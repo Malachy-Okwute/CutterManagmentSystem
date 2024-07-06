@@ -1,0 +1,45 @@
+﻿<local:CMSWindow x:Class="CMS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CMS"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="450" Width="800" 
+        WindowStartupLocation="CenterScreen"
+        d:DesignStyle="{StaticResource CMSWindowStyle}">
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <!--caption area-->
+            <RowDefinition Height="Auto" />
+            <!--main window content-->
+            <RowDefinition Height="*" />
+            <!--footer-->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--caption area-->
+        <Grid Grid.Row="0" Height="{Binding CaptionHeight, FallbackValue=35}">
+            <!--icon-->
+            <TextBlock Text="{StaticResource AppIcon}" FontFamily="{StaticResource SolidIcon}"
+                       Foreground="{DynamicResource BlueAccentForegroundColorBrush}" Margin="10 0"
+                       FontSize="{StaticResource Large}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="12" ShadowDepth="-8" Opacity="0.7" />
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <!--window control buttons-->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                <Button Content="{StaticResource WindowMinimizeIcon}" Command="{Binding MinimizeWindowCommand}"
+                        Style="{StaticResource WindowControlButtonStyle}" />
+                <Button x:Name="MaximizeButton" Content="{DynamicResource WindowMaximizeIcon}" 
+                        Style="{StaticResource WindowMaximizeButtonControl}" />
+                <Button Content="{StaticResource WindowCloseIcon}" Command="{Binding CloseWindowCommand}"
+                        Style="{StaticResource WindowControlButtonStyle}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</local:CMSWindow>

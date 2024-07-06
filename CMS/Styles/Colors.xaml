@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--colors-->
+    <Color x:Key="WhiteBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="WhiteForegroundColor">#FFFFFF</Color>
+    <Color x:Key="FadedWhiteBackgroundColor">#eeeef2</Color>
+    <Color x:Key="BlueAccentBackgroundColor">#525298</Color>
+    <Color x:Key="BlueAccentForegroundColor">#525298</Color>
+    <Color x:Key="GreenCheckResultPassedColor">#24b17c</Color>
+
+    <!--brushes-->
+    <SolidColorBrush x:Key="WhiteBackgroundColorBrush" Color="{StaticResource WhiteBackgroundColor}" />
+    <SolidColorBrush x:Key="WhiteForegroundColorBrush" Color="{StaticResource WhiteForegroundColor}" />
+    <SolidColorBrush x:Key="FadedWhiteBackgroundColorBrush" Color="{StaticResource FadedWhiteBackgroundColor}" />
+    <SolidColorBrush x:Key="BlueAccentBackgroundColorBrush" Color="{StaticResource BlueAccentBackgroundColor}" />
+    <SolidColorBrush x:Key="BlueAccentForegroundColorBrush" Color="{StaticResource BlueAccentForegroundColor}" />
+    <SolidColorBrush x:Key="GreenCheckResultPassedColorBrush" Color="{StaticResource GreenCheckResultPassedColor}" />
+
+</ResourceDictionary>

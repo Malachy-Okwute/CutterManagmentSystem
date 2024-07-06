@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!--font-awesome-->
+    <FontFamily x:Key="BrandsIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Brands Regular</FontFamily>
+    <FontFamily x:Key="ThinIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Pro Thin</FontFamily>
+    <FontFamily x:Key="LightIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Pro Light</FontFamily>
+    <FontFamily x:Key="RegularIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Pro Regular</FontFamily>
+    <FontFamily x:Key="SolidIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Pro Solid</FontFamily>
+    <FontFamily x:Key="SharpThinIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Sharp Thin</FontFamily>
+    <FontFamily x:Key="SharpLightIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Sharp Light</FontFamily>
+    <FontFamily x:Key="SharpRegularIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Sharp Regular</FontFamily>
+    <FontFamily x:Key="SharpSolidIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Sharp Solid</FontFamily>
+
+    <!--font sizes-->
+    <system:Double x:Key="XXSmall">10</system:Double>
+    <system:Double x:Key="XSmall">12</system:Double>
+    <system:Double x:Key="Small">14</system:Double>
+    <system:Double x:Key="Regular">16</system:Double>
+    <system:Double x:Key="Large">18</system:Double>
+    <system:Double x:Key="XLarge">22</system:Double>
+    <system:Double x:Key="XXLarge">26</system:Double>
+    <system:Double x:Key="BillBoard">32</system:Double>
+
+</ResourceDictionary>
