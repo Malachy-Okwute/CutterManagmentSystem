@@ -121,15 +121,40 @@ namespace CMS
             // Get app window
             Window cmsWindow = Application.Current.MainWindow;
 
+            // Screen work area
+            Rect workArea = SystemParameters.WorkArea;
+
             // Hook into window size changed event
             cmsWindow.SizeChanged += (s, e) =>
             {
                 // Set is-maximized to true if window is maximized
                 IsMaximized = cmsWindow.WindowState == WindowState.Maximized;
                 // Set resize border with to 0 when window is maximized and 8 if window is not maximized
-                ResizeBorderSize = cmsWindow.WindowState == WindowState.Maximized ? 0 : 8;
+                //ResizeBorderSize = cmsWindow.WindowState == WindowState.Maximized ? 0 : 8;
             };
-           
+
+            // Listen out for when window location changes
+            cmsWindow.LocationChanged += (sender, e) =>
+            {
+                //TODO: Find a cleaner way to implement this for the snap layout
+
+                if((workArea.Width - cmsWindow.ActualWidth) != cmsWindow.RestoreBounds.X && workArea.Y == cmsWindow.RestoreBounds.Y)
+                    DropShadowPadding = ResizeBorderSize = 0;
+                else if (workArea.X == cmsWindow.RestoreBounds.X && workArea.Y == cmsWindow.RestoreBounds.Y)
+                        DropShadowPadding = ResizeBorderSize = 0;
+                else if ((workArea.Width - cmsWindow.ActualWidth) == cmsWindow.RestoreBounds.X && workArea.Y == cmsWindow.RestoreBounds.Y)
+                        DropShadowPadding = ResizeBorderSize = 0;
+                else if (workArea.X == cmsWindow.RestoreBounds.X && (workArea.Height - cmsWindow.ActualHeight) == cmsWindow.RestoreBounds.Y)
+                        DropShadowPadding = ResizeBorderSize = 0;
+                else if ((workArea.Width - cmsWindow.ActualWidth) == cmsWindow.RestoreBounds.X && (workArea.Height - cmsWindow.ActualHeight) == cmsWindow.RestoreBounds.Y)
+                        DropShadowPadding = ResizeBorderSize = 0;
+                else
+                {
+                    DropShadowPadding = 40;
+                    ResizeBorderSize = 8;
+                }
+            };
+
             // Create commands
             MinimizeWindowCommand = new RelayCommand(() => cmsWindow.WindowState = WindowState.Minimized, canExecuteCommand => this != null);
             //MaximizeWindowCommand = new RelayCommand(() => cmsWindow.WindowState ^= WindowState.Maximized, canExecuteCommand => this != null);

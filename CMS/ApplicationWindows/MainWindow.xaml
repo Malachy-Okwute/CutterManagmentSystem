@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:CMS"
         mc:Ignorable="d"
         Title="MainWindow" 
-        Height="450" Width="800" 
         WindowStartupLocation="CenterScreen"
         d:DesignStyle="{StaticResource CMSWindowStyle}">
 
