@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace CMS
 {
@@ -123,8 +124,13 @@ namespace CMS
             }
             // Respond to when user clicks on the maximize button
             else if(msg == WM_NCLBUTTONDOWN)
+            {
+                // Set button background manually
+                MaximizeButton.Background = (Brush)TryFindResource("WhiteBackgroundColorBrush");
+
                 // Maximize window or set it to normal
                 WindowState ^= WindowState.Maximized;
+            }
             else
                 handled = false;
 
