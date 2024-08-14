@@ -2,19 +2,35 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!--colors-->
-    <Color x:Key="WhiteBackgroundColor">#FFFFFF</Color>
-    <Color x:Key="WhiteForegroundColor">#FFFFFF</Color>
-    <Color x:Key="FadedWhiteBackgroundColor">#eeeef2</Color>
-    <Color x:Key="BlueAccentBackgroundColor">#525298</Color>
-    <Color x:Key="BlueAccentForegroundColor">#525298</Color>
-    <Color x:Key="GreenCheckResultPassedColor">#24b17c</Color>
+    <Color x:Key="BackgroundColor1">#ffffff</Color>
+    <Color x:Key="BackgroundColor2">#525298</Color>
+    <Color x:Key="BackgroundColor3">#eeeef2</Color>
+    <Color x:Key="ForegroundColor1">#ffffff</Color>
+    <Color x:Key="ForegroundColor2">#525298</Color>
+    <Color x:Key="ForegroundColor3">#bdbdbd</Color>
+    <Color x:Key="AccentColor1">#ffff00</Color>
+    <Color x:Key="AccentColor2">#ff6b6c</Color>
+    <Color x:Key="AccentColor3">#5cffaa</Color>
+    <Color x:Key="AccentColor4">#ffb519</Color>
+    
+    <!--<Color x:Key="AccentColor5">#00a5ff</Color>
+    <Color x:Key="AccentColor6">#ff5cfe</Color>
+    <Color x:Key="AccentColor7">#00f6ff</Color>-->
 
     <!--brushes-->
-    <SolidColorBrush x:Key="WhiteBackgroundColorBrush" Color="{StaticResource WhiteBackgroundColor}" />
-    <SolidColorBrush x:Key="WhiteForegroundColorBrush" Color="{StaticResource WhiteForegroundColor}" />
-    <SolidColorBrush x:Key="FadedWhiteBackgroundColorBrush" Color="{StaticResource FadedWhiteBackgroundColor}" />
-    <SolidColorBrush x:Key="BlueAccentBackgroundColorBrush" Color="{StaticResource BlueAccentBackgroundColor}" />
-    <SolidColorBrush x:Key="BlueAccentForegroundColorBrush" Color="{StaticResource BlueAccentForegroundColor}" />
-    <SolidColorBrush x:Key="GreenCheckResultPassedColorBrush" Color="{StaticResource GreenCheckResultPassedColor}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush1" Color="{StaticResource BackgroundColor1}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush2" Color="{StaticResource BackgroundColor2}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush3" Color="{StaticResource BackgroundColor3}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush1" Color="{StaticResource ForegroundColor1}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush2" Color="{StaticResource ForegroundColor2}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush3" Color="{StaticResource ForegroundColor3}" />
+    <SolidColorBrush x:Key="AccentColorBrush1" Color="{StaticResource AccentColor1}" />
+    <SolidColorBrush x:Key="AccentColorBrush2" Color="{StaticResource AccentColor2}" />
+    <SolidColorBrush x:Key="AccentColorBrush3" Color="{StaticResource AccentColor3}" />
+    <SolidColorBrush x:Key="AccentColorBrush4" Color="{StaticResource AccentColor4}" />
+   
+    <!--<SolidColorBrush x:Key="AccentColorBrush5" Color="{StaticResource AccentColor5}" />
+    <SolidColorBrush x:Key="AccentColorBrush6" Color="{StaticResource AccentColor6}" />
+    <SolidColorBrush x:Key="AccentColorBrush7" Color="{StaticResource AccentColor7}" />-->
 
 </ResourceDictionary>

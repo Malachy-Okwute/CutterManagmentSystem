@@ -8,7 +8,8 @@
         <Setter Property="Width" Value="45" />
         <Setter Property="FontSize" Value="{StaticResource XSmall}" />
         <Setter Property="FontFamily" Value="{StaticResource LightIcon}" />
-        <Setter Property="Background" Value="{DynamicResource WhiteBackgroundColorBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush2}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush1}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -22,7 +23,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource FadedWhiteBackgroundColorBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -46,7 +47,7 @@
                                           HorizontalAlignment="Center" VerticalAlignment="Center"
                                           RenderTransformOrigin="0.5, 0.5">
 
-                            <!--rotate content of this button by 180deg-->
+                            <!--rotates content of this button by 180deg-->
                             <ContentPresenter.RenderTransform>
                                 <RotateTransform Angle="180" />
                             </ContentPresenter.RenderTransform>
@@ -54,7 +55,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource FadedWhiteBackgroundColorBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}"/>
                         </Trigger>
                         <DataTrigger Binding="{Binding IsMaximized, UpdateSourceTrigger=PropertyChanged}" Value="True">
                             <Setter Property="Content" Value="{StaticResource WindowRestoreIcon}" TargetName="ControlContent" />
@@ -64,6 +65,37 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>    
+    </Style>
+
+    <!--menu button style-->
+    <Style x:Key="AppMenuButtonStyle" TargetType="{x:Type Button}" >
+        <Setter Property="BorderBrush" Value="{x:Null}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Width" Value="100" />
+        <Setter Property="FontSize" Value="{StaticResource XSmall}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush1}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush2}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid UseLayoutRounding="True" Background="{TemplateBinding Background}" >
+
+                        <Grid Name="MouseOverBackground" Background="Transparent" />
+
+                        <ContentPresenter Content="{TemplateBinding Content}" 
+                                              VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}" TargetName="MouseOverBackground" />
+                            <Setter Property="Opacity" Value="0.1" TargetName="MouseOverBackground" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+    </Style>
     
 </ResourceDictionary>

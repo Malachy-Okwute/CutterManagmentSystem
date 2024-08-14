@@ -4,7 +4,7 @@
     <!--window style-->
     <Style x:Key="CMSWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="AllowsTransparency" Value="True" />
-        <Setter Property="Background" Value="{DynamicResource WhiteBackgroundColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush1}" />
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="WindowState" Value="Normal" />
         <Setter Property="MinHeight" Value="350" />
@@ -25,7 +25,7 @@
                         <Grid x:Name="PART_WindowLimitMargin" >
 
                             <!--drop-shadow effect-->
-                            <Border Background="{StaticResource WhiteBackgroundColorBrush}">
+                            <Border Background="{StaticResource BackgroundColorBrush1}">
                                 <Border.Effect>
                                     <DropShadowEffect ShadowDepth="10" BlurRadius="35" Direction="270"
                                                       Opacity="0.2" RenderingBias="Quality" />
@@ -33,7 +33,7 @@
                             </Border>
                             
                             <!--main window-->
-                            <Grid >
+                            <Grid>
                                 <Grid.RowDefinitions>
                                     <!--caption area-->
                                     <RowDefinition Height="Auto" />

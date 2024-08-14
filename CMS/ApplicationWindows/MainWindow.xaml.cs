@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 
 namespace CMS
 {
@@ -81,8 +80,8 @@ namespace CMS
             // Check if mouse pointer is over maximize button on x axis
             if (cursorPos.X > (buttonLocation.X + MaximizeButton.ActualWidth) || cursorPos.X < buttonLocation.X)
             {
-                // Set button background manually
-                MaximizeButton.Background = (Brush)TryFindResource("WhiteBackgroundColorBrush");
+                // Set button background and foreground manually
+                MaximizeButton.Background = (Brush)TryFindResource("BackgroundColorBrush1");
                 // Return false
                 return false;
             }
@@ -90,8 +89,8 @@ namespace CMS
             // Check if mouse pointer is over maximize button on y axis
             if (cursorPos.Y > (buttonLocation.Y + MaximizeButton.ActualHeight) || cursorPos.Y < buttonLocation.Y)
             {
-                // Set button background manually
-                MaximizeButton.Background = (Brush)TryFindResource("WhiteBackgroundColorBrush");
+                // Set button background and foreground manually
+                MaximizeButton.Background = (Brush)TryFindResource("BackgroundColorBrush1");
                 // Return false
                 return false;
             }
@@ -117,7 +116,7 @@ namespace CMS
                 // Make sure mouse pointer is over maximize button
                 if (IsCursorOverMaximizeButton(cursorPos))
                 {
-                    MaximizeButton.Background = (Brush)TryFindResource("FadedWhiteBackgroundColorBrush");
+                    MaximizeButton.Background = (Brush)TryFindResource("BackgroundColorBrush3");
                     handled = true;
                     return HTMAXBUTTON;
                 }
@@ -125,8 +124,8 @@ namespace CMS
             // Respond to when user clicks on the maximize button
             else if(msg == WM_NCLBUTTONDOWN)
             {
-                // Set button background manually
-                MaximizeButton.Background = (Brush)TryFindResource("WhiteBackgroundColorBrush");
+                // Set button background and foreground manually
+                MaximizeButton.Background = (Brush)TryFindResource("BackgroundColorBrush1");
 
                 // Maximize window or set it to normal
                 WindowState ^= WindowState.Maximized;
