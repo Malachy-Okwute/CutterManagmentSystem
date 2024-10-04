@@ -2,10 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
+    <!--icons-->
     <system:String x:Key="AppIcon">&#xf0e7;</system:String>
     <system:String x:Key="WindowMinimizeIcon">&#xf2d1;</system:String>
     <system:String x:Key="WindowMaximizeIcon">&#xf0c8;</system:String>
     <system:String x:Key="WindowRestoreIcon">&#xf24d;</system:String>
     <system:String x:Key="WindowCloseIcon">&#xe59b;</system:String>
+    <system:String x:Key="NotificationIcon">&#xf0f3;</system:String>
     
 </ResourceDictionary>

@@ -46,18 +46,23 @@
             <!--app menu selection indicator-->
             <Border x:Name="Indicator" Margin="0 0 0 0" Width="100" Height="2" VerticalAlignment="Bottom"
                     Background="{StaticResource AccentColorBrush3}" Focusable="False"
-                    Canvas.Top="40" Canvas.Left="670" d:Canvas.Left="530" />
+                    Canvas.Top="40" Canvas.Left="670" />
 
         </Canvas>
 
         <!--separator-->
         <Border Grid.Column="2" Background="{DynamicResource ForegroundColorBrush3}" Opacity="0.4"
-                Width="2" HorizontalAlignment="Left" Margin="0 4" />
+                Width="2" HorizontalAlignment="Left" Margin="10 4" />
 
         <!--user profile-->
         <Border Grid.Column="2" Background="{DynamicResource BackgroundColorBrush1}"
-                Margin="20 4" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" CornerRadius="20" >
-            <Button Content="1st" Background="Transparent" BorderBrush="{x:Null}"/>
+                Margin="30 4 20 4" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" CornerRadius="0" >
+            <Button Content="1st" Style="{StaticResource CurrentShiftStyle}"/>
+        </Border>
+
+        <!--notification icon-->
+        <Border Grid.Column="3" Margin="0 0 20 0" Width="45">
+            <Button Content="{StaticResource NotificationIcon}" Style="{StaticResource NotificationButtonStyle}"/>
         </Border>
 
     </Grid>
