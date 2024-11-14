@@ -4,7 +4,8 @@
         Title="CMSSplashWindow" Width="800"
         Height="450" WindowStartupLocation="CenterScreen"
         WindowStyle="None" AllowsTransparency="True"
-        mc:Ignorable="d">
+        mc:Ignorable="d"
+        local:WindowBehaviors.WindowLoaded="True">
     <Grid>
         <!--  splash screen background image  -->
         <Grid.Background>

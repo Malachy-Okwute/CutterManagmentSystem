@@ -37,48 +37,22 @@ namespace CMS
         /// </summary>
         public static IHost? ApplicationHost { get; private set; }
 
-        #endregion        
+        #endregion
+
+        #region Default Constructor
 
         /// <summary>
         /// Default constructor
         /// </summary>
         public App()
         {
-            #region Old code
-
-            //// Application configuration. Sets up .json, environment variable
-            //IConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-            //configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
-            //                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            //                    .AddJsonFile($"appsettings.{_environment}.json", optional: true)
-            //                    .AddEnvironmentVariables();
-
-            //// Configure serilog
-            //Log.Logger = new LoggerConfiguration()
-            //    .ReadFrom.Configuration(configurationBuilder.Build())
-            //    .Enrich.FromLogContext()
-            //    .WriteTo.File("app-log.txt")
-            //    .MinimumLevel.Information()
-            //    .MinimumLevel.Override("Default", LogEventLevel.Fatal)
-            //    .MinimumLevel.Override("Microsoft", LogEventLevel.Fatal)
-            //    .MinimumLevel.Override("System", LogEventLevel.Fatal)
-            //    .CreateLogger();
-
-            //// Log information
-            //Log.Logger.Information("Application is starting...");
-
-            //// Setup services
-            //ApplicationHost = Host.CreateDefaultBuilder()
-            //    .ConfigureServices((hostContext, services) =>
-            //    {
-            //        services.AddViewModels();
-            //        services.AddViews();
-            //    })
-            //    .UseSerilog()
-            //    .Build();
-
-            #endregion
+            // Create splash window
+            _splashWindow = new CMSSplashWindow();
         }
+
+        #endregion
+
+        #region Overriden Methods
 
         /// <summary>
         /// Event that runs during application initial start-up
@@ -114,6 +88,9 @@ namespace CMS
                         DependencyInjectionSetup();
                         await Task.Delay(TimeSpan.FromSeconds(1));
 
+                        //TODO: Get user settings and set application preferences such as theme etc
+                        //TODO: Get current machine theme mode
+
                         await Task.Delay(TimeSpan.FromSeconds(1));
                         // Finalizing...
                     }
@@ -123,7 +100,7 @@ namespace CMS
                         // Log the error 
                         Log.Logger.Warning(ex.Message);
                     }
-                    finally 
+                    finally
                     {
                         // Mark task as completed
                         taskCompletionSource.TrySetResult(true);
@@ -132,12 +109,12 @@ namespace CMS
                 // Send task information
                 await taskCompletionSource.Task;
             });
-             
+
             // Lunch main application window
             await LunchApplicationWindowAsync();
 
             #region Old code
-            
+
             //// Start the application host
             //await ApplicationHost!.StartAsync();
 
@@ -150,7 +127,7 @@ namespace CMS
             //// Display window
             //MainWindow.Show();
 
-            #endregion            
+            #endregion
 
             // Let base do what it needs
             base.OnStartup(e);
@@ -172,6 +149,8 @@ namespace CMS
             base.OnExit(e);
         }
 
+        #endregion
+
         #region Application Splash And Main Window
 
         /// <summary>
@@ -184,9 +163,6 @@ namespace CMS
         {
             // Create a task completion object
             TaskCompletionSource<bool> taskResult = new TaskCompletionSource<bool>();
-
-            // Create splash window
-            _splashWindow = new CMSSplashWindow();
 
             // Show window
             _splashWindow.Show();
@@ -275,8 +251,8 @@ namespace CMS
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configurationBuilder.Build())
                 .Enrich.FromLogContext()
-                .WriteTo.File("app-log.txt")
-                .MinimumLevel.Information()
+                .WriteTo.File("app-log.txt", outputTemplate: "{Timestamp:MM-dd-yyyy hh:mm tt} {Level:u3} {Message:lj}{NewLine}{Exception}")
+                .MinimumLevel.Information() 
                 .MinimumLevel.Override("Default", LogEventLevel.Fatal)
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Fatal)
                 .MinimumLevel.Override("System", LogEventLevel.Fatal)
