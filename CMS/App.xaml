@@ -1,11 +1,10 @@
-﻿<Application x:Class="CMS.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+﻿<Application x:Class="CMS.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
-                <!-- order is important -->
+                <!--  order is important  -->
                 <ResourceDictionary Source="Styles\Fonts.xaml" />
                 <ResourceDictionary Source="Styles\Icons.xaml" />
                 <ResourceDictionary Source="Styles\Texts.xaml" />

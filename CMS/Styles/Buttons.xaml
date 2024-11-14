@@ -1,7 +1,6 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!--window control button style-->
+    <!--  window control button style  -->
     <Style x:Key="WindowControlButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="BorderBrush" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
@@ -14,16 +13,20 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
 
-                    <Border UseLayoutRounding="True" Background="{TemplateBinding Background}"
-                            TextBlock.Foreground="{TemplateBinding Foreground}" BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border UseLayoutRounding="True"
+                            Background="{TemplateBinding Background}"
+                            TextBlock.Foreground="{TemplateBinding Foreground}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                
-                        <!--content-->
-                        <ContentPresenter x:Name="ControlContent" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        <!--  content  -->
+                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}"/>
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -31,23 +34,28 @@
         </Setter>
     </Style>
 
-    <!--maximize button style-->
-    <Style x:Key="WindowMaximizeButtonControl" TargetType="{x:Type Button}" BasedOn="{StaticResource WindowControlButtonStyle}">
-        
-        <Setter Property="Template" >
+    <!--  maximize button style  -->
+    <Style x:Key="WindowMaximizeButtonControl"
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource WindowControlButtonStyle}">
+
+        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
 
-                    <Border UseLayoutRounding="True" Background="{TemplateBinding Background}"
-                            TextBlock.Foreground="{TemplateBinding Foreground}" BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border UseLayoutRounding="True"
+                            Background="{TemplateBinding Background}"
+                            TextBlock.Foreground="{TemplateBinding Foreground}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
 
-                        <!--content-->
-                        <ContentPresenter x:Name="ControlContent" Content="{TemplateBinding Content}" 
-                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <!--  content  -->
+                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}"
                                           RenderTransformOrigin="0.5, 0.5">
 
-                            <!--rotates content of this button by 180deg-->
+                            <!--  rotates content of this button by 180deg  -->
                             <ContentPresenter.RenderTransform>
                                 <RotateTransform Angle="180" />
                             </ContentPresenter.RenderTransform>
@@ -55,10 +63,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}"/>
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
                         </Trigger>
                         <DataTrigger Binding="{Binding IsMaximized, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                            <Setter Property="Content" Value="{StaticResource WindowRestoreIcon}" TargetName="ControlContent" />
+                            <Setter TargetName="ControlContent" Property="Content" Value="{StaticResource WindowRestoreIcon}" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
 
@@ -67,8 +75,8 @@
         </Setter>
     </Style>
 
-    <!--menu button style-->
-    <Style x:Key="AppMenuButtonStyle" TargetType="{x:Type Button}" >
+    <!--  menu button style  -->
+    <Style x:Key="AppMenuButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="BorderBrush" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Width" Value="100" />
@@ -78,27 +86,27 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid UseLayoutRounding="True" Background="{TemplateBinding Background}" >
+                    <Grid UseLayoutRounding="True" Background="{TemplateBinding Background}">
 
                         <Grid Name="MouseOverBackground" Background="Transparent" />
 
-                        <ContentPresenter Content="{TemplateBinding Content}" 
-                                              VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}" />
+
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}" TargetName="MouseOverBackground" />
-                            <Setter Property="Opacity" Value="0.1" TargetName="MouseOverBackground" />
+                            <Setter TargetName="MouseOverBackground" Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
+                            <Setter TargetName="MouseOverBackground" Property="Opacity" Value="0.1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
     </Style>
 
-    <!--current shift profile button-->
+    <!--  current shift profile button  -->
     <Style x:Key="CurrentShiftStyle" TargetType="{x:Type Button}">
         <Setter Property="BorderBrush" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
@@ -109,18 +117,21 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
 
-                    <Border UseLayoutRounding="True" Background="{TemplateBinding Background}"
-                            TextBlock.Foreground="{TemplateBinding Foreground}" BorderBrush="{TemplateBinding BorderBrush}"
+                    <Border UseLayoutRounding="True"
+                            Background="{TemplateBinding Background}"
+                            TextBlock.Foreground="{TemplateBinding Foreground}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
 
-                        <!--content-->
-                        <ContentPresenter x:Name="ControlContent" Content="{TemplateBinding Content}"
+                        <!--  content  -->
+                        <ContentPresenter x:Name="ControlContent"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}"/>
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -128,8 +139,8 @@
         </Setter>
     </Style>
 
-    <!-- notification button -->
-    <Style x:Key="NotificationButtonStyle" TargetType="{x:Type Button}" >
+    <!--  notification button  -->
+    <Style x:Key="NotificationButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="BorderBrush" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="{StaticResource Large}" />
@@ -139,18 +150,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid UseLayoutRounding="True" Background="{TemplateBinding Background}" >
+                    <Grid UseLayoutRounding="True" Background="{TemplateBinding Background}">
 
                         <Grid Name="MouseOverBackground" Background="Transparent" />
 
-                        <ContentPresenter Content="{TemplateBinding Content}" 
-                                              VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}" />
 
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}" TargetName="MouseOverBackground" />
-                            <Setter Property="Opacity" Value="0.1" TargetName="MouseOverBackground" />
+                            <Setter TargetName="MouseOverBackground" Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
+                            <Setter TargetName="MouseOverBackground" Property="Opacity" Value="0.1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

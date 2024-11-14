@@ -12,19 +12,28 @@
 
   <ItemGroup>
     <Compile Include="ViewModels\.Base\ViewModelBase.cs" />
+    <Compile Include="ViewModels\.DesignModel\MachineItemCollectionDesignModel.cs" />
+    <Compile Include="ViewModels\.DesignModel\MachineItemDesignModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include=".Resources\Images\cms-icon.ico" />
+    <Resource Include=".Resources\Images\splashscreen.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentWPF" Version="0.10.2" />
-    <PackageReference Include="Fody" Version="6.8.1">
+    <PackageReference Include="Fody" Version="6.8.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,7 +59,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AttachedProperties\" />
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

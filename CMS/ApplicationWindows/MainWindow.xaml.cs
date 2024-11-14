@@ -64,6 +64,7 @@ namespace CMS
         {
             int x = lParam.ToInt32() & 0xFFFF;
             int y = lParam.ToInt32() >> 16;
+
             return new Point(x, y);
         }
 
@@ -108,7 +109,7 @@ namespace CMS
         /// <returns></returns>
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg == WM_NCHITTEST)
+            if ((nint)msg == WM_NCHITTEST)
             {
                 // Calculate the position of the cursor
                 Point cursorPos = GetCursorPosition(lParam);

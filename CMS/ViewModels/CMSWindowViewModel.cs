@@ -1,8 +1,5 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Converters;
 
 namespace CMS
 {
@@ -37,6 +34,8 @@ namespace CMS
         /// The size of borders around the window to allow user to click and drag to resize the window
         /// </summary>
         private double _resizeBorderSize = 8;
+
+        private Window _appWindow => Application.Current.MainWindow;
 
         #endregion
 
@@ -121,20 +120,17 @@ namespace CMS
         /// </summary>
         public CMSWindowViewModel()
         {
-            // Get app window
-            Window cmsWindow = Application.Current.MainWindow;
-
             // Screen work area
             Rect workArea = SystemParameters.WorkArea;
 
             // Hook into window size changed event
-            cmsWindow.SizeChanged += (s, e) =>
+            _appWindow.SizeChanged += (s, e) =>
             {
                 // Set is-maximized to true if window is maximized
-                IsMaximized = cmsWindow.WindowState == WindowState.Maximized;
+                IsMaximized = _appWindow.WindowState == WindowState.Maximized;
 
                 // Set resize border with to 0 when window is maximized and 8 if window is not maximized
-                //ResizeBorderSize = cmsWindow.WindowState == WindowState.Maximized ? 0 : 8;
+                //ResizeBorderSize = _appWindow.WindowState == WindowState.Maximized ? 0 : 8;
 
                 #region Snap Layout
 
@@ -171,12 +167,22 @@ namespace CMS
             };
 
             // Create commands
-            MinimizeWindowCommand = new RelayCommand(() => cmsWindow.WindowState = WindowState.Minimized, canExecuteCommand => this != null);
-            //MaximizeWindowCommand = new RelayCommand(() => cmsWindow.WindowState ^= WindowState.Maximized, canExecuteCommand => this != null);
-            CloseWindowCommand = new RelayCommand(cmsWindow.Close, canExecuteCommand => this != null);
+            MinimizeWindowCommand = new RelayCommand(MinimizeWindow, canExecuteCommand => this != null);
+            //MaximizeWindowCommand = new RelayCommand(() => _appWindow.WindowState ^= WindowState.Maximized, canExecuteCommand => this != null);
+            CloseWindowCommand = new RelayCommand(CloseWindow, canExecuteCommand => this != null);
         }
 
         #endregion
+
+        private void MinimizeWindow()
+        {
+            _appWindow.WindowState = WindowState.Minimized;
+        }
+
+        private void CloseWindow()
+        {
+            _appWindow.Close();
+        }
 
         #region Private Methods
 
