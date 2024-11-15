@@ -8,6 +8,10 @@ namespace CMS
     /// </summary>
     public static class Animations
     {
+        public static Action? Run { get; set; }
+
+        public static bool AnimationCompleted { get; set; }
+
         /// <summary>
         /// Fades the specified element into or out of view as desired
         /// </summary>
@@ -23,11 +27,20 @@ namespace CMS
             // Create a storyboard
             Storyboard storyboard = new Storyboard();
 
+            // The animation to run
+            var animation = AnimationHelpers.DoubleAnimation(duration, from, to, animationEasingKind, easingMode, easingFactor);
+
             // Add animation to storyboard
-            storyboard.Children.Add(AnimationHelpers.DoubleAnimation(duration, from, to, animationEasingKind, easingMode, easingFactor));
+            storyboard.Children.Add(animation);
 
             // Set property of element to animate
             Storyboard.SetTargetProperty(storyboard, new PropertyPath("Opacity"));
+
+            storyboard.Completed += delegate
+            {
+                if(AnimationCompleted && element.Opacity == 0)
+                    Run?.Invoke();
+            };
 
             // Start animation 
             storyboard.Begin(element);

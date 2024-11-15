@@ -13,7 +13,7 @@ namespace CMS
         private readonly Action? _executeCommand;
 
         /// <summary>
-        /// Action with parameter to run
+        /// Run with parameter to run
         /// </summary>
         private readonly Action<object>? _executeCommandWithParameter;
 

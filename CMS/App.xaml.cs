@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Media.Animation;
 
 namespace CMS
 {
@@ -15,7 +16,6 @@ namespace CMS
     /// </summary>
     public partial class App : Application
     {
-
         #region Private Fields
 
         /// <summary>

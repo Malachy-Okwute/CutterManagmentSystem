@@ -2,10 +2,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:CMS"
         Title="CMSSplashWindow" Width="800"
-        Height="450" WindowStartupLocation="CenterScreen"
-        WindowStyle="None" AllowsTransparency="True"
-        mc:Ignorable="d"
-        local:WindowBehaviors.WindowLoaded="True">
+        Height="450" local:WindowBehaviors.WindowLoaded="True"
+        WindowStartupLocation="CenterScreen" WindowStyle="None"
+        AllowsTransparency="True" mc:Ignorable="d">
     <Grid>
         <!--  splash screen background image  -->
         <Grid.Background>
