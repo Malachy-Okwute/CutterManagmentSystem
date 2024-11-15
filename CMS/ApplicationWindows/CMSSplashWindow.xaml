@@ -3,6 +3,15 @@
         Title="CMSSplashWindow" Width="800" Height="450"
         local:WindowBehaviors.WindowLoadedBehavior="True" WindowStartupLocation="CenterScreen" WindowStyle="None"
         AllowsTransparency="True" mc:Ignorable="d">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="\Styles\Fonts.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
         <!--  splash screen background image  -->
         <Grid.Background>
@@ -10,21 +19,23 @@
                         ViewportUnits="Absolute" />
         </Grid.Background>
 
-        <Image Source="/.Resources/Images/svg-spinners--bars-rotate-fade.png" Height="26" Width="26"
-               RenderTransformOrigin="0.5 0.5"
-               Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Visibility}"
-               Margin="12" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+        <!--  loader  -->
+        <TextBlock Text="&#xe1d4;"
+                   FontFamily="{StaticResource LightIcon}" FontSize="{StaticResource Large}"
+                   RenderTransformOrigin="0.5 0.5"
+                   Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Visibility}"
+                   Margin="12" VerticalAlignment="Bottom" HorizontalAlignment="Left">
 
-            <Image.RenderTransform>
+            <TextBlock.RenderTransform>
                 <RotateTransform />
-            </Image.RenderTransform>
+            </TextBlock.RenderTransform>
 
-            <!--  image animation  -->
-            <Image.Style>
+            <!--  loader animation  -->
+            <TextBlock.Style>
                 <Style>
                     <Style.Resources>
                         <Storyboard x:Key="Loader">
-                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" Duration="0:0:1" From="0"
+                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" Duration="0:0:1.5" From="0"
                                              To="360" RepeatBehavior="Forever" />
                         </Storyboard>
                     </Style.Resources>
@@ -39,8 +50,8 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Image.Style>
-        </Image>
+            </TextBlock.Style>
+        </TextBlock>
 
     </Grid>
 </Window>
