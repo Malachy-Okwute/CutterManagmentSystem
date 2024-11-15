@@ -3,8 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Animation;
@@ -193,6 +191,11 @@ namespace CMS
 
             // Make sure we have window
             ArgumentNullException.ThrowIfNull(nameof(MainWindow));
+
+            // TODO: Find a better way to implement this
+            // Animate splash window
+            Animations.Fade(_splashWindow, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, 3, 0.6, 0, 1);
+            await Task.Delay(TimeSpan.FromSeconds(0.6));
 
             // try closing the splash window on ui thread
             Dispatcher.Invoke(_splashWindow.Close);

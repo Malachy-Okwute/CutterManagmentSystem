@@ -8,10 +8,6 @@ namespace CMS
     /// </summary>
     public static class Animations
     {
-        public static Action? Run { get; set; }
-
-        public static bool AnimationCompleted { get; set; }
-
         /// <summary>
         /// Fades the specified element into or out of view as desired
         /// </summary>
@@ -35,12 +31,6 @@ namespace CMS
 
             // Set property of element to animate
             Storyboard.SetTargetProperty(storyboard, new PropertyPath("Opacity"));
-
-            storyboard.Completed += delegate
-            {
-                if(AnimationCompleted && element.Opacity == 0)
-                    Run?.Invoke();
-            };
 
             // Start animation 
             storyboard.Begin(element);

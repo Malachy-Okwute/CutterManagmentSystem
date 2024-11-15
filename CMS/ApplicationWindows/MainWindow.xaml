@@ -3,7 +3,7 @@
                  Title="MainWindow"
                  d:DesignStyle="{StaticResource CMSWindowStyle}"
                  WindowStartupLocation="CenterScreen" mc:Ignorable="d"
-                 local:WindowBehaviors.WindowLoaded="True">
+                 local:WindowBehaviors.WindowLoadedBehavior="True">
 
     <Grid>
         <Grid.RowDefinitions>
