@@ -12,6 +12,7 @@
     <FontFamily x:Key="SharpLightIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Sharp Light</FontFamily>
     <FontFamily x:Key="SharpRegularIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Sharp Regular</FontFamily>
     <FontFamily x:Key="SharpSolidIcon">Pack://Application:,,,/.Resources/Icons/#Font Awesome 6 Sharp Solid</FontFamily>
+    <FontFamily x:Key="RobotoFlexRegular">Pack://Application:,,,/.Resources/Fonts/#Roboto Flex</FontFamily>
 
     <!--font sizes-->
     <system:Double x:Key="XXSmall">10</system:Double>
@@ -21,6 +22,6 @@
     <system:Double x:Key="Large">18</system:Double>
     <system:Double x:Key="XLarge">22</system:Double>
     <system:Double x:Key="XXLarge">26</system:Double>
-    <system:Double x:Key="BillBoard">32</system:Double>
+    <system:Double x:Key="BillBoard">60</system:Double>
 
 </ResourceDictionary>

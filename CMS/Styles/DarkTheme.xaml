@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  dark theme background color palette  -->
+    <Color x:Key="BackgroundColor1">#1c1c1c</Color>
+    <Color x:Key="BackgroundColor2">#232323</Color>
+    <Color x:Key="BackgroundColor3">#545454</Color>
+    <Color x:Key="BackgroundColor4">#262626</Color>
+    <Color x:Key="BackgroundColor5">#3d6cf6</Color>
+
+    <!--  dark theme foreground color palette  -->
+    <Color x:Key="ForegroundColor1">#eaeaea</Color>
+    <Color x:Key="ForegroundColor2">#bbbbbb</Color>
+    <Color x:Key="ForegroundColor3">#eaeaea</Color>
+    <Color x:Key="ForegroundColor4">#3d6cf6</Color>
+    <Color x:Key="ForegroundColor5">#f62b4f</Color>
+    <Color x:Key="ForegroundColor6">#8f8f94</Color>
+
+    <!--  dark theme border color palette  -->
+    <Color x:Key="BorderColor1">#323232</Color>
+    <Color x:Key="BorderColor2">#2e2e2e</Color>
+    <Color x:Key="BorderColor3">#3d6cf6</Color>
+    <Color x:Key="BorderColor4">#f62b4f</Color>
+
+    <!--  miscellaneaus  -->
+    <Color x:Key="MiscellaneousColor1">#3c3c3c</Color>
+
+</ResourceDictionary>
