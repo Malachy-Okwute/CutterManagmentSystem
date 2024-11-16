@@ -194,7 +194,7 @@ namespace CMS
 
             // TODO: Find a better way to implement this
             // Animate splash window
-            Animations.Fade(_splashWindow, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, 3, 0.6, 0, 1);
+            Animations.Fade(_splashWindow, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, easingFactor: 3,duration: 0.6,to: 0, from: 1);
             await Task.Delay(TimeSpan.FromSeconds(0.6));
 
             // try closing the splash window on ui thread

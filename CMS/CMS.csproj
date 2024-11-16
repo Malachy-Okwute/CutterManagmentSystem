@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include=".Resources\Images\cms-icon-1.png" />
     <Content Include=".Resources\Images\cms-icon.ico" />
     <Resource Include=".Resources\Images\svg-spinners--bars-rotate-fade.png" />
     <Resource Include=".Resources\Images\splashscreen.jpg">

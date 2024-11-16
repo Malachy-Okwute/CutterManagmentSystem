@@ -44,9 +44,9 @@ namespace CMS
             {
                 // Animate and fade window into view
                 if(window is CMSSplashWindow)
-                   Animations.Fade(window, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, 3, 0.8, 1);
+                   Animations.Fade(window, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, easingFactor: 3, duration: 0.8, to: 1);
                 else
-                   Animations.Fade(window, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, 3, 0.6, 1);
+                   Animations.Fade(window, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, easingFactor: 3, duration: 0.6, to: 1);
             };
         }
     }
