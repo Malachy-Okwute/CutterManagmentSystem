@@ -41,7 +41,7 @@ namespace CMS
 
         #endregion
 
-        #region Methods (Window Snap Layout)
+        #region Methods (Window Snap Layout Popup)
 
         /// <summary>
         /// Override the <see cref="OnSourceInitialized(EventArgs)"/> event
