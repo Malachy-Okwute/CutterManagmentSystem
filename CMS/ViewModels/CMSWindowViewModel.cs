@@ -28,7 +28,7 @@ namespace CMS
         /// <summary>
         /// The height of footer of this application 
         /// </summary>
-        private double _footerHeight = 22;
+        private double _footerHeight = 24;
 
         /// <summary>
         /// The size of borders around the window to allow user to click and drag to resize the window
@@ -174,16 +174,26 @@ namespace CMS
 
         #endregion
 
+        #region Command Methods
+
+        /// <summary>
+        /// Minimizes <see cref="CMSWindow"/>
+        /// </summary>
         private void MinimizeWindow()
         {
             _appWindow.WindowState = WindowState.Minimized;
         }
 
+        /// <summary>
+        /// Closes <see cref="CMSWindow"/>
+        /// </summary>
         private void CloseWindow()
         {
             _appWindow.Close();
         }
 
+        #endregion        
+        
         #region Private Methods
 
         /// <summary>

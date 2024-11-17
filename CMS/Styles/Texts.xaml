@@ -17,7 +17,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border Padding="6,0 0 0"
+                    <Border Padding="6,0,0,0"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -36,13 +36,16 @@
                                        TextAlignment="{TemplateBinding TextAlignment}"
                                        Visibility="Collapsed" />
 
-                            <Button HorizontalAlignment="Right" FontSize="{TemplateBinding FontSize}" Background="{DynamicResource BackgroundColorBrush3}"
-                                    Content="{StaticResource SearchIcon}" Width="60"
-                                    Style="{DynamicResource AppMenuButtonStyle}" />
+                            <Button HorizontalAlignment="Right"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    Background="{DynamicResource BackgroundColorBrush3}"
+                                    Content="{StaticResource SearchIcon}"
+                                    Width="60"
+                                    Style="{DynamicResource AppButtonStyle}" />
 
                             <!--  control content  -->
-                            <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="0 0 66 0"
-                                          VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
+                            <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                          Margin="0,0,66,0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
 
                         </Grid>
 

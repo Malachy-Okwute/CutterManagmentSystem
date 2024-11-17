@@ -73,8 +73,8 @@
         </Setter>
     </Style>
 
-    <!--  menu button style  -->
-    <Style x:Key="AppMenuButtonStyle" TargetType="{x:Type Button}">
+    <!--  app button style  -->
+    <Style x:Key="AppButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="BorderBrush" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Width" Value="100" />
@@ -89,7 +89,7 @@
 
                         <Grid Name="MouseOverBackground" Background="Transparent" />
 
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Content="{TemplateBinding Content}" />
 
                     </Grid>

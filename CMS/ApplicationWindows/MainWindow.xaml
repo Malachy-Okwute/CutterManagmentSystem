@@ -2,8 +2,7 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CMS" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  Title="MainWindow"
                  d:DesignStyle="{StaticResource CMSWindowStyle}"
-                 WindowStartupLocation="CenterScreen" mc:Ignorable="d"
-                 local:WindowBehaviors.WindowLoadedBehavior="True">
+                 WindowStartupLocation="CenterScreen" mc:Ignorable="d" local:WindowBehaviors.WindowLoadedBehavior="True">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -67,8 +66,20 @@
 
         <!--  footer  -->
         <Border Grid.Row="2"
-                Height="{Binding FooterHeight, FallbackValue=22}"
-                Background="{DynamicResource BackgroundColorBrush3}" />
+                Height="{Binding FooterHeight, FallbackValue=24}"
+                Background="{DynamicResource BackgroundColorBrush3}">
+
+            <Grid>
+
+                <!--  notification icon  -->
+                <Button Content="{StaticResource NotificationIcon}" HorizontalAlignment="Right"
+                        Margin="20 0" FontSize="{StaticResource Regular}"
+                        Width="28"
+                        Style="{StaticResource NotificationButtonStyle}" />
+
+            </Grid>
+
+        </Border>
 
     </Grid>
 </local:CMSWindow>

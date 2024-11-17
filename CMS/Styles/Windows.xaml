@@ -9,7 +9,7 @@
         <Setter Property="MinHeight" Value="350" />
         <Setter Property="MinWidth" Value="450" />
         <Setter Property="Height" Value="850" />
-        <Setter Property="Width" Value="1350" />
+        <Setter Property="Width" Value="1400" />
         <Setter Property="WindowChrome.NonClientFrameEdges" Value="Bottom" />
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
 

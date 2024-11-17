@@ -16,5 +16,6 @@
     <system:String x:Key="UsersIcon">&#xf007;</system:String>
     <system:String x:Key="SettingsIcon">&#xf013;</system:String>
     <system:String x:Key="UpdatesIcon">&#xf09e;</system:String>
+    <system:String x:Key="AngleDownIcon">&#xf107;</system:String>
 
 </ResourceDictionary>
