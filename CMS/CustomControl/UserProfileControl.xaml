@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="CMS.UserProfileControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CMS"
+             mc:Ignorable="d">
+
+    <Grid Background="{DynamicResource BackgroundColorBrush1}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Height="50" Width="50"
+                CornerRadius="25" BorderBrush="Red" BorderThickness="1">
+            <TextBlock Text="1st" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+
+        <Border Grid.Column="1" Height="50" Width="100"
+                CornerRadius="25" Padding="8,0">
+            <TextBlock Text="1st Shift" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+        </Border>
+
+    </Grid>
+</UserControl>

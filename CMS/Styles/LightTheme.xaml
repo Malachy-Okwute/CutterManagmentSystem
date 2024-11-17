@@ -27,6 +27,8 @@
     <Color x:Key="BorderColor2">#edefef</Color>
     <Color x:Key="BorderColor3">#3d6cf6</Color>
     <Color x:Key="BorderColor4">#f62b4f</Color>
+    <Color x:Key="BorderColor5">#4e4e64</Color>
+    <Color x:Key="BorderColor6">#bbbbbb</Color>
 
     <!--  miscellaneaus color  palette  -->
     <Color x:Key="MiscellaneousColor1">#dddddd</Color>
@@ -58,7 +60,8 @@
     <SolidColorBrush x:Key="BorderColorBrush2" Color="{StaticResource BorderColor2}" />
     <SolidColorBrush x:Key="BorderColorBrush3" Color="{StaticResource BorderColor3}" />
     <SolidColorBrush x:Key="BorderColorBrush4" Color="{StaticResource BorderColor4}" />
-    <SolidColorBrush x:Key="BorderColorBrush5" Color="{StaticResource ForegroundColor3}" />
+    <SolidColorBrush x:Key="BorderColorBrush5" Color="{StaticResource BorderColor5}" />
+    <SolidColorBrush x:Key="BorderColorBrush6" Color="{StaticResource BorderColor6}" />
 
     <!--  light theme miscellaneous color brush palette  -->
     <SolidColorBrush x:Key="MiscellaneaousColorBrush1" Color="{StaticResource MiscellaneousColor1}" />
