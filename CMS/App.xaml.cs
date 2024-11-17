@@ -68,28 +68,23 @@ namespace CMS
                     {
                         // Get environment variable
                         GetEnvironmentVariable();
-                        await Task.Delay(TimeSpan.FromSeconds(1));
 
                         // Configure application 
                         IConfigurationBuilder configBuilder = SetupConfigurationBuilder();
-                        await Task.Delay(TimeSpan.FromSeconds(1));
 
                         // Set up logger for the application 
                         SetupSerilogLogger(configBuilder);
-                        await Task.Delay(TimeSpan.FromSeconds(1));
 
                         // Log application start up as information 
                         Log.Logger.Information("Application is starting...");
-                        await Task.Delay(TimeSpan.FromSeconds(1));
 
                         // Set up dependency injection service
                         DependencyInjectionSetup();
-                        await Task.Delay(TimeSpan.FromSeconds(1));
 
                         //TODO: Get user settings and set application preferences such as theme etc
                         //TODO: Get current machine theme mode
 
-                        await Task.Delay(TimeSpan.FromSeconds(1));
+                        await Task.Delay(TimeSpan.FromSeconds(6));
                         // Finalizing...
                     }
                     // If there is an error...
@@ -110,22 +105,6 @@ namespace CMS
 
             // Lunch main application window
             await LunchApplicationWindowAsync();
-
-            #region Old code
-
-            //// Start the application host
-            //await ApplicationHost!.StartAsync();
-
-            //// Get application window from application host
-            //MainWindow = ApplicationHost.Services.GetRequiredService<MainWindow>();
-
-            ////// Make sure we have window
-            ////ArgumentNullException.ThrowIfNull(nameof(MainWindow));
-
-            //// Display window
-            //MainWindow.Show();
-
-            #endregion
 
             // Let base do what it needs
             base.OnStartup(e);
@@ -192,10 +171,9 @@ namespace CMS
             // Make sure we have window
             ArgumentNullException.ThrowIfNull(nameof(MainWindow));
 
-            // TODO: Find a better way to implement this
-            // Animate splash window
-            Animations.Fade(_splashWindow, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, easingFactor: 3,duration: 0.6,to: 0, from: 1);
-            await Task.Delay(TimeSpan.FromSeconds(0.6));
+            // TODO: Find a better/smarter way to implement this
+            // Fade window out of view, then close it
+            await Animations.FadeElementOutOfView(_splashWindow);
 
             // try closing the splash window on ui thread
             Dispatcher.Invoke(_splashWindow.Close);
@@ -281,5 +259,6 @@ namespace CMS
         }
 
         #endregion
+
     }
 }

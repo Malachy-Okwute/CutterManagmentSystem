@@ -1,5 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+
+    <!--#region Colors-->
+
     <!--  light theme background color palette  -->
     <Color x:Key="BackgroundColor1">#ffffff</Color>
     <Color x:Key="BackgroundColor2">#f6f7f9</Color>
@@ -15,13 +18,51 @@
     <Color x:Key="ForegroundColor5">#f62b4f</Color>
     <Color x:Key="ForegroundColor6">#8f8f94</Color>
 
+
+    <!--  light theme background color palette on hover  -->
+    <Color x:Key="ButtonHoverBackgroundColor1">#4e4e64</Color>
+
     <!--  light theme border color palette  -->
     <Color x:Key="BorderColor1">#e6e8e9</Color>
     <Color x:Key="BorderColor2">#edefef</Color>
     <Color x:Key="BorderColor3">#3d6cf6</Color>
     <Color x:Key="BorderColor4">#f62b4f</Color>
 
-    <!--  miscellaneaus  -->
+    <!--  miscellaneaus color  palette  -->
     <Color x:Key="MiscellaneousColor1">#dddddd</Color>
+
+    <!--#endregion-->
+
+    <!--#region Brushes-->
+
+    <!--  light theme background color brush palette  -->
+    <SolidColorBrush x:Key="BackgroundColorBrush1" Color="{StaticResource BackgroundColor1}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush2" Color="{StaticResource BackgroundColor2}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush3" Color="{StaticResource BackgroundColor3}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush4" Color="{StaticResource BackgroundColor4}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush5" Color="{StaticResource BackgroundColor5}" />
+
+    <!--  light theme foreground color brush palette  -->
+    <SolidColorBrush x:Key="ForegroundColorBrush1" Color="{StaticResource ForegroundColor1}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush2" Color="{StaticResource ForegroundColor2}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush3" Color="{StaticResource ForegroundColor3}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush4" Color="{StaticResource ForegroundColor4}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush5" Color="{StaticResource ForegroundColor5}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush6" Color="{StaticResource ForegroundColor6}" />
+
+    <!--  light theme background color palette on hover  -->
+    <SolidColorBrush x:Key="ButtonHoverBackgroundColorBrush1" Color="{StaticResource ButtonHoverBackgroundColor1}" />
+
+    <!--  light theme border color brush palette  -->
+    <SolidColorBrush x:Key="BorderColorBrush1" Color="{StaticResource BorderColor1}" />
+    <SolidColorBrush x:Key="BorderColorBrush2" Color="{StaticResource BorderColor2}" />
+    <SolidColorBrush x:Key="BorderColorBrush3" Color="{StaticResource BorderColor3}" />
+    <SolidColorBrush x:Key="BorderColorBrush4" Color="{StaticResource BorderColor4}" />
+    <SolidColorBrush x:Key="BorderColorBrush5" Color="{StaticResource ForegroundColor3}" />
+
+    <!--  light theme miscellaneous color brush palette  -->
+    <SolidColorBrush x:Key="MiscellaneaousColorBrush1" Color="{StaticResource MiscellaneousColor1}" />
+
+    <!--#endregion-->
 
 </ResourceDictionary>

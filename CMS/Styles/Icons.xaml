@@ -1,4 +1,5 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <!--  icons  -->
     <system:String x:Key="AppIcon">&#xf0e7;</system:String>
@@ -8,5 +9,13 @@
     <system:String x:Key="WindowRestoreIcon">&#xf24d;</system:String>
     <system:String x:Key="WindowCloseIcon">&#xe59b;</system:String>
     <system:String x:Key="NotificationIcon">&#xf0f3;</system:String>
+    <system:String x:Key="SpinnerIcon">&#xe1d4;</system:String>
+    <system:String x:Key="SearchIcon">&#xf002;</system:String>
+    <system:String x:Key="HomeIcon">&#xe487;</system:String>
+    <system:String x:Key="InfosIcon">&#xf05a;</system:String>
+    <system:String x:Key="ArchivesIcon">&#xf187;</system:String>
+    <system:String x:Key="UsersIcon">&#xf007;</system:String>
+    <system:String x:Key="SettingsIcon">&#xf013;</system:String>
+    <system:String x:Key="UpdatesIcon">&#xf09e;</system:String>
 
 </ResourceDictionary>

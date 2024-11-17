@@ -21,7 +21,7 @@
             <TextBlock Margin="10,0" HorizontalAlignment="Left" VerticalAlignment="Center"
                        FontFamily="{StaticResource SolidIcon}"
                        FontSize="{StaticResource Large}"
-                       Foreground="{DynamicResource ForegroundColorBrush2}"
+                       Foreground="{DynamicResource ForegroundColorBrush3}"
                        Text="{StaticResource AppIcon}">
                 <TextBlock.Effect>
                     <DropShadowEffect BlurRadius="12" Opacity="0.7" ShadowDepth="-8" />

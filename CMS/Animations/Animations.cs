@@ -35,5 +35,22 @@ namespace CMS
             // Start animation 
             storyboard.Begin(element);
         }
+
+        /// <summary>
+        /// Fades a <see cref="FrameworkElement"/> out of view with animation 
+        /// </summary>
+        /// <param name="element">The element to fade out of view</param>
+        /// <returns><see cref="Task"/></returns>
+        public static async Task FadeElementOutOfView(FrameworkElement element)
+        {
+            // TODO: Find a better way to implement this
+            Fade(element, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, easingFactor: 3, duration: 0.6, to: 0, from: 1);
+
+            // Allow time for animation to play
+            await Task.Delay(TimeSpan.FromSeconds(0.6));
+
+            await Task.CompletedTask;
+        }
+
     }
 }

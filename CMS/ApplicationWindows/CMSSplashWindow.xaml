@@ -1,7 +1,9 @@
-﻿<Window x:Class="CMS.CMSSplashWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:CMS"
-        Title="CMSSplashWindow" Width="800" Height="450"
-        local:WindowBehaviors.WindowLoadedBehavior="True" WindowStartupLocation="CenterScreen" WindowStyle="None"
+﻿<Window x:Class="CMS.CMSSplashWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:CMS"
+        Title="CMSSplashWindow" Width="800"
+        Height="450" local:WindowBehaviors.WindowLoadedBehavior="True"
+        WindowStartupLocation="CenterScreen" WindowStyle="None"
         AllowsTransparency="True" mc:Ignorable="d">
 
     <Window.Resources>
@@ -16,13 +18,37 @@
     <Grid>
         <!--  splash screen background image  -->
         <Grid.Background>
-            <ImageBrush ImageSource="/.Resources/Images/splashscreen.jpg" TileMode="Tile" Viewport="0 0 800 450"
-                        ViewportUnits="Absolute" />
+            <ImageBrush ImageSource="/.Resources/Images/splashscreen.jpg" TileMode="Tile"
+                        Viewport="0 0 800 450" ViewportUnits="Absolute" />
         </Grid.Background>
 
+        <!--  splash window content  -->
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                    Orientation="Horizontal">
+
+            <TextBlock Margin="60,0,20,0" VerticalAlignment="Center"
+                       Text="{StaticResource AppLogoIcon}"
+                       FontSize="{StaticResource BillBoard}"
+                       Foreground="{DynamicResource ForegroundColorBrush3}"
+                       FontFamily="{StaticResource SolidIcon}" />
+
+            <TextBlock Margin="0,26,0,0" VerticalAlignment="Center"
+                       FontSize="36"
+                       Foreground="{DynamicResource ForegroundColorBrush3}"
+                       FontFamily="{StaticResource RobotoFlexRegular}"
+                       FontWeight="Black">
+                <Run Text="C" /><Run Text="utter" FontSize="26" />
+                <Run Text="M" /><Run Text="anagment" FontSize="26" />
+                <Run Text="S" /><Run Text="ystem" FontSize="26" />
+            </TextBlock>
+
+        </StackPanel>
+
         <!--  loader  -->
-        <TextBlock Margin="12" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                   Text="&#xe1d4;"
+        <TextBlock Margin="12" HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   Text="{StaticResource SpinnerIcon}"
+                   Foreground="{DynamicResource ForegroundColorBrush3}"
                    FontFamily="{StaticResource LightIcon}"
                    FontSize="{StaticResource Large}"
                    RenderTransformOrigin="0.5 0.5"
@@ -37,8 +63,9 @@
                 <Style>
                     <Style.Resources>
                         <Storyboard x:Key="Loader">
-                            <DoubleAnimation RepeatBehavior="Forever" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" From="0"
-                                             To="360" Duration="0:0:2" />
+                            <DoubleAnimation RepeatBehavior="Forever" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                             From="0" To="360"
+                                             Duration="0:0:2" />
                         </Storyboard>
                     </Style.Resources>
                     <Style.Triggers>
@@ -55,26 +82,13 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-
-            <TextBlock VerticalAlignment="Center"
-                       Text="{StaticResource AppLogoIcon}"
-                       FontSize="{StaticResource BillBoard}"
-                       Foreground="{DynamicResource ForegroundColorBrush2}"
-                       FontFamily="{StaticResource SolidIcon}"
-                       Margin="100,0,40,0" />
-
-            <TextBlock VerticalAlignment="Center" FontSize="36" Margin="0,0,0,0"
-                       Foreground="{DynamicResource ForegroundColorBrush2}"
-                       FontFamily="{StaticResource RobotoFlexRegular}"
-                       FontWeight="Black">
-                <Run Text="C" />
-                <Run Text="M" />
-                <Run Text="S" />
-            </TextBlock>
-
-        </StackPanel>
-
+        <!--  TODO: pull year value from view model  -->
+        <TextBlock Margin="20,10" HorizontalAlignment="Right"
+                   VerticalAlignment="Bottom" Text="2025"
+                   FontSize="{StaticResource Large}"
+                   FontFamily="{StaticResource RobotoFlexRegular}"
+                   FontWeight="Black"
+                   Foreground="{DynamicResource ForegroundColorBrush3}" />
 
     </Grid>
 </Window>

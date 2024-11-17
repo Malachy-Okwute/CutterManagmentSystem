@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include=".Resources\Images\cms-icon-1.png" />
     <Resource Include=".Resources\Fonts\RobotoFlex-Regular.ttf" />
     <Resource Include=".Resources\Fonts\Roboto-Black.ttf" />
     <Resource Include=".Resources\Fonts\Roboto-BlackItalic.ttf" />

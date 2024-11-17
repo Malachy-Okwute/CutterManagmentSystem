@@ -7,7 +7,7 @@
         <Setter Property="Width" Value="45" />
         <Setter Property="FontSize" Value="{StaticResource XSmall}" />
         <Setter Property="FontFamily" Value="{StaticResource LightIcon}" />
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush2}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush6}" />
         <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush1}" />
         <Setter Property="Template">
             <Setter.Value>
@@ -80,9 +80,10 @@
         <Setter Property="BorderBrush" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Width" Value="100" />
-        <Setter Property="FontSize" Value="{StaticResource XSmall}" />
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush1}" />
-        <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush2}" />
+        <Setter Property="FontSize" Value="{StaticResource Regular}" />
+        <Setter Property="FontFamily" Value="{StaticResource RegularIcon}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush3}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -96,7 +97,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="MouseOverBackground" Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
+                            <Setter TargetName="MouseOverBackground" Property="Background" Value="{DynamicResource ButtonHoverBackgroundColorBrush1}" />
                             <Setter TargetName="MouseOverBackground" Property="Opacity" Value="0.1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -108,10 +109,10 @@
 
     <!--  current shift profile button  -->
     <Style x:Key="CurrentShiftStyle" TargetType="{x:Type Button}">
-        <Setter Property="BorderBrush" Value="{x:Null}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontSize" Value="{StaticResource XSmall}" />
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush2}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColorBrush3}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="{StaticResource Small}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush3}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
@@ -120,7 +121,7 @@
                     <Border UseLayoutRounding="True"
                             Background="{TemplateBinding Background}"
                             TextBlock.Foreground="{TemplateBinding Foreground}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="20"
                             BorderThickness="{TemplateBinding BorderThickness}">
 
                         <!--  content  -->
@@ -143,10 +144,10 @@
     <Style x:Key="NotificationButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="BorderBrush" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontSize" Value="{StaticResource Large}" />
-        <Setter Property="FontFamily" Value="{StaticResource SharpLightIcon}" />
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush1}" />
-        <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush2}" />
+        <Setter Property="FontSize" Value="{StaticResource Regular}" />
+        <Setter Property="FontFamily" Value="{StaticResource RegularIcon}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush3}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -160,7 +161,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="MouseOverBackground" Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
+                            <Setter TargetName="MouseOverBackground" Property="Background" Value="{DynamicResource ButtonHoverBackgroundColorBrush1}" />
                             <Setter TargetName="MouseOverBackground" Property="Opacity" Value="0.1" />
                         </Trigger>
                     </ControlTemplate.Triggers>

@@ -25,7 +25,7 @@
                         <!--  app bare window outline  -->
                         <Grid x:Name="PART_WindowLimitMargin">
 
-                            <Border Background="{StaticResource BackgroundColorBrush1}">
+                            <Border Background="{DynamicResource BackgroundColorBrush1}">
                                 <!--  drop-shadow effect  -->
                                 <Border.Effect>
                                     <DropShadowEffect ShadowDepth="10" BlurRadius="35"
