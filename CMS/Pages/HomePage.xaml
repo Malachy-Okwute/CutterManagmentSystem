@@ -21,19 +21,15 @@
             <Label Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                    HorizontalContentAlignment="Center" Content="Pinions"
                    FontSize="{StaticResource XLarge}"
-                   Foreground="{DynamicResource ForegroundColorBrush2}">
-                <Label.Effect>
-                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.6" />
-                </Label.Effect>
-            </Label>
+                   FontWeight="Black"
+                   FontFamily="{StaticResource RobotoFlexRegular}"
+                   Foreground="{DynamicResource ForegroundColorBrush3}" />
             <Label Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                    HorizontalContentAlignment="Center" Content="Gears"
                    FontSize="{StaticResource XLarge}"
-                   Foreground="{DynamicResource ForegroundColorBrush2}">
-                <Label.Effect>
-                    <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.6" />
-                </Label.Effect>
-            </Label>
+                   FontWeight="Black"
+                   FontFamily="{StaticResource RobotoFlexRegular}"
+                   Foreground="{DynamicResource ForegroundColorBrush3}" />
 
         </Grid>
 
