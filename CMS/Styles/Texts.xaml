@@ -26,7 +26,8 @@
                         <Grid>
 
                             <!--  place holder  -->
-                            <TextBlock x:Name="PlaceHolder" Padding="2,1,0,0" HorizontalAlignment="Left"
+                            <TextBlock x:Name="PlaceHolder" Padding="2,1,0,0"
+                                       HorizontalAlignment="Left"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                        Text="{TemplateBinding Tag}"
                                        FontFamily="{TemplateBinding FontFamily}"
@@ -36,16 +37,16 @@
                                        TextAlignment="{TemplateBinding TextAlignment}"
                                        Visibility="Collapsed" />
 
-                            <Button HorizontalAlignment="Right"
+                            <Button Width="60" HorizontalAlignment="Right"
                                     FontSize="{TemplateBinding FontSize}"
                                     Background="{DynamicResource BackgroundColorBrush3}"
                                     Content="{StaticResource SearchIcon}"
-                                    Width="60"
                                     Style="{DynamicResource AppButtonStyle}" />
 
                             <!--  control content  -->
-                            <ScrollViewer x:Name="PART_ContentHost" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                                          Margin="0,0,66,0" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,66,0"
+                                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                          VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
 
                         </Grid>
 

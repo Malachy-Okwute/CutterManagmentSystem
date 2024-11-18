@@ -39,8 +39,172 @@ namespace CMS
                     ProducedPartCount = "1000",
                     ResultOfLastPartChecked = "PASSED",
                     DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
-                }
+                },
 
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
             };
         }
     }

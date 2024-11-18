@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="CMS.MachineItemCollectionControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CMS"
-             mc:Ignorable="d"
-             d:DataContext="{x:Static local:MachineItemCollectionDesignModel.Instance}">
+﻿<UserControl x:Class="CMS.MachineItemCollectionControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CMS"
+             d:DataContext="{x:Static local:MachineItemCollectionDesignModel.Instance}"
+             mc:Ignorable="d">
 
-    <Grid HorizontalAlignment="Center">
+    <Grid>
 
         <Grid.RowDefinitions>
             <!--  items labels  -->
@@ -13,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <!--  items labels  -->
-        <Grid Grid.Row="0" Margin="4,0">
+        <Grid Grid.Row="0" Margin="4,8">
             <Grid.ColumnDefinitions>
 
                 <!--  machine number  -->
@@ -33,56 +34,63 @@
             </Grid.ColumnDefinitions>
 
             <!--  machine number  -->
-            <TextBlock x:Name="MachineIDLabel" Grid.Column="0" HorizontalAlignment="Center"
-                       VerticalAlignment="Center" Text="MACHINE-ID" d:Width="80"
+            <TextBlock x:Name="MachineIDLabel" Grid.Column="0"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       d:Width="80" Text="MACHINE-ID"
                        FontSize="{StaticResource XSmall}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}"
                        TextAlignment="Center" />
 
             <!--  machine status  -->
-            <TextBlock x:Name="MachineStatusLabel" Grid.Column="1" HorizontalAlignment="Center"
-                       VerticalAlignment="Center" Text="STATUS" d:Width="60"
+            <TextBlock x:Name="MachineStatusLabel" Grid.Column="1"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       d:Width="60" Text="STATUS"
                        FontSize="{StaticResource XSmall}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}"
                        TextAlignment="Center" />
 
             <!--  cutter number  -->
-            <TextBlock x:Name="CutterNumberLabel" Grid.Column="2" HorizontalAlignment="Center"
-                       VerticalAlignment="Center" Text="CUTTER #" d:Width="80"
+            <TextBlock x:Name="CutterNumberLabel" Grid.Column="2"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       d:Width="80" Text="CUTTER #"
                        FontSize="{StaticResource XSmall}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}"
                        TextAlignment="Center" />
 
             <!--  part number  -->
-            <TextBlock x:Name="PartNumberLabel" Grid.Column="3" HorizontalAlignment="Center"
-                       VerticalAlignment="Center" Text="PART #" d:Width="80"
+            <TextBlock x:Name="PartNumberLabel" Grid.Column="3"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       d:Width="80" Text="PART #"
                        FontSize="{StaticResource XSmall}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}"
                        TextAlignment="Center" />
 
             <!--  count  -->
-            <TextBlock x:Name="CountLabel" Grid.Column="4" HorizontalAlignment="Center"
-                       VerticalAlignment="Center" Text="COUNT" d:Width="60"
+            <TextBlock x:Name="CountLabel" Grid.Column="4"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       d:Width="60" Text="COUNT"
                        FontSize="{StaticResource XSmall}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}"
                        TextAlignment="Center" />
 
             <!--  check result  -->
-            <TextBlock x:Name="ResultLabel" Grid.Column="5" HorizontalAlignment="Center"
-                       VerticalAlignment="Center" Text="RESULT" d:Width="80"
+            <TextBlock x:Name="ResultLabel" Grid.Column="5"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       d:Width="80" Text="RESULT"
                        FontSize="{StaticResource XSmall}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}"
                        TextAlignment="Center" />
 
             <!--  date and time of last check  -->
-            <TextBlock x:Name="DateAndTimeStampLabel" Grid.Column="6" HorizontalAlignment="Center"
-                       VerticalAlignment="Center" Text="DATE AND TIME" d:Width="160"
+            <TextBlock x:Name="DateAndTimeStampLabel" Grid.Column="6"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       d:Width="160" Text="DATE AND TIME"
                        FontSize="{StaticResource XSmall}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}"

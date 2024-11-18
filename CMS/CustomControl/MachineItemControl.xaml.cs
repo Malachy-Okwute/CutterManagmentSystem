@@ -23,7 +23,6 @@ namespace CMS
         public MachineItemControl()
         {
             InitializeComponent();
-
         }
     }
 }

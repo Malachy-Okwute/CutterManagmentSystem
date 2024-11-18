@@ -20,7 +20,8 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
 
                         <!--  content  -->
-                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -49,7 +50,8 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
 
                         <!--  content  -->
-                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}"
                                           RenderTransformOrigin="0.5, 0.5">
 
@@ -89,7 +91,8 @@
 
                         <Grid Name="MouseOverBackground" Background="Transparent" />
 
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Content="{TemplateBinding Content}" />
 
                     </Grid>

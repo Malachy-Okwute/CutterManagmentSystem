@@ -2,14 +2,11 @@
 
     <!--  window style  -->
     <Style x:Key="CMSWindowStyle" TargetType="{x:Type Window}">
-        <Setter Property="AllowsTransparency" Value="True" />
         <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush1}" />
-        <Setter Property="WindowStyle" Value="None" />
-        <Setter Property="WindowState" Value="Normal" />
-        <Setter Property="MinHeight" Value="350" />
-        <Setter Property="MinWidth" Value="450" />
-        <Setter Property="Height" Value="850" />
-        <Setter Property="Width" Value="1400" />
+        <Setter Property="MinHeight" Value="950" />
+        <Setter Property="MinWidth" Value="1600" />
+        <Setter Property="Height" Value="950" />
+        <Setter Property="Width" Value="1600" />
         <Setter Property="WindowChrome.NonClientFrameEdges" Value="Bottom" />
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
 
@@ -28,8 +25,9 @@
                             <Border Background="{DynamicResource BackgroundColorBrush1}">
                                 <!--  drop-shadow effect  -->
                                 <Border.Effect>
-                                    <DropShadowEffect ShadowDepth="10" BlurRadius="35" Direction="270"
-                                                      Opacity="0.2" RenderingBias="Quality" />
+                                    <DropShadowEffect ShadowDepth="10" BlurRadius="35"
+                                                      Direction="270" Opacity="0.2"
+                                                      RenderingBias="Quality" />
                                 </Border.Effect>
                             </Border>
 
@@ -66,24 +64,24 @@
                                 </Grid.RowDefinitions>
 
                                 <!--  the corners  -->
-                                <Border x:Name="PART_TopLeftBorder" Grid.Row="0" Grid.Column="0"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_TopRightBorder" Grid.Row="0" Grid.Column="2"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_BottomLeftBorder" Grid.Row="2" Grid.Column="0"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_BottomRightBorder" Grid.Row="2" Grid.Column="2"
-                                        Background="Transparent" />
+                                <Border x:Name="PART_TopLeftBorder" Grid.Row="0"
+                                        Grid.Column="0" Background="Transparent" />
+                                <Border x:Name="PART_TopRightBorder" Grid.Row="0"
+                                        Grid.Column="2" Background="Transparent" />
+                                <Border x:Name="PART_BottomLeftBorder" Grid.Row="2"
+                                        Grid.Column="0" Background="Transparent" />
+                                <Border x:Name="PART_BottomRightBorder" Grid.Row="2"
+                                        Grid.Column="2" Background="Transparent" />
 
                                 <!--  sides  -->
-                                <Border x:Name="PART_LeftBorder" Grid.Row="1" Grid.Column="0"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_RightBorder" Grid.Row="1" Grid.Column="2"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_TopBorder" Grid.Row="0" Grid.Column="1"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_BottomBorder" Grid.Row="2" Grid.Column="1"
-                                        Background="Transparent" />
+                                <Border x:Name="PART_LeftBorder" Grid.Row="1"
+                                        Grid.Column="0" Background="Transparent" />
+                                <Border x:Name="PART_RightBorder" Grid.Row="1"
+                                        Grid.Column="2" Background="Transparent" />
+                                <Border x:Name="PART_TopBorder" Grid.Row="0"
+                                        Grid.Column="1" Background="Transparent" />
+                                <Border x:Name="PART_BottomBorder" Grid.Row="2"
+                                        Grid.Column="1" Background="Transparent" />
 
                             </Grid>
 
