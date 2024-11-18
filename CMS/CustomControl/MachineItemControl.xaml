@@ -1,6 +1,5 @@
-﻿<UserControl x:Class="CMS.MachineItemControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CMS"
+﻿<UserControl x:Class="CMS.MachineItemControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CMS"
              Height="48"
              d:DataContext="{x:Static local:MachineItemDesignModel.Instance}"
              mc:Ignorable="d">
@@ -9,8 +8,7 @@
 
         <!--  dropshadow effect  -->
         <Grid.Effect>
-            <DropShadowEffect BlurRadius="12" ShadowDepth="0"
-                              Opacity="0.12" />
+            <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.12" />
         </Grid.Effect>
 
         <Grid.ColumnDefinitions>
@@ -28,13 +26,16 @@
             <ColumnDefinition Width="*" />
             <!--  date and time of last check  -->
             <ColumnDefinition Width="1.5*" />
+            <!--  machine item edit button  -->
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <!--  machine id #  -->
-        <Border x:Name="MachineNumber" Grid.Column="0"
-                MinWidth="80" HorizontalAlignment="Stretch">
+        <Border x:Name="MachineNumber" Grid.Column="0" MinWidth="80"
+                HorizontalAlignment="Stretch">
             <Button Background="{DynamicResource BackgroundColorBrush3}"
-                    Content="{Binding MachineNumber}" Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
+                    Content="{Binding MachineNumber}"
+                    Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
                     FontFamily="{StaticResource RobotoFlexRegular}"
                     Style="{StaticResource AppButtonStyle}" />
         </Border>
@@ -42,8 +43,8 @@
         <!--  machine status  -->
         <Border x:Name="MachineStatus" Grid.Column="1" HorizontalAlignment="Stretch"
                 MinWidth="60">
-            <Border Width="20" Height="20"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"
+            <Border Width="20" Height="20" HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
                     Background="{DynamicResource AccentColorBrush3}"
                     Opacity="0.3" CornerRadius="10" />
         </Border>
@@ -51,8 +52,7 @@
         <!--  cutter number  -->
         <Border x:Name="CutterNumber" Grid.Column="2" HorizontalAlignment="Stretch"
                 MinWidth="80">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding CurrentCutterNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
@@ -61,8 +61,7 @@
         <!--  part number currently being run by this machine  -->
         <Border x:Name="CurrentRunningPartNumber" Grid.Column="3" HorizontalAlignment="Stretch"
                 MinWidth="80">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding CurrentRunningPartNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
@@ -71,8 +70,7 @@
         <!--  amount of part made by this machine  -->
         <Border x:Name="ProducedPartCount" Grid.Column="4" HorizontalAlignment="Stretch"
                 MinWidth="60">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding ProducedPartCount}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
@@ -82,21 +80,28 @@
         <Border x:Name="ResultOfLastPartChecked" Grid.Column="5" HorizontalAlignment="Stretch"
                 MinWidth="90"
                 Background="{DynamicResource AccentColorBrush5}">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding ResultOfLastPartChecked}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush7}" />
         </Border>
 
         <!--  date and time of last check  -->
-        <Border x:Name="DateAndTimeOfLastCheck" Grid.Column="6" HorizontalAlignment="Stretch" 
+        <Border x:Name="DateAndTimeOfLastCheck" Grid.Column="6" HorizontalAlignment="Stretch"
                 MinWidth="160" d:Padding="8,0">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding DateAndTimeOfLastCheck}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
+        </Border>
+
+        <!--  machine item edit button  -->
+        <Border Grid.Column="7" Width="30" HorizontalAlignment="Stretch">
+            <Button Content="{StaticResource VerticalEllipsisIcon}"
+                    Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
+                    HorizontalContentAlignment="Center"
+                    FontFamily="{StaticResource SolidIcon}"
+                    Style="{StaticResource AppHoverlessButtonStyle}" />
         </Border>
 
     </Grid>

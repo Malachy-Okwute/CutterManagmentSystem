@@ -18,5 +18,6 @@
     <system:String x:Key="SettingsIcon">&#xf013;</system:String>
     <system:String x:Key="UpdatesIcon">&#xf09e;</system:String>
     <system:String x:Key="AngleDownIcon">&#xf107;</system:String>
+    <system:String x:Key="VerticalEllipsisIcon">&#xf142;</system:String>
 
 </ResourceDictionary>

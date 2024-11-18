@@ -20,8 +20,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
 
                         <!--  content  -->
-                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
+                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center" VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -50,8 +49,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
 
                         <!--  content  -->
-                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
+                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center" VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}"
                                           RenderTransformOrigin="0.5, 0.5">
 
@@ -106,6 +104,28 @@
             </Setter.Value>
         </Setter>
 
+    </Style>
+
+    <!--  app hoverless button style  -->
+    <Style x:Key="AppHoverlessButtonStyle"
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource AppButtonStyle}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid UseLayoutRounding="True" Background="{TemplateBinding Background}">
+
+                        <Grid Name="MouseOverBackground" Background="Transparent" />
+
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}" />
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!--  current shift profile button  -->

@@ -45,6 +45,9 @@ namespace CMS
                 // Set is-maximized to true if window is maximized
                 ((CMSWindowViewModel)DataContext).IsMaximized = WindowState == WindowState.Maximized;
 
+                // If window is in maximized state do nothing
+                if (WindowState == WindowState.Maximized) return;
+
                 #region Snap Layout
 
                 // If window edge is on the left | top left | bottom left of the screen...
@@ -171,7 +174,7 @@ namespace CMS
         /// <returns><see cref=" Thickness"/></returns>
         private Thickness GetMaximizedMarginThickness()
         {
-            var windowLimitMargin = GetTemplateChild("PART_WindowLimitMargin") as FrameworkElement;
+            FrameworkElement windowLimitMargin = (FrameworkElement)GetTemplateChild("PART_WindowLimitMargin");
             if (windowLimitMargin == null)
                 return new Thickness(0);
 

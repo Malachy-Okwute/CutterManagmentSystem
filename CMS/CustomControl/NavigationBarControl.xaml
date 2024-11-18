@@ -32,7 +32,7 @@
         </Border>
 
         <!--  app menu  -->
-        <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Panel.ZIndex="1">
             <Button x:Name="HomeButton"
                     Content="{StaticResource HomeIcon}"
                     Style="{StaticResource AppButtonStyle}" />
@@ -53,7 +53,7 @@
                     Style="{StaticResource AppButtonStyle}" />
         </StackPanel>
 
-        <Canvas Grid.Column="0" Grid.ColumnSpan="4">
+        <Canvas Grid.Column="0" Grid.ColumnSpan="4" >
 
             <!--  app menu selection indicator  -->
             <Border x:Name="Indicator" Canvas.Bottom="0"

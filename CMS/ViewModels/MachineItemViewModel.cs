@@ -49,5 +49,7 @@
         /// Date and time of the last checked part on this machine
         /// </summary>
         public string DateAndTimeOfLastCheck { get; set; } = string.Empty;
+
+        public bool IsMouseOverEditButton { get; set; }
     }
 }
