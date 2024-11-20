@@ -23,10 +23,7 @@ namespace CMS
         /// </summary>
         public static IServiceCollection AddViews(this IServiceCollection services)
         {
-            services.AddSingleton(provider => new MainWindow
-            {
-                DataContext = provider.GetRequiredService<CMSWindowViewModel>()
-            });
+            services.AddSingleton<MainWindow>();
 
             // Return services
             return services;

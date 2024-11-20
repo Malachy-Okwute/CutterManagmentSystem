@@ -38,7 +38,7 @@ namespace CMS
         /// <summary>
         /// The main application window
         /// </summary>
-        private Window _appWindow => Application.Current.MainWindow;
+        private Window _appWindow => Application.Current.MainWindow; //TODO: Refactor
 
         #endregion
 
@@ -89,12 +89,6 @@ namespace CMS
             set => _footerHeight = value;
         }
 
-        /// <summary>
-        /// True if <see cref="CMSWindow"/> is maximized, 
-        /// otherwise false
-        /// </summary>
-        public bool IsMaximized { get; set; }
-
         #endregion
 
         #region Public Commands
@@ -124,9 +118,9 @@ namespace CMS
         public CMSWindowViewModel()
         {
             // Create commands
-            MinimizeWindowCommand = new RelayCommand(() => _appWindow.WindowState = WindowState.Minimized, canExecuteCommand => this != null);
+            MinimizeWindowCommand = new RelayCommand(() => _appWindow.WindowState = WindowState.Minimized, canExecuteCommand => true);
             //MaximizeWindowCommand = new RelayCommand(() => _appWindow.WindowState ^= WindowState.Maximized, canExecuteCommand => this != null);
-            CloseWindowCommand = new RelayCommand(() => _appWindow.Close(), canExecuteCommand => this != null);
+            CloseWindowCommand = new RelayCommand(() => _appWindow.Close(), canExecuteCommand => true);
         }
 
         #endregion

@@ -34,7 +34,7 @@ namespace CMS
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MainWindow()
+        public MainWindow(CMSWindowViewModel viewModel) : base(viewModel)
         {
             InitializeComponent();
         }

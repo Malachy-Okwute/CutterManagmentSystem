@@ -5,8 +5,6 @@ using Serilog;
 using Serilog.Events;
 using System.IO;
 using System.Windows;
-using System.Windows.Media.Animation;
-using System.Windows.Xps;
 
 namespace CMS
 {
