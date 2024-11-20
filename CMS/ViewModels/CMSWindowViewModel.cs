@@ -89,6 +89,14 @@ namespace CMS
             set => _footerHeight = value;
         }
 
+        /// <summary>
+        /// True if application window is maximized, otherwise false
+        /// <remark>
+        /// Used to switch maximize button icon between maximized and normal state of the window
+        /// </remark>
+        /// </summary>
+        public bool IsMaximized {  get; set; }
+
         #endregion
 
         #region Public Commands

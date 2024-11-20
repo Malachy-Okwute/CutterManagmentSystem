@@ -3,7 +3,7 @@
                  xmlns:local="clr-namespace:CMS" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  Title="MainWindow"
                  d:DesignStyle="{StaticResource CMSWindowStyle}"
-                 local:WindowBehaviors.WindowLoadedBehavior="True" 
+                 local:WindowAttachedProperty.AnimateWindow="True" 
                  WindowStartupLocation="CenterScreen"
                  WindowStyle="None"
                  WindowState="Normal"

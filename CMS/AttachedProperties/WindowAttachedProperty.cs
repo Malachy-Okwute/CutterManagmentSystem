@@ -3,20 +3,20 @@ using System.Windows.Media.Animation;
 
 namespace CMS
 {
-    public class WindowBehaviors 
+    public class WindowAttachedProperty
     {
-        // Using a DependencyProperty as the backing store for WindowLoadedBehavior.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty WindowLoadedBehaviorProperty =
-            DependencyProperty.Register("WindowLoadedBehavior", typeof(bool), typeof(DependencyObject), new PropertyMetadata(default(bool), OnPropertyChanged));
+        // Using a DependencyProperty as the backing store for AnimateWindowProperty .  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AnimateWindowProperty =
+            DependencyProperty.Register("AnimateWindow", typeof(bool), typeof(DependencyObject), new PropertyMetadata(default(bool), OnPropertyChanged));
 
         /// <summary>
         /// Get value of this attached property
         /// </summary>
         /// <param name="element">The visual element this property is attached to</param>
         /// <returns></returns>
-        public static bool GetWindowLoadedBehavior(DependencyObject element)
+        public static bool GetAnimateWindow(DependencyObject element)
         {
-            return (bool)element.GetValue(WindowLoadedBehaviorProperty);
+            return (bool)element.GetValue(AnimateWindowProperty);
         }
 
         /// <summary>
@@ -24,9 +24,9 @@ namespace CMS
         /// </summary>
         /// <param name="element">The visual element this property is attached to</param>
         /// <param name="value">Boolean value determining if this attached behavior is to be used or not</param>
-        public static void SetWindowLoadedBehavior(DependencyObject element, bool value)
+        public static void SetAnimateWindow(DependencyObject element, bool value)
         {
-            element.SetValue(WindowLoadedBehaviorProperty, value);
+            element.SetValue(AnimateWindowProperty, value);
         }
 
         /// <summary>

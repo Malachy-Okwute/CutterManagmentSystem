@@ -48,7 +48,8 @@ namespace CMS
             // Hook into window size changed event
             SizeChanged += (s, e) =>
             {
-                // Set is-maximized to true if window is maximized
+                // Set view model properties
+                viewModel.IsMaximized = WindowState == WindowState.Maximized;
                 viewModel.ResizeBorderSize = WindowState == WindowState.Maximized ? 0 : 8;
 
                 // If window is in maximized state do nothing
