@@ -3,8 +3,8 @@
     <!--  window style  -->
     <Style x:Key="CMSWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush1}" />
-        <Setter Property="MinHeight" Value="950" />
-        <Setter Property="MinWidth" Value="1600" />
+        <Setter Property="MinHeight" Value="200" />
+        <Setter Property="MinWidth" Value="100" />
         <Setter Property="Height" Value="950" />
         <Setter Property="Width" Value="1600" />
         <Setter Property="WindowChrome.NonClientFrameEdges" Value="Bottom" />
@@ -22,7 +22,7 @@
                         <!--  app bare window outline  -->
                         <Grid x:Name="PART_WindowLimitMargin">
 
-                            <Border Background="{DynamicResource BackgroundColorBrush1}">
+                            <Border>
                                 <!--  drop-shadow effect  -->
                                 <Border.Effect>
                                     <DropShadowEffect ShadowDepth="10" BlurRadius="35"
@@ -32,7 +32,7 @@
                             </Border>
 
                             <!--  main window  -->
-                            <Grid>
+                            <Grid Background="{DynamicResource BackgroundColorBrush1}">
                                 <Grid.RowDefinitions>
                                     <!--  caption area  -->
                                     <RowDefinition Height="Auto" />
@@ -53,14 +53,14 @@
 
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="{Binding ResizeBorderSize}" />
+                                    <ColumnDefinition Width="0" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="{Binding ResizeBorderSize}" />
+                                    <ColumnDefinition Width="0" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="{Binding ResizeBorderSize}" />
+                                    <RowDefinition Height="0" />
                                     <RowDefinition Height="*" />
-                                    <RowDefinition Height="{Binding ResizeBorderSize}" />
+                                    <RowDefinition Height="0" />
                                 </Grid.RowDefinitions>
 
                                 <!--  the corners  -->

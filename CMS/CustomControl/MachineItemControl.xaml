@@ -101,7 +101,7 @@
                     Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
                     HorizontalContentAlignment="Center"
                     FontFamily="{StaticResource SolidIcon}"
-                    Style="{StaticResource AppHoverlessButtonStyle}" />
+                    Style="{StaticResource MachineItemEditButtonStyle}" />
         </Border>
 
     </Grid>

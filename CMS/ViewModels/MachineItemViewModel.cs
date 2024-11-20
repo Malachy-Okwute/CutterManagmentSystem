@@ -1,10 +1,14 @@
-﻿namespace CMS
+﻿using System.Windows.Input;
+
+namespace CMS
 {
     /// <summary>
     /// View model for <see cref="MachineItemControl"/>
     /// </summary>
     public class MachineItemViewModel : ViewModelBase
     {
+        #region Public Properties
+
         /// <summary>
         /// Unique ID of this machine
         /// </summary>
@@ -50,6 +54,25 @@
         /// </summary>
         public string DateAndTimeOfLastCheck { get; set; } = string.Empty;
 
-        public bool IsMouseOverEditButton { get; set; }
+        #endregion
+
+        /// <summary>
+        /// Command to run when this item is selected
+        /// </summary>
+        public ICommand ItemSelectedCommand { get; set; }
+
+        /// <summary>
+        /// Command to run when this item's edit button is clicked on
+        /// </summary>
+        public ICommand EditItemCommand { get; set; }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public MachineItemViewModel()
+        {
+            //ItemSelectedCommand = new RelayCommand(SelectItem, (d) =>true);
+            //EditItemCommand  = new RelayCommand();
+        }
     }
 }

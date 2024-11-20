@@ -20,7 +20,8 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
 
                         <!--  content  -->
-                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -49,7 +50,8 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
 
                         <!--  content  -->
-                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <ContentPresenter x:Name="ControlContent" HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}"
                                           RenderTransformOrigin="0.5, 0.5">
 
@@ -106,8 +108,8 @@
 
     </Style>
 
-    <!--  app hoverless button style  -->
-    <Style x:Key="AppHoverlessButtonStyle"
+    <!--  machine edit button style  -->
+    <Style x:Key="MachineItemEditButtonStyle"
            TargetType="{x:Type Button}"
            BasedOn="{StaticResource AppButtonStyle}">
         <Setter Property="Background" Value="Transparent" />
@@ -118,11 +120,18 @@
 
                         <Grid Name="MouseOverBackground" Background="Transparent" />
 
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        <ContentPresenter Name="Content"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Visibility="Collapsed"
                                           Content="{TemplateBinding Content}" />
 
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Content" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

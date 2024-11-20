@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 
@@ -21,6 +24,11 @@ namespace CMS
         /// </summary>
         private Point _cursorOffset;
 
+        /// <summary>
+        /// Application dependency service
+        /// </summary>
+        private readonly IServiceProvider AppHostServices = App.ApplicationHost!.Services;
+
         #endregion
 
         #region Constructor
@@ -30,6 +38,9 @@ namespace CMS
         /// </summary>
         public CMSWindow()
         {
+            // Get view model of this window 
+            CMSWindowViewModel? viewModel = AppHostServices.GetService<CMSWindowViewModel>();
+
             // Win32 operation event
             SourceInitialized += (s, e) => _handle = new WindowInteropHelper(this).Handle;
 
@@ -43,7 +54,7 @@ namespace CMS
             SizeChanged += (s, e) =>
             {
                 // Set is-maximized to true if window is maximized
-                ((CMSWindowViewModel)DataContext).IsMaximized = WindowState == WindowState.Maximized;
+                viewModel!.IsMaximized = WindowState == WindowState.Maximized;
 
                 // If window is in maximized state do nothing
                 if (WindowState == WindowState.Maximized) return;
@@ -53,26 +64,29 @@ namespace CMS
                 // If window edge is on the left | top left | bottom left of the screen...
                 if ((Left == workArea.Left && Top == workArea.Top) || (Left == workArea.Left && (Height + Top) == workArea.Bottom))
                     // Disable drop shadow
-                    ((CMSWindowViewModel)DataContext).DropShadowPadding = 0;
+                    //((CMSWindowViewModel)DataContext).DropShadowPadding = 0;
+                    viewModel!.DropShadowPadding = 0;
                 // If window edge is on the right | top right | bottom right of the screen...
                 else if ((Left + Width == workArea.Right && Top == workArea.Top) || ((Left + Width) == workArea.Right && (Height + Top) == workArea.Bottom))
                     // Disable drop shadow
-                    ((CMSWindowViewModel)DataContext).DropShadowPadding = 0;
-
+                    //((CMSWindowViewModel)DataContext).DropShadowPadding = 0;
+                    viewModel!.DropShadowPadding = 0;
                 // If window edge is on the top and bottom of the screen...
                 else if ((Top == workArea.Top) && (Height == workArea.Bottom))
                     // Disable drop shadow
-                    ((CMSWindowViewModel)DataContext).DropShadowPadding = 0;
+                    //((CMSWindowViewModel)DataContext).DropShadowPadding = 0;
+                    viewModel!.DropShadowPadding = 0;
                 // Otherwise
                 else
                 {
                     // Set drop shadow and resize border sizes
-                    ((CMSWindowViewModel)DataContext).DropShadowPadding = 40;
-                    ((CMSWindowViewModel)DataContext).ResizeBorderSize = 8;
+                    viewModel!.DropShadowPadding = 40;
+                    viewModel!.ResizeBorderSize = 8;
                 }
 
                 #endregion
             };
+
         }
 
         #endregion
@@ -143,10 +157,13 @@ namespace CMS
 
                             // Set window new location
                             Left = newWindowPos;
-                            Top = -40; // Take into account the size of padding around this window (40)
+                            //Top = -40; // Take into account the size of padding around this window (40)
+                            Top = -((CMSWindowViewModel)DataContext).DropShadowPadding; // Take into account the size of padding around this window (40)
 
-                            // Move window 
-                            DragMove();
+                            // Make sure left mouse button is pressed
+                            if(Mouse.LeftButton == MouseButtonState.Pressed)
+                                // Move window 
+                                DragMove();
                         }
                     };
 
@@ -159,8 +176,14 @@ namespace CMS
                 // Monitor when size of this window changes
                 SizeChanged += (sender, e) =>
                 {
-                    // Then calculate margin of this window limit element when this window is maximized
-                    windowLimitMargin.Margin = WindowState == WindowState.Maximized ? GetMaximizedMarginThickness() : new Thickness(0);
+                    // If window is maximized...
+                    if (WindowState == WindowState.Maximized)
+                        // Fix over size window size
+                        windowLimitMargin.Margin = GetMaximizedMarginThickness();
+                    // Otherwise
+                    else
+                        // Reset margin to nothing
+                        windowLimitMargin.Margin = new Thickness(0);
                 };
             }
 
