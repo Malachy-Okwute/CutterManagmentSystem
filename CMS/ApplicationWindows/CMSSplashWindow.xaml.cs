@@ -9,7 +9,7 @@ namespace CMS
     /// <summary>
     /// Interaction logic for CMSSplashWindow.xaml
     /// </summary>
-    public partial class CMSSplashWindow : Window, INotifyPropertyChanged
+    public partial class CMSSplashWindow : Window
     {
         public CMSSplashWindow()
         {

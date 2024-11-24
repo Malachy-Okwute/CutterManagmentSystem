@@ -2,7 +2,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:CMS" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       Title="HomePage" d:DesignHeight="850"
-      d:DesignWidth="1400" mc:Ignorable="d">
+      d:DesignWidth="1400" mc:Ignorable="d"
+      d:Background="White">
 
     <Grid >
         <Grid.RowDefinitions>

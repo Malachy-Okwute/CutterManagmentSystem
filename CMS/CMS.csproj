@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Validation\.Base\DataValidationService.cs" />
+    <Compile Include="Validation\.Base\DataValidationBase.cs" />
+    <Compile Include="Validation\.Base\IValidator.cs" />
+    <Compile Include="Validation\.Base\ValidationResult.cs" />
     <Compile Include="ViewModels\.Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemCollectionDesignModel.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemDesignModel.cs" />

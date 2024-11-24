@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CMS
+﻿namespace CMS
 {
+    /// <summary>
+    /// Part-model object
+    /// </summary>
     public class PartModel
     {
-        public string UniqueID { get; set; } = string.Empty;
+        /// <summary>
+        /// The part model number
+        /// </summary>
+        public string Model { get; set; } = string.Empty;
     }
 }

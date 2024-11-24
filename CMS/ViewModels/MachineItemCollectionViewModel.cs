@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 
 namespace CMS
 {
@@ -8,27 +7,43 @@ namespace CMS
     /// </summary>
     public class MachineItemCollectionViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Collection of <see cref="MachineItemControl"/>
-        /// </summary>
-        private ObservableCollection<MachineItemViewModel> _items;
+        private readonly MachineDataManager _machineData;
 
         /// <summary>
-        /// Collection of <see cref="MachineItemControl"/>
+        /// Collection of <see cref="MachineItemControl"/> representing rings
         /// </summary>
-        public ObservableCollection<MachineItemViewModel> Items 
+        private ObservableCollection<MachineItemViewModel> _ringItems;
+
+        /// <summary>
+        /// Collection of <see cref="MachineItemControl"/> representing pins
+        /// </summary>
+        private ObservableCollection<MachineItemViewModel> _pinItems;
+
+        /// <summary>
+        /// Collection of <see cref="MachineItemControl"/> representing rings
+        /// </summary>
+        public ObservableCollection<MachineItemViewModel> RingItems 
         {
-            get => _items;
-            set => _items = value;
+            get => _ringItems;
+            set => _ringItems = value;
+        }
+
+        /// <summary>
+        /// Collection of <see cref="MachineItemControl"/> representing pins
+        /// </summary>
+        public ObservableCollection<MachineItemViewModel> PinItems
+        {
+            get => _pinItems;
+            set => _pinItems = value;
         }
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemCollectionViewModel()
+        public MachineItemCollectionViewModel(MachineDataManager machineData)
         {
             // Set machine items 
-            _items = new ObservableCollection<MachineItemViewModel>()
+            _ringItems = new ObservableCollection<MachineItemViewModel>()
             {
                 new MachineItemViewModel
                 {
@@ -206,6 +221,218 @@ namespace CMS
                     DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
                 },
             };
+
+            // Set machine items 
+            _pinItems = new ObservableCollection<MachineItemViewModel>()
+            {
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+
+                new MachineItemViewModel
+                {
+                    MachineNumber = "123",
+                    MachineStatus = true,
+                    CurrentCutterNumber = "12345-6789X",
+                    CurrentRunningPartNumber = "12345678",
+                    ProducedPartCount = "1000",
+                    ResultOfLastPartChecked = "PASSED",
+                    DateAndTimeOfLastCheck = "10-21-2024 ~ 2:19 PM"
+                },
+            };
+
+            _machineData = machineData;
         }
+
+        public void AddMachineToRings(MachineItemViewModel machine)
+        {
+            foreach (var item in _machineData.Machines)
+            {
+                
+            }
+
+            if (_ringItems.Contains(machine) is false)
+                _ringItems.Add(machine);
+        }
+
+        public void AddMachineToPins(MachineItemViewModel machine)
+        {
+            if (_pinItems.Contains(machine) is false)
+                _pinItems.Add(machine);
+        }
+
+        public void RemoveMachineFromRings(MachineItemViewModel machine)
+        {
+            if (_ringItems.Contains(machine))
+                _ringItems.Remove(machine);
+        }
+
+        public void RemoveMachineFromPins(MachineItemViewModel machine)
+        {
+            if (_pinItems.Contains(machine))
+                _pinItems.Remove(machine);
+        }
+
     }
 }

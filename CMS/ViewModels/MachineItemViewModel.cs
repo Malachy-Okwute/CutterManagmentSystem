@@ -7,12 +7,26 @@ namespace CMS
     /// </summary>
     public class MachineItemViewModel : ViewModelBase
     {
+        private Machine _machine;
+        private Cutter _cutter;
+        private Part _part;
+
         #region Public Properties
 
         /// <summary>
         /// Unique ID of this machine
         /// </summary>
-        public string MachineNumber { get; set; } = string.Empty;
+        public required string MachineNumber { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Unique set ID of this machine
+        /// </summary>
+        public required string MachineSetNumber { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Cutter id number currently setup on this machine
+        /// </summary>
+        public required string CurrentCutterNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// The current status of this machine 
@@ -27,11 +41,6 @@ namespace CMS
         /// </remark>
         /// </summary>
         public string MachineStatusComment { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Cutter id number currently setup on this machine
-        /// </summary>
-        public string CurrentCutterNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// Part unique id number running on this machine

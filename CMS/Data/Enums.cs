@@ -38,4 +38,11 @@
         ChangOver = 0,
         LineOnThe
     }
+
+    public enum UserShift
+    {
+        First = 0,
+        Second,
+        Third
+    }
 }
