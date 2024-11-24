@@ -21,6 +21,11 @@
         public string? Count { get; set; }
 
         /// <summary>
+        /// The last date and time data record was updated
+        /// </summary>
+        public DateTime DateTime { get; set; }
+
+        /// <summary>
         /// The dept. owner of this machine
         /// </summary>
         public Department MachineOwner { get; set; }

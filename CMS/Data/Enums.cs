@@ -9,9 +9,9 @@
 
     public enum MachineStatus
     {
-        Running = 0,
-        Idle,
-        DownForMaintenance
+        IsRunning = 0,
+        IsIdle,
+        IsDownForMaintenance
     }
 
     public enum PartKind
@@ -29,14 +29,14 @@
 
     public enum FrequencyCheckResult
     {
-        Pass = 0,
-        Failed
+        PASSED = 0,
+        FAILED
     }
 
     public enum CutterChangeInformation
     {
         ChangOver = 0,
-        LineOnThe
+        LineOnTheDrive
     }
 
     public enum UserShift

@@ -20,17 +20,166 @@ namespace CMS
             // dummy data
             RingItems = new ObservableCollection<MachineItemViewModel>
             {
-                new MachineItemViewModel
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
                 {
                     MachineNumber = "123",
-                    MachineStatus = true,
-                    MachineStatusComment = "Running",
+                    MachineStatusComment = "IsRunning",
                     CurrentCutterNumber = "X12345-67890",
                     CurrentRunningPartNumber = "123456789",
                     ProducedPartCount = "1000",
-                    ResultOfLastPartChecked = "PASSED",
-                    DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                }
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
+                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                {
+                    MachineNumber = "123",
+                    MachineStatusComment = "IsRunning",
+                    CurrentCutterNumber = "X12345-67890",
+                    CurrentRunningPartNumber = "123456789",
+                    ProducedPartCount = "1000",
+                    //ResultOfLastPartChecked = "PASSED",
+                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+                },
             };
         }
     }
