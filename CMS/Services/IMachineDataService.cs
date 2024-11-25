@@ -1,11 +1,23 @@
-﻿
-namespace CMS
+﻿namespace CMS
 {
     /// <summary>
     /// Manages data associated with machines
     /// </summary>
-    public interface IMachineDataManager
+    public interface IMachineDataService
     {
+        /// <summary>
+        /// Retrieves a collection of machines
+        /// </summary>
+        Dictionary<string, Machine> GetMachines();
+
+        /// <summary>
+        /// Retrieves a collection of parts 
+        /// </summary>
+        Dictionary<string, Part> GetParts();
+
+        void LoadMachines();
+        void LoadParts();
+
         /// <summary>
         /// Adds <see cref="Machine"/> to the collection of machines
         /// </summary>
@@ -47,5 +59,11 @@ namespace CMS
         /// <param name="machine">The part to modify</param>
         /// <returns>An error message due to validation or success message if successful</returns>
         string UpdatePartInfo(Part part);
+
+        void RemoveCutter(Machine machine);
+        void AssignCutter(Cutter cutter, Machine machine);
+        void UpdateMachineInformation(Machine machine);
+        void SwapMachineCutter(Machine firstMachine, Machine secondMachine);
+
     }
 }

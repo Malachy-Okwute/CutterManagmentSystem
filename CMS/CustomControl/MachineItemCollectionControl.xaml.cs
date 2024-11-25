@@ -28,10 +28,6 @@ namespace CMS
         public MachineItemCollectionControl()
         {
             InitializeComponent();
-            
-            // Set data-context
-            //DataContext = viewModel;
-            //DataContext = new MachineItemCollectionViewModel(new MachineDataManager());
 
             // Hook into items-control size changed event
             Items.SizeChanged += (s, e) =>

@@ -251,6 +251,7 @@ namespace CMS
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddViewModels();
+                    services.AddServices();
                     services.AddViews();
                 })
                 .UseSerilog()

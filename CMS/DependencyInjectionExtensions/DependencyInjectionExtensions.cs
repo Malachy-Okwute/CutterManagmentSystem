@@ -18,6 +18,16 @@ namespace CMS
             return services;
         }
 
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IMachineDataService, MachineDataService>();
+
+            // Return services
+            return services;
+        }
+
+
+
         /// <summary>
         /// Inject app views into dependency service
         /// </summary>

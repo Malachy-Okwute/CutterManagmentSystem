@@ -7,10 +7,14 @@ namespace CMS
     /// </summary>
     public class MachineItemViewModel : ViewModelBase
     {
+        #region Private Fields
+
         /// <summary>
         /// Data
         /// </summary>
         private Machine _machine;
+
+        #endregion
 
         #region Public Properties
 
@@ -105,6 +109,8 @@ namespace CMS
 
         #endregion
 
+        #region Commands
+
         /// <summary>
         /// Command to run when this item is selected
         /// </summary>
@@ -115,6 +121,10 @@ namespace CMS
         /// </summary>
         //public ICommand EditItemCommand { get; set; }
 
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -124,5 +134,7 @@ namespace CMS
             //ItemSelectedCommand = new RelayCommand(SelectItem, (d) =>true);
             //EditItemCommand  = new RelayCommand();
         }
+
+        #endregion
     }
 }

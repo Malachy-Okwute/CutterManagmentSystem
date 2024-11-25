@@ -7,27 +7,37 @@ namespace CMS
     /// <summary>
     /// Manages data associated with machines
     /// </summary>
-    public class MachineDataManager : IMachineDataManager
+    public class MachineDataService : IMachineDataService
     {
         /// <summary>
         /// Collection of machines
         /// </summary>
-        public readonly Dictionary<string, Machine> Machines;
+        private readonly Dictionary<string, Machine> _machinesRecord;
 
         /// <summary>
         /// Collection of parts 
         /// </summary>
-        public readonly Dictionary<string, Part> Parts;
+        private readonly Dictionary<string, Part> _partsRecord;
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineDataManager()
+        public MachineDataService()
         {
             // Initialize resource objects
-            Machines = new Dictionary<string, Machine>();
-            Parts = new Dictionary<string, Part>();
+            _machinesRecord = new Dictionary<string, Machine>();
+            _partsRecord = new Dictionary<string, Part>();
         }
+
+        /// <summary>
+        /// Retrieves a collection of machines
+        /// </summary>
+        public Dictionary<string, Machine> GetMachines() => _machinesRecord; 
+
+        /// <summary>
+        /// Retrieves a collection of parts 
+        /// </summary>
+        public Dictionary<string, Part> GetParts() => _partsRecord; 
 
         /// <summary>
         /// Adds <see cref="Machine"/> to the collection of machines
@@ -48,9 +58,9 @@ namespace CMS
                 return result.ErrorMessage!;
 
             // If machine isn't already on the collection list...
-            if (!Machines.ContainsKey(machine.UniqueID))
+            if (!_machinesRecord.ContainsKey(machine.UniqueID))
                 // Add machine to collection
-                Machines.Add(machine.UniqueID, machine);
+                _machinesRecord.Add(machine.UniqueID, machine);
 
             // Return success message
             return $"Successfully added machine #{machine.UniqueID}";
@@ -75,9 +85,9 @@ namespace CMS
                 return result.ErrorMessage!;
 
             // If item isn't already on the collection list...
-            if (!Parts.ContainsKey(part.UniqueID))
+            if (!_partsRecord.ContainsKey(part.UniqueID))
                 // Add item to collection
-                Parts.Add(part.UniqueID, part);
+                _partsRecord.Add(part.UniqueID, part);
 
             // Return success
             return $"Successfully added part #{part.UniqueID}";
@@ -91,13 +101,13 @@ namespace CMS
         public string RemoveMachine(Machine machine)
         {
             // If we can't find the item in the collection...
-            if(!Machines.ContainsKey(machine.UniqueID))
+            if(!_machinesRecord.ContainsKey(machine.UniqueID))
                 // Exit it this function with error message
                 return $"Cannot find machine #{machine.UniqueID}";
             // Otherwise...
             else
                 // Remove item
-                Machines.Remove(machine.UniqueID);
+                _machinesRecord.Remove(machine.UniqueID);
 
             // Return success
             return $"Successfully removed machine #{machine.UniqueID}";
@@ -111,13 +121,13 @@ namespace CMS
         public string RemovePart(Part part)
         {
             // If we can't find the item in the collection...
-            if (!Parts.ContainsKey(part.UniqueID))
+            if (!_partsRecord.ContainsKey(part.UniqueID))
                 // Exit it this function with error message
                 return $"Cannot find part #{part.UniqueID}";
             // Otherwise...
             else
                 // Remove item
-                Machines.Remove(part.UniqueID);
+                _machinesRecord.Remove(part.UniqueID);
 
             // Return success
             return $"Successfully removed part #{part.UniqueID}";
@@ -131,10 +141,10 @@ namespace CMS
         public string UpdateMachineInfo(Machine machine)
         {
             
-            if (!Machines.ContainsKey(machine.UniqueID))
+            if (!_machinesRecord.ContainsKey(machine.UniqueID))
                 return $"Cannot find machine #{machine.UniqueID}";
             else
-                Machines[machine.UniqueID] = machine;
+                _machinesRecord[machine.UniqueID] = machine;
 
             return $"Successfully modified machine #{machine.UniqueID}";
         }
@@ -146,12 +156,38 @@ namespace CMS
         /// <returns>An error message due to validation or success message if successful</returns>
         public string UpdatePartInfo(Part part)
         {
-            if (!Parts.ContainsKey(part.UniqueID))
+            if (!_partsRecord.ContainsKey(part.UniqueID))
                 return $"Cannot find part #{part.UniqueID}";
             else
-                Parts[part.UniqueID] = part;
+                _partsRecord[part.UniqueID] = part;
 
             return $"Successfully modified part #{part.UniqueID}";
+        }
+
+        public void AssignCutter(Cutter cutter, Machine machine)
+        {
+        }
+
+        public void RemoveCutter(Machine machine)
+        {
+        }
+
+        public void SwapMachineCutter(Machine firstMachine, Machine secondMachine)
+        {
+        }
+
+        public void UpdateMachineInformation(Machine machine)
+        {
+        }
+
+        public void LoadMachines()
+        {
+            
+        }
+
+        public void LoadParts()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -10,14 +10,14 @@ namespace CMS
         /// <summary>
         /// A singleton instance of this design-model
         /// </summary>
-        public static readonly MachineItemCollectionDesignModel Instance = new (new MachineDataManager());
+        public static readonly MachineItemCollectionDesignModel Instance = new (new MachineDataService());
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemCollectionDesignModel(MachineDataManager machineDataManager) : base(machineDataManager)
+        public MachineItemCollectionDesignModel(MachineDataService machineDataManager) : base(machineDataManager)
         {
-            // dummy data
+            // design-time dummy data
             RingItems = new ObservableCollection<MachineItemViewModel>
             {
                 new MachineItemViewModel(new Machine("123", "456", Department.Pinion))

@@ -21,6 +21,11 @@
         public string? Count { get; set; }
 
         /// <summary>
+        /// Measured tooth size of part
+        /// </summary>
+        public string? PartToothSize { get; set; }
+
+        /// <summary>
         /// The last date and time data record was updated
         /// </summary>
         public DateTime DateTime { get; set; }
