@@ -22,6 +22,7 @@ namespace CMS
     /// </summary>
     public partial class MachineItemCollectionControl : UserControl
     {
+
         /// <summary>
         /// Default constructor
         /// </summary>

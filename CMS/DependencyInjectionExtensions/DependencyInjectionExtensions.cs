@@ -13,6 +13,7 @@ namespace CMS
         public static IServiceCollection AddViewModels(this IServiceCollection services)
         {
             services.AddSingleton<CMSWindowViewModel>();
+            services.AddSingleton<MachineItemCollectionViewModel>();
             
             // Return services
             return services;

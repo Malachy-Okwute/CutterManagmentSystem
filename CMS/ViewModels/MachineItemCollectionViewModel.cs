@@ -50,7 +50,6 @@ namespace CMS
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
             _machineData = machineData;
-
         }
 
         public void AddMachineToRings()
@@ -65,7 +64,7 @@ namespace CMS
             }
         }
 
-        public void AddMachineToPins(MachineItemViewModel machine)
+        public void AddMachineToPins()
         {
             foreach (var machineItem in _machineData.GetMachines())
             {

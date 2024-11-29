@@ -1,4 +1,6 @@
-﻿namespace CMS
+﻿using DocumentFormat.OpenXml.EMMA;
+
+namespace CMS
 {
     /// <summary>
     /// Part data model
@@ -33,6 +35,14 @@
         public Part(PartModel model)
         {
             Model = model;
+        }
+
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public Part()
+        {
+            Model = default!;
         }
     }
 }

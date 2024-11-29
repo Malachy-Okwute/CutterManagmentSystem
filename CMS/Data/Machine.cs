@@ -68,5 +68,14 @@
             UniqueSetID = uniqueSetID;
             MachineOwner = owner;
         }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Machine()
+        {
+            UniqueID = string.Empty;
+            UniqueSetID = string.Empty;
+        }
     }
 }

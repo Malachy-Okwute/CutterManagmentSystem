@@ -30,7 +30,8 @@
     public enum FrequencyCheckResult
     {
         PASSED = 0,
-        FAILED
+        FAILED,
+        SETUP
     }
 
     public enum CutterChangeInformation

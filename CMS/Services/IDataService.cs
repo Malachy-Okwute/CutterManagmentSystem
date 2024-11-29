@@ -3,6 +3,6 @@
     public interface IDataService
     {
         void LoadDataFromDB();
-        void LoadDataFromExcelStyleSheet();
+        void LoadDataFromExcelStyleSheet<T>(string path);
     }
 }
