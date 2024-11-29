@@ -12,12 +12,12 @@ namespace CMS
         /// <summary>
         /// Collection of machines
         /// </summary>
-        private readonly Dictionary<string, Machine> _machinesRecord;
+        private readonly Dictionary<string, MachineDataModel> _machinesRecord;
 
         /// <summary>
         /// Collection of parts 
         /// </summary>
-        private readonly Dictionary<string, Part> _partsRecord;
+        private readonly Dictionary<string, PartDataModel> _partsRecord;
 
         /// <summary>
         /// Default constructor
@@ -25,26 +25,26 @@ namespace CMS
         public MachineDataService()
         {
             // Initialize resource objects
-            _machinesRecord = new Dictionary<string, Machine>();
-            _partsRecord = new Dictionary<string, Part>();
+            _machinesRecord = new Dictionary<string, MachineDataModel>();
+            _partsRecord = new Dictionary<string, PartDataModel>();
         }
 
         /// <summary>
         /// Retrieves a collection of machines
         /// </summary>
-        public Dictionary<string, Machine> GetMachines() => _machinesRecord; 
+        public Dictionary<string, MachineDataModel> GetMachines() => _machinesRecord; 
 
         /// <summary>
         /// Retrieves a collection of parts 
         /// </summary>
-        public Dictionary<string, Part> GetParts() => _partsRecord; 
+        public Dictionary<string, PartDataModel> GetParts() => _partsRecord; 
 
         /// <summary>
-        /// Adds <see cref="Machine"/> to the collection of machines
+        /// Adds <see cref="MachineDataModel"/> to the collection of machines
         /// </summary>
         /// <param name="machine">The machine to add</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        public string AddMachine(Machine machine)
+        public string AddMachine(MachineDataModel machine)
         {
             // Register machine validation
             DataValidationService.RegisterValidator(new MachineValidation());
@@ -58,20 +58,20 @@ namespace CMS
                 return result.ErrorMessage!;
 
             // If machine isn't already on the collection list...
-            if (!_machinesRecord.ContainsKey(machine.UniqueID))
+            if (!_machinesRecord.ContainsKey(machine.Id))
                 // Add machine to collection
-                _machinesRecord.Add(machine.UniqueID, machine);
+                _machinesRecord.Add(machine.Id, machine);
 
             // Return success message
-            return $"Successfully added machine #{machine.UniqueID}";
+            return $"Successfully added machine #{machine.Id}";
         }
 
         /// <summary>
-        /// Adds <see cref="Part"/> to the collection of parts
+        /// Adds <see cref="PartDataModel"/> to the collection of parts
         /// </summary>
         /// <param name="part">The part to add</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        public string AddPart(Part part)
+        public string AddPart(PartDataModel part)
         {
             // Register machine validation
             DataValidationService.RegisterValidator(new PartValidation());
@@ -85,98 +85,98 @@ namespace CMS
                 return result.ErrorMessage!;
 
             // If item isn't already on the collection list...
-            if (!_partsRecord.ContainsKey(part.UniqueID))
+            if (!_partsRecord.ContainsKey(part.Id))
                 // Add item to collection
-                _partsRecord.Add(part.UniqueID, part);
+                _partsRecord.Add(part.Id, part);
 
             // Return success
-            return $"Successfully added part #{part.UniqueID}";
+            return $"Successfully added part #{part.Id}";
         }
 
         /// <summary>
-        /// Removes <see cref="Machine"/> from collection of machines
+        /// Removes <see cref="MachineDataModel"/> from collection of machines
         /// </summary>
         /// <param name="machine">The machine to remove</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        public string RemoveMachine(Machine machine)
+        public string RemoveMachine(MachineDataModel machine)
         {
             // If we can't find the item in the collection...
-            if(!_machinesRecord.ContainsKey(machine.UniqueID))
+            if(!_machinesRecord.ContainsKey(machine.Id))
                 // Exit it this function with error message
-                return $"Cannot find machine #{machine.UniqueID}";
+                return $"Cannot find machine #{machine.Id}";
             // Otherwise...
             else
                 // Remove item
-                _machinesRecord.Remove(machine.UniqueID);
+                _machinesRecord.Remove(machine.Id);
 
             // Return success
-            return $"Successfully removed machine #{machine.UniqueID}";
+            return $"Successfully removed machine #{machine.Id}";
         }
 
         /// <summary>
-        /// Removes <see cref="Part"/> from collection of parts
+        /// Removes <see cref="PartDataModel"/> from collection of parts
         /// </summary>
         /// <param name="part">The part to remove</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        public string RemovePart(Part part)
+        public string RemovePart(PartDataModel part)
         {
             // If we can't find the item in the collection...
-            if (!_partsRecord.ContainsKey(part.UniqueID))
+            if (!_partsRecord.ContainsKey(part.Id))
                 // Exit it this function with error message
-                return $"Cannot find part #{part.UniqueID}";
+                return $"Cannot find part #{part.Id}";
             // Otherwise...
             else
                 // Remove item
-                _machinesRecord.Remove(part.UniqueID);
+                _machinesRecord.Remove(part.Id);
 
             // Return success
-            return $"Successfully removed part #{part.UniqueID}";
+            return $"Successfully removed part #{part.Id}";
         }
 
         /// <summary>
-        /// Modifies values of a <see cref="Machine"/> item
+        /// Modifies values of a <see cref="MachineDataModel"/> item
         /// </summary>
         /// <param name="machine">The machine to modify</param>
         /// <returns>An error message due to validation or success message if successful</returns
-        public string UpdateMachineInfo(Machine machine)
+        public string UpdateMachineInfo(MachineDataModel machine)
         {
             
-            if (!_machinesRecord.ContainsKey(machine.UniqueID))
-                return $"Cannot find machine #{machine.UniqueID}";
+            if (!_machinesRecord.ContainsKey(machine.Id))
+                return $"Cannot find machine #{machine.Id}";
             else
-                _machinesRecord[machine.UniqueID] = machine;
+                _machinesRecord[machine.Id] = machine;
 
-            return $"Successfully modified machine #{machine.UniqueID}";
+            return $"Successfully modified machine #{machine.Id}";
         }
 
         /// <summary>
-        /// Modifies values of a <see cref="Part"/> item
+        /// Modifies values of a <see cref="PartDataModel"/> item
         /// </summary>
         /// <param name="machine">The part to modify</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        public string UpdatePartInfo(Part part)
+        public string UpdatePartInfo(PartDataModel part)
         {
-            if (!_partsRecord.ContainsKey(part.UniqueID))
-                return $"Cannot find part #{part.UniqueID}";
+            if (!_partsRecord.ContainsKey(part.Id))
+                return $"Cannot find part #{part.Id}";
             else
-                _partsRecord[part.UniqueID] = part;
+                _partsRecord[part.Id] = part;
 
-            return $"Successfully modified part #{part.UniqueID}";
+            return $"Successfully modified part #{part.Id}";
         }
 
-        public void AssignCutter(Cutter cutter, Machine machine)
+        public void AssignCutter(CutterDataModel cutter, MachineDataModel machine)
         {
         }
 
-        public void RemoveCutter(Machine machine)
+        public void RemoveCutter(MachineDataModel machine)
         {
         }
 
-        public void SwapMachineCutter(Machine firstMachine, Machine secondMachine)
+        public void SwapMachineCutter(MachineDataModel firstMachine, MachineDataModel secondMachine)
         {
         }
 
-        public void UpdateMachineInformation(Machine machine)
+        public void UpdateMachineInformation(MachineDataModel machine)
         {
         }
 

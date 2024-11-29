@@ -2,48 +2,36 @@
 {
     public enum Department
     {
-        None = 0,
-        Pinion,
-        Gear
+        None = 0, Pinion, Gear
     }
 
     public enum MachineStatus
     {
-        IsRunning = 0,
-        IsIdle,
-        IsDownForMaintenance
+        IsRunning = 0, IsIdle, IsDownForMaintenance
     }
 
     public enum PartKind
     {
-        Pinion = 0,
-        Ring
+        Pinion = 0, Ring
     }
 
     public enum CutterCondition
     {
-        NewCutter = 0,
-        UsedCutter,
-        DevelopmentCutter
+        NewCutter = 0, UsedCutter, DevelopmentCutter
     }
 
     public enum FrequencyCheckResult
     {
-        PASSED = 0,
-        FAILED,
-        SETUP
+        PASSED = 0, FAILED, SETUP
     }
 
     public enum CutterChangeInformation
     {
-        ChangOver = 0,
-        LineOnTheDrive
+        ChangOver = 0, LineOnTheDrive, BrokenBlades
     }
 
     public enum UserShift
     {
-        First = 0,
-        Second,
-        Third
+        First = 0, Second, Third
     }
 }

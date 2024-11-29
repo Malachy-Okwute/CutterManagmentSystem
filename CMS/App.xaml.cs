@@ -32,7 +32,7 @@ namespace CMS
         /// <summary>
         /// Application services host
         /// </summary>
-        public static IHost? ApplicationHost { get; private set; }
+        public static IHost ApplicationHost { get; private set; }
 
         #endregion
 

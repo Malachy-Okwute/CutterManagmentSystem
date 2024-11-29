@@ -12,7 +12,7 @@ namespace CMS
         /// <summary>
         /// Data
         /// </summary>
-        private Machine _machine;
+        private MachineDataModel _machine;
 
         #endregion
 
@@ -23,8 +23,8 @@ namespace CMS
         /// </summary>
         public string MachineNumber 
         {
-            get => _machine.UniqueID;
-            set => _machine.UniqueID = value;
+            get => _machine.Id;
+            set => _machine.Id = value;
         }
 
         /// <summary>
@@ -32,20 +32,20 @@ namespace CMS
         /// </summary>
         public string MachineSetNumber 
         {
-            get => _machine.UniqueSetID;
-            set => _machine.UniqueSetID = value; 
+            get => _machine.SetID;
+            set => _machine.SetID = value; 
         } 
 
         /// <summary>
         /// Cutter id number currently setup on this machine
         /// </summary>
-        public string? CurrentCutterNumber
+        public string CurrentCutterNumber
         {
-            get => _machine.Cutter?.UniqueID;
+            get => _machine.Cutter.Id;
             set 
             {
                 if (_machine.Cutter is not null)
-                _machine.Cutter.UniqueID = value ?? string.Empty;
+                _machine.Cutter.Id = value ?? string.Empty;
             }
         }
 
@@ -67,18 +67,18 @@ namespace CMS
         /// <summary>
         /// Comment related to the status of this machine
         /// </summary>
-        public string? MachineStatusComment { get; set; } 
+        public string MachineStatusComment { get; set; } 
 
         /// <summary>
         /// Part unique id number running on this machine
         /// </summary>
-        public string? CurrentRunningPartNumber
+        public string CurrentRunningPartNumber
         {
-            get => _machine.RunningPart?.UniqueID;
+            get => _machine.RunningPart?.Id;
             set
             { 
                 if(_machine.RunningPart is not null)
-                    _machine.RunningPart.UniqueID = value ?? string.Empty;
+                    _machine.RunningPart.Id = value ?? string.Empty;
             } 
         }
 
@@ -86,7 +86,7 @@ namespace CMS
         /// <summary>
         /// Number of parts produced by this machine with the current cutter
         /// </summary>
-        public string? ProducedPartCount
+        public string ProducedPartCount
         {
             get => _machine.Cutter?.Count;
             set
@@ -128,7 +128,7 @@ namespace CMS
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemViewModel(Machine machine)
+        public MachineItemViewModel(MachineDataModel machine)
         {
             _machine = machine;
             //ItemSelectedCommand = new RelayCommand(SelectItem, (d) =>true);

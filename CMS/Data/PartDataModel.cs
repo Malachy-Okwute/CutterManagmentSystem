@@ -5,12 +5,12 @@ namespace CMS
     /// <summary>
     /// Part data model
     /// </summary>
-    public class Part
+    public class PartDataModel
     {
         /// <summary>
         /// The unique id of this part object
         /// </summary>
-        public string UniqueID { get; set; } = string.Empty;
+        public string Id { get; set; } = string.Empty;
 
         /// <summary>
         /// The number of teeth this part has
@@ -26,23 +26,6 @@ namespace CMS
         /// <summary>
         /// The model of this part
         /// </summary>
-        public PartModel Model { get; set; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="model">Model of this part</param>
-        public Part(PartModel model)
-        {
-            Model = model;
-        }
-
-        /// <summary>
-        /// Default Constructor
-        /// </summary>
-        public Part()
-        {
-            Model = default!;
-        }
+        public string Model { get; set; }
     }
 }

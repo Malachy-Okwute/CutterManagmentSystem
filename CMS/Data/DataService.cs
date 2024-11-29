@@ -29,15 +29,15 @@ namespace CMS
                     WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
                     SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
 
-                    object? requestedDataType = CreateInstance<T>();
+                    object requestedDataType = CreateInstance<T>();
 
                     switch (requestedDataType)
                     {
-                        case Machine:
-                            MapMachineInfo((Machine)requestedDataType, sheetData);
+                        case MachineDataModel:
+                            MapMachineInfo((MachineDataModel)requestedDataType, sheetData);
                             break;
 
-                        case Part:
+                        case PartDataModel:
                             break;
                     }
                 }
@@ -53,7 +53,7 @@ namespace CMS
 
         }
 
-        public void MapMachineInfo(Machine machine, SheetData sheetData)
+        public void MapMachineInfo(MachineDataModel machine, SheetData sheetData)
         {
             foreach (Row row in sheetData.Elements<Row>())
             {
@@ -67,14 +67,14 @@ namespace CMS
                     switch (column.CellReference?.InnerText)
                     {
                         case "A3":
-                            machine.UniqueID = column.InnerText;
-                            machine.UniqueSetID = column.InnerText;
+                            machine.Id = column.InnerText;
+                            machine.SetID = column.InnerText;
                             break;
                         case "B3":
                             machine.Count = column.InnerText;
                             break;
                         case "C3":
-                            machine.MachineOwner = column.InnerText.ToUpper() == "GEAR" ? Department.Gear : Department.Pinion;
+                            machine.Owner = column.InnerText.ToUpper() == "GEAR" ? Department.Gear : Department.Pinion;
                             break;
                     }
                 }

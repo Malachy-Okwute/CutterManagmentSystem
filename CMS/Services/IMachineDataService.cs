@@ -8,62 +8,62 @@
         /// <summary>
         /// Retrieves a collection of machines
         /// </summary>
-        Dictionary<string, Machine> GetMachines();
+        Dictionary<string, MachineDataModel> GetMachines();
 
         /// <summary>
         /// Retrieves a collection of parts 
         /// </summary>
-        Dictionary<string, Part> GetParts();
+        Dictionary<string, PartDataModel> GetParts();
 
         void LoadMachines();
         void LoadParts();
 
         /// <summary>
-        /// Adds <see cref="Machine"/> to the collection of machines
+        /// Adds <see cref="MachineDataModel"/> to the collection of machines
         /// </summary>
         /// <param name="machine">The machine to add</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        string AddMachine(Machine machine);
+        string AddMachine(MachineDataModel machine);
 
         /// <summary>
-        /// Adds <see cref="Part"/> to the collection of parts
+        /// Adds <see cref="PartDataModel"/> to the collection of parts
         /// </summary>
         /// <param name="part">The part to add</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        string AddPart(Part part);
+        string AddPart(PartDataModel part);
 
         /// <summary>
-        /// Removes <see cref="Machine"/> from collection of machines
+        /// Removes <see cref="MachineDataModel"/> from collection of machines
         /// </summary>
         /// <param name="machine">The machine to remove</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        string RemoveMachine(Machine machine);
+        string RemoveMachine(MachineDataModel machine);
 
         /// <summary>
-        /// Removes <see cref="Part"/> from collection of parts
+        /// Removes <see cref="PartDataModel"/> from collection of parts
         /// </summary>
         /// <param name="part">The part to remove</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        string RemovePart(Part part);
+        string RemovePart(PartDataModel part);
 
         /// <summary>
-        /// Modifies values of a <see cref="Machine"/> item
+        /// Modifies values of a <see cref="MachineDataModel"/> item
         /// </summary>
         /// <param name="machine">The machine to modify</param>
         /// <returns>An error message due to validation or success message if successful</returns
-        string UpdateMachineInfo(Machine machine);
+        string UpdateMachineInfo(MachineDataModel machine);
 
         /// <summary>
-        /// Modifies values of a <see cref="Part"/> item
+        /// Modifies values of a <see cref="PartDataModel"/> item
         /// </summary>
         /// <param name="machine">The part to modify</param>
         /// <returns>An error message due to validation or success message if successful</returns>
-        string UpdatePartInfo(Part part);
+        string UpdatePartInfo(PartDataModel part);
 
-        void RemoveCutter(Machine machine);
-        void AssignCutter(Cutter cutter, Machine machine);
-        void UpdateMachineInformation(Machine machine);
-        void SwapMachineCutter(Machine firstMachine, Machine secondMachine);
+        void RemoveCutter(MachineDataModel machine);
+        void AssignCutter(CutterDataModel cutter, MachineDataModel machine);
+        void UpdateMachineInformation(MachineDataModel machine);
+        void SwapMachineCutter(MachineDataModel firstMachine, MachineDataModel secondMachine);
 
     }
 }

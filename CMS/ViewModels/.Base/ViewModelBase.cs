@@ -11,7 +11,7 @@ namespace CMS
         /// <summary>
         /// The event to fire when a property changes
         /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Property changed callback
@@ -20,7 +20,7 @@ namespace CMS
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             // Invoke the property changed event
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

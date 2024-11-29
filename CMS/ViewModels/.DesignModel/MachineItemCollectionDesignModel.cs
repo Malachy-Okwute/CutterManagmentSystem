@@ -20,7 +20,7 @@ namespace CMS
             // design-time dummy data
             RingItems = new ObservableCollection<MachineItemViewModel>
             {
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -30,7 +30,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -40,7 +40,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -50,7 +50,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -60,7 +60,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -70,7 +70,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -80,7 +80,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -90,7 +90,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -100,7 +100,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -110,7 +110,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -120,7 +120,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -130,7 +130,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -140,7 +140,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -150,7 +150,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -160,7 +160,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
@@ -170,7 +170,7 @@ namespace CMS
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
-                new MachineItemViewModel(new Machine("123", "456", Department.Pinion))
+                new MachineItemViewModel(new())
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",

@@ -8,12 +8,12 @@
         /// <summary>
         /// A singleton instance of this design-model
         /// </summary>
-        public static readonly MachineItemDesignModel Instance = new(new Machine("123", "456", Department.Pinion));
+        public static readonly MachineItemDesignModel Instance = new(new());
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemDesignModel(Machine machine) : base(machine) 
+        public MachineItemDesignModel(MachineDataModel machine) : base(machine) 
         {
             // Dummy data
             MachineNumber = "123";

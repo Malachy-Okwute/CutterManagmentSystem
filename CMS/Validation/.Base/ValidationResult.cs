@@ -13,6 +13,6 @@
         /// <summary>
         /// The error message associated with validation result when validation failed
         /// </summary>
-        public string? ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

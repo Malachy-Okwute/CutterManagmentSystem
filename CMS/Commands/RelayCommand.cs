@@ -10,12 +10,12 @@ namespace CMS
         /// <summary>
         /// The action to run
         /// </summary>
-        private readonly Action? _executeCommand;
+        private readonly Action _executeCommand;
 
         /// <summary>
         /// Run with parameter to run
         /// </summary>
-        private readonly Action<object>? _executeCommandWithParameter;
+        private readonly Action<object> _executeCommandWithParameter;
 
         /// <summary>
         /// The logic determining if a command or an action should be allowed to execute
@@ -25,7 +25,7 @@ namespace CMS
         /// <summary>
         /// Event that gets fired when can execute changes
         /// </summary>
-        public event EventHandler? CanExecuteChanged
+        public event EventHandler CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
@@ -63,7 +63,7 @@ namespace CMS
         /// </summary>
         /// <param name="parameter">The parameter to evaluate</param>
         /// <returns>A boolean value of True or false</returns>
-        public bool CanExecute(object? parameter)
+        public bool CanExecute(object parameter)
         {
             // Return feedback
             return (parameter is bool).Equals(null) ? true : _canExecuteCommand!(parameter is bool);
@@ -72,7 +72,7 @@ namespace CMS
         /// <summary>
         /// Executes an action when requested
         /// </summary>
-        public void Execute(object? parameter)
+        public void Execute(object parameter)
         {
             if (parameter is null)
                 _executeCommand?.Invoke();

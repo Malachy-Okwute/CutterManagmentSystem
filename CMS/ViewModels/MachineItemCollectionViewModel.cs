@@ -56,10 +56,10 @@ namespace CMS
         {
             foreach (var machineItem in _machineData.GetMachines())
             {
-                if (machineItem.Value.MachineOwner == Department.Gear && !_ringItems.Contains(new MachineItemViewModel(machineItem.Value)))
+                if (machineItem.Value.Owner == Department.Gear && !_ringItems.Contains(new MachineItemViewModel(machineItem.Value)))
                 {
                     _ringItems.Add(new MachineItemViewModel(machineItem.Value));
-                    Log.Logger.Information($"Machine { machineItem.Value.UniqueID } was added");
+                    Log.Logger.Information($"MachineDataModel { machineItem.Value.Id } was added");
                 }
             }
         }
@@ -68,10 +68,10 @@ namespace CMS
         {
             foreach (var machineItem in _machineData.GetMachines())
             {
-                if (machineItem.Value.MachineOwner == Department.Pinion && !_pinItems.Contains(new MachineItemViewModel(machineItem.Value)))
+                if (machineItem.Value.Owner == Department.Pinion && !_pinItems.Contains(new MachineItemViewModel(machineItem.Value)))
                 {
                     _pinItems.Add(new MachineItemViewModel(machineItem.Value));
-                    Log.Logger.Information($"Machine {machineItem.Value.UniqueID} was added");
+                    Log.Logger.Information($"MachineDataModel {machineItem.Value.Id} was added");
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace CMS
         {
             if (_ringItems.Contains(machine))
             {
-                Log.Logger.Information($"Machine {machine.MachineNumber} was removed");
+                Log.Logger.Information($"MachineDataModel {machine.MachineNumber} was removed");
                 _ringItems.Remove(machine);
             }
         }
@@ -89,7 +89,7 @@ namespace CMS
         {
             if (_pinItems.Contains(machine))
             {
-                Log.Logger.Information($"Machine {machine.MachineNumber} was removed");
+                Log.Logger.Information($"MachineDataModel {machine.MachineNumber} was removed");
                 _pinItems.Remove(machine);
             }
         }
