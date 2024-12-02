@@ -1,0 +1,97 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>.Resources\Images\cms-icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\**" />
+    <Compile Remove="Validation\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <EmbeddedResource Remove="Validation\**" />
+    <None Remove="Services\**" />
+    <None Remove="Validation\**" />
+    <Page Remove="Services\**" />
+    <Page Remove="Validation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="ViewModels\.Base\ViewModelBase.cs" />
+    <Compile Include="ViewModels\.DesignModel\MachineItemCollectionDesignModel.cs" />
+    <Compile Include="ViewModels\.DesignModel\MachineItemDesignModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include=".Resources\Fonts\RobotoFlex-Regular.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-Black.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-BlackItalic.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-Bold.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-BoldItalic.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-Italic.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-Light.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-LightItalic.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-Medium.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-MediumItalic.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-Regular.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-Thin.ttf" />
+    <Resource Include=".Resources\Fonts\Roboto-ThinItalic.ttf" />
+    <Content Include=".Resources\Images\cms-icon.ico" />
+    <Resource Include=".Resources\Images\svg-spinners--bars-rotate-fade.png" />
+    <Resource Include=".Resources\Images\splashscreen.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+    <PackageReference Include="Fody" Version="6.9.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0-dev-02304" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include=".Resources\Images\cms-icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include=".Resources\Icons\Font Awesome 6 Brands-Regular-400.otf" />
+    <Resource Include=".Resources\Icons\Font Awesome 6 Pro-Light-300.otf" />
+    <Resource Include=".Resources\Icons\Font Awesome 6 Pro-Regular-400.otf" />
+    <Resource Include=".Resources\Icons\Font Awesome 6 Pro-Solid-900.otf" />
+    <Resource Include=".Resources\Icons\Font Awesome 6 Pro-Thin-100.otf" />
+    <Resource Include=".Resources\Icons\Font Awesome 6 Sharp-Light-300.otf" />
+    <Resource Include=".Resources\Icons\Font Awesome 6 Sharp-Regular-400.otf" />
+    <Resource Include=".Resources\Icons\Font Awesome 6 Sharp-Solid-900.otf" />
+    <Resource Include=".Resources\Icons\Font Awesome 6 Sharp-Thin-100.otf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CutterManagement.Core\CutterManagement.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
