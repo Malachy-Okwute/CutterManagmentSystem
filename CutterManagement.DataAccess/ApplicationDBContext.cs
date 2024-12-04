@@ -1,6 +1,6 @@
 ﻿using CutterManagement.Core;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace CutterManagement.DataAccess
 {
@@ -8,15 +8,7 @@ namespace CutterManagement.DataAccess
     {
         public DbSet<MachineDataModel>? MachineDataStore { get; set; }
 
-        //public ApplicationDbContext(DbContextOptions options) : base(options) { }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=CutterManagementSystemDatabase;Trusted_Connection=True;");
-
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -7,6 +7,7 @@ using Serilog;
 using Serilog.Events;
 using System.IO;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -210,7 +211,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Configures application to enable the use of appsettings.json file
         /// </summary>
-        /// <returns><see cref="IConfigurationBuilder"/></returns>
+        /// <returns><see cref="IConfigurationBuilder"/> used to configure Serilog</returns>
         private IConfigurationBuilder SetupConfigurationBuilder()
         {
             // Application configuration. Sets up .json
@@ -243,8 +244,6 @@ namespace CutterManagement.UI.Desktop
 
         /// <summary>
         /// Set up application dependency injection service
-        /// SERVICES SETUP: Dependency Injection service
-        ///                 Serilog
         /// </summary>
         private void DependencyInjectionSetup()
         {
@@ -252,7 +251,7 @@ namespace CutterManagement.UI.Desktop
             ApplicationHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddDataAccess();
+                    services.AddDataAccess(hostContext.Configuration);
                     services.AddViewModels();
                     services.AddServices();
                     services.AddViews();
