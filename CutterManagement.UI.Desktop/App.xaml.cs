@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CutterManagement.Core;
+using CutterManagement.DataAccess;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -250,6 +252,7 @@ namespace CutterManagement.UI.Desktop
             ApplicationHost = Host.CreateDefaultBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddDataAccess();
                     services.AddViewModels();
                     services.AddServices();
                     services.AddViews();

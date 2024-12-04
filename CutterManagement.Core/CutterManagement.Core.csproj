@@ -13,4 +13,8 @@
     <Compile Include="Validation\.Base\ValidationResult.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Interface\" />
+  </ItemGroup>
+
 </Project>

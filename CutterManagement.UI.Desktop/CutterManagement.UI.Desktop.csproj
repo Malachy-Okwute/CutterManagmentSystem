@@ -86,6 +86,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CutterManagement.Core\CutterManagement.Core.csproj" />
+    <ProjectReference Include="..\CutterManagement.DataAccess\CutterManagement.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>

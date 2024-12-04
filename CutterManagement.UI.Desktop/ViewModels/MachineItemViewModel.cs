@@ -16,17 +16,17 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Unique ID of this machine
         /// </summary>
-        public string MachineNumber { get; set; }
+        public string MachineNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// Unique set ID of this machine
         /// </summary>
-        public string MachineSetNumber { get; set; }
+        public string MachineSetNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// Cutter id number currently setup on this machine
         /// </summary>
-        public string CurrentCutterNumber { get; set; }
+        public string CurrentCutterNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// True if this machine is running, false if it's sitting idle or down for maintenance
@@ -46,37 +46,27 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Part unique id number running on this machine
         /// </summary>
-        public string CurrentRunningPartNumber { get; set; }
+        public string? CurrentRunningPartNumber { get; set; }
 
         /// <summary>
         /// Number of parts produced by this machine with the current cutter
         /// </summary>
-        public string ProducedPartCount { get; set; }
+        public string? ProducedPartCount { get; set; }
 
         /// <summary>
         /// Result of the last part checked 
         /// <remark>PASSED | FAILED</remark>
         /// </summary>
-        public string ResultOfLastPartChecked { get; set; }
+        public string ResultOfLastPartChecked { get; set; } = string.Empty;
 
         /// <summary>
         /// Date and time of the last checked part on this machine
         /// </summary>
-        public string DateAndTimeOfLastCheck { get; set; }
+        public string DateAndTimeOfLastCheck { get; set; } = string.Empty;
 
         #endregion
 
         #region Commands
-
-        /// <summary>
-        /// Command to run when this item is selected
-        /// </summary>
-        //public ICommand ItemSelectedCommand { get; set; }
-
-        /// <summary>
-        /// Command to run when this item's edit button is clicked on
-        /// </summary>
-        //public ICommand EditItemCommand { get; set; }
 
         #endregion
 
@@ -87,8 +77,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public MachineItemViewModel()
         {
-            //ItemSelectedCommand = new RelayCommand(SelectItem, (d) =>true);
-            //EditItemCommand  = new RelayCommand();
         }
 
         #endregion

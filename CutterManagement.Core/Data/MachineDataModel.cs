@@ -47,12 +47,12 @@
         public FrequencyCheckResult FrequencyCheckResult { get; set; }
 
         /// <summary>
-        /// The part this machine is currently setup to run/produce
+        /// The part this machine is currently setup to run/produce or null if not setup
         /// </summary>
-        public PartDataModel? RunningPart { get; set; }
+        public PartDataModel? Part { get; set; }
 
         /// <summary>
-        /// The cutter this machine is currently set up with to run/produce parts
+        /// The cutter this machine is currently set up with to run/produce parts or null if not setup
         /// </summary>
         public CutterDataModel? Cutter { get; set; }
     }
