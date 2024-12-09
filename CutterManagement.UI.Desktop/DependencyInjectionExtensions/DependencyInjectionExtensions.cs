@@ -22,14 +22,20 @@ namespace CutterManagement.UI.Desktop
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddSingleton<PageFactory>();
-            services.AddSingleton<Func<AppPage, PagePresenterViewModel>>(serviceProvider => pageProvider =>
+            services.AddSingleton<Func<AppPage, ViewModelBase>>(serviceProvider => pageProvider =>
             {
-                var currentPage = serviceProvider.GetRequiredService<PagePresenterViewModel>();
                 switch(pageProvider)
                 {
-                }
+                    case AppPage.HomePage:
+                        return serviceProvider.GetService<HomePageViewModel>()!;
 
-                return currentPage;
+                    case AppPage.SettingsPage:
+                        return serviceProvider.GetService<SettingsPageViewModel>()!;
+
+
+                    default:
+                        throw new InvalidOperationException();
+                }
             });
 
             // Return services

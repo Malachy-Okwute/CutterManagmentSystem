@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutterManagement.UI.Desktop.ViewModels
+namespace CutterManagement.UI.Desktop
 {
     public class SettingsPageViewModel : ViewModelBase
     {
