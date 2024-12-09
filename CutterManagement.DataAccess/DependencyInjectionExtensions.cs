@@ -2,21 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System;
 
 namespace CutterManagement.DataAccess
 {
     public static class DependencyInjectionExtensions
     {
-        public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUserDataContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<UsersDbContext>(option =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            }, ServiceLifetime.Transient);
+                option.UseSqlite(configuration.GetConnectionString("UserDbConnection"));
+            },ServiceLifetime.Transient);
 
-            services.AddTransient<IDataAccessService>(serviceProvider => new DataAccessService(serviceProvider.GetRequiredService<ApplicationDbContext>()));
+            services.AddTransient<IUserDataAccessService>(serviceProvider => new UserDataAccessService(serviceProvider.GetRequiredService<UsersDbContext>()));
 
             return services;
         }

@@ -33,7 +33,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MainWindow(CMSWindowViewModel viewModel) : base(viewModel)
+        public MainWindow(ApplicationWindowViewModel viewModel) : base(viewModel)
         {
             InitializeComponent();
         }

@@ -28,7 +28,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ApplicationWindow(CMSWindowViewModel viewModel)
+        public ApplicationWindow(ApplicationWindowViewModel viewModel)
         {
             // Get view model of this window 
             DataContext = viewModel;
@@ -148,7 +148,7 @@ namespace CutterManagement.UI.Desktop
                             // Set window new location
                             Left = newWindowPos;
                             //Top = -40; // Take into account the size of padding around this window (40)
-                            Top = -((CMSWindowViewModel)DataContext).DropShadowPadding; // Take into account the size of padding around this window (40)
+                            Top = -((ApplicationWindowViewModel)DataContext).DropShadowPadding; // Take into account the size of padding around this window (40)
 
                             // Make sure left mouse button is pressed
                             if(Mouse.LeftButton == MouseButtonState.Pressed)

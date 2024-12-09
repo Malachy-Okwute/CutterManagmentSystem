@@ -4,7 +4,8 @@
              d:DataContext="{x:Static local:MachineItemDesignModel.Instance}"
              mc:Ignorable="d">
 
-    <Grid x:Name="MainControl" HorizontalAlignment="Stretch" Background="{DynamicResource BackgroundColorBrush1}">
+    <Grid x:Name="MainControl" HorizontalAlignment="Stretch"
+          Background="{DynamicResource BackgroundColorBrush1}">
 
         <!--  dropshadow effect  -->
         <Grid.Effect>

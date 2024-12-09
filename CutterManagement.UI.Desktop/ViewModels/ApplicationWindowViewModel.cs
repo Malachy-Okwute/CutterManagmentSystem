@@ -6,7 +6,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="ApplicationWindow"/>
     /// </summary>
-    public class CMSWindowViewModel : ViewModelBase
+    public class ApplicationWindowViewModel : ViewModelBase
     {
         #region Private Fields
 
@@ -123,7 +123,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public CMSWindowViewModel()
+        public ApplicationWindowViewModel()
         {
             // Create commands
             MinimizeWindowCommand = new RelayCommand(() => _appWindow.WindowState = WindowState.Minimized, canExecuteCommand => true);

@@ -66,11 +66,7 @@
 
             <!--  other window content  -->
             <Border Grid.Row="1" Padding="0,12,0,0">
-                <Frame NavigationUIVisibility="Hidden">
-                    <Frame.Content>
-                        <local:HomePage />
-                    </Frame.Content>
-                </Frame>
+                <local:PagePresenterControl />
             </Border>
 
         </Grid>

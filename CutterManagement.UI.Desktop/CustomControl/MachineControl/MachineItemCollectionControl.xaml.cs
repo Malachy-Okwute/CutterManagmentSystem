@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -30,7 +16,8 @@ namespace CutterManagement.UI.Desktop
         {
             InitializeComponent();
 
-            DataContext = new MachineItemCollectionViewModel();
+            // TODO: To be removed 
+            DataContext = new MachineItemCollectionDesignModel();
 
             // Hook into items-control size changed event
             Items.SizeChanged += (s, e) =>

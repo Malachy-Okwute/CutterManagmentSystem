@@ -7,7 +7,6 @@ using Serilog;
 using Serilog.Events;
 using System.IO;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -26,7 +25,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// The splash window for this application
         /// </summary>
-        private SplashWindow _splashWindow { get; set; }
+        private readonly SplashWindow _splashWindow;
 
         #endregion
 
@@ -35,7 +34,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Application services host
         /// </summary>
-        public static IHost? ApplicationHost { get; private set; }
+        private IHost ApplicationHost { get; set; } = default!;
 
         #endregion
 
@@ -49,7 +48,6 @@ namespace CutterManagement.UI.Desktop
             // Create splash window
             _splashWindow = new SplashWindow();
         }
-
         #endregion
 
         #region Overriden Methods
@@ -71,23 +69,14 @@ namespace CutterManagement.UI.Desktop
                         // Get environment variable
                         GetEnvironmentVariable();
 
-                        // Configure application 
-                        IConfigurationBuilder configBuilder = SetupConfigurationBuilder();
-
-                        // Set up logger for the application 
-                        SetupSerilogLogger(configBuilder);
+                        // Set up dependency injection service
+                        DependencyInjectionSetup();
 
                         // Log application start up as information 
                         Log.Logger.Information("Application is starting...");
 
-                        // Set up dependency injection service
-                        DependencyInjectionSetup();
-
-                        //TODO: Get user settings and set application preferences such as theme etc
-                        //TODO: Get current machine theme mode
-
-                        await Task.Delay(TimeSpan.FromSeconds(6));
                         // Finalizing...
+                        await Task.Delay(TimeSpan.FromSeconds(6));
                     }
                     // If there is an error...
                     catch (Exception ex)
@@ -108,6 +97,9 @@ namespace CutterManagement.UI.Desktop
             // Lunch main application window
             await LunchApplicationWindowAsync();
 
+            // Set up local app db
+            await ApplicationHost.Services.GetRequiredService<IUserDataAccessService>().EnsureDbCreatedAsync();
+
             // Let base do what it needs
             base.OnStartup(e);
         }
@@ -122,7 +114,10 @@ namespace CutterManagement.UI.Desktop
             Log.Logger.Information("Application is shutting down...");
 
             // Stop application host
-            await ApplicationHost!.StopAsync();
+            await ApplicationHost.StopAsync();
+
+            // Dispose on exit
+            ApplicationHost.Dispose();
 
             // Let base do what it needs
             base.OnExit(e);
@@ -165,7 +160,7 @@ namespace CutterManagement.UI.Desktop
         private async Task LunchApplicationWindowAsync()
         {
             // Start the application host
-            await ApplicationHost!.StartAsync();
+            await ApplicationHost.StartAsync();
 
             // Get application window from application host
             MainWindow = ApplicationHost.Services.GetRequiredService<MainWindow>();
@@ -209,22 +204,6 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
-        /// Configures application to enable the use of appsettings.json file
-        /// </summary>
-        /// <returns><see cref="IConfigurationBuilder"/> used to configure Serilog</returns>
-        private IConfigurationBuilder SetupConfigurationBuilder()
-        {
-            // Application configuration. Sets up .json
-            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-            configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
-                                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                .AddJsonFile($"appsettings.{_environment}.json", optional: true);
-                                //.AddEnvironmentVariables();
-
-            return configurationBuilder;
-        }
-
-        /// <summary>
         /// Sets up serilog logger ready for use
         /// </summary>
         /// <param name="configurationBuilder">The logger configuration settings</param>
@@ -249,9 +228,17 @@ namespace CutterManagement.UI.Desktop
         {
             // Setup services 
             ApplicationHost = Host.CreateDefaultBuilder()
+                .ConfigureAppConfiguration(configurationBuilder =>
+                {
+                    configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
+                                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                                        .AddJsonFile($"appsettings.{_environment}.json", optional: true);
+
+                    SetupSerilogLogger(configurationBuilder);
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddDataAccess(hostContext.Configuration);
+                    services.AddUserDataContext(hostContext.Configuration);
                     services.AddViewModels();
                     services.AddServices();
                     services.AddViews();

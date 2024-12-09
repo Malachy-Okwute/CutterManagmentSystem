@@ -1,4 +1,6 @@
-﻿namespace CutterManagement.Core
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CutterManagement.Core
 {
     /// <summary>
     /// Machine data model

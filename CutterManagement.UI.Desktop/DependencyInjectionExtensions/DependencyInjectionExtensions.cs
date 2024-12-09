@@ -12,7 +12,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public static IServiceCollection AddViewModels(this IServiceCollection services)
         {
-            services.AddSingleton<CMSWindowViewModel>();
+            services.AddSingleton<ApplicationWindowViewModel>();
             services.AddSingleton<MachineItemCollectionViewModel>();
             
             // Return services
@@ -21,6 +21,17 @@ namespace CutterManagement.UI.Desktop
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddSingleton<PageFactory>();
+            services.AddSingleton<Func<AppPage, PagePresenterViewModel>>(serviceProvider => pageProvider =>
+            {
+                var currentPage = serviceProvider.GetRequiredService<PagePresenterViewModel>();
+                switch(pageProvider)
+                {
+                }
+
+                return currentPage;
+            });
+
             // Return services
             return services;
         }

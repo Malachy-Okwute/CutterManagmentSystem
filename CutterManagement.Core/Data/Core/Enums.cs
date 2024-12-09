@@ -29,9 +29,4 @@
     {
         ChangOver = 0, LineOnTheDrive, BrokenBlades
     }
-
-    public enum UserShift
-    {
-        First = 0, Second, Third
-    }
 }
