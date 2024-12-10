@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel;
 using System.Windows;
 
 namespace CutterManagement.UI.Desktop
@@ -23,24 +24,20 @@ namespace CutterManagement.UI.Desktop
         {
             if(DesignerProperties.GetIsInDesignMode(d)) 
                 return;
-            string getViewModelName;
+
             Type view = d.GetType();
 
-            if (view.ToString().EndsWith("Page"))
+            if(view.FullName is not null)
             {
-                getViewModelName = (view).ToString().Replace("Page", "ViewModel", StringComparison.InvariantCulture);
-            }
-            else
-            { 
-                getViewModelName = (view).ToString().Replace("Control", "ViewModel", StringComparison.InvariantCulture);
-            }
+                string getViewModelName = view.FullName.Insert(view.FullName.Length, "ViewModel");
 
-            Type? viewModelObjectType = Type.GetType(getViewModelName);
+                Type? viewModelObjectType = Type.GetType(getViewModelName);
 
-            if(viewModelObjectType != null) 
-            {
-                object? viewModel = Activator.CreateInstance(viewModelObjectType);
-                ((FrameworkElement)d).DataContext = viewModel;
+                if(viewModelObjectType is not null && ((FrameworkElement)d).DataContext is null) 
+                {
+                    object? viewModel = Activator.CreateInstance(viewModelObjectType);
+                    ((FrameworkElement)d).DataContext = viewModel;
+                }
             }
         }
     }

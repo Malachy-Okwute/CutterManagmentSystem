@@ -25,8 +25,9 @@
                             <Border>
                                 <!--  drop-shadow effect  -->
                                 <Border.Effect>
-                                    <DropShadowEffect ShadowDepth="10" BlurRadius="35" Direction="270"
-                                                      Opacity="0.2" RenderingBias="Quality" />
+                                    <DropShadowEffect ShadowDepth="10" BlurRadius="35"
+                                                      Direction="270" Opacity="0.2"
+                                                      RenderingBias="Quality" />
                                 </Border.Effect>
                             </Border>
 
@@ -63,24 +64,24 @@
                                 </Grid.RowDefinitions>
 
                                 <!--  the corners  -->
-                                <Border x:Name="PART_TopLeftBorder" Grid.Row="0" Grid.Column="0"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_TopRightBorder" Grid.Row="0" Grid.Column="2"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_BottomLeftBorder" Grid.Row="2" Grid.Column="0"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_BottomRightBorder" Grid.Row="2" Grid.Column="2"
-                                        Background="Transparent" />
+                                <Border x:Name="PART_TopLeftBorder" Grid.Row="0"
+                                        Grid.Column="0" Background="Transparent" />
+                                <Border x:Name="PART_TopRightBorder" Grid.Row="0"
+                                        Grid.Column="2" Background="Transparent" />
+                                <Border x:Name="PART_BottomLeftBorder" Grid.Row="2"
+                                        Grid.Column="0" Background="Transparent" />
+                                <Border x:Name="PART_BottomRightBorder" Grid.Row="2"
+                                        Grid.Column="2" Background="Transparent" />
 
                                 <!--  sides  -->
-                                <Border x:Name="PART_LeftBorder" Grid.Row="1" Grid.Column="0"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_RightBorder" Grid.Row="1" Grid.Column="2"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_TopBorder" Grid.Row="0" Grid.Column="1"
-                                        Background="Transparent" />
-                                <Border x:Name="PART_BottomBorder" Grid.Row="2" Grid.Column="1"
-                                        Background="Transparent" />
+                                <Border x:Name="PART_LeftBorder" Grid.Row="1"
+                                        Grid.Column="0" Background="Transparent" />
+                                <Border x:Name="PART_RightBorder" Grid.Row="1"
+                                        Grid.Column="2" Background="Transparent" />
+                                <Border x:Name="PART_TopBorder" Grid.Row="0"
+                                        Grid.Column="1" Background="Transparent" />
+                                <Border x:Name="PART_BottomBorder" Grid.Row="2"
+                                        Grid.Column="1" Background="Transparent" />
 
                             </Grid>
 

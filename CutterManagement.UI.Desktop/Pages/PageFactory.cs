@@ -8,13 +8,14 @@ namespace CutterManagement.UI.Desktop
 {
     public class PageFactory
     {
-        private readonly Func<AppPage, PagePresenterViewModel> _pageFactory;
+        private readonly Func<AppPage, ViewModelBase> _pageFactory;
 
-        public PageFactory(Func<AppPage, PagePresenterViewModel> factory)
+        public PageFactory(Func<AppPage, ViewModelBase> factory)
         {
             _pageFactory = factory;
         }
 
-        public PagePresenterViewModel GetPageViewModel(AppPage page) => _pageFactory.Invoke(page);
+        public ViewModelBase GetPageViewModel(AppPage page) => 
+            _pageFactory.Invoke(page);
     }
 }

@@ -26,7 +26,8 @@
                         <Grid>
 
                             <!--  place holder  -->
-                            <TextBlock x:Name="PlaceHolder" Padding="2,1,0,0" HorizontalAlignment="Left"
+                            <TextBlock x:Name="PlaceHolder" Padding="2,1,0,0"
+                                       HorizontalAlignment="Left"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                        Text="{TemplateBinding Tag}"
                                        FontFamily="{TemplateBinding FontFamily}"
@@ -43,8 +44,9 @@
                                     Style="{DynamicResource AppButtonStyle}" />
 
                             <!--  control content  -->
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,66,0" HorizontalContentAlignment="Left"
-                                          VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,66,0"
+                                          HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                          VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
 
                         </Grid>
 

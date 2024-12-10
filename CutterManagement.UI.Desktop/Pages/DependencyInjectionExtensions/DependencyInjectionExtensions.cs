@@ -27,11 +27,10 @@ namespace CutterManagement.UI.Desktop
                 switch(pageProvider)
                 {
                     case AppPage.HomePage:
-                        return serviceProvider.GetService<HomePageViewModel>()!;
+                        return serviceProvider.GetRequiredService<HomePageViewModel>();
 
                     case AppPage.SettingsPage:
-                        return serviceProvider.GetService<SettingsPageViewModel>()!;
-
+                        return serviceProvider.GetRequiredService<SettingsPageViewModel>();
 
                     default:
                         throw new InvalidOperationException();

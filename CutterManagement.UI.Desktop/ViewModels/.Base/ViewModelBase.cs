@@ -8,6 +8,8 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class ViewModelBase : INotifyPropertyChanged
     {
+        public AppPage CurrentPage { get; set; } = AppPage.HomePage;
+
         /// <summary>
         /// The event to fire when a property changes
         /// </summary>

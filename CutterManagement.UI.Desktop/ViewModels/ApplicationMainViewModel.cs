@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CutterManagement.UI.Desktop
 {
-    public class PagePresenterViewModel : ViewModelBase
+    public class ApplicationMainViewModel : ViewModelBase
     {
-        public AppPage CurrentPage { get; set; } = AppPage.HomePage;
 
     }
 }
