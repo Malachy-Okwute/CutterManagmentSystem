@@ -20,7 +20,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// The logic determining if a command or an action should be allowed to execute
         /// </summary>
-        private readonly Predicate<object> _canExecuteCommand;
+        private readonly Func<bool>? _canExecuteCommand;
 
         /// <summary>
         /// Event that gets fired when can execute changes
@@ -36,7 +36,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="executeCommand">The action to execute</param>
         /// <param name="canExecuteCommand">The condition whether to execute a command or not </param>
-        public RelayCommand(Action executeCommand, Predicate<object> canExecuteCommand)
+        public RelayCommand(Action executeCommand, Func<bool>? canExecuteCommand = null)
         {
             // Set fields values
             _executeCommand = executeCommand;
@@ -49,13 +49,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="executeCommandWithParameter">The action with parameter to execute</param>
         /// <param name="canExecuteCommand">The condition whether to execute a command or not </param>
-        public RelayCommand(Action<object> executeCommandWithParameter, Predicate<object> canExecuteCommand)
+        public RelayCommand(Action<object> executeCommandWithParameter, Func<bool>? canExecuteCommand = null)
         {
             // Set fields values
             _executeCommandWithParameter = executeCommandWithParameter;
             _canExecuteCommand = canExecuteCommand;
-            _executeCommand?.Invoke();
-
         }
 
         /// <summary>
@@ -65,8 +63,7 @@ namespace CutterManagement.UI.Desktop
         /// <returns>A boolean value of True or false</returns>
         public bool CanExecute(object? parameter)
         {
-            // Return feedback
-            return (parameter is bool).Equals(null) ? true : _canExecuteCommand(parameter is bool);
+            return _canExecuteCommand is null ? true : _canExecuteCommand.Invoke();
         }
 
         /// <summary>

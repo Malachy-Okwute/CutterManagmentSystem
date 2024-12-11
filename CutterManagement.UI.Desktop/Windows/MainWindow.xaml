@@ -1,11 +1,9 @@
-﻿<local:ApplicationWindow x:Class="CutterManagement.UI.Desktop.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                         xmlns:local="clr-namespace:CutterManagement.UI.Desktop" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+﻿<local:ApplicationWindow x:Class="CutterManagement.UI.Desktop.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                          Title="MainWindow"
                          d:DesignStyle="{StaticResource CMSWindowStyle}"
-                         local:WindowAttachedProperty.AnimateWindow="True" WindowStartupLocation="CenterScreen"
-                         WindowStyle="None" WindowState="Normal"
-                         AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
+                         local:WindowAttachedProperty.AnimateWindow="True" WindowStartupLocation="CenterScreen" WindowStyle="None"
+                         WindowState="Normal" AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
                          mc:Ignorable="d">
 
     <Grid>
@@ -21,21 +19,18 @@
         <!--  caption area  -->
         <Grid Grid.Row="0" Height="{Binding CaptionHeight, FallbackValue=35}">
             <!--  icon  -->
-            <TextBlock Margin="10,0" HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
+            <TextBlock Margin="10,0" HorizontalAlignment="Left" VerticalAlignment="Center"
                        FontFamily="{StaticResource SolidIcon}"
                        FontSize="{StaticResource Large}"
                        Foreground="{DynamicResource ForegroundColorBrush3}"
                        Text="{StaticResource AppIcon}">
                 <TextBlock.Effect>
-                    <DropShadowEffect BlurRadius="12" Opacity="0.7"
-                                      ShadowDepth="-8" />
+                    <DropShadowEffect BlurRadius="12" Opacity="0.7" ShadowDepth="-8" />
                 </TextBlock.Effect>
             </TextBlock>
 
             <!--  window control buttons  -->
-            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Stretch"
-                        Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Stretch" Orientation="Horizontal">
                 <Button Command="{Binding MinimizeWindowCommand}"
                         Content="{StaticResource WindowMinimizeIcon}"
                         Style="{StaticResource WindowControlButtonStyle}" />
@@ -58,15 +53,12 @@
             </Grid.RowDefinitions>
 
             <!--  navigation bar  -->
-            <local:NavigationBarControl Grid.Row="0" Height="45"
-                                        VerticalAlignment="Top" />
+            <local:NavigationBarControl DataContext="{Binding Navigation}"
+                                        Grid.Row="0" Height="45" VerticalAlignment="Top" />
 
-            <!--  other window content  -->
+            <!--  window main content  -->
             <Border Grid.Row="1" Padding="0,12,0,0">
-                <Frame VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch"
-                       NavigationUIVisibility="Hidden"
-                       DataContext="{Binding}"
-                       Content="{Binding CurrentPage, Converter={x:Static local:ApplicationPageConverter.Instance}}" />
+                <local:PagePresenterControl DataContext="{Binding Navigation}" />
             </Border>
 
         </Grid>
@@ -79,8 +71,7 @@
             <Grid>
 
                 <!--  notification icon  -->
-                <Button Width="28" Margin="20,0"
-                        HorizontalAlignment="Right"
+                <Button Width="28" Margin="20,0" HorizontalAlignment="Right"
                         Content="{StaticResource NotificationIcon}"
                         FontSize="{StaticResource Regular}"
                         Style="{StaticResource NotificationButtonStyle}" />

@@ -40,6 +40,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private Window _appWindow => Application.Current.MainWindow; //TODO: Refactor
 
+        /// <summary>
+        /// App navigation
+        /// </summary>
+        public NavigationBarViewModel Navigation { get; private set; } //TODO: Refactor
+
         #endregion
 
         #region Public Properties
@@ -123,12 +128,15 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ApplicationWindowViewModel()
+        public ApplicationWindowViewModel(NavigationBarViewModel navigation)
         {
+            // set app navigation
+            Navigation = navigation;
+
             // Create commands
-            MinimizeWindowCommand = new RelayCommand(() => _appWindow.WindowState = WindowState.Minimized, canExecuteCommand => true);
+            MinimizeWindowCommand = new RelayCommand(() => _appWindow.WindowState = WindowState.Minimized);
             //MaximizeWindowCommand = new RelayCommand(() => _appWindow.WindowState ^= WindowState.Maximized, canExecuteCommand => this != null);
-            CloseWindowCommand = new RelayCommand(() => _appWindow.Close(), canExecuteCommand => true);
+            CloseWindowCommand = new RelayCommand(() => _appWindow.Close());
         }
 
         #endregion
