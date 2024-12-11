@@ -36,12 +36,15 @@
                     Content="{StaticResource HomeIcon}"
                     Style="{StaticResource AppButtonStyle}" />
             <Button x:Name="UpdatesButton"
+                    Command="{Binding NavigateToUpdatesPageCommand}"
                     Content="{StaticResource UpdatesIcon}"
                     Style="{StaticResource AppButtonStyle}" />
             <Button x:Name="ArchivesButton"
+                    Command="{Binding NavigateToArchivesPageCommand}"
                     Content="{StaticResource ArchivesIcon}"
                     Style="{StaticResource AppButtonStyle}" />
             <Button x:Name="UsersButton"
+                    Command="{Binding NavigateToUsersPageCommand}"
                     Content="{StaticResource UsersIcon}"
                     Style="{StaticResource AppButtonStyle}" />
             <Button x:Name="SettingsButton"
@@ -49,6 +52,7 @@
                     Content="{StaticResource SettingsIcon}"
                     Style="{StaticResource AppButtonStyle}" />
             <Button x:Name="InfoButton"
+                    Command="{Binding NavigateToInfoPageCommand}"
                     Content="{StaticResource InfosIcon}"
                     Style="{StaticResource AppButtonStyle}" />
         </StackPanel>

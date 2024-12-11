@@ -33,9 +33,30 @@ namespace CutterManagement.UI.Desktop
         public ICommand NavigateToHomePageCommand { get; set; }
 
         /// <summary>
+        /// Command to navigate to updates page
+        /// </summary>
+        public ICommand NavigateToUpdatesPageCommand { get; set; }
+
+        /// <summary>
+        /// Command to navigate to archives page
+        /// </summary>
+        public ICommand NavigateToArchivesPageCommand { get; set; }
+
+        /// <summary>
+        /// Command to navigate to users page
+        /// </summary>
+        public ICommand NavigateToUsersPageCommand { get; set; }
+
+
+        /// <summary>
         /// Command to navigate to settings page
         /// </summary>
         public ICommand NavigateToSettingsPageCommand { get; set; }
+
+        /// <summary>
+        /// Command to navigate to info page
+        /// </summary>
+        public ICommand NavigateToInfoPageCommand { get; set; }
 
         #endregion
 
@@ -52,7 +73,11 @@ namespace CutterManagement.UI.Desktop
 
             // Create commands
             NavigateToHomePageCommand = new RelayCommand(GotoHomePage);
+            NavigateToUpdatesPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.UpdatePage));
+            NavigateToArchivesPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.ArchivePage));
+            NavigateToUsersPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.UserPage));
             NavigateToSettingsPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.SettingsPage));
+            NavigateToInfoPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.InformationPage));
 
             // Goto home page on start up
             GotoHomePage();

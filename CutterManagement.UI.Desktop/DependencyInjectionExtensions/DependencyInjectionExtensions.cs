@@ -21,6 +21,10 @@ namespace CutterManagement.UI.Desktop
             services.AddSingleton<MachineItemCollectionViewModel>();
 
             // Transients
+            services.AddTransient<InfoPageViewModel>();
+            services.AddTransient<UsersPageViewModel>();
+            services.AddTransient<UpdatesPageViewModel>();
+            services.AddTransient<ArchivesPageViewModel>();
             services.AddTransient<SettingsPageViewModel>();
             services.AddTransient<ApplicationWindowViewModel>();
             
@@ -35,15 +39,27 @@ namespace CutterManagement.UI.Desktop
         {
             // Add services
             services.AddSingleton<PageFactory>();
-            services.AddSingleton<Func<AppPage, ViewModelBase>>(serviceProvider => pageProvider =>
+            services.AddTransient<Func<AppPage, ViewModelBase>>(serviceProvider => pageProvider =>
             {
                 switch(pageProvider)
                 {
                     case AppPage.HomePage:
                         return serviceProvider.GetRequiredService<HomePageViewModel>();
 
+                    case AppPage.UpdatePage:
+                        return serviceProvider.GetRequiredService<UpdatesPageViewModel>();
+
+                    case AppPage.ArchivePage:
+                        return serviceProvider.GetRequiredService<ArchivesPageViewModel>();
+
+                    case AppPage.UserPage:
+                        return serviceProvider.GetRequiredService<UsersPageViewModel>();
+
                     case AppPage.SettingsPage:
                         return serviceProvider.GetRequiredService<SettingsPageViewModel>();
+
+                    case AppPage.InformationPage:
+                        return serviceProvider.GetRequiredService<InfoPageViewModel>();
 
                     default:
                         throw new InvalidOperationException();
