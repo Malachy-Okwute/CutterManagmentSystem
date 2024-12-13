@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,7 +21,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Environment variable (pulled using compiler directives)
         /// </summary>
-        private string _environment = string.Empty;
+        private static string _environment = string.Empty;
 
         /// <summary>
         /// The splash window for this application
@@ -34,7 +35,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Application services host
         /// </summary>
-        private IHost ApplicationHost { get; set; } = default!;
+        public IHost ApplicationHost { get; private set; } = default!;
 
         #endregion
 
@@ -70,7 +71,7 @@ namespace CutterManagement.UI.Desktop
                         GetEnvironmentVariable();
 
                         // Set up dependency injection service
-                        DependencyInjectionSetup();
+                        ApplicationHost = CreateHostBuilder().Build();
 
                         // Log application start up as information 
                         Log.Logger.Information("Application is starting...");
@@ -96,9 +97,6 @@ namespace CutterManagement.UI.Desktop
 
             // Lunch main application window
             await LunchApplicationWindowAsync();
-
-            // Set up local app db
-            await ApplicationHost.Services.GetRequiredService<IUserDataAccessService>().EnsureDbCreatedAsync();
 
             // Let base do what it needs
             base.OnStartup(e);
@@ -207,7 +205,7 @@ namespace CutterManagement.UI.Desktop
         /// Sets up serilog logger ready for use
         /// </summary>
         /// <param name="configurationBuilder">The logger configuration settings</param>
-        private void SetupSerilogLogger(IConfigurationBuilder configurationBuilder)
+        private static void SetupSerilogLogger(IConfigurationBuilder configurationBuilder)
         {
             // Configure serilog
             Log.Logger = new LoggerConfiguration()
@@ -224,27 +222,45 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Set up application dependency injection service
         /// </summary>
-        private void DependencyInjectionSetup()
+        private static IHostBuilder CreateHostBuilder(string[]? args = null)
         {
             // Setup services 
-            ApplicationHost = Host.CreateDefaultBuilder()
-                .ConfigureAppConfiguration(configurationBuilder =>
-                {
-                    configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
-                                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                        .AddJsonFile($"appsettings.{_environment}.json", optional: true);
+            return Host.CreateDefaultBuilder(args)
+                 .ConfigureAppConfiguration(configurationBuilder =>
+                 {
+                     configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
+                                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                                         .AddJsonFile($"appsettings.{_environment}.json", optional: true);
 
-                    SetupSerilogLogger(configurationBuilder);
-                })
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddUserDataContext(hostContext.Configuration);
-                    services.AddViewModels();
-                    services.AddServices();
-                    services.AddViews();
-                })
-                .UseSerilog()
-                .Build();
+                     SetupSerilogLogger(configurationBuilder);
+                 })
+                 .ConfigureServices((hostContext, services) =>
+                 {
+                     // To apply ef core migration, the project configuring services (e.g. Dependency Injection)
+                     // Have to do the following for migration to work
+                     //
+                     // - Define a static CreateHostBuilder(string[]? args) method and use it to setup services
+                     //         (Ef core looks for a method with such signature during migration to locate Dbcontext type and db provider e.g. SqlServer).
+                     // - AddDbContext to services and set it up.
+                     // - Install ef core design and ef core tools nuget packages.
+                     // - Use the project to run migrations by setting it as a startup project.
+                     //
+                     // **** Use -verbose to see what's actually going on during migration. ****
+
+                     services.AddDbContext<ApplicationDbContext>(option =>
+                     {
+                         option.UseSqlServer(hostContext.Configuration.GetConnectionString("DefaultDbConnection")!
+                                                                      // https://learn.microsoft.com/en-us/answers/questions/1113995/changing-location-of-database-mdf-file-from-defaul
+                                                                      // Create the *.mfd file in the bin folder instead of the user folder
+                                                                      .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));
+                     });
+                     services.AddTransient<IDataAccessService>(serviceProvider => new DataAccessService(serviceProvider.GetRequiredService<ApplicationDbContext>()));
+
+                     services.AddViewModels();
+                     services.AddServices();
+                     services.AddViews();
+                 })
+                 .UseSerilog();
         }
 
         #endregion

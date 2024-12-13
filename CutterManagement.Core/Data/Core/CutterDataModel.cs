@@ -6,19 +6,24 @@
     public class CutterDataModel
     {
         /// <summary>
-        /// The model this cutter is made for
-        /// </summary>
-        private string _model = string.Empty;
-
-        /// <summary>
         /// Unique id of this cutter
         /// </summary>
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Unique cutter id
+        /// </summary>
+        public string CutterId { get; set; } = string.Empty;
 
         /// <summary>
         /// The number of parts produced by this cutter
         /// </summary>
         public string Count { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The model this cutter is made for
+        /// </summary>
+        public string Model { get; set; } = string.Empty;
 
         /// <summary>
         /// The kind of <see cref="PartKind"/> this cutter is made for
@@ -36,13 +41,5 @@
         /// </summary>
         public CutterCondition Condition { get; set; }
 
-        /// <summary>
-        /// The model this cutter is made for
-        /// </summary>
-        public string Model 
-        {
-            get => string.Format("M{0}", _model);
-            set => _model = value;
-        } 
     }
 }

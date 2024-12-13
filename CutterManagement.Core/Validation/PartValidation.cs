@@ -19,7 +19,7 @@
             if (part is null)
                 return ErrorReport(result, "A valid part is required");
 
-            else if (string.IsNullOrEmpty(part.Id))
+            else if (string.IsNullOrEmpty(part.PartId))
                 return ErrorReport(result, "A valid part ID is required");
 
             else if (string.IsNullOrEmpty(part.PartToothCount))

@@ -9,16 +9,16 @@
             if (machine is null)
                 return ErrorReport(result, "A valid machine is required");
 
-            else if (string.IsNullOrEmpty(machine.Id))
+            else if (string.IsNullOrEmpty(machine.MachineId))
                 return ErrorReport(result, "A valid machine ID is required");
 
-            else if (machine.Id.Count() > 3 || machine.Id.Count() < 3)
+            else if (machine.MachineId.Count() > 3 || machine.MachineId.Count() < 3)
                 return ErrorReport(result, "MachineDataModel ID must be 3 digits");
 
-            else if (string.IsNullOrEmpty(machine.SetID))
+            else if (string.IsNullOrEmpty(machine.SetId))
                 return ErrorReport(result, "A valid machine set ID is required");
 
-            else if (int.TryParse(machine.Id, out var number) is false)
+            else if (int.TryParse(machine.MachineId, out var number) is false)
                 return ErrorReport(result, "MachineDataModel ID must be a number");
 
             else if (machine.Owner is Department.None)

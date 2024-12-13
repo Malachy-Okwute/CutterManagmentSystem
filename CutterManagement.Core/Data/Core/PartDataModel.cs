@@ -6,14 +6,14 @@
     public class PartDataModel
     {
         /// <summary>
-        /// The model of this part
+        /// The unique id used to identify this data on db
         /// </summary>
-        private string _model = string.Empty;
+        public int Id { get; set; }
 
         /// <summary>
-        /// The unique id of this part object
+        /// Unique part id
         /// </summary>
-        public string Id { get; set; } = string.Empty;
+        public string PartId { get; set; } = string.Empty;
 
         /// <summary>
         /// The number of teeth this part has
@@ -21,18 +21,15 @@
         public string PartToothCount { get; set; } = string.Empty;
 
         /// <summary>
+        /// The model of this part
+        /// </summary>
+        public string Model { get; set; } = string.Empty;
+
+        /// <summary>
         /// The type of this part
         /// Ring or pinion
         /// </summary>
         public PartKind Kind { get; set; }
 
-        /// <summary>
-        /// The model of this part
-        /// </summary>
-        public string Model
-        {
-            get => string.Format("M{0}", _model);
-            set => _model = value;
-        }
     }
 }

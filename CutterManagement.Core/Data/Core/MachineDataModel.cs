@@ -8,14 +8,19 @@ namespace CutterManagement.Core
     public class MachineDataModel
     {
         /// <summary>
-        /// The unique id assigned to this machine object
+        /// The unique id used to identify this data in db
         /// </summary>
-        public string Id { get; set; } = string.Empty;
+        public int Id { get; set; }
 
         /// <summary>
         /// The unique set id assigned to this machine object
         /// </summary>
-        public string SetID { get; set; } = string.Empty;
+        public string MachineId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The unique set id assigned to this machine object
+        /// </summary>
+        public string SetId { get; set; } = string.Empty;
 
         /// <summary>
         /// The count representing the number of parts produced by this machine
@@ -49,13 +54,13 @@ namespace CutterManagement.Core
         public FrequencyCheckResult FrequencyCheckResult { get; set; }
 
         /// <summary>
-        /// The part this machine is currently setup to run/produce or null if not setup
+        /// Collection of part
         /// </summary>
-        public PartDataModel? Part { get; set; }
+        public ICollection<PartDataModel>? Part { get; set; }
 
         /// <summary>
-        /// The cutter this machine is currently set up with to run/produce parts or null if not setup
+        /// Collection of cutters
         /// </summary>
-        public CutterDataModel? Cutter { get; set; }
+        public ICollection<CutterDataModel>? Cutter { get; set; }
     }
 }
