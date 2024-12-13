@@ -2,6 +2,6 @@
 {
     public interface IDataAccessService
     {
-        Task GenerateDatabaseAsync();
+        Task UpdateDatabaseMigrateAsync();
     }
 }

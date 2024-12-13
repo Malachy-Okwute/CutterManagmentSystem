@@ -95,6 +95,9 @@ namespace CutterManagement.UI.Desktop
                 await taskCompletionSource.Task;
             });
 
+            // Update database migration or generate a database if not created.
+            await ApplicationHost.Services.GetRequiredService<IDataAccessService>().UpdateDatabaseMigrateAsync();
+
             // Lunch main application window
             await LunchApplicationWindowAsync();
 

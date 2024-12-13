@@ -85,7 +85,6 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
-
         /// <summary>
         /// Navigates to the home page of this application 
         /// </summary>
