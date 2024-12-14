@@ -11,9 +11,9 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Unique part id
+        /// Unique part number
         /// </summary>
-        public string PartId { get; set; } = string.Empty;
+        public string PartNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// The number of teeth this part has
@@ -30,6 +30,11 @@
         /// Ring or pinion
         /// </summary>
         public PartKind Kind { get; set; }
+
+        /// <summary>
+        /// Date this entry was created
+        /// </summary>
+        public DateTime EntryDate { get; set; }
 
     }
 }

@@ -6,19 +6,19 @@
     public class UserDataModel
     {
         /// <summary>
-        /// Unique id of this user
+        /// Unique id of this user to be identified with in database
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
         /// User first name 
         /// </summary>
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         /// <summary>
         /// User last name 
         /// </summary>
-        public string? LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         /// <summary>
         /// Role of user
@@ -33,6 +33,6 @@
         /// <summary>
         /// Data this entry was created
         /// </summary>
-        public string EntryDate { get; set; } = DateTime.UtcNow.ToString("g");
+        public DateTime EntryDate { get; set; } 
     }
 }

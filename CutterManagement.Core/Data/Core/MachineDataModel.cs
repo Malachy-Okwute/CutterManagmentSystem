@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace CutterManagement.Core
+﻿namespace CutterManagement.Core
 {
     /// <summary>
     /// Machine data model
@@ -13,14 +11,14 @@ namespace CutterManagement.Core
         public int Id { get; set; }
 
         /// <summary>
-        /// The unique set id assigned to this machine object
+        /// The unique number assigned to this machine object
         /// </summary>
-        public string MachineId { get; set; } = string.Empty;
+        public string MachineNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// The unique set id assigned to this machine object
         /// </summary>
-        public string SetId { get; set; } = string.Empty;
+        public string MachineSetId { get; set; } = string.Empty;
 
         /// <summary>
         /// The count representing the number of parts produced by this machine
@@ -35,7 +33,7 @@ namespace CutterManagement.Core
         /// <summary>
         /// The last date and time data record was updated
         /// </summary>
-        public DateTime DateTime { get; set; } = DateTime.UtcNow;
+        public DateTime DateTime { get; set; } 
 
         /// <summary>
         /// The dept. owner of this machine
@@ -46,6 +44,16 @@ namespace CutterManagement.Core
         /// The status of this machine indicating whether it's running, sitting idle or down for maintenance
         /// </summary>
         public MachineStatus Status { get; set; }
+
+        /// <summary>
+        /// The reason cutter assigned to this machine was pulled from this machine
+        /// </summary>
+        public CutterChangeInformation CutterChangeInfo{ get; set; }
+
+        /// <summary>
+        /// Extra information relating to the reason cutter is pulled
+        /// </summary>
+        public string CutterChangeComment { get; set; } = string.Empty;
 
         /// <summary>
         /// The result of a frequency check

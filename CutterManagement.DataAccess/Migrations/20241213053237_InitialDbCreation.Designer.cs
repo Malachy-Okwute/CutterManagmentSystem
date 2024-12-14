@@ -46,7 +46,7 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("int");
 
-                    b.Property<string>("MachineId")
+                    b.Property<string>("MachineNumber")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -59,7 +59,7 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("SetId")
+                    b.Property<string>("MachineSetId")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -93,7 +93,7 @@ namespace CutterManagement.DataAccess.Migrations
                             b1.Property<int>("CutterForeignId")
                                 .HasColumnType("int");
 
-                            b1.Property<string>("CutterId")
+                            b1.Property<string>("CutterNumber")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
@@ -135,7 +135,7 @@ namespace CutterManagement.DataAccess.Migrations
                             b1.Property<int>("PartForeignId")
                                 .HasColumnType("int");
 
-                            b1.Property<string>("PartId")
+                            b1.Property<string>("PartNumber")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 

@@ -98,6 +98,13 @@ namespace CutterManagement.UI.Desktop
             // Update database migration or generate a database if not created.
             await ApplicationHost.Services.GetRequiredService<IDataAccessService>().UpdateDatabaseMigrateAsync();
 
+            // Check if there is an app update available
+            // Check if we have database
+            // Check if admin user exist
+            // Check if total number of users is less than 3
+            // 
+            // continue lunching app window
+
             // Lunch main application window
             await LunchApplicationWindowAsync();
 
