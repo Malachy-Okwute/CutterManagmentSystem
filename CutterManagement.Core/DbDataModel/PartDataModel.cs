@@ -3,22 +3,27 @@
     /// <summary>
     /// Part data model
     /// </summary>
-    public class PartDataModel
+    public class PartDataModel : DbDataModelBase
     {
         /// <summary>
-        /// The unique id used to identify this data on db
+        /// Foreign id to <see cref="MachineDataModel"/>
         /// </summary>
-        public int Id { get; set; }
+        public int MachineDataModelId { get; set; }
+
+        /// <summary>
+        /// Navigation property <see cref="MachineDataModel"/>
+        /// </summary>
+        public MachineDataModel MachineData { get; set; }
 
         /// <summary>
         /// Unique part number
         /// </summary>
-        public string PartNumber { get; set; } = string.Empty;
+        public int PartNumber { get; set; }
 
         /// <summary>
         /// The number of teeth this part has
         /// </summary>
-        public string PartToothCount { get; set; } = string.Empty;
+        public int PartToothCount { get; set; }
 
         /// <summary>
         /// The model of this part
@@ -34,7 +39,7 @@
         /// <summary>
         /// Date this entry was created
         /// </summary>
-        public DateTime EntryDate { get; set; }
+        public DateTime EntryCreatedDateTime { get; set; }
 
     }
 }

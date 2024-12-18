@@ -17,7 +17,7 @@ namespace CutterManagement.UI.Desktop
             InitializeComponent();
 
             // TODO: To be removed 
-            DataContext = new MachineItemCollectionDesignModel();
+            //DataContext = new MachineItemCollectionDesignModel();
 
             // Hook into items-control size changed event
             Items.SizeChanged += (s, e) =>

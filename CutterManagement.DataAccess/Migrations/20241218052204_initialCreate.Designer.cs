@@ -4,6 +4,7 @@ using CutterManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241218052204_initialCreate")]
+    partial class initialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,52 +33,52 @@ namespace CutterManagement.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Count")
+                    b.Property<string>("Count")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CutterChangeComment")
                         .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
-                    b.Property<string>("CutterChangeInfo")
-                        .IsRequired()
+                    b.Property<int>("CutterChangeInfo")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EntryCreatedDateTime")
                         .HasMaxLength(100)
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FrequencyCheckResult")
-                        .IsRequired()
+                    b.Property<int>("FrequencyCheckResult")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("LastModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MachineNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
-
-                    b.Property<int>("MachineSetId")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
-
-                    b.Property<string>("Owner")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PartToothSize")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
+                    b.Property<string>("MachineNumber")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MachineSetId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Owner")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PartToothSize")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasMaxLength(100)
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -95,11 +98,13 @@ namespace CutterManagement.DataAccess.Migrations
                             b1.Property<int>("Condition")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("Count")
-                                .HasColumnType("int");
+                            b1.Property<string>("Count")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                            b1.Property<int>("CutterNumber")
-                                .HasColumnType("int");
+                            b1.Property<string>("CutterNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<DateTime>("EntryCreatedDateTime")
                                 .HasColumnType("datetime2");
@@ -153,11 +158,13 @@ namespace CutterManagement.DataAccess.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<int>("PartNumber")
-                                .HasColumnType("int");
+                            b1.Property<string>("PartNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                            b1.Property<int>("PartToothCount")
-                                .HasColumnType("int");
+                            b1.Property<string>("PartToothCount")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("Id");
 

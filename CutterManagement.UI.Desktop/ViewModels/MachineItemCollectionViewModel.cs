@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using CutterManagement.Core;
+using Serilog;
 using System.Collections.ObjectModel;
 
 namespace CutterManagement.UI.Desktop
@@ -17,6 +18,8 @@ namespace CutterManagement.UI.Desktop
         /// Collection of <see cref="MachineItemControl"/> representing pins
         /// </summary>
         private ObservableCollection<MachineItemViewModel> _pinItems;
+
+        private IDataAccessService<MachineDataModel> _machineData;
 
         /// <summary>
         /// Collection of <see cref="MachineItemControl"/> representing rings
@@ -39,10 +42,23 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemCollectionViewModel()
+        public MachineItemCollectionViewModel(IDataAccessService<MachineDataModel> machineData)
         {
+            _machineData = machineData;
+
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
+            LoadMachineData();
+        }
+
+        private void LoadMachineData()
+        {
+            if (_machineData is null) return;
+
+            if(_machineData.GetAllEntitiesAsync().Result.Count is 0)
+            {
+
+            }
         }
 
     }

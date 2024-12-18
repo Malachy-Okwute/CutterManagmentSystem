@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241213053237_InitialDbCreation")]
-    partial class InitialDbCreation
+    [Migration("20241218172951_AddedConversionToStringForTypeEnums")]
+    partial class AddedConversionToStringForTypeEnums
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,23 +38,29 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("DateTime")
-                        .HasMaxLength(100)
-                        .HasColumnType("datetime2");
+                    b.Property<string>("CutterChangeComment")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
-                    b.Property<int>("FrequencyCheckResult")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
-
-                    b.Property<string>("MachineNumber")
+                    b.Property<string>("CutterChangeInfo")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Owner")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("EntryCreatedDateTime")
+                        .HasMaxLength(100)
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("PartToothSize")
+                    b.Property<string>("FrequencyCheckResult")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("LastModifiedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MachineNumber")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -64,13 +70,23 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("Status")
+                    b.Property<string>("Owner")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartToothSize")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("MachineDataStore");
+                    b.ToTable("Machines");
                 });
 
             modelBuilder.Entity("CutterManagement.Core.MachineDataModel", b =>
@@ -90,14 +106,20 @@ namespace CutterManagement.DataAccess.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<int>("CutterForeignId")
-                                .HasColumnType("int");
-
                             b1.Property<string>("CutterNumber")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
+                            b1.Property<DateTime>("EntryCreatedDateTime")
+                                .HasColumnType("datetime2");
+
                             b1.Property<int>("Kind")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("LastUsedDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<int>("MachineDataModelId")
                                 .HasColumnType("int");
 
                             b1.Property<string>("Model")
@@ -109,12 +131,14 @@ namespace CutterManagement.DataAccess.Migrations
 
                             b1.HasKey("Id");
 
-                            b1.HasIndex("CutterForeignId");
+                            b1.HasIndex("MachineDataModelId");
 
-                            b1.ToTable("CutterDataModel");
+                            b1.ToTable("Cutters");
 
-                            b1.WithOwner()
-                                .HasForeignKey("CutterForeignId");
+                            b1.WithOwner("MachineData")
+                                .HasForeignKey("MachineDataModelId");
+
+                            b1.Navigation("MachineData");
                         });
 
                     b.OwnsMany("CutterManagement.Core.PartDataModel", "Part", b1 =>
@@ -125,15 +149,18 @@ namespace CutterManagement.DataAccess.Migrations
 
                             SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
 
+                            b1.Property<DateTime>("EntryCreatedDateTime")
+                                .HasColumnType("datetime2");
+
                             b1.Property<int>("Kind")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("MachineDataModelId")
                                 .HasColumnType("int");
 
                             b1.Property<string>("Model")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
-
-                            b1.Property<int>("PartForeignId")
-                                .HasColumnType("int");
 
                             b1.Property<string>("PartNumber")
                                 .IsRequired()
@@ -145,17 +172,58 @@ namespace CutterManagement.DataAccess.Migrations
 
                             b1.HasKey("Id");
 
-                            b1.HasIndex("PartForeignId");
+                            b1.HasIndex("MachineDataModelId");
 
-                            b1.ToTable("PartDataModel");
+                            b1.ToTable("Parts");
 
-                            b1.WithOwner()
-                                .HasForeignKey("PartForeignId");
+                            b1.WithOwner("MachineData")
+                                .HasForeignKey("MachineDataModelId");
+
+                            b1.Navigation("MachineData");
+                        });
+
+                    b.OwnsMany("CutterManagement.Core.UserDataModel", "Users", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<DateTime>("EntryCreatedDateTime")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("MachineDataModelId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Shift")
+                                .HasColumnType("int");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("MachineDataModelId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner("MachineData")
+                                .HasForeignKey("MachineDataModelId");
+
+                            b1.Navigation("MachineData");
                         });
 
                     b.Navigation("Cutter");
 
                     b.Navigation("Part");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

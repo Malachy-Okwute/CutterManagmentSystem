@@ -95,15 +95,17 @@ namespace CutterManagement.UI.Desktop
                 await taskCompletionSource.Task;
             });
 
-            // Update database migration or generate a database if not created.
-            await ApplicationHost.Services.GetRequiredService<IDataAccessService>().UpdateDatabaseMigrateAsync();
+            // Get database 
+            ApplicationDbContext db = ApplicationHost.Services.GetRequiredService<ApplicationDbContext>();
 
-            // Check if there is an app update available
-            // Check if we have database
-            // Check if admin user exist
-            // Check if total number of users is less than 3
-            // 
-            // continue lunching app window
+            // Update database migration or generate a database if not created.
+            await db.UpdateDatabaseMigrateAsync();
+
+            // TODO: Check if there is an app update available - if new update is available
+            //      - notify user to update the application
+            //      - if app is not updated... automatically update app at the end of shift.
+            // TODO: Check if we have database connection string - if not - request that dev team should provide a database connection.
+
 
             // Lunch main application window
             await LunchApplicationWindowAsync();
@@ -264,7 +266,7 @@ namespace CutterManagement.UI.Desktop
                                                                       // Create the *.mfd file in the bin folder instead of the user folder
                                                                       .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));
                      });
-                     services.AddTransient<IDataAccessService>(serviceProvider => new DataAccessService(serviceProvider.GetRequiredService<ApplicationDbContext>()));
+                     services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
 
                      services.AddViewModels();
                      services.AddServices();

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CutterManagement.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -18,7 +19,7 @@ namespace CutterManagement.UI.Desktop
             services.AddSingleton<HomePageViewModel>();
             services.AddSingleton<NavigationBarViewModel>();
             services.AddSingleton<ApplicationMainViewModel>();
-            services.AddSingleton<MachineItemCollectionViewModel>();
+            services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IDataAccessService<MachineDataModel>>()));
 
             // Transients
             services.AddTransient<InfoPageViewModel>();

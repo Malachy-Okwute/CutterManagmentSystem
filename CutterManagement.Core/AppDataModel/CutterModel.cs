@@ -1,14 +1,16 @@
 ﻿namespace CutterManagement.Core
 {
-    /// <summary>
-    /// Cutter data model
-    /// </summary>
-    public class CutterDataModel
+    public class CutterModel
     {
         /// <summary>
-        /// Unique id of this cutter
+        /// Information about the machine this cutter is currently setup on
+        /// 
+        /// <para> 
+        /// NOTE: If cutter is not currently setup and is still re-useable, 
+        ///       Information about the previous machine is provided 
+        /// </para>
         /// </summary>
-        public int Id { get; set; }
+        public MachineDataModel MachineData { get; set; }
 
         /// <summary>
         /// Unique cutter number
@@ -49,6 +51,6 @@
         /// <summary>
         /// Date this entry was created
         /// </summary>
-        public DateTime EntryDate { get; set; }
+        public DateTime EntryCreatedDateTime { get; set; }
     }
 }

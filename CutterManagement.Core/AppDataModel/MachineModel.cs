@@ -1,39 +1,36 @@
 ﻿namespace CutterManagement.Core
 {
-    /// <summary>
-    /// Machine data model
-    /// </summary>
-    public class MachineDataModel
+    public class MachineModel
     {
-        /// <summary>
-        /// The unique id used to identify this data in db
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// The unique number assigned to this machine object
         /// </summary>
-        public string MachineNumber { get; set; } = string.Empty;
+        public int MachineNumber { get; set; }
 
         /// <summary>
         /// The unique set id assigned to this machine object
         /// </summary>
-        public string MachineSetId { get; set; } = string.Empty;
+        public int MachineSetId { get; set; }
 
         /// <summary>
         /// The count representing the number of parts produced by this machine
         /// </summary>
-        public string Count { get; set; } = string.Empty;
+        public int Count { get; set; }
 
         /// <summary>
         /// Measured tooth size of part
         /// </summary>
-        public string PartToothSize { get; set; } = string.Empty;
+        public int PartToothSize { get; set; } 
 
         /// <summary>
-        /// The last date and time data record was updated
+        /// The most recent date and time this table was modified
         /// </summary>
-        public DateTime DateTime { get; set; } 
+        public DateTime LastModifiedDateTime { get; set; }
+
+        /// <summary>
+        /// The date and time when this entity record was created
+        /// </summary>
+        public DateTime EntryCreatedDateTime { get; set; }
 
         /// <summary>
         /// The dept. owner of this machine
@@ -48,7 +45,7 @@
         /// <summary>
         /// The reason cutter assigned to this machine was pulled from this machine
         /// </summary>
-        public CutterChangeInformation CutterChangeInfo{ get; set; }
+        public CutterChangeInformation CutterChangeInfo { get; set; }
 
         /// <summary>
         /// Extra information relating to the reason cutter is pulled
@@ -62,13 +59,18 @@
         public FrequencyCheckResult FrequencyCheckResult { get; set; }
 
         /// <summary>
-        /// Collection of part
+        /// The part that is currently setup on this machine or null if machine doesn't have part
         /// </summary>
-        public ICollection<PartDataModel>? Part { get; set; }
+        public PartDataModel? Part { get; set; }
 
         /// <summary>
-        /// Collection of cutters
+        /// The cutter that is currently setup on this machine or null if machine doesn't have cutter
         /// </summary>
-        public ICollection<CutterDataModel>? Cutter { get; set; }
+        public CutterDataModel? Cutter { get; set; }
+
+        /// <summary>
+        /// User that made the most recent change to this machine
+        /// </summary>
+        public UserDataModel? User { get; set; }
     }
 }

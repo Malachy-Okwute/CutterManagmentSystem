@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using CutterManagement.Core;
+using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -10,12 +12,12 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// A singleton instance of this design-model
         /// </summary>
-        public static readonly MachineItemCollectionDesignModel Instance = new();
+        //public static readonly MachineItemCollectionDesignModel Instance = new();
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemCollectionDesignModel() 
+        public MachineItemCollectionDesignModel(IDataAccessService<MachineDataModel> dataModel) : base(dataModel) 
         {
             //new PartDataModel { Id = "123456789" };
 

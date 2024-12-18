@@ -25,6 +25,7 @@
     <Compile Include="ViewModels\.Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemCollectionDesignModel.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemDesignModel.cs" />
+    <Compile Include="ViewModels\.ViewLocator\ViewLocator.cs" />
   </ItemGroup>
 
   <ItemGroup>
