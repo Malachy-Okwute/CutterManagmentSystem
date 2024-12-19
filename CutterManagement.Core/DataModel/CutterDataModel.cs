@@ -3,22 +3,12 @@
     /// <summary>
     /// Cutter data model
     /// </summary>
-    public class CutterDataModel : DbDataModelBase
+    public class CutterDataModel : DataModelBase
     {
-        /// <summary>
-        /// Foreign id to <see cref="MachineDataModel"/>
-        /// </summary>
-        public int MachineDataModelId { get; set; }
-
-        /// <summary>
-        /// Navigation property <see cref="MachineDataModel"/>
-        /// </summary>
-        public MachineDataModel MachineData { get; set; }
-
         /// <summary>
         /// Unique cutter number
         /// </summary>
-        public int CutterNumber { get; set; } 
+        public string CutterNumber { get; set; } 
 
         /// <summary>
         /// The number of parts produced by this cutter
@@ -28,7 +18,7 @@
         /// <summary>
         /// The model this cutter is made for
         /// </summary>
-        public string Model { get; set; } = string.Empty;
+        public string Model { get; set; }
 
         /// <summary>
         /// The kind of <see cref="PartKind"/> this cutter is made for
@@ -52,8 +42,8 @@
         public DateTime LastUsedDate { get; set; }
 
         /// <summary>
-        /// Date this entry was created
+        /// Machine and cutters navigation properties
         /// </summary>
-        public DateTime EntryCreatedDateTime { get; set; }
+        public ICollection<MachineDataModelCutterDataModel> MachinesAndCutters { get; set; }
     }
 }

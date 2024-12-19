@@ -16,9 +16,9 @@ namespace CutterManagement.UI.Desktop
             // Add services
 
             // Singletons
-            services.AddSingleton<HomePageViewModel>();
             services.AddSingleton<NavigationBarViewModel>();
             services.AddSingleton<ApplicationMainViewModel>();
+            services.AddSingleton(provider => new HomePageViewModel(provider.GetRequiredService<MachineItemCollectionViewModel>()));
             services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IDataAccessService<MachineDataModel>>()));
 
             // Transients

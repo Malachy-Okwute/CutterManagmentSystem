@@ -3,17 +3,17 @@
     /// <summary>
     /// Machine data model
     /// </summary>
-    public class MachineDataModel : DbDataModelBase
+    public class MachineDataModel : DataModelBase
     {
         /// <summary>
         /// The unique number assigned to this machine object
         /// </summary>
-        public int MachineNumber { get; set; } 
+        public string MachineNumber { get; set; } 
 
         /// <summary>
         /// The unique set id assigned to this machine object
         /// </summary>
-        public int MachineSetId { get; set; } 
+        public string MachineSetId { get; set; } 
 
         /// <summary>
         /// The count representing the number of parts produced by this machine
@@ -23,17 +23,12 @@
         /// <summary>
         /// Measured tooth size of part
         /// </summary>
-        public int PartToothSize { get; set; }
+        public string PartToothSize { get; set; }
 
         /// <summary>
         /// The most recent date and time this table was modified
         /// </summary>
-        public DateTime LastModifiedDateTime { get; set; } 
-
-        /// <summary>
-        /// The date and time when this entity record was created
-        /// </summary>
-        public DateTime EntryCreatedDateTime { get; set; } 
+        public DateTime DateTimeLastModified { get; set; } 
 
         /// <summary>
         /// The dept. owner of this machine
@@ -53,7 +48,7 @@
         /// <summary>
         /// Extra information relating to the reason cutter is pulled
         /// </summary>
-        public string CutterChangeComment { get; set; } = string.Empty;
+        public string CutterChangeComment { get; set; }
 
         /// <summary>
         /// The result of a frequency check
@@ -62,18 +57,19 @@
         public FrequencyCheckResult FrequencyCheckResult { get; set; }
 
         /// <summary>
-        /// Collection of part
+        /// Machine and parts navigation properties
         /// </summary>
-        public ICollection<PartDataModel>? Part { get; set; }
+        public ICollection<MachineDataModelPartDataModel> MachinesAndParts { get; set; }
 
         /// <summary>
-        /// Collection of cutters
+        /// Machine and cutters navigation properties
         /// </summary>
-        public ICollection<CutterDataModel>? Cutter { get; set; }
+        public ICollection<MachineDataModelCutterDataModel> MachinesAndCutters { get; set; }
 
         /// <summary>
-        /// Collection of user
+        /// Machine and users navigation properties
         /// </summary>
-        public ICollection<UserDataModel>? Users { get; set; }
+        public ICollection<MachineDataModelUserDataModel> MachinesAndUsers { get; set; }
+
     }
 }

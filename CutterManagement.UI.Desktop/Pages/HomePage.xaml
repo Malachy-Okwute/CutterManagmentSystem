@@ -35,10 +35,9 @@
 
         <!--  home page content  -->
         <Grid Grid.Row="1" Margin="10,10,10,4">
-            <local:MachineItemCollectionControl />
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                       Text="{Binding Test}"
-                       FontSize="50" />
+
+            <local:MachineItemCollectionControl DataContext="{Binding MachineItemCollection}" />
+
         </Grid>
 
     </Grid>

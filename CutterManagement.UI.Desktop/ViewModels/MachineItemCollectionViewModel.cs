@@ -51,14 +51,15 @@ namespace CutterManagement.UI.Desktop
             LoadMachineData();
         }
 
-        private void LoadMachineData()
+        private async void LoadMachineData()
         {
             if (_machineData is null) return;
 
-            if(_machineData.GetAllEntitiesAsync().Result.Count is 0)
+            if ((await _machineData.GetAllEntitiesAsync()).Count is 0)
             {
-
+                var machines = MachinesDefaultData.GenerateDefaultMachineItems();
             }
+
         }
 
     }

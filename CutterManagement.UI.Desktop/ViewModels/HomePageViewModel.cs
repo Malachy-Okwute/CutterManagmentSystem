@@ -4,10 +4,11 @@ namespace CutterManagement.UI.Desktop
 {
     public class HomePageViewModel : ViewModelBase
     {
-        public string Test { get; set; } = "Home page";
+        public readonly MachineItemCollectionViewModel MachineItemCollection;
 
-        public HomePageViewModel()
+        public HomePageViewModel(MachineItemCollectionViewModel machineItemCollection)
         {
+            MachineItemCollection = machineItemCollection;
         }
     }
 }
