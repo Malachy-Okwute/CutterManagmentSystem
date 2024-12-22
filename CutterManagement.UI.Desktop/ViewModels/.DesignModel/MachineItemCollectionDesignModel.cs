@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using CutterManagement.DataAccess;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 
@@ -12,12 +13,12 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// A singleton instance of this design-model
         /// </summary>
-        //public static readonly MachineItemCollectionDesignModel Instance = new();
+        public static readonly MachineItemCollectionDesignModel Instance = new(new DataAccessServiceFactory());
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemCollectionDesignModel(IDataAccessService<MachineDataModel> dataModel) : base(dataModel) 
+        public MachineItemCollectionDesignModel(IDataAccessServiceFactory dataFactory) : base(dataFactory) 
         {
             //new PartDataModel { Id = "123456789" };
 
@@ -30,9 +31,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -40,9 +41,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -50,9 +51,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -60,9 +61,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -70,9 +71,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -80,9 +81,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -90,9 +91,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -100,9 +101,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -110,9 +111,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -120,9 +121,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -130,9 +131,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -140,9 +141,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -150,9 +151,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -160,9 +161,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -170,9 +171,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },
@@ -180,9 +181,9 @@ namespace CutterManagement.UI.Desktop
                 {
                     MachineNumber = "123",
                     MachineStatusComment = "IsRunning",
-                    CurrentCutterNumber = "X12345-67890",
-                    CurrentRunningPartNumber = "123456789",
-                    ProducedPartCount = "1000",
+                    CutterNumber = "X12345-67890",
+                    PartNumber = "123456789",
+                    Count = "1000",
                     //ResultOfLastPartChecked = "PASSED",
                     //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
                 },

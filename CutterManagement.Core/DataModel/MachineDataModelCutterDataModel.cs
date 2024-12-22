@@ -3,7 +3,7 @@
     /// <summary>
     /// Many to many relationship between machine and cutter
     /// </summary>
-    public class MachineDataModelCutterDataModel
+    public class MachineDataModelCutterDataModel 
     {
         /// <summary>
         /// Machine foreign key id

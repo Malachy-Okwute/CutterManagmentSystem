@@ -3,7 +3,7 @@
     /// <summary>
     /// Many to many relationship between machine and part
     /// </summary>
-    public class MachineDataModelUserDataModel
+    public class MachineDataModelUserDataModel 
     {
         /// <summary>
         /// Machine foreign key id

@@ -1,5 +1,4 @@
 ﻿using CutterManagement.Core;
-using Serilog;
 using System.Collections.ObjectModel;
 
 namespace CutterManagement.UI.Desktop
@@ -9,6 +8,8 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class MachineItemCollectionViewModel : ViewModelBase
     {
+        #region Private Fields
+
         /// <summary>
         /// Collection of <see cref="MachineItemControl"/> representing rings
         /// </summary>
@@ -19,7 +20,19 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private ObservableCollection<MachineItemViewModel> _pinItems;
 
-        private IDataAccessService<MachineDataModel> _machineData;
+        /// <summary>
+        /// Data service factory
+        /// </summary>
+        private IDataAccessServiceFactory _dataAccessService;
+
+        /// <summary>
+        /// Load data asynchronously 
+        /// </summary>
+        private Task _dataLoader;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// Collection of <see cref="MachineItemControl"/> representing rings
@@ -39,28 +52,122 @@ namespace CutterManagement.UI.Desktop
             set => _pinItems = value;
         }
 
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemCollectionViewModel(IDataAccessService<MachineDataModel> machineData)
+        public MachineItemCollectionViewModel(IDataAccessServiceFactory dataAccessService)
         {
-            _machineData = machineData;
+            _dataAccessService = dataAccessService;
 
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
-            LoadMachineData();
+            _dataLoader = LoadMachineData();
         }
 
-        private async void LoadMachineData()
-        {
-            if (_machineData is null) return;
+        #endregion
 
-            if ((await _machineData.GetAllEntitiesAsync()).Count is 0)
+        #region Methods
+
+        /// <summary>
+        /// Loads existing machine data from database, 
+        /// or generate default machine data if no data was found in the database
+        /// </summary>
+        /// <returns><see cref="Task"/></returns>
+        private async Task LoadMachineData()
+        {
+            // Makes sure we have service
+            if (_dataAccessService is null) return;
+
+            // Get tables needed
+            IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
+            IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
+            IDataAccessService<MachineDataModelUserDataModel> machineUserTable = _dataAccessService.GetDbTable<MachineDataModelUserDataModel>();
+
+            // if we don't have any data in the database
+            if ((await machineTable.GetAllEntitiesAsync()).Count < 1)
             {
-                var machines = MachinesDefaultData.GenerateDefaultMachineItems();
+                // Generate default ring and pins machine
+                var defaultPinionMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Pinion, 14);
+                var defaultRingMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Ring, 14);
+
+                // Get admin user
+                UserDataModel? admin = (await userTable.GetAllEntitiesAsync()).ToList().FirstOrDefault(user => user.LastName is "admin");
+
+                // Ensure pin and ring collections are empty
+                _pinItems.Clear();
+                _ringItems.Clear();
+
+                // Go through generated pinion data
+                foreach (MachineDataModel data in defaultPinionMachineData)
+                {
+                    // Create join table for machine and user
+                    // NOTE: Default machine is generated using admin user 
+                    MachineDataModelUserDataModel machineUserJoinData = new MachineDataModelUserDataModel 
+                    {
+                        MachineDataModel = data, 
+                        UserDataModel = admin! 
+                    };
+                    // Create new machine record in the database
+                    await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
+                    // Populate item list
+                    _pinItems.Add(ResolveToMachineItemViewModel(data));
+                }
+
+                // Create join table for machine and user
+                // NOTE: Default machine is generated using admin user 
+                foreach (MachineDataModel data in defaultRingMachineData)
+                {
+                    MachineDataModelUserDataModel machineUserJoinData = new MachineDataModelUserDataModel
+                    {
+                        MachineDataModel = data,
+                        UserDataModel = admin!
+                    };
+                    // Create new machine record in the database
+                    await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
+                    // Populate item list
+                    _ringItems.Add(ResolveToMachineItemViewModel(data));
+                }
             }
 
+            // Go through data from database
+            foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
+            {
+                // If machine data is owned by pinion
+                if (data.Owner is Department.Pinion)
+                {
+                    // Populate pin item list with data
+                    _pinItems.Add(ResolveToMachineItemViewModel(data));
+                }
+                // Otherwise
+                else
+                {
+                    // Populate ring item list with data
+                    _ringItems.Add(ResolveToMachineItemViewModel(data));
+                }
+            }
         }
 
+        /// <summary>
+        /// Resolves <see cref="MachineDataModel"/> to <see cref="MachineItemViewModel"/>
+        /// </summary>
+        /// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
+        /// <returns><see cref="MachineItemViewModel"/></returns>
+        private MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData)
+        {
+            return new MachineItemViewModel
+            {
+                Count = machineData.Count.ToString(),
+                MachineSetId = machineData.MachineSetId,
+                MachineNumber = machineData.MachineNumber,
+                FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
+                DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
+            };
+        }
+
+        #endregion
     }
 }

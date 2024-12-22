@@ -54,7 +54,7 @@
         <Border x:Name="CutterNumber" Grid.Column="2" MinWidth="80"
                 HorizontalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
-                       Text="{Binding CurrentCutterNumber}"
+                       Text="{Binding CutterNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
@@ -63,7 +63,7 @@
         <Border x:Name="CurrentRunningPartNumber" Grid.Column="3" MinWidth="80"
                 HorizontalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
-                       Text="{Binding CurrentRunningPartNumber}"
+                       Text="{Binding PartNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
@@ -72,7 +72,7 @@
         <Border x:Name="ProducedPartCount" Grid.Column="4" MinWidth="60"
                 HorizontalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
-                       Text="{Binding ProducedPartCount}"
+                       Text="{Binding Count}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
@@ -82,7 +82,7 @@
                 HorizontalAlignment="Stretch"
                 Background="{DynamicResource AccentColorBrush5}">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
-                       Text="{Binding ResultOfLastPartChecked}"
+                       Text="{Binding FrequencyCheckResult}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush7}" />
         </Border>
@@ -91,7 +91,7 @@
         <Border x:Name="DateAndTimeOfLastCheck" Grid.Column="6" MinWidth="160"
                 HorizontalAlignment="Stretch" d:Padding="8,0">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
-                       Text="{Binding DateAndTimeOfLastCheck}"
+                       Text="{Binding DateTimeLastModified}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>

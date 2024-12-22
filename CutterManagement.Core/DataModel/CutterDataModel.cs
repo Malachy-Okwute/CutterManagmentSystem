@@ -42,7 +42,7 @@
         public DateTime LastUsedDate { get; set; }
 
         /// <summary>
-        /// Machine and cutters navigation properties
+        /// Machine and cutters skip navigation properties
         /// </summary>
         public ICollection<MachineDataModelCutterDataModel> MachinesAndCutters { get; set; }
     }

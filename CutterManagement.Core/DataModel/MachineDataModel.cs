@@ -57,17 +57,17 @@
         public FrequencyCheckResult FrequencyCheckResult { get; set; }
 
         /// <summary>
-        /// Machine and parts navigation properties
+        /// Machine and parts skip navigation properties
         /// </summary>
         public ICollection<MachineDataModelPartDataModel> MachinesAndParts { get; set; }
 
         /// <summary>
-        /// Machine and cutters navigation properties
+        /// Machine and cutters skip navigation properties
         /// </summary>
         public ICollection<MachineDataModelCutterDataModel> MachinesAndCutters { get; set; }
 
         /// <summary>
-        /// Machine and users navigation properties
+        /// Machine and users skip navigation properties
         /// </summary>
         public ICollection<MachineDataModelUserDataModel> MachinesAndUsers { get; set; }
 

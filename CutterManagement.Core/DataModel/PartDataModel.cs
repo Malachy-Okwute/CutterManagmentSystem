@@ -27,7 +27,7 @@
         public PartKind Kind { get; set; }
 
         /// <summary>
-        /// Machine and parts navigation properties
+        /// Machine and parts skip navigation properties
         /// </summary>
         public ICollection<MachineDataModelPartDataModel> MachinesAndParts { get; set; }
     }

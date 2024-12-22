@@ -18,11 +18,11 @@
             // Dummy data
             MachineNumber = "123";
             MachineStatusComment = "IsRunning";
-            CurrentCutterNumber = "X12345-67890";
-            CurrentRunningPartNumber = "123456789";
-            ProducedPartCount = "1000";
-            //ResultOfLastPartChecked = "PASSED";
-            //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM";
+            CutterNumber = "X12345-67890";
+            PartNumber = "123456789";
+            Count = "1000";
+            FrequencyCheckResult = "PASSED";
+            DateTimeLastModified = "10-10-2024 ~ 12:36 AM";
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using CutterManagement.Core;
+using CutterManagement.DataAccess;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace CutterManagement.UI.Desktop
@@ -15,9 +17,6 @@ namespace CutterManagement.UI.Desktop
         public MachineItemCollectionControl()
         {
             InitializeComponent();
-
-            // TODO: To be removed 
-            //DataContext = new MachineItemCollectionDesignModel();
 
             // Hook into items-control size changed event
             Items.SizeChanged += (s, e) =>

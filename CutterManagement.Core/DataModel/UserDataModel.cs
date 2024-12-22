@@ -21,7 +21,7 @@
          public UserShift Shift { get; set; }
 
         /// <summary>
-        /// Machine and users navigation properties
+        /// Machine and users skip navigation properties
         /// </summary>
         public ICollection<MachineDataModelUserDataModel> MachinesAndUsers { get; set; }
     }

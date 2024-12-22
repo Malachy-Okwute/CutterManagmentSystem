@@ -2,7 +2,7 @@
 {
     public enum Department
     {
-        None = 0, Pinion, Gear
+        None = 0, Pinion, Ring
     }
 
     public enum MachineStatus
@@ -27,7 +27,7 @@
 
     public enum CutterChangeInformation
     {
-        ChangOver = 0, LineOnTheDrive, BrokenBlades
+        None = 0, Unknown, ChangOver, LineOnTheDrive, BrokenBlades
     }
 
     public enum UserRole 

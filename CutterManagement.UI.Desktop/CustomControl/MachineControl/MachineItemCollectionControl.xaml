@@ -37,7 +37,7 @@
                 <!--  list of pin items  -->
                 <ItemsControl x:Name="Items" Grid.Column="0" HorizontalContentAlignment="Stretch"
                               d:ItemsSource="{Binding RingItems}"
-                              ItemsSource="{Binding RingItems}">
+                              ItemsSource="{Binding PinItems}">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>

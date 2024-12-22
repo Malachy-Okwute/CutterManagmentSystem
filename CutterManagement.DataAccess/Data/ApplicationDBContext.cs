@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace CutterManagement.DataAccess
 {
@@ -71,13 +72,13 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<MachineDataModel>().Property(x => x.MachineNumber).HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.MachineSetId).HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.Count).HasMaxLength(100);
-            modelBuilder.Entity<MachineDataModel>().Property(x => x.PartToothSize).HasMaxLength(100);
+            modelBuilder.Entity<MachineDataModel>().Property(x => x.PartToothSize).HasMaxLength(100).IsRequired(false);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.DateCreated).HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.Owner).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.Status).HasConversion<string>().HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.FrequencyCheckResult).HasConversion<string>().HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.CutterChangeInfo).HasConversion<string>().HasMaxLength(100);
-            modelBuilder.Entity<MachineDataModel>().Property(x => x.CutterChangeComment).HasMaxLength(400);
+            modelBuilder.Entity<MachineDataModel>().Property(x => x.CutterChangeComment).HasMaxLength(400).IsRequired(false);
 
             #endregion
 
@@ -146,8 +147,8 @@ namespace CutterManagement.DataAccess
             catch (Exception ex)
             {
                 // Log ex.Message as error or warning
-
-                throw new Exception(ex.Message);
+                Debugger.Break();
+                Console.WriteLine(ex.Message);
             }
         }
 

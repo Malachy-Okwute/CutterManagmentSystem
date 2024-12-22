@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using CutterManagement.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CutterManagement.UI.Desktop
@@ -19,7 +20,7 @@ namespace CutterManagement.UI.Desktop
             services.AddSingleton<NavigationBarViewModel>();
             services.AddSingleton<ApplicationMainViewModel>();
             services.AddSingleton(provider => new HomePageViewModel(provider.GetRequiredService<MachineItemCollectionViewModel>()));
-            services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IDataAccessService<MachineDataModel>>()));
+            services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IDataAccessServiceFactory>()));
 
             // Transients
             services.AddTransient<InfoPageViewModel>();
@@ -66,6 +67,9 @@ namespace CutterManagement.UI.Desktop
                         throw new InvalidOperationException();
                 }
             });
+
+            //services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
+            services.AddScoped<IDataAccessServiceFactory, DataAccessServiceFactory>();
 
             // Return services
             return services;

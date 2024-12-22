@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace CutterManagement.UI.Desktop
@@ -100,6 +101,23 @@ namespace CutterManagement.UI.Desktop
 
             // Update database migration or generate a database if not created.
             await db.UpdateDatabaseMigrateAsync();
+
+            // If admin doesn't exist...
+            if (await db.Users.AnyAsync(user => user.LastName == "admin") is false)
+            {
+                // add admin user
+                await db.Users.AddAsync(new UserDataModel
+                {
+                    FirstName = "resource",
+                    LastName = "admin",
+                    DateCreated = DateTime.UtcNow,
+                    Shift = UserShift.First
+                });
+
+                // Save changes
+                await db.SaveChangesAsync();
+            }
+
 
             // TODO: Check if there is an app update available - if new update is available
             //      - notify user to update the application
@@ -266,7 +284,6 @@ namespace CutterManagement.UI.Desktop
                                                                       // Create the *.mfd file in the bin folder instead of the user folder
                                                                       .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));
                      });
-                     services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
 
                      services.AddViewModels();
                      services.AddServices();

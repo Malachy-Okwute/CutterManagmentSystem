@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241219115933_InitialDatabaseCreation")]
-    partial class InitialDatabaseCreation
+    [Migration("20241221170017_MadeCutterChangeCommentNullable")]
+    partial class MadeCutterChangeCommentNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,7 +85,6 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CutterChangeComment")
-                        .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 

@@ -40,11 +40,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private Window _appWindow => Application.Current.MainWindow; //TODO: Refactor
 
-        /// <summary>
-        /// App navigation
-        /// </summary>
-        public NavigationBarViewModel Navigation { get; private set; } //TODO: Refactor
-
         #endregion
 
         #region Public Properties
@@ -101,6 +96,11 @@ namespace CutterManagement.UI.Desktop
         /// </remark>
         /// </summary>
         public bool IsMaximized {  get; set; }
+
+        /// <summary>
+        /// App navigation
+        /// </summary>
+        public NavigationBarViewModel Navigation { get; } //TODO: Refactor
 
         #endregion
 

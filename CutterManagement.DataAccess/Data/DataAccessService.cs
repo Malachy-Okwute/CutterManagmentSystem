@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace CutterManagement.DataAccess
 {
@@ -33,8 +34,16 @@ namespace CutterManagement.DataAccess
         {
             if (entity is not null) 
             {
-                await _dbTable.AddAsync(entity);
-                await _applicationDbContext.SaveChangesAsync();
+                try
+                {
+                    await _dbTable.AddAsync(entity);
+                    await _applicationDbContext.SaveChangesAsync();
+                }
+                catch (Exception msg) // Use custom exception here
+                {
+                    Debugger.Break();
+                    Console.WriteLine(msg);
+                }
             }
         }
 
@@ -57,7 +66,6 @@ namespace CutterManagement.DataAccess
            return await _dbTable.FindAsync(entityId);
         }
 
-
         /// <summary>
         /// Update an entity
         /// </summary>
@@ -65,8 +73,16 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="Task"/></returns>
         public async Task UpdateEntityAsync(T entity)
         {
-            _dbTable.Update(entity);
-            await _applicationDbContext.SaveChangesAsync();
+            try
+            {
+                _dbTable.Update(entity);
+                await _applicationDbContext.SaveChangesAsync();
+            }
+            catch (Exception msg) // Use custom exception here
+            {
+                Console.WriteLine(msg);
+                Debugger.Break();
+            }
         }
 
         /// <summary>
@@ -76,8 +92,16 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="Task"/></returns>
         public async Task DeleteEntityAsync(T entity)
         {
-            _dbTable.Remove(entity);
-            await _applicationDbContext.SaveChangesAsync();
+            try
+            {
+                _dbTable.Remove(entity);
+                await _applicationDbContext.SaveChangesAsync();
+            }
+            catch (Exception msg) // Use custom exception here
+            {
+                Console.WriteLine(msg);
+                Debugger.Break();
+            }
         }
     }
 }
