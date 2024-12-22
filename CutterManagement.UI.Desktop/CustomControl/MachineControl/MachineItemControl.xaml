@@ -44,10 +44,7 @@
         <!--  machine status  -->
         <Border x:Name="MachineStatus" Grid.Column="1" MinWidth="60"
                 HorizontalAlignment="Stretch">
-            <Border Width="20" Height="20" HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource AccentColorBrush3}"
-                    Opacity="0.3" CornerRadius="10" />
+            <local:RippleEffectControl ClipToBounds="True" />
         </Border>
 
         <!--  cutter number  -->

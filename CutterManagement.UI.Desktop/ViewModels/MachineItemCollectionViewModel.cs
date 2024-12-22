@@ -160,7 +160,6 @@ namespace CutterManagement.UI.Desktop
         {
             return new MachineItemViewModel
             {
-                Count = machineData.Count.ToString(),
                 MachineSetId = machineData.MachineSetId,
                 MachineNumber = machineData.MachineNumber,
                 FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
