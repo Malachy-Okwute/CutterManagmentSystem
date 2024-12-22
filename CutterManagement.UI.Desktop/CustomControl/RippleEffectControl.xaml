@@ -3,33 +3,33 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <Storyboard x:Key="FirstRippleEffect" RepeatBehavior="Forever" Duration="0:0:02.5">
-            <DoubleAnimation To="3" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)">
+        <Storyboard x:Key="FirstRippleEffect" RepeatBehavior="Forever"  Duration="0:0:4" >
+            <DoubleAnimation To="3" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)" Duration="0:0:3">
                 <DoubleAnimation.EasingFunction>
-                    <QuadraticEase EasingMode="EaseInOut" />
+                    <QuarticEase EasingMode="EaseInOut" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <DoubleAnimation To="3" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)">
+            <DoubleAnimation To="3" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)" Duration="0:0:3">
                 <DoubleAnimation.EasingFunction>
-                    <SineEase EasingMode="EaseInOut" />
+                    <QuarticEase EasingMode="EaseInOut" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <DoubleAnimation To="0" Storyboard.TargetProperty="Opacity" />
+            <DoubleAnimation To="0" Storyboard.TargetProperty="Opacity" Duration="0:0:3"/>
         </Storyboard>
 
-        <Storyboard x:Key="SecondRippleEffect" RepeatBehavior="Forever" Duration="0:0:02.5"
-                    BeginTime="0:0:00.5">
-            <DoubleAnimation To="3" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)">
+        <Storyboard x:Key="SecondRippleEffect" RepeatBehavior="Forever" Duration="0:0:4"
+                    BeginTime="0:0:00.6">
+            <DoubleAnimation To="3" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)" Duration="0:0:3">
                 <DoubleAnimation.EasingFunction>
-                    <QuadraticEase EasingMode="EaseInOut" />
+                    <QuarticEase EasingMode="EaseInOut" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <DoubleAnimation To="3" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)">
+            <DoubleAnimation To="3" Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)" Duration="0:0:3">
                 <DoubleAnimation.EasingFunction>
-                    <SineEase EasingMode="EaseInOut" />
+                    <QuarticEase EasingMode="EaseInOut" />
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <DoubleAnimation To="0" Storyboard.TargetProperty="Opacity" />
+            <DoubleAnimation To="0" Storyboard.TargetProperty="Opacity" Duration="0:0:3" />
         </Storyboard>
     </UserControl.Resources>
 
