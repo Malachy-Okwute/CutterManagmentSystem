@@ -44,7 +44,8 @@
         <!--  machine status  -->
         <Border x:Name="MachineStatus" Grid.Column="1" MinWidth="60"
                 HorizontalAlignment="Stretch">
-            <local:RippleEffectControl ClipToBounds="True" />
+            <ContentControl Content="{Binding Status, Converter={local:MachineStatusConverter}}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" />
         </Border>
 
         <!--  cutter number  -->
@@ -77,8 +78,9 @@
         <!--  result of the recently checked part  -->
         <Border x:Name="ResultOfLastPartChecked" Grid.Column="5" MinWidth="90"
                 HorizontalAlignment="Stretch"
-                Background="{DynamicResource AccentColorBrush5}">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
+                Background="{Binding ElementName=FrequencyCheck, Path=Text, Converter={local:FrequencyCheckToColorConverter}}">
+            <TextBlock x:Name="FrequencyCheck" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                       TextAlignment="Center"
                        Text="{Binding FrequencyCheckResult}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush7}" />

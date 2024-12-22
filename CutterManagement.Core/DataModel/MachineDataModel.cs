@@ -41,6 +41,11 @@
         public MachineStatus Status { get; set; }
 
         /// <summary>
+        /// Comment related to the status of this machine
+        /// </summary>
+        public string StatusMessage { get; set; }
+
+        /// <summary>
         /// The reason cutter assigned to this machine was pulled from this machine
         /// </summary>
         public CutterChangeInformation CutterChangeInfo{ get; set; }

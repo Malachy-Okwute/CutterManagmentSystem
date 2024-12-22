@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Interaction logic for RippleEffectControl.xaml
+    /// Interaction logic for RippleEffectIndicatorControl.xaml
     /// </summary>
-    public partial class RippleEffectControl : UserControl
+    public partial class RippleEffectIndicatorControl : UserControl
     {
-        public RippleEffectControl()
+        public RippleEffectIndicatorControl()
         {
             InitializeComponent();
         }

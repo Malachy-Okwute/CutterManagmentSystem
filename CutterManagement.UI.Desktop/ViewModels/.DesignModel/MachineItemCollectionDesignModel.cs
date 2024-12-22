@@ -30,7 +30,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -40,7 +40,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -50,7 +50,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -60,7 +60,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -70,7 +70,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -80,7 +80,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -90,7 +90,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -100,7 +100,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -110,7 +110,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -120,7 +120,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -130,7 +130,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -140,7 +140,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -150,7 +150,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -160,7 +160,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -170,7 +170,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",
@@ -180,7 +180,7 @@ namespace CutterManagement.UI.Desktop
                 new MachineItemViewModel()
                 {
                     MachineNumber = "123",
-                    MachineStatusComment = "IsRunning",
+                    StatusMessage = "IsRunning",
                     CutterNumber = "X12345-67890",
                     PartNumber = "123456789",
                     Count = "1000",

@@ -38,7 +38,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Comment related to the status of this machine
         /// </summary>
-        public string? MachineStatusComment { get; set; } 
+        public string? StatusMessage { get; set; } 
 
         /// <summary>
         /// Part unique id number running on this machine

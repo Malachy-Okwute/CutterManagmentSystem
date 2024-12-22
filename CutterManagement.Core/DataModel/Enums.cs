@@ -7,7 +7,7 @@
 
     public enum MachineStatus
     {
-        IsRunning = 0, IsIdle, IsDownForMaintenance
+        IsRunning = 0, Warning, IsDownForMaintenance
     }
 
     public enum PartKind

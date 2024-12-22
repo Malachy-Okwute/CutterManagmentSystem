@@ -162,6 +162,8 @@ namespace CutterManagement.UI.Desktop
             {
                 MachineSetId = machineData.MachineSetId,
                 MachineNumber = machineData.MachineNumber,
+                Status = machineData.Status,
+                StatusMessage = machineData.StatusMessage,
                 FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
                 DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
             };

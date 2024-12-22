@@ -18,5 +18,7 @@
     <system:String x:Key="UpdatesIcon">&#xf09e;</system:String>
     <system:String x:Key="AngleDownIcon">&#xf107;</system:String>
     <system:String x:Key="VerticalEllipsisIcon">&#xf142;</system:String>
+    <system:String x:Key="WarningIcon">&#xf071;</system:String>
+    <system:String x:Key="MaintenanceIcon">&#xf7d9;</system:String>
 
 </ResourceDictionary>

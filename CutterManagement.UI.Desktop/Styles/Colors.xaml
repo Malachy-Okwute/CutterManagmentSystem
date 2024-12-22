@@ -12,6 +12,7 @@
     <Color x:Key="AccentColor3">#5cffaa</Color>
     <Color x:Key="AccentColor4">#ffb519</Color>
     <Color x:Key="AccentColor5">#24b17c</Color>
+    <Color x:Key="AccentColor6">#a0a0a0</Color>
 
 
 
@@ -31,6 +32,7 @@
     <SolidColorBrush x:Key="AccentColorBrush3" Color="{StaticResource AccentColor3}" />
     <SolidColorBrush x:Key="AccentColorBrush4" Color="{StaticResource AccentColor4}" />
     <SolidColorBrush x:Key="AccentColorBrush5" Color="{StaticResource AccentColor5}" />
+    <SolidColorBrush x:Key="AccentColorBrush6" Color="{StaticResource AccentColor6}" />
 
     <!--<SolidColorBrush x:Key="AccentColorBrush5" Color="{StaticResource AccentColor5}" />
     <SolidColorBrush x:Key="AccentColorBrush6" Color="{StaticResource AccentColor6}" />

@@ -16,7 +16,6 @@
         /// <returns><see cref="List{T}"/></returns>
         public static List<MachineDataModel> GenerateDefaultMachineItems(Department department, int amount)
         {
-
             List<MachineDataModel> machineItems = new List<MachineDataModel>();
 
             for (int i = 0; i < amount; i++)
@@ -28,7 +27,8 @@
                     Owner = department,
                     Count = 0,
                     PartToothSize = "0",
-                    Status = MachineStatus.IsIdle,
+                    Status = MachineStatus.Warning,
+                    StatusMessage = "Machine need to be configured by admin",
                     FrequencyCheckResult = FrequencyCheckResult.SETUP,
                     DateTimeLastModified = DateTime.UtcNow,
                     DateCreated = DateTime.UtcNow,

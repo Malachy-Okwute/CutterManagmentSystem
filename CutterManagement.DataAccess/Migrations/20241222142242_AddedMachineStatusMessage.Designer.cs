@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241221213812_ConfiguredSomePropertyToAcceptNullValues")]
-    partial class ConfiguredSomePropertyToAcceptNullValues
+    [Migration("20241222142242_AddedMachineStatusMessage")]
+    partial class AddedMachineStatusMessage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,6 +126,10 @@ namespace CutterManagement.DataAccess.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("StatusMessage")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
