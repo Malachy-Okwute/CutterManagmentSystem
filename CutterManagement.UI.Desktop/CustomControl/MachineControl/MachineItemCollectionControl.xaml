@@ -58,6 +58,11 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
+                <local:MachineOptionsPopupControl Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                                  ClipToBounds="True" />
+                <local:MachineOptionsPopupControl Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                                  ClipToBounds="True" />
+
             </Grid>
         </ScrollViewer>
 
