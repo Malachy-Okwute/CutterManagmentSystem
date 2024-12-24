@@ -36,6 +36,7 @@
         <!--  home page content  -->
         <Grid Grid.Row="1" Margin="10,10,10,4">
 
+            <!--  machine items  -->
             <local:MachineItemCollectionControl DataContext="{Binding MachineItemCollection}" />
 
         </Grid>

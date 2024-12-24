@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -52,16 +53,22 @@ namespace CutterManagement.UI.Desktop
 
         /// <summary>
         /// Result of the last part checked 
-        /// <remark>PASSED | FAILED</remark>
+        /// <para>SETUP | PASSED | FAILED</para>
         /// </summary>
         public string FrequencyCheckResult { get; set; } 
 
         /// <summary>
         /// Date and time of the last checked part on this machine
         /// </summary>
-        public string DateTimeLastModified { get; set; } 
+        public string DateTimeLastModified { get; set; }
+
+        public bool IsPopupOpen { get; set; }
 
         #endregion
+
+        public event EventHandler ItemSelected;
+
+        public ICommand OpenPopupCommand { get; set; }
 
         #region Constructor
 
@@ -70,8 +77,14 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public MachineItemViewModel()
         {
+            OpenPopupCommand = new RelayCommand(() => OpenPopup(this));
         }
 
         #endregion
+        private void OpenPopup(MachineItemViewModel machineItem)
+        {
+            ItemSelected?.Invoke(machineItem, EventArgs.Empty);
+        }
+
     }
 }

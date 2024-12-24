@@ -1,6 +1,8 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CutterManagement.UI.Desktop
@@ -56,6 +58,52 @@ namespace CutterManagement.UI.Desktop
                 }
             };
         }
+
+
+        /// <summary>
+        /// Pop-up control visibility changed event 
+        /// 
+        /// <Remarks>
+        /// This is used to set to location of where pop-up control should appear.
+        /// Ideal location is set to be anywhere within app window 
+        /// </Remarks>
+        /// </summary>
+        /// <param name="sender">Origin of this event</param>
+        /// <param name="e">Event args</param>
+        private void PopupControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            // Focus on pop-up control
+            PopupControl.Focus();
+
+            // Get mouse location relative to pop up container
+            Point mousePointerPosition = Mouse.GetPosition(PopupControlContainer);
+
+            // Account for bottom right corner
+            if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.Width && ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.Height)
+            {
+                Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.Width);
+                Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1) - PopupControl.Height);
+            }
+            // Account for right edge
+            else if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.Width)
+            {
+                Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.Width);
+                Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1));
+            }
+            // Account for top edge
+            else if (ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.Height)
+            {
+                Canvas.SetLeft(PopupControl, (mousePointerPosition.X + 1));
+                Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1) - PopupControl.Height);
+            }
+            // If pop up wont overflow, set position
+            else
+            {
+                Canvas.SetLeft(PopupControl, (mousePointerPosition.X + 1));
+                Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1));
+            }
+        }
+
 
     }
 }

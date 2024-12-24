@@ -100,6 +100,7 @@
             <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
                     HorizontalContentAlignment="Center"
                     Content="{StaticResource VerticalEllipsisIcon}"
+                    Command="{Binding OpenPopupCommand}"
                     FontFamily="{StaticResource SolidIcon}"
                     Style="{StaticResource MachineItemEditButtonStyle}" />
         </Border>

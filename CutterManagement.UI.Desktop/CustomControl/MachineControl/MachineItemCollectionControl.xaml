@@ -25,7 +25,7 @@
         </Grid>
 
         <!--  items  -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+        <ScrollViewer x:Name="ItemsContainer" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
             <Grid Grid.Row="1" Margin="0,4,0,0">
 
                 <Grid.ColumnDefinitions>
@@ -58,10 +58,17 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <local:MachineOptionsPopupControl Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                                  ClipToBounds="True" />
-                <local:MachineOptionsPopupControl Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top"
-                                                  ClipToBounds="True" />
+                <!--  pop-up  -->
+                <Canvas x:Name="PopupControlContainer" Grid.Column="0" Grid.ColumnSpan="2"
+                        DataContext="{Binding MachineItemViewModel}"
+                        Panel.ZIndex="10"
+                        Visibility="{Binding IsPopupOpen, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}}">
+
+                    <!--  machine popup menu  -->
+                    <local:MachineOptionsPopupControl x:Name="PopupControl" IsVisibleChanged="PopupControl_IsVisibleChanged" />
+                    
+                </Canvas>
+                
 
             </Grid>
         </ScrollViewer>

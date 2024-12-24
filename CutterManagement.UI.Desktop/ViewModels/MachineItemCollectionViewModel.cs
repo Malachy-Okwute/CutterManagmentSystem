@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -54,6 +55,14 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        public MachineItemViewModel _machineItemViewModel;
+
+        public MachineItemViewModel MachineItemViewModel
+        {
+            get => _machineItemViewModel;
+            set => _machineItemViewModel = value;
+        }
+
         #region Constructor
 
         /// <summary>
@@ -62,10 +71,23 @@ namespace CutterManagement.UI.Desktop
         public MachineItemCollectionViewModel(IDataAccessServiceFactory dataAccessService)
         {
             _dataAccessService = dataAccessService;
+            _machineItemViewModel = new MachineItemViewModel();
 
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
             _dataLoader = LoadMachineData();
+        }
+
+        private void OnItemSelectionChanged(object? sender, EventArgs e)
+        {
+            MachineItemViewModel? selectedItem = (sender as MachineItemViewModel);
+            _machineItemViewModel.IsPopupOpen = false;
+
+            if (selectedItem is not null)
+            {
+                _machineItemViewModel.IsPopupOpen = true;
+                _machineItemViewModel = selectedItem;
+            }
         }
 
         #endregion
@@ -158,7 +180,7 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="MachineItemViewModel"/></returns>
         private MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData)
         {
-            return new MachineItemViewModel
+            MachineItemViewModel items = new MachineItemViewModel
             {
                 MachineSetId = machineData.MachineSetId,
                 MachineNumber = machineData.MachineNumber,
@@ -167,6 +189,10 @@ namespace CutterManagement.UI.Desktop
                 FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
                 DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
             };
+
+            items.ItemSelected += OnItemSelectionChanged;
+
+            return items;
         }
 
         #endregion
