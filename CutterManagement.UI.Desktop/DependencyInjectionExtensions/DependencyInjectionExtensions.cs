@@ -25,7 +25,6 @@ namespace CutterManagement.UI.Desktop
             // Transients
             services.AddTransient<InfoPageViewModel>();
             services.AddTransient<UsersPageViewModel>();
-            services.AddTransient<MachineItemViewModel>();
             services.AddTransient<UpdatesPageViewModel>();
             services.AddTransient<ArchivesPageViewModel>();
             services.AddTransient<SettingsPageViewModel>();

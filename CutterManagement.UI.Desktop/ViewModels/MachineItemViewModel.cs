@@ -75,9 +75,26 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Public Events
+
+        /// <summary>
+        /// Event that gets fired when this item gets clicked on
+        /// </summary>
         public event EventHandler<CommandKind> ItemSelected;
 
+        #endregion
+
+        #region Public Commands
+
+        /// <summary>
+        /// Command to open pop up control 
+        /// <para>
+        /// <see cref="MachineOptionsPopupControl"/>
+        /// </para>
+        /// </summary>
         public ICommand OpenPopupCommand { get; set; }
+
+        #endregion
 
         #region Constructor
 
@@ -86,14 +103,10 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public MachineItemViewModel()
         {
-            OpenPopupCommand = new RelayCommand(OpenPopup);
+            // Create commands
+            OpenPopupCommand = new RelayCommand(() => ItemSelected?.Invoke(this, CommandKind.PopCommand));
         }
 
-        #endregion
-        private void OpenPopup()
-        {
-            ItemSelected?.Invoke(this, CommandKind.PopCommand);
-        }
-
+        #endregion        
     }
 }

@@ -90,19 +90,24 @@ namespace CutterManagement.UI.Desktop
         ///  Item selection event for when any machine item's gets a mouse click
         /// </summary>
         /// <param name="sender">The event source</param>
-        /// <param name="eventArgs">The event args</param>
+        /// <param name="commandKind">The event args</param>
         [SuppressPropertyChangedWarnings]
-        private void OnItemSelectionChanged(object? sender, CommandKind eventArgs)
+        private void OnItemSelectionChanged(object? sender, CommandKind commandKind)
         {
+            // Get source of event
             MachineItemViewModel? selectedItem = (sender as MachineItemViewModel);
 
+            // Reset pop up
             _machineItemViewModel.IsPopupOpen = false;
 
+            // Make sure event source isn't null
             if (selectedItem is not null)
             {
+                // Set pop up control data context
                 _machineItemViewModel = selectedItem;
 
-                switch (eventArgs)
+                // Sort and apply command accordingly
+                switch (commandKind)
                 {
                     case CommandKind.DataFormCommand:
                         break;
@@ -115,7 +120,7 @@ namespace CutterManagement.UI.Desktop
                         Debugger.Break();
                         throw new InvalidOperationException("Command not configured");
                 }
-
+                // Update pop up control as needed
                 OnPropertyChanged(nameof(MachineItemViewModel));
             }
         }
