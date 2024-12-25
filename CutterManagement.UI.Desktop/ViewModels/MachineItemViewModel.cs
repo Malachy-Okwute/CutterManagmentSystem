@@ -62,11 +62,20 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public string DateTimeLastModified { get; set; }
 
+        /// <summary>
+        /// True if pop up should show in the view 
+        /// otherwise false
+        /// </summary>
         public bool IsPopupOpen { get; set; }
+
+        /// <summary>
+        /// The kind of command to run
+        /// </summary>
+        public CommandKind CommandKind { get; set; }
 
         #endregion
 
-        public event EventHandler ItemSelected;
+        public event EventHandler<CommandKind> ItemSelected;
 
         public ICommand OpenPopupCommand { get; set; }
 
@@ -77,13 +86,13 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public MachineItemViewModel()
         {
-            OpenPopupCommand = new RelayCommand(() => OpenPopup(this));
+            OpenPopupCommand = new RelayCommand(OpenPopup);
         }
 
         #endregion
-        private void OpenPopup(MachineItemViewModel machineItem)
+        private void OpenPopup()
         {
-            ItemSelected?.Invoke(machineItem, EventArgs.Empty);
+            ItemSelected?.Invoke(this, CommandKind.PopCommand);
         }
 
     }

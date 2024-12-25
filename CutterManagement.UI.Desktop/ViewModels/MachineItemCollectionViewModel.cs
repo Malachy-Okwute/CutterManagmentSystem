@@ -1,5 +1,7 @@
 ﻿using CutterManagement.Core;
+using PropertyChanged;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -20,6 +22,11 @@ namespace CutterManagement.UI.Desktop
         /// Collection of <see cref="MachineItemControl"/> representing pins
         /// </summary>
         private ObservableCollection<MachineItemViewModel> _pinItems;
+
+        /// <summary>
+        /// <see cref="MachineItemViewModel"/>
+        /// </summary>
+        public MachineItemViewModel _machineItemViewModel;
 
         /// <summary>
         /// Data service factory
@@ -53,15 +60,16 @@ namespace CutterManagement.UI.Desktop
             set => _pinItems = value;
         }
 
-        #endregion
-
-        public MachineItemViewModel _machineItemViewModel;
-
+        /// <summary>
+        /// <see cref="MachineItemViewModel"/>
+        /// </summary>
         public MachineItemViewModel MachineItemViewModel
         {
             get => _machineItemViewModel;
             set => _machineItemViewModel = value;
         }
+
+        #endregion
 
         #region Constructor
 
@@ -78,15 +86,37 @@ namespace CutterManagement.UI.Desktop
             _dataLoader = LoadMachineData();
         }
 
-        private void OnItemSelectionChanged(object? sender, EventArgs e)
+        /// <summary>
+        ///  Item selection event for when any machine item's gets a mouse click
+        /// </summary>
+        /// <param name="sender">The event source</param>
+        /// <param name="eventArgs">The event args</param>
+        [SuppressPropertyChangedWarnings]
+        private void OnItemSelectionChanged(object? sender, CommandKind eventArgs)
         {
             MachineItemViewModel? selectedItem = (sender as MachineItemViewModel);
+
             _machineItemViewModel.IsPopupOpen = false;
 
             if (selectedItem is not null)
             {
-                _machineItemViewModel.IsPopupOpen = true;
                 _machineItemViewModel = selectedItem;
+
+                switch (eventArgs)
+                {
+                    case CommandKind.DataFormCommand:
+                        break;
+
+                    case CommandKind.PopCommand:
+                        _machineItemViewModel.IsPopupOpen = true;
+                        break;
+
+                    default:
+                        Debugger.Break();
+                        throw new InvalidOperationException("Command not configured");
+                }
+
+                OnPropertyChanged(nameof(MachineItemViewModel));
             }
         }
 
@@ -190,6 +220,7 @@ namespace CutterManagement.UI.Desktop
                 DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
             };
 
+            // Hook in selection changed event
             items.ItemSelected += OnItemSelectionChanged;
 
             return items;

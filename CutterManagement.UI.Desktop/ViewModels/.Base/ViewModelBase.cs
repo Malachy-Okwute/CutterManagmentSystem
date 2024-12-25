@@ -8,7 +8,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model base for this application view models
     /// </summary>
-    public class ViewModelBase : MarkupExtension, INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         /// <summary>
         /// The event to fire when a property changes
@@ -23,11 +23,6 @@ namespace CutterManagement.UI.Desktop
         {
             // Invoke the property changed event
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
         }
     }
 }

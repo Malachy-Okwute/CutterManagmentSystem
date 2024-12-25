@@ -57,21 +57,35 @@ namespace CutterManagement.UI.Desktop
 
                 }
             };
-        }
 
+            // Listen out for when pop is visible or not visible
+            PopupControl.IsVisibleChanged += PopupControl_IsVisibleChanged;
+        }
 
         /// <summary>
         /// Pop-up control visibility changed event 
         /// 
-        /// <Remarks>
+        /// <para>
         /// This is used to set to location of where pop-up control should appear.
         /// Ideal location is set to be anywhere within app window 
-        /// </Remarks>
+        /// </para>
         /// </summary>
         /// <param name="sender">Origin of this event</param>
         /// <param name="e">Event args</param>
         private void PopupControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            // Do nothing if we're not visible 
+            if (e.NewValue is false)
+            { 
+                return; 
+            }
+
+            // Make sure pop up control size is calculated properly
+            if(PopupControl.ActualWidth == 0 || PopupControl.ActualHeight == 0)
+            {
+                PopupControl.UpdateLayout();
+            }
+
             // Focus on pop-up control
             PopupControl.Focus();
 
@@ -79,22 +93,22 @@ namespace CutterManagement.UI.Desktop
             Point mousePointerPosition = Mouse.GetPosition(PopupControlContainer);
 
             // Account for bottom right corner
-            if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.Width && ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.Height)
+            if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.ActualWidth && ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.ActualHeight)
             {
-                Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.Width);
-                Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1) - PopupControl.Height);
+                Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.ActualWidth);
+                Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1) - PopupControl.ActualHeight);
             }
             // Account for right edge
-            else if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.Width)
+            else if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.ActualWidth)
             {
-                Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.Width);
+                Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.ActualWidth);
                 Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1));
             }
             // Account for top edge
-            else if (ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.Height)
+            else if (ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.ActualHeight)
             {
                 Canvas.SetLeft(PopupControl, (mousePointerPosition.X + 1));
-                Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1) - PopupControl.Height);
+                Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1) - PopupControl.ActualHeight);
             }
             // If pop up wont overflow, set position
             else
@@ -103,7 +117,5 @@ namespace CutterManagement.UI.Desktop
                 Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1));
             }
         }
-
-
     }
 }
