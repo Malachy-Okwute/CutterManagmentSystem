@@ -22,11 +22,10 @@
                         <!--  app bare window outline  -->
                         <Grid x:Name="PART_WindowLimitMargin">
 
-                            <Border>
+                            <Border Background="White">
                                 <!--  drop-shadow effect  -->
                                 <Border.Effect>
-                                    <DropShadowEffect ShadowDepth="10" BlurRadius="35" Direction="270"
-                                                      Opacity="0.2" RenderingBias="Quality" />
+                                    <DropShadowEffect ShadowDepth="0" BlurRadius="20" Opacity="0.25" />
                                 </Border.Effect>
                             </Border>
 

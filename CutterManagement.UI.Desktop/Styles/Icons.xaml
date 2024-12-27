@@ -20,5 +20,8 @@
     <system:String x:Key="VerticalEllipsisIcon">&#xf142;</system:String>
     <system:String x:Key="WarningIcon">&#xf071;</system:String>
     <system:String x:Key="MaintenanceIcon">&#xf7d9;</system:String>
+    <system:String x:Key="PasswordIcon">&#xf577;</system:String>
+    <system:String x:Key="CheckMarkIcon">&#xf00c;</system:String>
+    <system:String x:Key="ShieldIcon">&#xf132;</system:String>
 
 </ResourceDictionary>

@@ -86,45 +86,6 @@ namespace CutterManagement.UI.Desktop
             _dataLoader = LoadMachineData();
         }
 
-        /// <summary>
-        ///  Item selection event for when any machine item's gets a mouse click
-        /// </summary>
-        /// <param name="sender">The event source</param>
-        /// <param name="commandKind">The event args</param>
-        [SuppressPropertyChangedWarnings]
-        private void OnItemSelectionChanged(object? sender, CommandKind commandKind)
-        {
-            // Get source of event
-            MachineItemViewModel? selectedItem = (sender as MachineItemViewModel);
-
-            // Reset pop up
-            _machineItemViewModel.IsPopupOpen = false;
-
-            // Make sure event source isn't null
-            if (selectedItem is not null)
-            {
-                // Set pop up control data context
-                _machineItemViewModel = selectedItem;
-
-                // Sort and apply command accordingly
-                switch (commandKind)
-                {
-                    case CommandKind.DataFormCommand:
-                        break;
-
-                    case CommandKind.PopCommand:
-                        _machineItemViewModel.IsPopupOpen = true;
-                        break;
-
-                    default:
-                        Debugger.Break();
-                        throw new InvalidOperationException("Command not configured");
-                }
-                // Update pop up control as needed
-                OnPropertyChanged(nameof(MachineItemViewModel));
-            }
-        }
-
         #endregion
 
         #region Methods
@@ -229,6 +190,49 @@ namespace CutterManagement.UI.Desktop
             items.ItemSelected += OnItemSelectionChanged;
 
             return items;
+        }
+
+        #endregion
+
+        #region Event Methods
+
+        /// <summary>
+        ///  Item selection event for when any machine item's gets a mouse click
+        /// </summary>
+        /// <param name="sender">The event source</param>
+        /// <param name="commandKind">The event args</param>
+        [SuppressPropertyChangedWarnings]
+        private void OnItemSelectionChanged(object? sender, CommandKind commandKind)
+        {
+            // Get source of event
+            MachineItemViewModel? selectedItem = (sender as MachineItemViewModel);
+
+            // Reset pop up
+            _machineItemViewModel.IsPopupOpen = false;
+
+            // Make sure event source isn't null
+            if (selectedItem is not null)
+            {
+                // Set pop up control data context
+                _machineItemViewModel = selectedItem;
+
+                // Sort and apply command accordingly
+                switch (commandKind)
+                {
+                    case CommandKind.DataFormCommand:
+                        break;
+
+                    case CommandKind.PopCommand:
+                        _machineItemViewModel.IsPopupOpen = true;
+                        break;
+
+                    default:
+                        Debugger.Break();
+                        throw new InvalidOperationException("Command not configured");
+                }
+                // Update pop up control as needed
+                OnPropertyChanged(nameof(MachineItemViewModel));
+            }
         }
 
         #endregion

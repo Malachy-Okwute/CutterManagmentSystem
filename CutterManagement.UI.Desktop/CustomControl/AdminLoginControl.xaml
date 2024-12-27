@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="CutterManagement.UI.Desktop.AdminLoginControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+             mc:Ignorable="d">
+
+    <Grid Background="Transparent">
+        <Border Background="{DynamicResource BackgroundColorBrush1}"
+                Width="300" Height="320" VerticalAlignment="Center"
+                HorizontalAlignment="Center" Padding="10">
+
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.25" />
+            </Border.Effect>
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="{StaticResource ShieldIcon}"
+                           VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"
+                           FontSize="{StaticResource BillBoard}"
+                           Foreground="{DynamicResource ForegroundColorBrush3}"
+                           FontFamily="{StaticResource LightIcon}" />
+
+                <local:TextEntryControl Grid.Row="1" PlaceHolderText="Username" Focusable="True"
+                                        PlaceHolderIcon="{StaticResource UsersIcon}" />
+
+                <local:PasswordEntryControl x:Name="CustomPassWordControl" Grid.Row="2" PlaceHolderText="Password"
+                                            PlaceHolderIcon="{StaticResource PasswordIcon}" />
+
+                <Label Grid.Row="3" Content="Incorrect username or password" Margin="4,0,0,4"
+                       Padding="12,8"
+                       FontFamily="{StaticResource RobotoFlexRegular}"
+                       FontSize="{StaticResource XSmall}"
+                       Background="{DynamicResource BackgroundColorBrush6}"
+                       Foreground="{DynamicResource ForegroundColorBrush8}"
+                       Visibility="{Binding ShowErrorMessage, Converter={local:BooleanToVisibilityConverter}}"
+                       d:Visibility="Collapsed" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" />
+
+                <Grid Grid.RowSpan="5" Height="60" Width="200"
+                      d:Visibility="Collapsed"
+                      Visibility="{Binding ShowSuccessMessage, Converter={local:BooleanToVisibilityConverter}}"
+                      Background="{DynamicResource BackgroundColorBrush1}">
+
+                    <Grid.Effect>
+                        <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.25" />
+                    </Grid.Effect>
+
+                    <Label Grid.Row="3" Content="Login successful" Margin="4,0"
+                           Padding="18,8"
+                           FontFamily="{StaticResource RobotoFlexRegular}"
+                           FontSize="{StaticResource Small}"
+                           Foreground="{DynamicResource ForegroundColorBrush3}"
+                           VerticalContentAlignment="Center" HorizontalContentAlignment="Left" />
+
+                    <TextBlock Text="{StaticResource CheckMarkIcon}"
+                               Padding="18,8" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               FontFamily="{StaticResource RegularIcon}"
+                               FontSize="{StaticResource Large}"
+                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+
+                </Grid>
+
+                <Grid Grid.Row="4" Margin="4">
+                    <Button Style="{StaticResource AdminLoginButtonStyle}"
+                            IsCancel="True" HorizontalAlignment="Left" Content="Cancel"
+                            Command="{Binding CancelCommand}" />
+                    <Button Style="{StaticResource AdminLoginButtonStyle}"
+                            IsDefault="True"
+                            BorderBrush="{DynamicResource BorderColorBrush3}"
+                            HorizontalAlignment="Right" Content="Login"
+                            Command="{Binding LoginCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:AdminLoginControl}}}" />
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

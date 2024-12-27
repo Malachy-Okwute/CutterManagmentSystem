@@ -50,6 +50,7 @@ namespace CutterManagement.UI.Desktop
             // Create splash window
             _splashWindow = new SplashWindow();
         }
+
         #endregion
 
         #region Overriden Methods
@@ -78,7 +79,7 @@ namespace CutterManagement.UI.Desktop
                         Log.Logger.Information("Application is starting...");
 
                         // Finalizing...
-                        await Task.Delay(TimeSpan.FromSeconds(6));
+                        //await Task.Delay(TimeSpan.FromSeconds(6));
                     }
                     // If there is an error...
                     catch (Exception ex)
@@ -123,7 +124,6 @@ namespace CutterManagement.UI.Desktop
             //      - notify user to update the application
             //      - if app is not updated... automatically update app at the end of shift.
             // TODO: Check if we have database connection string - if not - request that dev team should provide a database connection.
-
 
             // Lunch main application window
             await LunchApplicationWindowAsync();

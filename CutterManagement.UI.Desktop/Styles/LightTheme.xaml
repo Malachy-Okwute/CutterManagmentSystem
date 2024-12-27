@@ -9,6 +9,7 @@
     <Color x:Key="BackgroundColor3">#e8ebee</Color>
     <Color x:Key="BackgroundColor4">#eaeaea</Color>
     <Color x:Key="BackgroundColor5">#3d6cf6</Color>
+    <Color x:Key="BackgroundColor6">#f7d8d6</Color>
 
     <!--  light theme foreground color palette  -->
     <Color x:Key="ForegroundColor1">#000000</Color>
@@ -18,6 +19,7 @@
     <Color x:Key="ForegroundColor5">#f62b4f</Color>
     <Color x:Key="ForegroundColor6">#8f8f94</Color>
     <Color x:Key="ForegroundColor7">#ffffff</Color>
+    <Color x:Key="ForegroundColor8">#a05859</Color>
 
 
     <!--  light theme background color palette on hover  -->
@@ -44,6 +46,7 @@
     <SolidColorBrush x:Key="BackgroundColorBrush3" Color="{StaticResource BackgroundColor3}" />
     <SolidColorBrush x:Key="BackgroundColorBrush4" Color="{StaticResource BackgroundColor4}" />
     <SolidColorBrush x:Key="BackgroundColorBrush5" Color="{StaticResource BackgroundColor5}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush6" Color="{StaticResource BackgroundColor6}" />
 
     <!--  light theme foreground color brush palette  -->
     <SolidColorBrush x:Key="ForegroundColorBrush1" Color="{StaticResource ForegroundColor1}" />
@@ -53,6 +56,7 @@
     <SolidColorBrush x:Key="ForegroundColorBrush5" Color="{StaticResource ForegroundColor5}" />
     <SolidColorBrush x:Key="ForegroundColorBrush6" Color="{StaticResource ForegroundColor6}" />
     <SolidColorBrush x:Key="ForegroundColorBrush7" Color="{StaticResource ForegroundColor7}" />
+    <SolidColorBrush x:Key="ForegroundColorBrush8" Color="{StaticResource ForegroundColor8}" />
 
     <!--  light theme background color palette on hover  -->
     <SolidColorBrush x:Key="ButtonHoverBackgroundColorBrush1" Color="{StaticResource ButtonHoverBackgroundColor1}" />
