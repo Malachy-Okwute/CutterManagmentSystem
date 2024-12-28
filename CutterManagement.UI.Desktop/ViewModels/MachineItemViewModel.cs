@@ -73,6 +73,12 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public CommandKind CommandKind { get; set; }
 
+        /// <summary>
+        /// True if admin user is currently logged in
+        /// otherwise false
+        /// </summary>
+        public bool IsAdminLoggedIn => AuthenticationService.IsAuthorized;
+
         #endregion
 
         #region Public Events
@@ -107,6 +113,6 @@ namespace CutterManagement.UI.Desktop
             OpenPopupCommand = new RelayCommand(() => ItemSelected?.Invoke(this, CommandKind.PopCommand));
         }
 
-        #endregion        
+        #endregion
     }
 }

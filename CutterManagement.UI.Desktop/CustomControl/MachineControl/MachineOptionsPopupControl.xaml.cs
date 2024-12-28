@@ -12,25 +12,10 @@ namespace CutterManagement.UI.Desktop
         {
             InitializeComponent();
 
-            // Listen for when this control loses focus
             LostFocus += MachineOptionsPopupControl_LostFocus;
         }
 
-        /// <summary>
-        /// Hide pop up control when it loses focus
-        /// </summary>
-        /// <param name="sender">The source of this event</param>
-        /// <param name="e">Event args</param>
-        private void MachineOptionsPopupControl_LostFocus(object sender, RoutedEventArgs e)
-        {
-            // Unhook the current event 
-            LostFocus -= MachineOptionsPopupControl_LostFocus;
-
-            // Close pop up control
-            ((MachineItemViewModel)DataContext).IsPopupOpen = false;
-
-            // Continue listening for when this control loses focus
-            LostFocus += MachineOptionsPopupControl_LostFocus;
-        }
+        private void MachineOptionsPopupControl_LostFocus(object sender, RoutedEventArgs e) { }// => ((MachineItemViewModel)DataContext).IsPopupOpen = false;
+        
     }
 }

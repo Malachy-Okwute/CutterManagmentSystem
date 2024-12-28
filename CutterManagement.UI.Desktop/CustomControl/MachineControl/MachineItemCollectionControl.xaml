@@ -64,7 +64,8 @@
                         Visibility="{Binding IsPopupOpen, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}}">
 
                     <!--  machine popup menu  -->
-                    <local:MachineOptionsPopupControl x:Name="PopupControl" Panel.ZIndex="10" />
+                    <local:MachineOptionsPopupControl x:Name="PopupControl" Panel.ZIndex="10"
+                                                      DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:MachineItemCollectionControl}}}" />
 
                 </Canvas>
 

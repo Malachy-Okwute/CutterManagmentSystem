@@ -71,6 +71,11 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        /// <summary>
+        /// Configures this machine item
+        /// </summary>
+        public ICommand MachineConfigurationCommand { get; set; }
+
         #region Constructor
 
         /// <summary>
@@ -81,12 +86,25 @@ namespace CutterManagement.UI.Desktop
             _dataAccessService = dataAccessService;
             _machineItemViewModel = new MachineItemViewModel();
 
+            MachineConfigurationCommand = new RelayCommand((parameter) => ConfigureMachine(parameter));
+
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
             _dataLoader = LoadMachineData();
         }
 
         #endregion
+
+        private void ConfigureMachine(object parameter)
+        {
+            MachineItemViewModel.IsPopupOpen = false;
+
+            if (AuthenticationService.IsAuthorized is false) return;
+
+            var item = parameter as MachineItemViewModel;
+
+
+        }
 
         #region Methods
 

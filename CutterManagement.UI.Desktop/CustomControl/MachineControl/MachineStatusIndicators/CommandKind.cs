@@ -2,6 +2,6 @@
 {
     public enum CommandKind
     {
-        None = 0, DataFormCommand, PopCommand 
+        None = 0, DataFormCommand, PopCommand
     }
 }
