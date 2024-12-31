@@ -36,7 +36,7 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="IDataAccessService{T}"/></returns>
         public IDataAccessService<T> GetDbTable<T>() where T : class
         {
-            return new DataAccessService<T>(_dbContext);
+           return new DataAccessService<T>(_dbContext);
         }
     }
 }

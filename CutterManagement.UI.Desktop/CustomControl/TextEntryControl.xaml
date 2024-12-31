@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="CutterManagement.UI.Desktop.TextEntryControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
-             mc:Ignorable="d">
+             mc:Ignorable="d" local:FocusAttachedProperty.SetFocus="True" Focusable="True"
+             x:Name="TextEntry">
 
     <UserControl.Resources>
         <Style x:Key="TextEntryStyle" TargetType="{x:Type TextBox}">
@@ -69,8 +70,8 @@
 
     </UserControl.Resources>
     <Grid>
-        <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Text="{Binding ControlContent, ElementName=TextEntry}"
                  Style="{StaticResource TextEntryStyle}"
-                 local:FocusAttachedProperty.SetFocus="True" />
+                 local:FocusAttachedProperty.SetFocus="{Binding IsFocused, RelativeSource={RelativeSource AncestorType=UserControl}}" />
     </Grid>
 </UserControl>

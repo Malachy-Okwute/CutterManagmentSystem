@@ -117,5 +117,8 @@ namespace CutterManagement.UI.Desktop
                 Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1));
             }
         }
+
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => ((MachineItemCollectionViewModel)DataContext).IsConfigurationFormOpen = false;
+        
     }
 }

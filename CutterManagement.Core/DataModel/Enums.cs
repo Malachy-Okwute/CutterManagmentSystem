@@ -1,4 +1,6 @@
-﻿namespace CutterManagement.Core
+﻿using System.ComponentModel;
+
+namespace CutterManagement.Core
 {
     public enum Department
     {
@@ -7,7 +9,12 @@
 
     public enum MachineStatus
     {
-        IsRunning = 0, Warning, IsDownForMaintenance
+        [Description("Is running")]
+        IsRunning = 0, 
+        [Description("Warning")]
+        Warning, 
+        [Description("Is down for maintenance")]
+        IsDownForMaintenance
     }
 
     public enum PartKind

@@ -26,7 +26,20 @@
         <!--  search bar  -->
         <Border Grid.Column="0" Width="450" Margin="40,10"
                 Padding="0" HorizontalAlignment="Left">
-            <TextBox Tag="Search" Style="{StaticResource SearchBarStyle}" />
+            <Grid>
+                <TextBox HorizontalAlignment="Stretch" Tag="Search"
+                         Style="{StaticResource SearchBarStyle}" />
+                <Grid HorizontalAlignment="Right" Margin="2">
+
+                    <Button Width="60"
+                            FontSize="{StaticResource XXSmall}"
+                            Content="{StaticResource SearchIcon}"
+                            FontFamily="{StaticResource RegularIcon}"
+                            BorderBrush="{DynamicResource BorderColorBrush6}"
+                            BorderThickness="0"
+                            Style="{StaticResource TransparentButtonStyle}" />
+                </Grid>
+            </Grid>
         </Border>
 
         <!--  app menu  -->
@@ -34,27 +47,27 @@
             <Button x:Name="HomeButton"
                     Command="{Binding NavigateToHomePageCommand}"
                     Content="{StaticResource HomeIcon}"
-                    Style="{StaticResource AppButtonStyle}" />
+                    Style="{StaticResource TransparentButtonStyle}" />
             <Button x:Name="UpdatesButton"
                     Command="{Binding NavigateToUpdatesPageCommand}"
                     Content="{StaticResource UpdatesIcon}"
-                    Style="{StaticResource AppButtonStyle}" />
+                    Style="{StaticResource TransparentButtonStyle}" />
             <Button x:Name="ArchivesButton"
                     Command="{Binding NavigateToArchivesPageCommand}"
                     Content="{StaticResource ArchivesIcon}"
-                    Style="{StaticResource AppButtonStyle}" />
+                    Style="{StaticResource TransparentButtonStyle}" />
             <Button x:Name="UsersButton"
                     Command="{Binding NavigateToUsersPageCommand}"
                     Content="{StaticResource UsersIcon}"
-                    Style="{StaticResource AppButtonStyle}" />
+                    Style="{StaticResource TransparentButtonStyle}" />
             <Button x:Name="SettingsButton"
                     Command="{Binding NavigateToSettingsPageCommand}"
                     Content="{StaticResource SettingsIcon}"
-                    Style="{StaticResource AppButtonStyle}" />
+                    Style="{StaticResource TransparentButtonStyle}" />
             <Button x:Name="InfoButton"
                     Command="{Binding NavigateToInfoPageCommand}"
                     Content="{StaticResource InfosIcon}"
-                    Style="{StaticResource AppButtonStyle}" />
+                    Style="{StaticResource TransparentButtonStyle}" />
         </StackPanel>
 
         <Canvas Grid.Column="0" Grid.ColumnSpan="4">
@@ -63,7 +76,7 @@
             <Border x:Name="Indicator" Canvas.Bottom="0" Width="100"
                     Height="2" Margin="0,0,0,2" VerticalAlignment="Bottom"
                     d:Canvas.Left="550"
-                    Background="{DynamicResource BackgroundColorBrush5}"
+                    Background="{DynamicResource BackgroundColorBrush7}"
                     Focusable="False" />
 
         </Canvas>

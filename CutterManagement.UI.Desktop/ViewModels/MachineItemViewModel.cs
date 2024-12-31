@@ -1,5 +1,4 @@
 ﻿using CutterManagement.Core;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -12,14 +11,19 @@ namespace CutterManagement.UI.Desktop
         #region Public Properties
 
         /// <summary>
-        /// Unique ID of this machine
+        /// The unique Id of this machine
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Unique number assigned to this machine
         /// </summary>
         public string MachineNumber { get; set; }
 
         /// <summary>
-        /// Unique set ID of this machine
+        /// Unique set number assigned to this machine
         /// </summary>
-        public string MachineSetId { get; set; } 
+        public string MachineSetNumber { get; set; } 
 
         /// <summary>
         /// Cutter id number currently setup on this machine
@@ -74,10 +78,15 @@ namespace CutterManagement.UI.Desktop
         public CommandKind CommandKind { get; set; }
 
         /// <summary>
+        /// The owner of this machine
+        /// </summary>
+        public Department Owner { get; set; }
+
+        /// <summary>
         /// True if admin user is currently logged in
         /// otherwise false
         /// </summary>
-        public bool IsAdminLoggedIn => AuthenticationService.IsAuthorized;
+        public bool IsAdminLoggedIn => AuthenticationService.IsAdminUserAuthorized;
 
         #endregion
 

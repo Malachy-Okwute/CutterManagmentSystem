@@ -35,10 +35,11 @@
         <Border x:Name="MachineNumber" Grid.Column="0" MinWidth="80"
                 HorizontalAlignment="Stretch">
             <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
-                    Background="{DynamicResource BackgroundColorBrush3}"
                     Content="{Binding MachineNumber}"
+                    BorderThickness="0"
+                    BorderBrush="{x:Null}"
                     FontFamily="{StaticResource RobotoFlexRegular}"
-                    Style="{StaticResource AppButtonStyle}" />
+                    Style="{StaticResource TransparentButtonStyle}" />
         </Border>
 
         <!--  machine status  -->

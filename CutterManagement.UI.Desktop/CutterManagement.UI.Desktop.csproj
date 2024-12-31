@@ -11,13 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\**" />
     <Compile Remove="Validation\**" />
-    <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="Validation\**" />
-    <None Remove="Services\**" />
     <None Remove="Validation\**" />
-    <Page Remove="Services\**" />
     <Page Remove="Validation\**" />
   </ItemGroup>
 
@@ -25,7 +21,7 @@
     <Compile Include="ViewModels\.Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemCollectionDesignModel.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemDesignModel.cs" />
-    <Compile Include="ViewModels\.ViewLocator\ViewLocator.cs" />
+    <Compile Include="Pages\.ViewLocator\ViewLocator.cs" />
   </ItemGroup>
 
   <ItemGroup>

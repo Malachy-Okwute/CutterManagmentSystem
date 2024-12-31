@@ -6,7 +6,7 @@
 
         private static Timer? _timer;
 
-        public static bool IsAuthorized { get; private set; }
+        public static bool IsAdminUserAuthorized { get; private set; }
 
         public AuthenticationResult Authenticate(string username, string password) 
         {
@@ -42,12 +42,12 @@
 
             if(result.Success)
             {
-                IsAuthorized = true;
+                IsAdminUserAuthorized = true;
                 StartAdminPrivilegeSessionCountDown();
             }
             else
             {
-                IsAuthorized = false;
+                IsAdminUserAuthorized = false;
             }
 
             return result;
@@ -57,9 +57,9 @@
         {
             lock(_locker)
             {
-                IsAuthorized = true;
+                IsAdminUserAuthorized = true;
                 _timer = new Timer(TimerElapsed, null, 0, Timeout.Infinite);
-                _timer.Change((int)TimeSpan.FromMinutes(0.5).TotalMilliseconds, Timeout.Infinite);
+                _timer.Change((int)TimeSpan.FromMinutes(120).TotalMilliseconds, Timeout.Infinite);
             }
         }
 
@@ -89,7 +89,7 @@
             lock (_locker)
             {
                 _timer?.Change(Timeout.Infinite, Timeout.Infinite);
-                IsAuthorized = false;
+                IsAdminUserAuthorized = false;
             }
         }
 

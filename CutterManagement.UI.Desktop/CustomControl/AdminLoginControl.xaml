@@ -28,8 +28,9 @@
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontFamily="{StaticResource LightIcon}" />
 
-                <local:TextEntryControl Grid.Row="1" PlaceHolderText="Username" Focusable="True"
-                                        PlaceHolderIcon="{StaticResource UsersIcon}" />
+                <local:TextEntryControl Grid.Row="1" PlaceHolderText="Username" 
+                                        PlaceHolderIcon="{StaticResource UsersIcon}"
+                                        ControlContent="{Binding Username, Mode=TwoWay}" />
 
                 <local:PasswordEntryControl x:Name="CustomPassWordControl" Grid.Row="2" PlaceHolderText="Password"
                                             PlaceHolderIcon="{StaticResource PasswordIcon}" />
@@ -68,14 +69,22 @@
                 </Grid>
 
                 <Grid Grid.Row="4" Margin="4">
-                    <Button Style="{StaticResource AdminLoginButtonStyle}"
+                    <Button Style="{StaticResource TransparentButtonStyle}"
                             IsCancel="True" HorizontalAlignment="Left" Content="Cancel"
-                            Command="{Binding CancelCommand}" />
-                    <Button Style="{StaticResource AdminLoginButtonStyle}"
-                            IsDefault="True"
+                            Command="{Binding CancelCommand}"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource BorderColorBrush6}"
+                            Height="34" Width="130"
+                            FontFamily="{StaticResource RobotoFlexRegular}"
+                            FontSize="{StaticResource XSmall}" />
+                    <Button Style="{StaticResource TransparentButtonStyle}"
+                            IsDefault="True" BorderThickness="2"
+                            FontFamily="{StaticResource RobotoFlexRegular}"
                             BorderBrush="{DynamicResource BorderColorBrush3}"
                             HorizontalAlignment="Right" Content="Login"
                             Command="{Binding LoginCommand}"
+                            Height="34" Width="130"
+                            FontSize="{StaticResource XSmall}"
                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:AdminLoginControl}}}" />
                 </Grid>
             </Grid>

@@ -1,7 +1,9 @@
 ﻿using CutterManagement.Core;
+using CutterManagement.DataAccess;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -26,7 +28,12 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// <see cref="MachineItemViewModel"/>
         /// </summary>
-        public MachineItemViewModel _machineItemViewModel;
+        private MachineItemViewModel _machineItemViewModel;
+
+        /// <summary>
+        /// <see cref="MachineConfigurationViewModel"/>
+        /// </summary>
+        private MachineConfigurationViewModel _machineConfigurationViewModel;
 
         /// <summary>
         /// Data service factory
@@ -36,7 +43,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Load data asynchronously 
         /// </summary>
-        private Task _dataLoader;
+        private readonly Task _dataLoader;
 
         #endregion
 
@@ -69,12 +76,31 @@ namespace CutterManagement.UI.Desktop
             set => _machineItemViewModel = value;
         }
 
+        /// <summary>
+        /// <see cref="MachineConfigurationViewModel"/>
+        /// </summary>
+        public MachineConfigurationViewModel MachineConfigurationViewModel 
+        {
+            get => _machineConfigurationViewModel;
+            set => _machineConfigurationViewModel = value;
+        }
+
+        /// <summary>
+        /// True if configuration form is open
+        /// otherwise false
+        /// </summary>
+        public bool IsConfigurationFormOpen { get; set; }
+
         #endregion
+
+        #region Commands
 
         /// <summary>
         /// Configures this machine item
         /// </summary>
-        public ICommand MachineConfigurationCommand { get; set; }
+        public ICommand OpenMachineConfigurationFormCommand { get; set; }
+
+        #endregion
 
         #region Constructor
 
@@ -83,28 +109,46 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public MachineItemCollectionViewModel(IDataAccessServiceFactory dataAccessService)
         {
+            // Initialize
             _dataAccessService = dataAccessService;
             _machineItemViewModel = new MachineItemViewModel();
-
-            MachineConfigurationCommand = new RelayCommand((parameter) => ConfigureMachine(parameter));
-
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
+
+            // Create commands
+            OpenMachineConfigurationFormCommand = new RelayCommand((parameter) => OpenMachineConfigurationForm(parameter));
+
+            // Load data
             _dataLoader = LoadMachineData();
         }
 
         #endregion
 
-        private void ConfigureMachine(object parameter)
+        #region Command Methods
+
+        /// <summary>
+        /// Opens configuration used in configuring machine item
+        /// </summary>
+        /// <param name="parameter">The machine to configure</param>
+        private void OpenMachineConfigurationForm(object parameter)
         {
+            // Turn off pop up control
             MachineItemViewModel.IsPopupOpen = false;
 
-            if (AuthenticationService.IsAuthorized is false) return;
+            // Make sure admin user is authorized
+            if (AuthenticationService.IsAdminUserAuthorized is false) return;
 
-            var item = parameter as MachineItemViewModel;
+            // Open configuration form
+            IsConfigurationFormOpen = true;
 
+            // Create machine configuration view model
+            _machineConfigurationViewModel = new MachineConfigurationViewModel((MachineItemViewModel)parameter, _dataAccessService, this);
 
+            // Update machine configuration view model property
+            OnPropertyChanged(nameof(MachineConfigurationViewModel));
         }
+
+        #endregion
 
         #region Methods
 
@@ -150,7 +194,8 @@ namespace CutterManagement.UI.Desktop
                     // Create new machine record in the database
                     await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
                     // Populate item list
-                    _pinItems.Add(ResolveToMachineItemViewModel(data));
+                    //_pinItems.Add(ResolveToMachineItemViewModel(data));
+                    _pinItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
                 }
 
                 // Create join table for machine and user
@@ -165,7 +210,8 @@ namespace CutterManagement.UI.Desktop
                     // Create new machine record in the database
                     await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
                     // Populate item list
-                    _ringItems.Add(ResolveToMachineItemViewModel(data));
+                    //_ringItems.Add(ResolveToMachineItemViewModel(data));
+                    _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
                 }
             }
 
@@ -176,39 +222,43 @@ namespace CutterManagement.UI.Desktop
                 if (data.Owner is Department.Pinion)
                 {
                     // Populate pin item list with data
-                    _pinItems.Add(ResolveToMachineItemViewModel(data));
+                    //_pinItems.Add(ResolveToMachineItemViewModel(data));
+                    _pinItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
                 }
                 // Otherwise
                 else
                 {
                     // Populate ring item list with data
-                    _ringItems.Add(ResolveToMachineItemViewModel(data));
+                    //_ringItems.Add(ResolveToMachineItemViewModel(data));
+                    _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
                 }
             }
         }
 
-        /// <summary>
-        /// Resolves <see cref="MachineDataModel"/> to <see cref="MachineItemViewModel"/>
-        /// </summary>
-        /// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
-        /// <returns><see cref="MachineItemViewModel"/></returns>
-        private MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData)
-        {
-            MachineItemViewModel items = new MachineItemViewModel
-            {
-                MachineSetId = machineData.MachineSetId,
-                MachineNumber = machineData.MachineNumber,
-                Status = machineData.Status,
-                StatusMessage = machineData.StatusMessage,
-                FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
-                DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
-            };
+        ///// <summary>
+        ///// Resolves <see cref="MachineDataModel"/> to <see cref="MachineItemViewModel"/>
+        ///// </summary>
+        ///// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
+        ///// <returns><see cref="MachineItemViewModel"/></returns>
+        //private MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData)
+        //{
+        //    MachineItemViewModel items = new MachineItemViewModel
+        //    {
+        //        Id = machineData.Id,
+        //        MachineSetNumber = machineData.MachineSetId,
+        //        MachineNumber = machineData.MachineNumber,
+        //        Status = machineData.Status,
+        //        StatusMessage = machineData.StatusMessage,
+        //        Owner = machineData.Owner,
+        //        FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
+        //        DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
+        //    };
 
-            // Hook in selection changed event
-            items.ItemSelected += OnItemSelectionChanged;
+        //    // Hook in selection changed event
+        //    items.ItemSelected += OnItemSelectionChanged;
 
-            return items;
-        }
+        //    return items;
+        //}
 
         #endregion
 

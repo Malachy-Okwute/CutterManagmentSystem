@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="\Styles\Colors.xaml" />
                 <ResourceDictionary Source="\Styles\LightTheme.xaml" />
                 <ResourceDictionary Source="\Styles\Buttons.xaml" />
+                <ResourceDictionary Source="\Styles\ComboBoxStyles.xaml" />
                 <ResourceDictionary Source="\Styles\Windows.xaml" />
 
             </ResourceDictionary.MergedDictionaries>

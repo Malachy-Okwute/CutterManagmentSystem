@@ -10,6 +10,7 @@
     <Color x:Key="BackgroundColor4">#eaeaea</Color>
     <Color x:Key="BackgroundColor5">#3d6cf6</Color>
     <Color x:Key="BackgroundColor6">#f7d8d6</Color>
+    <Color x:Key="BackgroundColor7">#4e4e64</Color>
 
     <!--  light theme foreground color palette  -->
     <Color x:Key="ForegroundColor1">#000000</Color>
@@ -47,6 +48,7 @@
     <SolidColorBrush x:Key="BackgroundColorBrush4" Color="{StaticResource BackgroundColor4}" />
     <SolidColorBrush x:Key="BackgroundColorBrush5" Color="{StaticResource BackgroundColor5}" />
     <SolidColorBrush x:Key="BackgroundColorBrush6" Color="{StaticResource BackgroundColor6}" />
+    <SolidColorBrush x:Key="BackgroundColorBrush7" Color="{StaticResource BackgroundColor7}" />
 
     <!--  light theme foreground color brush palette  -->
     <SolidColorBrush x:Key="ForegroundColorBrush1" Color="{StaticResource ForegroundColor1}" />

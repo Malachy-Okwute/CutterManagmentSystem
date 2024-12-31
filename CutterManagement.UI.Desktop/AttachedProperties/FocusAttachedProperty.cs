@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -24,19 +22,17 @@ namespace CutterManagement.UI.Desktop
 
         private static void OnPropertyValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Control control = (Control)d;
+            FrameworkElement control = (FrameworkElement)d;
 
-            if(control is not null)
+            if(control is null) return;
+
+            control.IsVisibleChanged += (s, e) =>
             {
-                control.Loaded += Control_Loaded;
-            }
-        }
-
-        private static void Control_Loaded(object sender, RoutedEventArgs e)
-        {
-            Control control = (Control)sender;
-
-            control.Focus();
+                if (control.IsVisible)
+                {
+                    control.Focus();
+                }
+            };
         }
     }
 }

@@ -74,7 +74,7 @@
     </Style>
 
     <!--  app button style  -->
-    <Style x:Key="AppButtonStyle" TargetType="{x:Type Button}">
+    <Style x:Key="TransparentButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="BorderBrush" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Width" Value="100" />
@@ -85,15 +85,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid UseLayoutRounding="True" Background="{TemplateBinding Background}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
 
-                        <Grid Name="MouseOverBackground" Background="Transparent" />
+                        <Grid UseLayoutRounding="True" Background="{TemplateBinding Background}">
 
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding Content}" />
+                            <Grid Name="MouseOverBackground" Background="Transparent" />
 
-                    </Grid>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding Content}" />
+
+                        </Grid>
+                    </Border>
+
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="MouseOverBackground" Property="Background" Value="{DynamicResource ButtonHoverBackgroundColorBrush1}" />
@@ -109,7 +113,7 @@
     <!--  machine edit button style  -->
     <Style x:Key="MachineItemEditButtonStyle"
            TargetType="{x:Type Button}"
-           BasedOn="{StaticResource AppButtonStyle}">
+           BasedOn="{StaticResource TransparentButtonStyle}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template">
             <Setter.Value>
@@ -232,14 +236,12 @@
         </Setter>
     </Style>
 
-    <Style x:Key="AdminLoginButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush2}" />
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush3}" />
+    <Style x:Key="RegularButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush8}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush7}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderColorBrush1}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="FontSize" Value="{StaticResource XSmall}" />
-        <Setter Property="Height" Value="34" />
-        <Setter Property="Width" Value="130" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -252,7 +254,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush7}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush2}" />

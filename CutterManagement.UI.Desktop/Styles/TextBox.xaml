@@ -36,12 +36,6 @@
                                        TextAlignment="{TemplateBinding TextAlignment}"
                                        Visibility="Collapsed" />
 
-                            <Button Width="60" HorizontalAlignment="Right"
-                                    FontSize="{TemplateBinding FontSize}"
-                                    Background="{DynamicResource BackgroundColorBrush3}"
-                                    Content="{StaticResource SearchIcon}"
-                                    Style="{DynamicResource AppButtonStyle}" />
-
                             <!--  control content  -->
                             <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,66,0" HorizontalContentAlignment="Left"
                                           VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
@@ -60,4 +54,60 @@
 
     </Style>
 
+
+    <Style x:Key="RegularTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush3}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush1}" />
+        <Setter Property="FontFamily" Value="{DynamicResource RobotoFlexRegular}" />
+        <Setter Property="FontSize" Value="{DynamicResource XSmall}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColorBrush3}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource ForegroundColorBrush3}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColorBrush6}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="3" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            Padding="{TemplateBinding Padding}">
+
+                        <Grid>
+
+                            <!--  place holder  -->
+                            <TextBlock x:Name="PlaceHolder" Padding="5,4,0,0" HorizontalAlignment="Left"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                       Text="{TemplateBinding Tag}"
+                                       FontFamily="{TemplateBinding FontFamily}"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       Background="{TemplateBinding Background}"
+                                       Foreground="{DynamicResource ForegroundColorBrush2}"
+                                       TextAlignment="{TemplateBinding TextAlignment}"
+                                       Visibility="Collapsed" />
+
+                            <!--  control content  -->
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,66,0" HorizontalContentAlignment="Left"
+                                          VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" />
+
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter TargetName="PlaceHolder" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
 </ResourceDictionary>

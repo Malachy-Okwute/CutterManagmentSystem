@@ -13,6 +13,10 @@ namespace CutterManagement.DataAccess
         /// The application database client
         /// </summary>
         protected ApplicationDbContext _applicationDbContext;
+
+        /// <summary>
+        /// A table of type <c>T</c> in the application database
+        /// </summary>
         protected DbSet<T> _dbTable;
 
         /// <summary>
