@@ -74,9 +74,11 @@ namespace CutterManagement.UI.Desktop
         /// <param name="e">Event args</param>
         private void PopupControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            // Do nothing if we're not visible 
+            // If we're not visible 
             if (e.NewValue is false)
-            { 
+            {
+                // Hide pop up if it's visible
+                ((MachineItemCollectionViewModel)DataContext).MachineItemViewModel.IsPopupOpen = false;
                 return; 
             }
 
@@ -118,7 +120,9 @@ namespace CutterManagement.UI.Desktop
             }
         }
 
-        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => ((MachineItemCollectionViewModel)DataContext).IsConfigurationFormOpen = false;
-        
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ((MachineItemCollectionViewModel)DataContext).IsConfigurationFormOpen = false;
+        }
     }
 }

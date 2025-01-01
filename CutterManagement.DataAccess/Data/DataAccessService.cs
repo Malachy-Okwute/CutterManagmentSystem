@@ -15,6 +15,11 @@ namespace CutterManagement.DataAccess
         protected ApplicationDbContext _applicationDbContext;
 
         /// <summary>
+        /// Event to run whenever data changes in the database
+        /// </summary>
+        public event EventHandler<object> DataChanged;
+
+        /// <summary>
         /// A table of type <c>T</c> in the application database
         /// </summary>
         protected DbSet<T> _dbTable;
@@ -41,12 +46,18 @@ namespace CutterManagement.DataAccess
                 try
                 {
                     await _dbTable.AddAsync(entity);
-                    await _applicationDbContext.SaveChangesAsync();
+
+                    int result = await _applicationDbContext.SaveChangesAsync();
+
+                    if (result > 0)
+                    {
+                        DataChanged?.Invoke(this, entity);
+                    }
                 }
                 catch (Exception msg) // Use custom exception here
                 {
                     Debugger.Break();
-                    Console.WriteLine(msg);
+                    Debug.WriteLine(msg.Message);
                 }
             }
         }
@@ -80,11 +91,16 @@ namespace CutterManagement.DataAccess
             try
             {
                 _dbTable.Update(entity);
-                await _applicationDbContext.SaveChangesAsync();
+                int result = await _applicationDbContext.SaveChangesAsync();
+
+                if (result > 0)
+                {
+                    DataChanged?.Invoke(this, entity);
+                }
             }
             catch (Exception msg) // Use custom exception here
             {
-                Console.WriteLine(msg);
+                Debug.WriteLine(msg.Message);
                 Debugger.Break();
             }
         }
@@ -99,12 +115,17 @@ namespace CutterManagement.DataAccess
             try
             {
                 _dbTable.Remove(entity);
-                await _applicationDbContext.SaveChangesAsync();
+                int result = await _applicationDbContext.SaveChangesAsync();
+
+                if (result > 0)
+                {
+                    DataChanged?.Invoke(this, entity);
+                }
             }
             catch (Exception msg) // Use custom exception here
             {
-                Console.WriteLine(msg);
                 Debugger.Break();
+                Debug.WriteLine(msg.Message);
             }
         }
     }

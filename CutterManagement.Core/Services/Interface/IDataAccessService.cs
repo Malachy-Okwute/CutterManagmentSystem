@@ -6,6 +6,11 @@
     public interface IDataAccessService<T>
     {
         /// <summary>
+        /// Event to run whenever data changes in the database
+        /// </summary>
+        event EventHandler<object> DataChanged;
+
+        /// <summary>
         /// Create a new entry record and save it in the database
         /// </summary>
         /// <param name="entity">The new to save to database</param>

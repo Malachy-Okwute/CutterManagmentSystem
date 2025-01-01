@@ -70,7 +70,8 @@
 
     </UserControl.Resources>
     <Grid>
-        <TextBox Text="{Binding ControlContent, ElementName=TextEntry}"
+        <TextBox x:Name="ActualText"
+                 Text="{Binding ControlContent, ElementName=TextEntry, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource TextEntryStyle}"
                  local:FocusAttachedProperty.SetFocus="{Binding IsFocused, RelativeSource={RelativeSource AncestorType=UserControl}}" />
     </Grid>

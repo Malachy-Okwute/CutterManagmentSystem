@@ -23,6 +23,32 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
+            <!--  message  -->
+            <Grid Grid.RowSpan="5" Height="80" 
+                  Margin="14" d:Visibility="Collapsed" Panel.ZIndex="10"
+                  Visibility="{Binding ShowMessage, Converter={local:BooleanToVisibilityConverter}}"
+                  Background="{Binding IsConfigurationSuccessful, Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}">
+
+                <Grid.Effect>
+                    <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.25" />
+                </Grid.Effect>
+
+                <Label Grid.Row="3"
+                       Content="{Binding Message}"
+                       Margin="4,0" Padding="18,8"
+                       FontFamily="{StaticResource RobotoFlexRegular}"
+                       FontSize="{StaticResource Small}"
+                       Foreground="{Binding IsConfigurationSuccessful, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}"
+                       VerticalContentAlignment="Center" HorizontalContentAlignment="Left" />
+
+                <TextBlock Text="{Binding IsConfigurationSuccessful, Converter={local:BooleanToIconConverter}}"
+                           Padding="18,8" HorizontalAlignment="Right" VerticalAlignment="Center"
+                           FontFamily="{StaticResource RegularIcon}"
+                           FontSize="{StaticResource Large}"
+                           Foreground="{Binding IsConfigurationSuccessful, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />
+
+            </Grid>
+
             <local:TextEntryControl Grid.Row="0" PlaceHolderText="Enter machine #"
                                     ControlContent="{Binding MachineNumber, Mode=TwoWay}" />
 

@@ -2,9 +2,13 @@
 using CutterManagement.DataAccess;
 using PropertyChanged;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -115,6 +119,9 @@ namespace CutterManagement.UI.Desktop
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
 
+            // Set up data changed delegate
+            _dataAccessService.OnDataChanged = UpdateMachineCollection;
+
             // Create commands
             OpenMachineConfigurationFormCommand = new RelayCommand((parameter) => OpenMachineConfigurationForm(parameter));
 
@@ -136,13 +143,13 @@ namespace CutterManagement.UI.Desktop
             MachineItemViewModel.IsPopupOpen = false;
 
             // Make sure admin user is authorized
-            if (AuthenticationService.IsAdminUserAuthorized is false) return;
+            //if (AuthenticationService.IsAdminUserAuthorized is false) return;
 
             // Open configuration form
             IsConfigurationFormOpen = true;
 
             // Create machine configuration view model
-            _machineConfigurationViewModel = new MachineConfigurationViewModel((MachineItemViewModel)parameter, _dataAccessService, this);
+            _machineConfigurationViewModel = new MachineConfigurationViewModel(MachineItemViewModel, _dataAccessService, this);
 
             // Update machine configuration view model property
             OnPropertyChanged(nameof(MachineConfigurationViewModel));
@@ -167,6 +174,10 @@ namespace CutterManagement.UI.Desktop
             IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
             IDataAccessService<MachineDataModelUserDataModel> machineUserTable = _dataAccessService.GetDbTable<MachineDataModelUserDataModel>();
 
+            // Ensure pin and ring collections are empty
+            _pinItems.Clear();
+            _ringItems.Clear();
+
             // if we don't have any data in the database
             if ((await machineTable.GetAllEntitiesAsync()).Count < 1)
             {
@@ -176,10 +187,6 @@ namespace CutterManagement.UI.Desktop
 
                 // Get admin user
                 UserDataModel? admin = (await userTable.GetAllEntitiesAsync()).ToList().FirstOrDefault(user => user.LastName is "admin");
-
-                // Ensure pin and ring collections are empty
-                _pinItems.Clear();
-                _ringItems.Clear();
 
                 // Go through generated pinion data
                 foreach (MachineDataModel data in defaultPinionMachineData)
@@ -194,7 +201,6 @@ namespace CutterManagement.UI.Desktop
                     // Create new machine record in the database
                     await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
                     // Populate item list
-                    //_pinItems.Add(ResolveToMachineItemViewModel(data));
                     _pinItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
                 }
 
@@ -210,7 +216,6 @@ namespace CutterManagement.UI.Desktop
                     // Create new machine record in the database
                     await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
                     // Populate item list
-                    //_ringItems.Add(ResolveToMachineItemViewModel(data));
                     _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
                 }
             }
@@ -218,47 +223,70 @@ namespace CutterManagement.UI.Desktop
             // Go through data from database
             foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
             {
+                MachineItemViewModel machineItem = DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged);
+
                 // If machine data is owned by pinion
-                if (data.Owner is Department.Pinion)
+                if (machineItem.Owner is Department.Pinion)
                 {
                     // Populate pin item list with data
-                    //_pinItems.Add(ResolveToMachineItemViewModel(data));
-                    _pinItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
+                    _pinItems.Add(machineItem);
                 }
                 // Otherwise
                 else
                 {
                     // Populate ring item list with data
-                    //_ringItems.Add(ResolveToMachineItemViewModel(data));
-                    _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
+                    _ringItems.Add(machineItem);
                 }
             }
         }
 
-        ///// <summary>
-        ///// Resolves <see cref="MachineDataModel"/> to <see cref="MachineItemViewModel"/>
-        ///// </summary>
-        ///// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
-        ///// <returns><see cref="MachineItemViewModel"/></returns>
-        //private MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData)
-        //{
-        //    MachineItemViewModel items = new MachineItemViewModel
-        //    {
-        //        Id = machineData.Id,
-        //        MachineSetNumber = machineData.MachineSetId,
-        //        MachineNumber = machineData.MachineNumber,
-        //        Status = machineData.Status,
-        //        StatusMessage = machineData.StatusMessage,
-        //        Owner = machineData.Owner,
-        //        FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
-        //        DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
-        //    };
+        /// <summary>
+        /// Updates machine items list with the latest information from db
+        /// </summary>
+        /// <param name="item">The item that changed</param>
+        /// <returns><see cref="bool"/></returns>
+        public bool UpdateMachineCollection(object item) 
+        {
+            // Resolve the new item that changed
+            MachineItemViewModel newItem = DataResolver.ResolveToMachineItemViewModel((MachineDataModel)item, OnItemSelectionChanged);
 
-        //    // Hook in selection changed event
-        //    items.ItemSelected += OnItemSelectionChanged;
+            // If new item is pinion
+            if(newItem.Owner is Department.Pinion)
+            {
+                // Insert item into pinion list
+                InsertNewItem(newItem, _pinItems);
+            }
+            // Otherwise
+            else
+            {
+                // Insert item into ring list
+                InsertNewItem(newItem, _ringItems);
+            }
 
-        //    return items;
-        //}
+            return default;
+        }
+
+        /// <summary>
+        /// Inserts a <see cref="MachineItemViewModel"/> into an <see cref="ObservableCollection{T}"/>
+        /// in a specific index that is set internally in this method
+        /// </summary>
+        /// <param name="item">The item to insert</param>
+        /// <param name="itemList">The list to insert item into</param>
+        private void InsertNewItem(MachineItemViewModel item, ObservableCollection<MachineItemViewModel> itemList)
+        {
+            MachineItemViewModel? currentItemToChange = itemList.FirstOrDefault(x => x.Id == item.Id);
+
+            if (currentItemToChange is not null)
+            {
+                int index = itemList.IndexOf(currentItemToChange);
+
+                DispatcherService.Invoke(() =>
+                {
+                    itemList.RemoveAt(index);
+                    itemList.Insert(index, item);
+                });
+            }
+        }
 
         #endregion
 

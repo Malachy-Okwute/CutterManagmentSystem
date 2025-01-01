@@ -9,7 +9,7 @@
         /// Configures a machine item
         /// </summary>
         /// <param name="item">The item to configure</param>
-        /// <returns><see cref="Task"/></returns>
-        Task Configure(object item);
+        /// <returns><see cref="Task{ValidationResult}"/></returns>
+        Task<ValidationResult> Configure(MachineDataModel newData);
     }
 }

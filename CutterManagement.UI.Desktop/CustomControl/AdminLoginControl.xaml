@@ -28,13 +28,14 @@
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontFamily="{StaticResource LightIcon}" />
 
-                <local:TextEntryControl Grid.Row="1" PlaceHolderText="Username" 
+                <local:TextEntryControl Grid.Row="1" PlaceHolderText="Username"
                                         PlaceHolderIcon="{StaticResource UsersIcon}"
                                         ControlContent="{Binding Username, Mode=TwoWay}" />
 
                 <local:PasswordEntryControl x:Name="CustomPassWordControl" Grid.Row="2" PlaceHolderText="Password"
                                             PlaceHolderIcon="{StaticResource PasswordIcon}" />
 
+                <!--  error message  -->
                 <Label Grid.Row="3" Content="Incorrect username or password" Margin="4,0,0,4"
                        Padding="12,8"
                        FontFamily="{StaticResource RobotoFlexRegular}"
@@ -44,6 +45,7 @@
                        Visibility="{Binding ShowErrorMessage, Converter={local:BooleanToVisibilityConverter}}"
                        d:Visibility="Collapsed" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" />
 
+                <!--  success message  -->
                 <Grid Grid.RowSpan="5" Height="60" Width="200"
                       d:Visibility="Collapsed"
                       Visibility="{Binding ShowSuccessMessage, Converter={local:BooleanToVisibilityConverter}}"

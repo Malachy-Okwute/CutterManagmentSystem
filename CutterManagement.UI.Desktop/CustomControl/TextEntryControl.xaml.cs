@@ -55,6 +55,13 @@ namespace CutterManagement.UI.Desktop
 
         // Using a DependencyProperty as the backing store for ControlContent.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ControlContentProperty =
-            DependencyProperty.Register("ControlContent", typeof(string), typeof(TextEntryControl), new PropertyMetadata(default));
+            DependencyProperty.Register("ControlContent", typeof(string), typeof(TextEntryControl), new PropertyMetadata(OnPropertyValueChanged));
+
+        private static void OnPropertyValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if((string)e.NewValue is null) return; 
+
+            ((TextEntryControl)d).ActualText.Text = ((string)e.NewValue).Replace(" ", "");
+        }
     }
 }

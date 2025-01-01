@@ -15,7 +15,9 @@ namespace CutterManagement.UI.Desktop
             LostFocus += MachineOptionsPopupControl_LostFocus;
         }
 
-        private void MachineOptionsPopupControl_LostFocus(object sender, RoutedEventArgs e) { }// => ((MachineItemViewModel)DataContext).IsPopupOpen = false;
-        
+        private void MachineOptionsPopupControl_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //((MachineItemCollectionViewModel)DataContext).MachineItemViewModel.IsPopupOpen = false;
+        }
     }
 }

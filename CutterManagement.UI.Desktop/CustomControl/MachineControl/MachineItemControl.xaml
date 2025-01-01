@@ -35,7 +35,7 @@
         <Border x:Name="MachineNumber" Grid.Column="0" MinWidth="80"
                 HorizontalAlignment="Stretch">
             <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
-                    Content="{Binding MachineNumber}"
+                    Content="{Binding MachineNumber, UpdateSourceTrigger=PropertyChanged}"
                     BorderThickness="0"
                     BorderBrush="{x:Null}"
                     FontFamily="{StaticResource RobotoFlexRegular}"

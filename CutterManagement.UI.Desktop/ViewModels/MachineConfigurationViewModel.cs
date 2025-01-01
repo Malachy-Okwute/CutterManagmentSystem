@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -8,6 +9,8 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class MachineConfigurationViewModel : ViewModelBase
     {
+        #region Private Fields
+
         /// <summary>
         /// Machine item
         /// </summary>
@@ -34,6 +37,15 @@ namespace CutterManagement.UI.Desktop
         private object _currentStatus;
 
         /// <summary>
+        /// Message to display about the configuration process result
+        /// </summary>
+        private string _message;
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
         /// New machine number
         /// </summary>
         public string MachineNumber { get; set; }
@@ -42,6 +54,21 @@ namespace CutterManagement.UI.Desktop
         /// New machine set number
         /// </summary>
         public string MachineSetNumber { get; set; }
+
+        /// <summary>
+        /// New machine status message
+        /// </summary>
+        public string MachineStatusMessage { get; set; }
+
+        /// <summary>
+        /// True if message should be shown, otherwise false
+        /// </summary>
+        public bool ShowMessage { get; set; }
+
+        /// <summary>
+        /// True if configuration process ran successfully, otherwise false
+        /// </summary>
+        public bool IsConfigurationSuccessful { get; set; }
 
         /// <summary>
         /// Collection of status options available
@@ -56,11 +83,19 @@ namespace CutterManagement.UI.Desktop
             get => _currentStatus;
             set => _currentStatus = value;
         }
-
+        
         /// <summary>
-        /// New machine status message
+        /// Message to display about the configuration process result
         /// </summary>
-        public string MachineStatusMessage { get; set; }
+        public string Message
+        {
+            get => _message;
+            set => _message = value;
+        }
+
+        #endregion
+
+        #region Public Commands
 
         /// <summary>
         /// Command to update a machine item with new data
@@ -71,6 +106,10 @@ namespace CutterManagement.UI.Desktop
         /// Command to cancel update operation
         /// </summary>
         public ICommand CancelCommand { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Default constructor
@@ -99,29 +138,91 @@ namespace CutterManagement.UI.Desktop
             CancelCommand = new RelayCommand(() => _machineItemCollectionVM.IsConfigurationFormOpen = false);
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// Update machine item with new data
         /// </summary>
         private void UpdateData()
         {
-            // Set new data
-            _machineItemViewModel.MachineNumber = MachineNumber;
-            _machineItemViewModel.MachineSetNumber = MachineSetNumber;
-            _machineItemViewModel.Status = (MachineStatus)CurrentStatus;
-            _machineItemViewModel.StatusMessage = MachineStatusMessage;
+            // Create a new machine data model
+            MachineDataModel newData = new MachineDataModel
+            {
+                // Set incoming data
+                Id = _machineItemViewModel.Id,
+                Owner = _machineItemViewModel.Owner,
+                MachineNumber = MachineNumber,
+                MachineSetId = MachineSetNumber,
+                Status = (MachineStatus)CurrentStatus,
+                StatusMessage = MachineStatusMessage,
+                DateTimeLastModified = DateTime.UtcNow,
+            };
 
             // Configure machine with new data
-            ConfigureMachine(_machineItemViewModel);
-
-            // Close configuration form
-            _machineItemCollectionVM.IsConfigurationFormOpen = false;
+            ConfigureMachine(newData);
         }
 
         /// <summary>
         /// Configures a machine item
         /// </summary>
         /// <param name="machineItem">The machine to configure</param>
-        public void ConfigureMachine(MachineItemViewModel machineItem) => Task.Run(async () => { await _machineConfiguration.Configure(machineItem); });
-        
+        public void ConfigureMachine(MachineDataModel newData)
+        {
+            Task.Run(async () => 
+            {
+                try
+                {
+                    // Try configuring machine with new data, get the result of the process
+                    ValidationResult result =  await _machineConfiguration.Configure(newData);
+
+                    // Set message
+                    _message = string.IsNullOrEmpty(result.ErrorMessage) ? "Configuration successful" : result.ErrorMessage;
+
+                    // If process is successful 
+                    if (result.IsValid)
+                    {
+                        // Set success flag
+                        IsConfigurationSuccessful = true;
+                    }
+
+                    // Show message
+                    ShowMessage = true;
+                    // Update UI with the current message
+                    OnPropertyChanged(nameof(Message));
+
+                    // Wait for 2 seconds
+                    await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>
+                    {
+                        // If process is successful
+                        if (result.IsValid)
+                        {
+                            // Close configuration form
+                            _machineItemCollectionVM.IsConfigurationFormOpen = false;
+
+                            // Close message
+                            ShowMessage = false;
+                        }
+                        // Otherwise
+                        else
+                        {
+                            // Set success flag
+                            IsConfigurationSuccessful = false;
+
+                            // Close message
+                            ShowMessage = false;
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Debugger.Break();
+                    Debug.WriteLine(ex.Message);
+                }
+            });
+        }
+
+        #endregion
     }
 }

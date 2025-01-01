@@ -28,7 +28,7 @@
         /// <summary>
         /// The most recent date and time this table was modified
         /// </summary>
-        public DateTime DateTimeLastModified { get; set; } 
+        public DateTime DateTimeLastModified { get; set; }
 
         /// <summary>
         /// The dept. owner of this machine

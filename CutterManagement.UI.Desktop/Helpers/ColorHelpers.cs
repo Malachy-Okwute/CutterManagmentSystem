@@ -7,7 +7,11 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public enum ColorKind
     {
-        BackgroundColor1, BackgroundColor2, BackgroundColor3, ForegroundColor1, ForegroundColor2, ForegroundColor3, AccentColor1, AccentColor2, AccentColor3, AccentColor4, AccentColor5, AccentColor6,
+        BackgroundColor1, BackgroundColor2, BackgroundColor3, BackgroundColor4, BackgroundColor5, BackgroundColor6, BackgroundColor7,
+        ForegroundColor1, ForegroundColor2, ForegroundColor3, ForegroundColor4, ForegroundColor5, ForegroundColor6, ForegroundColor7, ForegroundColor8,
+        ButtonHoverBackgroundColor1,
+        BorderColor1, BorderColor2, BorderColor3, BorderColor4, BorderColor5, BorderColor6,
+        AccentColor1, AccentColor2, AccentColor3, AccentColor4, AccentColor5, AccentColor6, AccentColor7,
     }
 
     /// <summary>
@@ -27,24 +31,77 @@ namespace CutterManagement.UI.Desktop
         {
             switch (color)
             {
+                // Background colors
                 case ColorKind.BackgroundColor1:
                     return (SolidColorBrush)new BrushConverter().ConvertFromString("#ffffff")!;
 
                 case ColorKind.BackgroundColor2:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#525298")!;
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#f6f7f9")!;
 
                 case ColorKind.BackgroundColor3:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#eeeef2")!;
-
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#e8ebee")!;
+                    
+                case ColorKind.BackgroundColor4:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#eaeaea")!;
+                   
+                case ColorKind.BackgroundColor5:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#3d6cf6")!;
+                    
+                case ColorKind.BackgroundColor6:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#f7d8d6")!;
+                    
+                case ColorKind.BackgroundColor7:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#4e4e64")!;
+                
+                // Foreground colors
                 case ColorKind.ForegroundColor1:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#ffffff")!;
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#000000")!;
 
                 case ColorKind.ForegroundColor2:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#525298")!;
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#bbbbbb")!;
 
                 case ColorKind.ForegroundColor3:
-                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#bdbdbd")!;
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#4e4e64")!;
+                
+                case ColorKind.ForegroundColor4:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#3d6cf6")!;
 
+                case ColorKind.ForegroundColor5:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#f62b4f")!;
+
+                case ColorKind.ForegroundColor6:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#8f8f94")!;
+                
+                case ColorKind.ForegroundColor7:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#ffffff")!;
+
+                case ColorKind.ForegroundColor8:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#a05859")!;
+                
+                // Button hover color
+                case ColorKind.ButtonHoverBackgroundColor1:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#4e4e64")!;
+
+                // Border colors                
+                case ColorKind.BorderColor1:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#e6e8e9")!;
+
+                case ColorKind.BorderColor2:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#edefef")!;
+
+                case ColorKind.BorderColor3:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#3d6cf6")!;
+
+                case ColorKind.BorderColor4:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#f62b4f")!;
+
+                case ColorKind.BorderColor5:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#4e4e64")!;
+
+                case ColorKind.BorderColor6:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#bbbbbb")!;
+
+                // Accent colors                
                 case ColorKind.AccentColor1:
                     return (SolidColorBrush)new BrushConverter().ConvertFromString("#ffff00")!;
 
@@ -62,6 +119,9 @@ namespace CutterManagement.UI.Desktop
 
                 case ColorKind.AccentColor6:
                     return (SolidColorBrush)new BrushConverter().ConvertFromString("#a0a0a0")!;
+
+                case ColorKind.AccentColor7:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#dddddd")!;
 
                 default:
                     throw new ArgumentOutOfRangeException("Color not configured yet");

@@ -13,6 +13,11 @@ namespace CutterManagement.DataAccess
         private readonly ApplicationDbContext _dbContext;
 
         /// <summary>
+        /// Function to run whenever data changed in the database
+        /// </summary>
+        public Func<object, bool> OnDataChanged { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// <para>
         /// Design-time constructor
@@ -36,7 +41,16 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="IDataAccessService{T}"/></returns>
         public IDataAccessService<T> GetDbTable<T>() where T : class
         {
-           return new DataAccessService<T>(_dbContext);
+           var dataService = new DataAccessService<T>(_dbContext);
+
+            dataService.DataChanged += DataService_DataChanged; ;
+
+            return dataService;
+        }
+
+        private void DataService_DataChanged(object? sender, object e)
+        {
+            OnDataChanged?.Invoke(e);
         }
     }
 }

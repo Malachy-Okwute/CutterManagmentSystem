@@ -34,8 +34,14 @@
     <Color x:Key="BorderColor5">#4e4e64</Color>
     <Color x:Key="BorderColor6">#bbbbbb</Color>
 
-    <!--  miscellaneaus color  palette  -->
-    <Color x:Key="MiscellaneousColor1">#dddddd</Color>
+    <!--  accent color  palette  -->
+    <Color x:Key="AccentColor1">#ffff00</Color>
+    <Color x:Key="AccentColor2">#ff6b6c</Color>
+    <Color x:Key="AccentColor3">#5cffaa</Color>
+    <Color x:Key="AccentColor4">#ffb519</Color>
+    <Color x:Key="AccentColor5">#24b17c</Color>
+    <Color x:Key="AccentColor6">#a0a0a0</Color>
+    <Color x:Key="AccentColor7">#dddddd</Color>
 
     <!--#endregion-->
 
@@ -71,8 +77,14 @@
     <SolidColorBrush x:Key="BorderColorBrush5" Color="{StaticResource BorderColor5}" />
     <SolidColorBrush x:Key="BorderColorBrush6" Color="{StaticResource BorderColor6}" />
 
-    <!--  light theme miscellaneous color brush palette  -->
-    <SolidColorBrush x:Key="MiscellaneaousColorBrush1" Color="{StaticResource MiscellaneousColor1}" />
+    <!--  light theme accent color brush palette  -->
+    <SolidColorBrush x:Key="AccentColorBrush1" Color="{StaticResource AccentColor1}" />
+    <SolidColorBrush x:Key="AccentColorBrush2" Color="{StaticResource AccentColor2}" />
+    <SolidColorBrush x:Key="AccentColorBrush3" Color="{StaticResource AccentColor3}" />
+    <SolidColorBrush x:Key="AccentColorBrush4" Color="{StaticResource AccentColor4}" />
+    <SolidColorBrush x:Key="AccentColorBrush5" Color="{StaticResource AccentColor5}" />
+    <SolidColorBrush x:Key="AccentColorBrush6" Color="{StaticResource AccentColor6}" />
+    <SolidColorBrush x:Key="AccentColorBrush7" Color="{StaticResource AccentColor7}" />
 
     <!--#endregion-->
 

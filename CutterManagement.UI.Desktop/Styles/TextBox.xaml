@@ -63,6 +63,7 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="TextAlignment" Value="Left" />
+        <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColorBrush3}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource ForegroundColorBrush3}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderColorBrush6}" />
@@ -93,7 +94,7 @@
                                        Visibility="Collapsed" />
 
                             <!--  control content  -->
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,66,0" HorizontalContentAlignment="Left"
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0" HorizontalContentAlignment="Left"
                                           VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" />
 
                         </Grid>

@@ -5,6 +5,12 @@
     /// </summary>
     public interface IDataAccessServiceFactory
     {
+
+        /// <summary>
+        /// Function to run whenever data changed in the database
+        /// </summary>
+        Func<object, bool> OnDataChanged { get; set; }
+
         /// <summary>
         /// Gets the desired table <see cref="IDataAccessService{T}"/> passed in as T
         /// </summary>
