@@ -7,6 +7,11 @@ namespace CutterManagement.UI.Desktop
     public class UsersPageViewModel : ViewModelBase
     {
         /// <summary>
+        /// Tells whether admin user is currently logged in or not
+        /// </summary>
+        private string _sessionStatus;
+
+        /// <summary>
         /// The user name 
         /// </summary>
         public string Username { get; set; }
@@ -30,6 +35,15 @@ namespace CutterManagement.UI.Desktop
         public bool ShowSuccessMessage { get; set; }
 
         /// <summary>
+        /// Tells whether admin user is currently logged in or not
+        /// </summary>
+        public string SessionStatus 
+        {
+            get => _sessionStatus;
+            set => _sessionStatus = value;
+        }
+
+        /// <summary>
         /// Command to log in user
         /// </summary>
         public ICommand LoginCommand { get; set; }
@@ -46,6 +60,8 @@ namespace CutterManagement.UI.Desktop
 
         public UsersPageViewModel()
         {
+            GetCurrentLoginSessionStatus();
+
             ShowLoginFormCommand = new RelayCommand(() => IsLoginFormVisible = true);
             LoginCommand = new RelayCommand(async(parameter) => await Login(parameter));
             CancelCommand = new RelayCommand(() =>
@@ -105,7 +121,7 @@ namespace CutterManagement.UI.Desktop
                     ResetLoginProcedure();
 
                     // Then close log-in form
-                    IsLoginFormVisible = false; 
+                    IsLoginFormVisible = false;
                 });
             }
         }
@@ -118,6 +134,19 @@ namespace CutterManagement.UI.Desktop
             ShowErrorMessage = false;
             ShowSuccessMessage = false;
             Username = string.Empty;
+
+            GetCurrentLoginSessionStatus();
+        }
+
+        private void GetCurrentLoginSessionStatus()
+        {
+            _sessionStatus = AuthenticationService.IsAdminUserAuthorized ?
+                                "Session status: Currently logged in" :
+                                       "Session status: Not logged in";
+            OnPropertyChanged(nameof(SessionStatus));
+
+            // TODO: Broadcast and listen to live event of when login session starts or ended
+            //       So we can get live update and update UI with the latest information
         }
     }
 }

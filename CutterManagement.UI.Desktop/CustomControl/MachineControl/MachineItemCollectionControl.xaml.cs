@@ -122,7 +122,9 @@ namespace CutterManagement.UI.Desktop
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ((MachineItemCollectionViewModel)DataContext).IsConfigurationFormOpen = false;
+            MachineItemCollectionViewModel popups = ((MachineItemCollectionViewModel)DataContext);
+
+            popups.IsConfigurationFormOpen = popups.IsSetStatusFormOpen = false;
         }
     }
 }

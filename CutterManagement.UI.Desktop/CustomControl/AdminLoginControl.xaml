@@ -28,6 +28,13 @@
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontFamily="{StaticResource LightIcon}" />
 
+                <TextBlock Grid.Row="0"
+                           Text="{Binding SessionStatus, UpdateSourceTrigger=PropertyChanged, FallbackValue=Session status: Unavailable}"
+                           VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="6,-4"
+                           FontSize="{StaticResource XSmall}"
+                           Foreground="{DynamicResource ForegroundColorBrush3}"
+                           FontFamily="{StaticResource RobotoFlexRegular}" />
+
                 <local:TextEntryControl Grid.Row="1" PlaceHolderText="Username"
                                         PlaceHolderIcon="{StaticResource UsersIcon}"
                                         ControlContent="{Binding Username, Mode=TwoWay}" />

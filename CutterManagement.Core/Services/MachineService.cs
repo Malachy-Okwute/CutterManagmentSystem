@@ -3,9 +3,9 @@
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Configuration service for machine items
+    /// Provides services for machine items
     /// </summary>
-    public class MachineConfigurationService : IMachineConfigurationService
+    public class MachineService : IMachineService
     {
         /// <summary>
         /// Data access factory
@@ -16,7 +16,7 @@ namespace CutterManagement.UI.Desktop
         /// Default constructor
         /// </summary>
         /// <param name="dataAccessService">Data access factory</param>
-        public MachineConfigurationService(IDataAccessServiceFactory dataAccessService)
+        public MachineService(IDataAccessServiceFactory dataAccessService)
         {
             _dataAccessService = dataAccessService;
         }
@@ -51,7 +51,7 @@ namespace CutterManagement.UI.Desktop
                 machineData.MachineSetId = newData.MachineSetId;
                 machineData.Status = newData.Status;
                 machineData.StatusMessage = newData.StatusMessage ?? string.Empty;
-                machineData.DateTimeLastModified = DateTime.UtcNow;
+                machineData.DateTimeLastModified = DateTime.Now;
 
                 // Save new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
@@ -62,6 +62,30 @@ namespace CutterManagement.UI.Desktop
 
             // Return result
             return result;
+        }
+
+        public async Task SetStatus(MachineDataModel newData)
+        {
+            // Get machine table
+            IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
+
+            // Get the specific item from db
+            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
+
+            // TODO: Validate data, make sure comment is required
+
+            // Make sure we have the item and incoming data is valid
+            if (machineData is not null)
+            {
+                // Wire new data 
+                machineData.Status = newData.Status;
+                machineData.StatusMessage = newData.StatusMessage ?? string.Empty;
+                machineData.DateTimeLastModified = DateTime.Now;
+
+                // Save new data
+                await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
+            }
+
         }
     }
 }

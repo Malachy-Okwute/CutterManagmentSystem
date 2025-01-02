@@ -24,14 +24,26 @@
 
         </Grid>
 
+        <!--  Configuration  -->
         <Grid Grid.Row="0" Grid.RowSpan="2" Background="Transparent"
               Panel.ZIndex="10"
               Visibility="{Binding IsConfigurationFormOpen, Converter={local:BooleanToVisibilityConverter}}"
               d:Visibility="Collapsed" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
 
-            <local:MachineConfigurationControl Height="400" Width="650" VerticalAlignment="Center"
-                                               HorizontalAlignment="Center"
+            <local:MachineConfigurationControl VerticalAlignment="Center" HorizontalAlignment="Center"
                                                DataContext="{Binding DataContext.MachineConfigurationViewModel, RelativeSource={RelativeSource AncestorType={x:Type local:MachineItemCollectionControl}}}" />
+
+        </Grid>
+
+        <!--Set status-->
+        <Grid Grid.Row="0" Grid.RowSpan="2" Background="Transparent"
+              Panel.ZIndex="10" d:Visibility="Collapsed"
+              Visibility="{Binding IsSetStatusFormOpen, Converter={local:BooleanToVisibilityConverter}}"
+              MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+
+            <local:SetStatusControl VerticalAlignment="Center" HorizontalAlignment="Center"
+                                    DataContext="{Binding DataContext.MachineSetStatusViewModel, RelativeSource={RelativeSource AncestorType={x:Type local:MachineItemCollectionControl}}}" />
+
         </Grid>
 
         <!--  items  -->

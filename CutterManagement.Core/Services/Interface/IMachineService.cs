@@ -3,7 +3,7 @@
     /// <summary>
     /// Configuration service for machine items
     /// </summary>
-    public interface IMachineConfigurationService 
+    public interface IMachineService 
     {
         /// <summary>
         /// Configures a machine item

@@ -40,6 +40,11 @@ namespace CutterManagement.UI.Desktop
         private MachineConfigurationViewModel _machineConfigurationViewModel;
 
         /// <summary>
+        /// <see cref="MachineSetStatusViewModel"/>
+        /// </summary>
+        private MachineSetStatusViewModel _machineSetStatusViewModel;
+
+        /// <summary>
         /// Data service factory
         /// </summary>
         private IDataAccessServiceFactory _dataAccessService;
@@ -90,19 +95,39 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
+        /// <see cref="MachineSetStatusViewModel"/>
+        /// </summary>
+        public MachineSetStatusViewModel MachineSetStatusViewModel
+        {
+            get => _machineSetStatusViewModel;
+            set => _machineSetStatusViewModel = value;
+        }
+
+        /// <summary>
         /// True if configuration form is open
         /// otherwise false
         /// </summary>
         public bool IsConfigurationFormOpen { get; set; }
+
+        /// <summary>
+        /// True if set status form is open
+        /// otherwise false
+        /// </summary>
+        public bool IsSetStatusFormOpen { get; set; }
 
         #endregion
 
         #region Commands
 
         /// <summary>
-        /// Configures this machine item
+        /// Command to open machine configuration form
         /// </summary>
         public ICommand OpenMachineConfigurationFormCommand { get; set; }
+
+        /// <summary>
+        /// Command to open machine set status form
+        /// </summary>
+        public ICommand OpenSetStatusFormCommand { get; set; }
 
         #endregion
 
@@ -123,7 +148,9 @@ namespace CutterManagement.UI.Desktop
             _dataAccessService.OnDataChanged = UpdateMachineCollection;
 
             // Create commands
-            OpenMachineConfigurationFormCommand = new RelayCommand((parameter) => OpenMachineConfigurationForm(parameter));
+            OpenMachineConfigurationFormCommand = new RelayCommand(OpenMachineConfigurationForm);
+            OpenSetStatusFormCommand = new RelayCommand(OpenSetStatusForm);
+            
 
             // Load data
             _dataLoader = LoadMachineData();
@@ -137,13 +164,13 @@ namespace CutterManagement.UI.Desktop
         /// Opens configuration used in configuring machine item
         /// </summary>
         /// <param name="parameter">The machine to configure</param>
-        private void OpenMachineConfigurationForm(object parameter)
+        private void OpenMachineConfigurationForm()
         {
             // Turn off pop up control
             MachineItemViewModel.IsPopupOpen = false;
 
             // Make sure admin user is authorized
-            //if (AuthenticationService.IsAdminUserAuthorized is false) return;
+            if (AuthenticationService.IsAdminUserAuthorized is false) return;
 
             // Open configuration form
             IsConfigurationFormOpen = true;
@@ -153,6 +180,20 @@ namespace CutterManagement.UI.Desktop
 
             // Update machine configuration view model property
             OnPropertyChanged(nameof(MachineConfigurationViewModel));
+        }
+        private void OpenSetStatusForm()
+        {
+            // Turn off pop up control
+            MachineItemViewModel.IsPopupOpen = false;
+
+            // Open form
+            IsSetStatusFormOpen = true;
+
+            // Create machine configuration view model
+            _machineSetStatusViewModel = new MachineSetStatusViewModel(MachineItemViewModel, _dataAccessService, this);
+
+            // Update machine configuration view model property
+            OnPropertyChanged(nameof(MachineSetStatusViewModel));
         }
 
         #endregion
@@ -223,6 +264,7 @@ namespace CutterManagement.UI.Desktop
             // Go through data from database
             foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
             {
+                // Resolve data
                 MachineItemViewModel machineItem = DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged);
 
                 // If machine data is owned by pinion

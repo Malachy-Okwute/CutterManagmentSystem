@@ -15,17 +15,16 @@
                         Focusable="False" />
                 <Button Content="Set status"
                         Style="{StaticResource MachineOptionsPopupStyle}"
-                        Focusable="False" />
+                        Focusable="False"
+                        Command="{Binding OpenSetStatusFormCommand}" />
                 <Button Content="Data swap"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
-                        Command="{Binding OpenMachineConfigurationFormCommand}"
-                        CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Canvas}}}" />
+                        Command="{Binding}" />
                 <Button Content="Configuration" Focusable="False"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         IsEnabled="{Binding MachineItemViewModel.IsAdminLoggedIn}"
-                        Command="{Binding OpenMachineConfigurationFormCommand}"
-                        CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Canvas}}}" />
+                        Command="{Binding OpenMachineConfigurationFormCommand}" />
             </StackPanel>
 
         </Border>

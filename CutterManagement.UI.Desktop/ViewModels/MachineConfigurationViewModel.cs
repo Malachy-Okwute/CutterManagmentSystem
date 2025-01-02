@@ -7,7 +7,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineConfigurationControl"/>
     /// </summary>
-    public class MachineConfigurationViewModel : ViewModelBase
+    public class MachineConfigurationViewModel : ViewModelBase, IDisposable
     {
         #region Private Fields
 
@@ -24,7 +24,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Machine configuration service
         /// </summary>
-        private IMachineConfigurationService _machineConfiguration;
+        private IMachineService _machineService;
 
         /// <summary>
         /// Data access service
@@ -44,6 +44,11 @@ namespace CutterManagement.UI.Desktop
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Label indicating current machine number
+        /// </summary>
+        public string Label { get; set; }
 
         /// <summary>
         /// New machine number
@@ -124,8 +129,9 @@ namespace CutterManagement.UI.Desktop
             _machineItemCollectionVM = machineItemCollectionVM;
             _dataAccessService = dataAccessService;
             CurrentStatus = _machineItemViewModel.Status;
+            Label = _machineItemViewModel.MachineNumber;
             StatusCollection = new Dictionary<MachineStatus, string>();
-            _machineConfiguration = new MachineConfigurationService(_dataAccessService);
+            _machineService = new MachineService(_dataAccessService);
 
             foreach (MachineStatus status in Enum.GetValues<MachineStatus>())
             {
@@ -135,7 +141,11 @@ namespace CutterManagement.UI.Desktop
 
             // Create commands
             UpdateCommand = new RelayCommand(UpdateData);
-            CancelCommand = new RelayCommand(() => _machineItemCollectionVM.IsConfigurationFormOpen = false);
+            CancelCommand = new RelayCommand(() =>
+            {
+                _machineItemCollectionVM.IsConfigurationFormOpen = false;
+                Dispose();
+            });
         }
 
         #endregion
@@ -157,7 +167,6 @@ namespace CutterManagement.UI.Desktop
                 MachineSetId = MachineSetNumber,
                 Status = (MachineStatus)CurrentStatus,
                 StatusMessage = MachineStatusMessage,
-                DateTimeLastModified = DateTime.UtcNow,
             };
 
             // Configure machine with new data
@@ -175,7 +184,7 @@ namespace CutterManagement.UI.Desktop
                 try
                 {
                     // Try configuring machine with new data, get the result of the process
-                    ValidationResult result =  await _machineConfiguration.Configure(newData);
+                    ValidationResult result =  await _machineService.Configure(newData);
 
                     // Set message
                     _message = string.IsNullOrEmpty(result.ErrorMessage) ? "Configuration successful" : result.ErrorMessage;
@@ -203,6 +212,8 @@ namespace CutterManagement.UI.Desktop
 
                             // Close message
                             ShowMessage = false;
+
+                            Dispose();
                         }
                         // Otherwise
                         else
@@ -221,6 +232,13 @@ namespace CutterManagement.UI.Desktop
                     Debug.WriteLine(ex.Message);
                 }
             });
+        }
+
+        public void Dispose()
+        {
+            Label = string.Empty;
+            MachineNumber = string.Empty;
+            MachineStatusMessage = string.Empty;
         }
 
         #endregion
