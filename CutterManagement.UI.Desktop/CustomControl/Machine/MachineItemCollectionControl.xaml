@@ -35,7 +35,7 @@
 
         </Grid>
 
-        <!--Set status-->
+        <!--  Set status  -->
         <Grid Grid.Row="0" Grid.RowSpan="2" Background="Transparent"
               Panel.ZIndex="10" d:Visibility="Collapsed"
               Visibility="{Binding IsSetStatusFormOpen, Converter={local:BooleanToVisibilityConverter}}"

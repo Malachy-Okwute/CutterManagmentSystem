@@ -58,6 +58,11 @@ namespace CutterManagement.UI.Desktop
         public Dictionary<MachineStatus, string> StatusCollection { get; set; }
 
         /// <summary>
+        /// Collection of users
+        /// </summary>
+        public Dictionary<UserDataModel, string> UsersCollection { get; set; }
+
+        /// <summary>
         /// The current status of the item to configure
         /// </summary>
         public object CurrentStatus

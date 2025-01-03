@@ -23,5 +23,6 @@
     <system:String x:Key="PasswordIcon">&#xf577;</system:String>
     <system:String x:Key="CheckMarkIcon">&#xf00c;</system:String>
     <system:String x:Key="ShieldIcon">&#xf132;</system:String>
+    <system:String x:Key="CubeIcon">&#xf6d1;</system:String>
 
 </ResourceDictionary>

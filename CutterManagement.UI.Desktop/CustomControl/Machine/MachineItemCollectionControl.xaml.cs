@@ -26,7 +26,7 @@ namespace CutterManagement.UI.Desktop
                 // Get the content present of items control
                 ContentPresenter itemsControlContentPresenter = (ContentPresenter)Items.ItemContainerGenerator.ContainerFromIndex(0);
 
-                //TODO: Add a dummy data if we don't have any item on the list
+                //TODO: Add a dummy data with a message showing that list is empty if we don't have any item on the list
 
                 // make sure we have content presenter
                 if (itemsControlContentPresenter is not null)

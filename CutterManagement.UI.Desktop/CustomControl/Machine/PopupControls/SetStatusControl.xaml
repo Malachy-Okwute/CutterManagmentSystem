@@ -18,6 +18,8 @@
                 <RowDefinition Height="*" />
                 <!--  Machine status message with date and time [required]  -->
                 <RowDefinition Height="2*" />
+                <!--  user  -->
+                <RowDefinition Height="*" />
                 <!--  Cancel and submit button  -->
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -26,7 +28,7 @@
             <Grid Grid.RowSpan="5" Height="80" Margin="14"
                   Visibility="Collapsed" Panel.ZIndex="10"
                   Background="{Binding IsConfigurationSuccessful, Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}">
-                  <!--d:Visibility="{Binding ShowMessage, Converter={local:BooleanToVisibilityConverter}}"-->
+                <!--  d:Visibility="{Binding ShowMessage, Converter={local:BooleanToVisibilityConverter}}"  -->
 
                 <Grid.Effect>
                     <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.25" />
@@ -82,6 +84,16 @@
                      Margin="5" Height="120" AcceptsReturn="True"
                      Style="{StaticResource RegularTextBoxStyle}"
                      Text="{Binding MachineStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
+
+            <ComboBox Grid.Row="3" Height="35" Margin="5"
+                      ItemsSource="{Binding StatusCollection}"
+                      SelectedValue="{Binding CurrentStatus, Mode=TwoWay}"
+                      SelectedValuePath="Key" DisplayMemberPath="Value" />
+
+            <!--  desgin-time-only  -->
+            <d:ComboBox Grid.Row="3" Height="35" Margin="5">
+                <ComboBoxItem Content="Is Running" IsSelected="True" />
+            </d:ComboBox>
 
             <Grid Grid.Row="4" Margin="5">
                 <Button Content="Cancel" IsCancel="True" HorizontalAlignment="Left"

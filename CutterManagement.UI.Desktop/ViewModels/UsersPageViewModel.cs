@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Collections.ObjectModel;
 using System.Reflection.Metadata;
 using System.Windows.Input;
 
@@ -10,6 +11,8 @@ namespace CutterManagement.UI.Desktop
         /// Tells whether admin user is currently logged in or not
         /// </summary>
         private string _sessionStatus;
+
+        private ObservableCollection<UserItemViewModel> _users;
 
         /// <summary>
         /// The user name 
@@ -42,6 +45,12 @@ namespace CutterManagement.UI.Desktop
             get => _sessionStatus;
             set => _sessionStatus = value;
         }
+        
+        public ObservableCollection<UserItemViewModel> Users
+        {
+            get => _users;
+            set => _users = value;
+        }
 
         /// <summary>
         /// Command to log in user
@@ -61,6 +70,25 @@ namespace CutterManagement.UI.Desktop
         public UsersPageViewModel()
         {
             GetCurrentLoginSessionStatus();
+
+            _users = new ObservableCollection<UserItemViewModel>
+            {
+              new UserItemViewModel{ FirstName= "Heather", LastName = "Okwute", UserFullName = "Heather Okwute", UserInitials = "HO", UserShift = "1st shift" },
+              new UserItemViewModel{ FirstName= "Malachy", LastName = "Okwute", UserFullName = "Malachy Okwute", UserInitials = "MO", UserShift = "2nd shift" },
+              new UserItemViewModel{ FirstName= "Logan", LastName = "Berger", UserFullName = "Logan Berger", UserInitials = "LB", UserShift = "3rd shift" },
+              new UserItemViewModel{ FirstName= "Aidan", LastName = "Berger", UserFullName = "Aidan Berger", UserInitials = "AB", UserShift = "1st shift" },
+              new UserItemViewModel{ FirstName= "Heather", LastName = "Okwute", UserFullName = "Heather Okwute", UserInitials = "HO", UserShift = "1st shift" },
+              new UserItemViewModel{ FirstName= "Malachy", LastName = "Okwute", UserFullName = "Malachy Okwute", UserInitials = "MO", UserShift = "2nd shift" },
+              new UserItemViewModel{ FirstName= "Logan", LastName = "Berger", UserFullName = "Logan Berger", UserInitials = "LB", UserShift = "3rd shift" },
+              new UserItemViewModel{ FirstName= "Aidan", LastName = "Berger", UserFullName = "Aidan Berger", UserInitials = "AB", UserShift = "1st shift" },
+              new UserItemViewModel{ FirstName= "Heather", LastName = "Okwute", UserFullName = "Heather Okwute", UserInitials = "HO", UserShift = "1st shift" },
+              new UserItemViewModel{ FirstName= "Malachy", LastName = "Okwute", UserFullName = "Malachy Okwute", UserInitials = "MO", UserShift = "2nd shift" },
+              new UserItemViewModel{ FirstName= "Logan", LastName = "Berger", UserFullName = "Logan Berger", UserInitials = "LB", UserShift = "3rd shift" },
+              new UserItemViewModel{ FirstName= "Aidan", LastName = "Berger", UserFullName = "Aidan Berger", UserInitials = "AB", UserShift = "1st shift" },
+            };
+
+
+            OnPropertyChanged(nameof(Users));
 
             ShowLoginFormCommand = new RelayCommand(() => IsLoginFormVisible = true);
             LoginCommand = new RelayCommand(async(parameter) => await Login(parameter));
