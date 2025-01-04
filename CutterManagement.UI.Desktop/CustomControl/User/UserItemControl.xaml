@@ -3,100 +3,14 @@
              mc:Ignorable="d" Height="48" d:Width="700">
 
     <UserControl.Resources>
-        <Style TargetType="{x:Type ContentControl}">
-            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush1}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ContentControl}">
-                        <Grid x:Name="MainControl" HorizontalAlignment="Stretch"
-                              Background="{DynamicResource BackgroundColorBrush1}">
-
-                            <!--  dropshadow effect  -->
-                            <Grid.Effect>
-                                <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.12" />
-                            </Grid.Effect>
-
-                            <Grid.ColumnDefinitions>
-                                <!--  User initials  -->
-                                <ColumnDefinition Width="Auto" />
-                                <!--  Username  -->
-                                <ColumnDefinition Width="Auto" />
-                                <!--  Shift  -->
-                                <ColumnDefinition Width="Auto" />
-
-                                <ColumnDefinition Width="*" />
-                                <!--  user item edit button  -->
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Grid x:Name="bgPanel" Grid.Column="0" Grid.ColumnSpan="5"
-                                  Background="Transparent" />
-
-                            <!--  User initials  -->
-                            <Border x:Name="UserInitials" Grid.Column="0"
-                                    Width="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-                                    CornerRadius="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"
-                                    BorderBrush="{DynamicResource BorderColorBrush5}"
-                                    BorderThickness="3" Margin="40,8">
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" d:Text="MO"
-                                           Text="{Binding UserInitials}"
-                                           FontFamily="{StaticResource RobotoFlexRegular}"
-                                           Foreground="{DynamicResource ForegroundColorBrush3}"
-                                           FontSize="{StaticResource XXSmall}"
-                                           FontWeight="Bold" />
-                            </Border>
-
-                            <!--  Username  -->
-                            <Border x:Name="UserFullName" Grid.Column="1" MinWidth="200"
-                                    HorizontalAlignment="Stretch">
-                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Left"
-                                           d:Text="Malachy Okwute"
-                                           Text="{Binding UserFullName}"
-                                           FontFamily="{StaticResource RobotoFlexRegular}"
-                                           Foreground="{DynamicResource ForegroundColorBrush3}" />
-                            </Border>
-
-                            <!--  Shift  -->
-                            <Border x:Name="Shift" Grid.Column="2" MinWidth="200"
-                                    HorizontalAlignment="Stretch">
-                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Left"
-                                           d:Text="1st Shift"
-                                           Text="{Binding UserShift}"
-                                           FontFamily="{StaticResource RobotoFlexRegular}"
-                                           Foreground="{DynamicResource ForegroundColorBrush3}" />
-                            </Border>
-
-                            <Border Grid.Column="3" HorizontalAlignment="Stretch" />
-
-                            <!--  machine item edit button  -->
-                            <Border Grid.Column="4" Width="30" HorizontalAlignment="Stretch">
-                                <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
-                                        HorizontalContentAlignment="Center"
-                                        Content="{StaticResource VerticalEllipsisIcon}"
-                                        Command="{Binding OpenPopupCommand}"
-                                        FontFamily="{StaticResource SolidIcon}"
-                                        Style="{StaticResource MachineItemEditButtonStyle}" />
-                            </Border>
-
-                            <!--  for design time only  -->
-                            <d:TextBlock Grid.Column="4"
-                                         Text="{StaticResource VerticalEllipsisIcon}"
-                                         FontFamily="{StaticResource SolidIcon}"
-                                         VerticalAlignment="Center" HorizontalAlignment="Center"
-                                         FontSize="{StaticResource Small}"
-                                         Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                        </Grid>
-
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" TargetName="bgPanel" Value="{DynamicResource ButtonHoverBackgroundColorBrush1}" />
-                                <Setter Property="Opacity" TargetName="bgPanel" Value="0.15" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="ItemHoverStyle" TargetType="{x:Type Grid}">
+            <Setter Property="Background" Value="Transparent" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ButtonHoverBackgroundColorBrush1}" />
+                    <Setter Property="Opacity" Value="0.15" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
@@ -117,14 +31,13 @@
             <ColumnDefinition Width="Auto" />
             <!--  Shift  -->
             <ColumnDefinition Width="Auto" />
-
+            <!--  blank  -->
             <ColumnDefinition Width="*" />
-            <!--  user item edit button  -->
-            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Grid x:Name="bgPanel" Grid.Column="0" Grid.ColumnSpan="5"
-              Background="Transparent" />
+              Panel.ZIndex="4"
+              Style="{StaticResource ItemHoverStyle}" />
 
         <!--  User initials  -->
         <Border x:Name="UserInitials" Grid.Column="0" Width="120">
@@ -163,24 +76,6 @@
         </Border>
 
         <Border Grid.Column="3" HorizontalAlignment="Stretch" />
-
-        <!--  machine item edit button  -->
-        <Border Grid.Column="4" Width="30" HorizontalAlignment="Stretch">
-            <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
-                    HorizontalContentAlignment="Center"
-                    Content="{StaticResource VerticalEllipsisIcon}"
-                    Command="{Binding OpenPopupCommand}"
-                    FontFamily="{StaticResource SolidIcon}"
-                    Style="{StaticResource MachineItemEditButtonStyle}" />
-        </Border>
-
-        <!--  for design time only  -->
-        <d:TextBlock Grid.Column="4"
-                     Text="{StaticResource VerticalEllipsisIcon}"
-                     FontFamily="{StaticResource SolidIcon}"
-                     VerticalAlignment="Center" HorizontalAlignment="Center"
-                     FontSize="{StaticResource Small}"
-                     Foreground="{DynamicResource ForegroundColorBrush3}" />
 
     </Grid>
 </UserControl>

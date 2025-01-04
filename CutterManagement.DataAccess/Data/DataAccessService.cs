@@ -56,8 +56,12 @@ namespace CutterManagement.DataAccess
                 }
                 catch (Exception msg) // Use custom exception here
                 {
-                    Debugger.Break();
                     Debug.WriteLine(msg.Message);
+                    Debugger.Break();
+                }
+                finally
+                {
+                    
                 }
             }
         }
@@ -124,8 +128,8 @@ namespace CutterManagement.DataAccess
             }
             catch (Exception msg) // Use custom exception here
             {
-                Debugger.Break();
                 Debug.WriteLine(msg.Message);
+                Debugger.Break();
             }
         }
     }

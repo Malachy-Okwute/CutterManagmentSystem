@@ -24,11 +24,11 @@ namespace CutterManagement.UI.Desktop
 
             // Transients
             services.AddTransient<InfoPageViewModel>();
-            services.AddTransient<UsersPageViewModel>();
             services.AddTransient<UpdatesPageViewModel>();
             services.AddTransient<ArchivesPageViewModel>();
             services.AddTransient<SettingsPageViewModel>();
             services.AddTransient<ApplicationWindowViewModel>();
+            services.AddTransient(provider => new UsersPageViewModel(provider.GetRequiredService<IDataAccessServiceFactory>()));
             
             // Return services
             return services;

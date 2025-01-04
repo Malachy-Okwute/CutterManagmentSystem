@@ -24,32 +24,46 @@ namespace CutterManagement.UI.Desktop
         {
             InitializeComponent();
 
+            RoutedEventHandler? itemsLoaded = null;
 
-            Items.SizeChanged += (s, e) =>
+            itemsLoaded += (ss, e) =>
             {
-
-                // Get the content present of items control
-                ContentPresenter itemsControlContentPresenter = (ContentPresenter)Items.ItemContainerGenerator.ContainerFromIndex(0);
-
-                //TODO: Add a dummy data with a message showing that list is empty if we don't have any item on the list
-
-                // make sure we have content presenter
-                if (itemsControlContentPresenter is not null)
+                Items.SizeChanged += (s, e) =>
                 {
-                    // Get machine-item-control
-                    UserItemControl userItemControl = (UserItemControl)VisualTreeHelper.GetChild(itemsControlContentPresenter, 0);
+                    // Get the content present of items control
+                    ContentPresenter itemsControlContentPresenter = (ContentPresenter)Items.ItemContainerGenerator.ContainerFromIndex(0);
 
-                    #region Label Width
+                    //TODO: Add a dummy data with a message showing that list is empty if we don't have any item on the list
 
-                    // Set data label width to match the items they are labeling
-                    UserItemLabel.UserInitialsLabel.Width = userItemControl.UserInitials.ActualWidth;
-                    UserItemLabel.UserFullNameLabel.Width = userItemControl.UserFullName.ActualWidth;
-                    UserItemLabel.UserShiftLabel.Width = userItemControl.Shift.ActualWidth;
+                    // make sure we have content presenter
+                    if (itemsControlContentPresenter is not null)
+                    {
+                        // Get machine-item-control
+                        UserItemControl userItemControl = (UserItemControl)VisualTreeHelper.GetChild(itemsControlContentPresenter, 0);
 
-                    #endregion
+                        #region Label Width
 
+                        // Set data label width to match the items they are labeling
+                        UserItemLabel.UserInitialsLabel.Width = userItemControl.UserInitials.ActualWidth;
+                        UserItemLabel.UserFullNameLabel.Width = userItemControl.UserFullName.ActualWidth;
+                        UserItemLabel.UserShiftLabel.Width = userItemControl.Shift.ActualWidth;
+
+                        #endregion
+
+                    }
+                };
+
+                if (Items.Items.Count == 0)
+                {
+                    UserItemLabel.UserInitialsLabel.Width = 120;
+                    UserItemLabel.UserFullNameLabel.Width = 200;
+                    UserItemLabel.UserShiftLabel.Width = 200;
                 }
+
+                Items.Loaded -= itemsLoaded;
             };
+
+            Items.Loaded += itemsLoaded;
         }
     }
 }

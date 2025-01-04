@@ -15,7 +15,14 @@ namespace CutterManagement.UI.Desktop
         public override object ProvideValue(IServiceProvider serviceProvider) => this;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+            if (parameter is null)
+            {
+                return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+            }
+            else
+            {
+                return (bool)value ? Visibility.Collapsed: Visibility.Visible;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -43,7 +43,17 @@ namespace CutterManagement.Core
     }
 
     public enum UserShift 
-    { 
-        First, Second, Third 
+    {
+        [Description("---")]
+        None,
+
+        [Description("1st Shift")]
+        First,
+
+        [Description("2nd Shift")]
+        Second,
+
+        [Description("3rd Shift")]
+        Third
     }
 }

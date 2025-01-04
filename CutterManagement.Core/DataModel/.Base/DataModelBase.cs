@@ -19,6 +19,6 @@ namespace CutterManagement.Core
         /// <summary>
         /// Date this entry was created
         /// </summary>
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public DateTime DateCreated { get; set; } = DateTime.Now;
     }
 }

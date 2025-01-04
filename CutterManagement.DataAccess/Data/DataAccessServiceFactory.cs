@@ -15,7 +15,7 @@ namespace CutterManagement.DataAccess
         /// <summary>
         /// Function to run whenever data changed in the database
         /// </summary>
-        public Func<object, bool> OnDataChanged { get; set; }
+        public Func<object, bool> OnDataChanged { get; set; } 
 
         /// <summary>
         /// Default constructor

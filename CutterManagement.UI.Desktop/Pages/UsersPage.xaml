@@ -13,9 +13,13 @@
             </Grid.RowDefinitions>
 
             <!--  Admin control  -->
-            <local:AdminLoginControl Grid.Row="0" Grid.RowSpan="3"
+            <local:AdminLoginControl Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="10"
                                      Visibility="{Binding IsLoginFormVisible, Converter={local:BooleanToVisibilityConverter}}"
                                      d:Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+            <local:CreateUserFormControl Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="10"
+                                         Visibility="{Binding ShowUserCreationForm, Converter={local:BooleanToVisibilityConverter}}"
+                                         d:Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
             <Label Grid.Row="0" Content="Users" Margin="6,10"
                    Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -33,43 +37,59 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0" Content="PlusUser" Tag="Add"
-                        Width="100"
-                        Style="{StaticResource TransparentButtonWithTextStyle}"
-                        Margin="10,0" />
+                        Width="100" Margin="10,0"
+                        Command="{Binding AddUserCommand}"
+                        Style="{StaticResource TransparentButtonWithTextStyle}" />
                 <Button Grid.Column="1" Width="100"
+                        Content="{StaticResource CubeIcon}"
+                        Tag="Manage" Margin="10,0"
+                        Command="{Binding ManageUserCommand}"
+                        Style="{StaticResource TransparentButtonWithTextStyle}" />
+                <Button Grid.Column="3" Width="100"
                         Content="{StaticResource UsersIcon}"
                         Tag="Admin" Margin="10,0"
                         Command="{Binding ShowLoginFormCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
-                <Button Grid.Column="3" Width="100"
-                        Content="{StaticResource CubeIcon}"
-                        Tag="Manage" Margin="10,0"
-                        Command="{Binding ShowLoginFormCommand}"
-                        Style="{StaticResource TransparentButtonWithTextStyle}" />
             </Grid>
 
-            <Grid Grid.Row="2" Margin="0,15">
+            <Grid Grid.Row="2" Margin="0,15,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <!--  label  -->
-                <local:UserItemLabelControl x:Name="UserItemLabel" Grid.Row="0" Margin="10,10" />
+                <local:UserItemLabelControl x:Name="UserItemLabel" Grid.Row="0" Margin="10,10"
+                                            HorizontalAlignment="Stretch" />
 
                 <!--  items  -->
-                <ScrollViewer x:Name="ItemsContainer" Grid.Row="1" Padding="7,0"
-                              VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer Grid.Row="1" Padding="7,0" VerticalScrollBarVisibility="Hidden"
+                              HorizontalScrollBarVisibility="Disabled">
 
-                    <ItemsControl x:Name="Items" ItemsSource="{Binding Users}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <local:UserItemControl Margin="4" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <Grid x:Name="ItemsContainer" Margin="0,4">
+
+                        <ItemsControl x:Name="Items" ItemsSource="{Binding Users}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:UserItemControl Margin="4" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
 
                 </ScrollViewer>
+
+
+                <Border Grid.Row="1" Padding="20" BorderThickness="1" BorderBrush="{DynamicResource BorderColorBrush1}">
+
+                    <TextBlock Text="No user available" Padding="20"
+                           HorizontalAlignment="Center" VerticalAlignment="Top"
+                           FontFamily="{StaticResource RobotoFlexRegular}"
+                           FontSize="{StaticResource XLarge}"
+                           Foreground="{DynamicResource ForegroundColorBrush3}"
+                           Visibility="{Binding IsUserCollectionEmpty, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=Invert}" />
+                </Border>
+
             </Grid>
 
         </Grid>

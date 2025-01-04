@@ -7,7 +7,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineConfigurationControl"/>
     /// </summary>
-    public class MachineConfigurationViewModel : ViewModelBase, IDisposable
+    public class MachineConfigurationViewModel : ViewModelBase
     {
         #region Private Fields
 
@@ -34,7 +34,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// The current status of the item to configure
         /// </summary>
-        private object _currentStatus;
+        private MachineStatus _currentStatus;
 
         /// <summary>
         /// Message to display about the configuration process result
@@ -83,7 +83,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// The current status of the item to configure
         /// </summary>
-        public object CurrentStatus 
+        public MachineStatus CurrentStatus 
         {
             get => _currentStatus;
             set => _currentStatus = value;
@@ -144,7 +144,7 @@ namespace CutterManagement.UI.Desktop
             CancelCommand = new RelayCommand(() =>
             {
                 _machineItemCollectionVM.IsConfigurationFormOpen = false;
-                Dispose();
+                ClearDataResidue();
             });
         }
 
@@ -165,7 +165,7 @@ namespace CutterManagement.UI.Desktop
                 Owner = _machineItemViewModel.Owner,
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
-                Status = (MachineStatus)CurrentStatus,
+                Status = CurrentStatus,
                 StatusMessage = MachineStatusMessage,
             };
 
@@ -213,7 +213,7 @@ namespace CutterManagement.UI.Desktop
                             // Close message
                             ShowMessage = false;
 
-                            Dispose();
+                            ClearDataResidue();
                         }
                         // Otherwise
                         else
@@ -234,7 +234,7 @@ namespace CutterManagement.UI.Desktop
             });
         }
 
-        public void Dispose()
+        public void ClearDataResidue()
         {
             Label = string.Empty;
             MachineNumber = string.Empty;
