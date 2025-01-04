@@ -1,6 +1,5 @@
 ﻿using CutterManagement.Core;
 using System.Collections.ObjectModel;
-using System.Reflection.Metadata;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -373,6 +372,7 @@ namespace CutterManagement.UI.Desktop
                 }
             });
 
+            OnPropertyChanged(nameof(IsUserCollectionEmpty));
             return true;
         }
 
