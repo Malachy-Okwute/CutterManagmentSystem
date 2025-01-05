@@ -22,7 +22,7 @@
 
         <!--  user full name  -->
         <TextBlock x:Name="UserFullNameLabel" Grid.Column="1" HorizontalAlignment="Center"
-                   VerticalAlignment="Center" d:Width="60" Text="FULLNAME"
+                   VerticalAlignment="Center" d:Width="80" Text="FULLNAME"
                    FontSize="{StaticResource XSmall}"
                    FontFamily="{StaticResource RobotoFlexRegular}"
                    Foreground="{DynamicResource ForegroundColorBrush3}"

@@ -266,6 +266,7 @@ namespace CutterManagement.UI.Desktop
 
         private void ManageUser()
         {
+
         }
 
         /// <summary>

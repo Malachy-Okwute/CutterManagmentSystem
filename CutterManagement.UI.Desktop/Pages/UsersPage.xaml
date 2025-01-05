@@ -80,14 +80,15 @@
                 </ScrollViewer>
 
 
-                <Border Grid.Row="1" Padding="20" BorderThickness="1" BorderBrush="{DynamicResource BorderColorBrush1}">
+                <Border Grid.Row="1" Padding="20" BorderThickness="1"
+                        BorderBrush="{DynamicResource BorderColorBrush1}"
+                        Visibility="{Binding IsUserCollectionEmpty, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=Invert}">
 
-                    <TextBlock Text="No user available" Padding="20"
-                           HorizontalAlignment="Center" VerticalAlignment="Top"
-                           FontFamily="{StaticResource RobotoFlexRegular}"
-                           FontSize="{StaticResource XLarge}"
-                           Foreground="{DynamicResource ForegroundColorBrush3}"
-                           Visibility="{Binding IsUserCollectionEmpty, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=Invert}" />
+                    <TextBlock Text="No user available" Padding="20" HorizontalAlignment="Center"
+                               VerticalAlignment="Top"
+                               FontFamily="{StaticResource RobotoFlexRegular}"
+                               FontSize="{StaticResource XLarge}"
+                               Foreground="{DynamicResource ForegroundColorBrush3}" />
                 </Border>
 
             </Grid>

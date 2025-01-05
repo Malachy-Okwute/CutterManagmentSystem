@@ -28,7 +28,7 @@
             <Grid Grid.RowSpan="5" Height="80" Margin="14"
                   d:Visibility="Collapsed" Panel.ZIndex="10"
                   Visibility="{Binding ShowMessage, Converter={local:BooleanToVisibilityConverter}}"
-                  Background="{Binding ShowSuccessMessage , Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}">
+                  Background="{Binding ShowSuccessMessage, Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}">
 
                 <Grid.Effect>
                     <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.25" />
