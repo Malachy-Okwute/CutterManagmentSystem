@@ -1,6 +1,9 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -20,6 +23,16 @@ namespace CutterManagement.UI.Desktop
         /// Cursor offset
         /// </summary>
         private Point _cursorOffset;
+
+        /// <summary>
+        /// Previous <see cref="Window.Left"/>
+        /// </summary>
+        private double _windowPreviousLeft;
+
+        /// <summary>
+        /// Previous <see cref="Window.Height"/>
+        /// </summary>
+        private double _windowPreviousHeight;
 
         #endregion
 
@@ -76,7 +89,6 @@ namespace CutterManagement.UI.Desktop
 
                 #endregion
             };
-
         }
 
         #endregion
@@ -115,6 +127,22 @@ namespace CutterManagement.UI.Desktop
                             // Set flag to true
                             isWindowMaximized = true;
 
+                        // If window is extended to max vertically
+                        if (Top == SystemParameters.WorkArea.Top)
+                        {
+                            // Make sure left mouse button is pressed
+                            if (Mouse.LeftButton == MouseButtonState.Pressed)
+                            {
+                                // Get mouse location 
+                                double mousePos = e.GetPosition(this).Y;
+
+                                // Set window new location and previous size
+                                Left = _windowPreviousLeft;
+                                Top = mousePos - 54; // Account for drop shadow and margin | padding 
+                                Height = _windowPreviousHeight;
+                            }
+                        }
+
                         // Drag window
                         DragMove();
                     }
@@ -147,14 +175,14 @@ namespace CutterManagement.UI.Desktop
 
                             // Set window new location
                             Left = newWindowPos;
-                            //Top = -40; // Take into account the size of padding around this window (40)
-                            Top = -((ApplicationWindowViewModel)DataContext).DropShadowPadding; // Take into account the size of padding around this window (40)
+                            Top = -((ApplicationWindowViewModel)DataContext).DropShadowPadding; // Take into account the size of padding around this window
 
                             // Make sure left mouse button is pressed
                             if(Mouse.LeftButton == MouseButtonState.Pressed)
                                 // Move window 
                                 DragMove();
                         }
+
                     };
 
                 };
@@ -332,6 +360,14 @@ namespace CutterManagement.UI.Desktop
                     // Set cursor offset
                     _cursorOffset = cursorOffset;
 
+                    // If window is not maximized and window is height is not at max
+                    if(Top != SystemParameters.WorkArea.Top && WindowState != WindowState.Maximized)
+                    {
+                        // Capture windows Left and height values
+                        _windowPreviousLeft = Left;
+                        _windowPreviousHeight = Height;
+                    }
+
                     // Capture mouse
                     border.CaptureMouse();
                 }
@@ -417,6 +453,8 @@ namespace CutterManagement.UI.Desktop
                         case WindowBorder.Bottom:
                             if (positiveVerticalChange <= MinHeight)
                                 break;
+                            if (Height + Top - 20 > SystemParameters.WorkArea.Height)
+                                break;
 
                             Height = positiveVerticalChange;
                             break;
@@ -438,7 +476,19 @@ namespace CutterManagement.UI.Desktop
             };
 
             // Release mouse capture
-            border.MouseLeftButtonUp += (sender, e) => border.ReleaseMouseCapture();
+            border.MouseLeftButtonUp += (sender, e) =>
+            {
+                border.ReleaseMouseCapture();
+
+                // If window is already at the top or bottom
+                if ((Top + ((ApplicationWindowViewModel)DataContext).DropShadowPadding) < SystemParameters.WorkArea.Top ||
+                (Height + Top - 20 > SystemParameters.WorkArea.Height))
+                {
+                    // Extend window to max vertically
+                    Top = SystemParameters.WorkArea.Top;
+                    Height = SystemParameters.WorkArea.Height;
+                }
+            };
         }
 
         #endregion

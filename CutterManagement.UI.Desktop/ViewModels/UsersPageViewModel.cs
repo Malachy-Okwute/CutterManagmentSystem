@@ -171,8 +171,8 @@ namespace CutterManagement.UI.Desktop
             LoadUsers();
             GetCurrentLoginSessionStatus();
 
-            // Delegates
-            _dataServiceFactory.OnDataChanged = UpdateUsersCollection;
+            // Event hook up
+            _dataServiceFactory.DataChanged += UpdateUsersCollection;
 
             foreach (UserShift shift in Enum.GetValues<UserShift>())
             {
@@ -193,7 +193,6 @@ namespace CutterManagement.UI.Desktop
                 IsLoginFormVisible = false;
             });
         }
-
 
         #endregion
 
@@ -330,12 +329,15 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Update users list with the most current users that exists in the database
         /// </summary>
-        /// <param name="user">The change from database</param>
+        /// <param name="sender">The change from database</param>
         /// <returns><see cref="bool"/></returns>
-        private bool UpdateUsersCollection(object user)
+        private void UpdateUsersCollection(object? sender, object e)
         {
+            // Make sure incoming changes is user data
+            if (e is not UserDataModel data) return;
+
             // store data as user data model
-            UserDataModel data = (UserDataModel)user;
+            //UserDataModel data = (UserDataModel)user;
 
             // Check if user exist in local users list
             UserItemViewModel? existingLocalData = _users.FirstOrDefault(x => x.Id == data.Id);
@@ -374,7 +376,6 @@ namespace CutterManagement.UI.Desktop
             });
 
             OnPropertyChanged(nameof(IsUserCollectionEmpty));
-            return true;
         }
 
         /// <summary>

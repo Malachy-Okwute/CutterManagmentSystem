@@ -17,7 +17,7 @@ namespace CutterManagement.DataAccess
         /// <summary>
         /// Event to run whenever data changes in the database
         /// </summary>
-        public event EventHandler<object> DataChanged;
+        public event EventHandler<object>? DataChanged;
 
         /// <summary>
         /// A table of type <c>T</c> in the application database
@@ -106,6 +106,9 @@ namespace CutterManagement.DataAccess
             {
                 Debug.WriteLine(msg.Message);
                 Debugger.Break();
+            }
+            finally
+            {
             }
         }
 

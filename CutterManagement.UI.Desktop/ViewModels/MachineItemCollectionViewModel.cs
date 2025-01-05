@@ -144,13 +144,12 @@ namespace CutterManagement.UI.Desktop
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
 
-            // Set up data changed delegate
-            _dataAccessService.OnDataChanged = UpdateMachineCollection;
+            // Event hook up
+            _dataAccessService.DataChanged += UpdateMachineCollection;
 
             // Create commands
             OpenMachineConfigurationFormCommand = new RelayCommand(OpenMachineConfigurationForm);
             OpenSetStatusFormCommand = new RelayCommand(OpenSetStatusForm);
-            
 
             // Load data
             _dataLoader = LoadMachineData();
@@ -285,12 +284,15 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Updates machine items list with the latest information from db
         /// </summary>
-        /// <param name="item">The item that changed</param>
+        /// <param name="sender">The item that changed</param>
         /// <returns><see cref="bool"/></returns>
-        public bool UpdateMachineCollection(object item) 
+        public void UpdateMachineCollection(object? sender, object e) 
         {
+            // Make sure incoming changes is machine data
+            if (e is not MachineDataModel machineItem) return;
+
             // Resolve the new item that changed
-            MachineItemViewModel newItem = DataResolver.ResolveToMachineItemViewModel((MachineDataModel)item, OnItemSelectionChanged);
+            MachineItemViewModel newItem = DataResolver.ResolveToMachineItemViewModel(machineItem, OnItemSelectionChanged);
 
             // If new item is pinion
             if(newItem.Owner is Department.Pinion)
@@ -304,8 +306,6 @@ namespace CutterManagement.UI.Desktop
                 // Insert item into ring list
                 InsertNewItem(newItem, _ringItems);
             }
-
-            return default;
         }
 
         /// <summary>

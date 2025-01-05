@@ -7,9 +7,9 @@
     {
 
         /// <summary>
-        /// Function to run whenever data changed in the database
+        /// Event that gets fired whenever data changed in the database
         /// </summary>
-        Func<object, bool> OnDataChanged { get; set; }
+        event EventHandler<object> DataChanged;
 
         /// <summary>
         /// Gets the desired table <see cref="IDataAccessService{T}"/> passed in as T
