@@ -172,7 +172,7 @@ namespace CutterManagement.UI.Desktop
             GetCurrentLoginSessionStatus();
 
             // Event hook up
-            _dataServiceFactory.DataChanged += UpdateUsersCollection;
+            //_dataServiceFactory.DataChanged += UpdateUsersCollection;
 
             foreach (UserShift shift in Enum.GetValues<UserShift>())
             {
@@ -233,11 +233,15 @@ namespace CutterManagement.UI.Desktop
             {
                 // Get users table
                 IDataAccessService<UserDataModel> userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+                // Listen for when user is created
+                userTable.DataChanged += UserTable_DataChanged;
                 // commit the newly created user to the users table
                 await userTable.CreateNewEntityAsync(newUser);
                 // Set flag
                 ShowSuccessMessage = true;
-            } 
+                // Unhook event
+                userTable.DataChanged -= UserTable_DataChanged;
+            }
 
             // Show message
             ShowMessage = true;
@@ -327,58 +331,6 @@ namespace CutterManagement.UI.Desktop
         #region Methods
 
         /// <summary>
-        /// Update users list with the most current users that exists in the database
-        /// </summary>
-        /// <param name="sender">The change from database</param>
-        /// <returns><see cref="bool"/></returns>
-        private void UpdateUsersCollection(object? sender, object e)
-        {
-            // Make sure incoming changes is user data
-            if (e is not UserDataModel data) return;
-
-            // store data as user data model
-            //UserDataModel data = (UserDataModel)user;
-
-            // Check if user exist in local users list
-            UserItemViewModel? existingLocalData = _users.FirstOrDefault(x => x.Id == data.Id);
-
-            // Get users db table
-            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
-
-            // Jump onto UI thread
-            DispatcherService.Invoke(async () =>
-            {
-                // Check if the user is on database
-                UserDataModel? existingDbData = await usersTable.GetEntityByIdAsync(data.Id);
-
-                // If user exists locally
-                if (existingLocalData is not null)
-                {
-                    // Get its position on the list
-                    int index = _users.IndexOf(existingLocalData);
-                    // Remove the user
-                    _users.RemoveAt(index);
-                    // Add the most current data of the user from db
-                    AddUserToUserCollection(data);
-                }
-                // Otherwise, if user is in db but not locally
-                else if (existingDbData is not null && existingLocalData is null)
-                {
-                    // Then it must be a new user
-                    // Add it to the collection 
-                    AddUserToUserCollection(data);
-                }
-                else
-                {
-                    // Remove user from local collection
-                    _users.RemoveAt(data.Id);
-                }
-            });
-
-            OnPropertyChanged(nameof(IsUserCollectionEmpty));
-        }
-
-        /// <summary>
         /// Loads users from db
         /// </summary>
         private void LoadUsers()
@@ -403,7 +355,6 @@ namespace CutterManagement.UI.Desktop
 
         /// <summary>
         /// Adds a user into <see cref="ObservableCollection{T}"/>
-        /// 
         /// <para> T is <see cref="UserItemViewModel"/></para>
         /// </summary>
         /// <param name="user">The user to add</param>
@@ -468,6 +419,62 @@ namespace CutterManagement.UI.Desktop
                 return string.Empty;
             }
             return char.ToUpper(name[0]) + name.Substring(1);
+        }
+
+        #endregion
+
+        #region Event Methods
+
+        /// <summary>
+        /// Update users list with the most current users that exists in the database
+        /// </summary>
+        /// <param name="sender">Origin of this event</param>
+        /// <param name="e">The actual data that changed</param>
+        private void UserTable_DataChanged(object? sender, object e)
+        {
+            // Make sure incoming changes is user data
+            if (e is not UserDataModel data) return;
+
+            // store data as user data model
+            //UserDataModel data = (UserDataModel)user;
+
+            // Check if user exist in local users list
+            UserItemViewModel? existingLocalData = _users.FirstOrDefault(x => x.Id == data.Id);
+
+            // Get users db table
+            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+
+            // Jump onto UI thread
+            DispatcherService.Invoke(async () =>
+            {
+                // Check if the user is on database
+                UserDataModel? existingDbData = await usersTable.GetEntityByIdAsync(data.Id);
+
+                // If user exists locally
+                if (existingLocalData is not null)
+                {
+                    // Get its position on the list
+                    int index = _users.IndexOf(existingLocalData);
+                    // Remove the user
+                    _users.RemoveAt(index);
+                    // Add the most current data of the user from db
+                    AddUserToUserCollection(data);
+                }
+                // Otherwise, if user is in db but not locally
+                else if (existingDbData is not null && existingLocalData is null)
+                {
+                    // Then it must be a new user
+                    // Add it to the collection 
+                    AddUserToUserCollection(data);
+                }
+                else
+                {
+                    // Remove user from local collection
+                    _users.RemoveAt(data.Id);
+                }
+            });
+
+            OnPropertyChanged(nameof(IsUserCollectionEmpty));
         }
 
         #endregion

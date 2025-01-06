@@ -5,12 +5,6 @@
     /// </summary>
     public interface IDataAccessServiceFactory
     {
-
-        /// <summary>
-        /// Event that gets fired whenever data changed in the database
-        /// </summary>
-        event EventHandler<object> DataChanged;
-
         /// <summary>
         /// Gets the desired table <see cref="IDataAccessService{T}"/> passed in as T
         /// </summary>

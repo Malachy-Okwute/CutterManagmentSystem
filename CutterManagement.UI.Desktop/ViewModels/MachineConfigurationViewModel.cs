@@ -184,14 +184,16 @@ namespace CutterManagement.UI.Desktop
                 try
                 {
                     // Try configuring machine with new data, get the result of the process
-                    ValidationResult result =  await _machineService.Configure(newData);
+                    (ValidationResult, MachineDataModel?) result =  await _machineService.Configure(newData);
 
                     // Set message
-                    _message = string.IsNullOrEmpty(result.ErrorMessage) ? "Configuration successful" : result.ErrorMessage;
+                    _message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
 
                     // If process is successful 
-                    if (result.IsValid)
+                    if (result.Item1.IsValid && result.Item2 is not null)
                     {
+                        // Update UI
+                        _machineItemCollectionVM.UpdateMachineCollection(result.Item2);
                         // Set success flag
                         IsConfigurationSuccessful = true;
                     }
@@ -204,8 +206,8 @@ namespace CutterManagement.UI.Desktop
                     // Wait for 2 seconds
                     await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>
                     {
-                        // If process is successful
-                        if (result.IsValid)
+                        // If process is successful...
+                        if (result.Item1.IsValid)
                         {
                             // Close configuration form
                             _machineItemCollectionVM.IsConfigurationFormOpen = false;

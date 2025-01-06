@@ -109,6 +109,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand OpenPopupCommand { get; set; }
 
+        public ICommand OpenSetCutterFormCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -120,6 +122,7 @@ namespace CutterManagement.UI.Desktop
         {
             // Create commands
             OpenPopupCommand = new RelayCommand(() => ItemSelected?.Invoke(this, CommandKind.PopCommand));
+            OpenSetCutterFormCommand = new RelayCommand(() => ItemSelected?.Invoke(this, CommandKind.DataFormCommand));
         }
 
         #endregion

@@ -29,11 +29,17 @@ namespace CutterManagement.UI.Desktop
         /// <exception cref="ArgumentException">
         /// Throws an exception if item could not be configured
         /// </exception>
-        public async Task<ValidationResult> Configure(MachineDataModel newData)
+        public async Task<(ValidationResult, MachineDataModel?)> Configure(MachineDataModel newData)
         {
+            // Data that will be changing
+            MachineDataModel? data = null;
+
             // Get machine table
             IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
-           
+
+            // Listen for when data actually changed
+            machineTable.DataChanged += (s, e) => { data = e as MachineDataModel; };
+
             // Get the specific item from db
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
 
@@ -56,13 +62,17 @@ namespace CutterManagement.UI.Desktop
                 // Save new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
 
+                // Unhook event
+                machineTable.DataChanged -= delegate { };
+
                 // Return result
-                return result;
+                return (result, data);
             }
 
             // Return result
-            return result;
+            return (result, data);
         }
+
 
         public async Task SetStatus(MachineDataModel newData)
         {

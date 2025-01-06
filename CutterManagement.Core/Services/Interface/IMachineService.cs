@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="item">The item to configure</param>
         /// <returns><see cref="Task{ValidationResult}"/></returns>
-        Task<ValidationResult> Configure(MachineDataModel newData);
+        Task<(ValidationResult, MachineDataModel?)> Configure(MachineDataModel newData);
     }
 }

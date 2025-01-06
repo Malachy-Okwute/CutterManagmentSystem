@@ -13,11 +13,6 @@ namespace CutterManagement.DataAccess
         private readonly ApplicationDbContext _dbContext;
 
         /// <summary>
-        /// Event that gets fired whenever data changed in the database
-        /// </summary>
-        public event EventHandler<object> DataChanged;
-
-        /// <summary>
         /// Default constructor
         /// <para>
         /// Design-time constructor
@@ -41,11 +36,7 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="IDataAccessService{T}"/></returns>
         public IDataAccessService<T> GetDbTable<T>() where T : class
         {
-            IDataAccessService<T> dataService = new DataAccessService<T>(_dbContext);
-
-            dataService.DataChanged += DataChanged;
-
-            return dataService;
+            return new DataAccessService<T>(_dbContext);
         }
     }
 }

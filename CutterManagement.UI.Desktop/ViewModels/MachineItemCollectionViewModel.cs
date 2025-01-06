@@ -145,7 +145,7 @@ namespace CutterManagement.UI.Desktop
             _pinItems = new ObservableCollection<MachineItemViewModel>();
 
             // Event hook up
-            _dataAccessService.DataChanged += UpdateMachineCollection;
+            //_dataAccessService.DataChanged += UpdateMachineCollection;
 
             // Create commands
             OpenMachineConfigurationFormCommand = new RelayCommand(OpenMachineConfigurationForm);
@@ -180,6 +180,10 @@ namespace CutterManagement.UI.Desktop
             // Update machine configuration view model property
             OnPropertyChanged(nameof(MachineConfigurationViewModel));
         }
+
+        /// <summary>
+        /// Opens status form
+        /// </summary>
         private void OpenSetStatusForm()
         {
             // Turn off pop up control
@@ -286,11 +290,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="sender">The item that changed</param>
         /// <returns><see cref="bool"/></returns>
-        public void UpdateMachineCollection(object? sender, object e) 
+        public void UpdateMachineCollection(MachineDataModel machineItem) 
         {
-            // Make sure incoming changes is machine data
-            if (e is not MachineDataModel machineItem) return;
-
             // Resolve the new item that changed
             MachineItemViewModel newItem = DataResolver.ResolveToMachineItemViewModel(machineItem, OnItemSelectionChanged);
 
