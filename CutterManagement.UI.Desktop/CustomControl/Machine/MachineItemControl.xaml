@@ -14,7 +14,7 @@
 
         <Grid.ColumnDefinitions>
             <!--  machine id #  -->
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
             <!--  machine status  -->
             <ColumnDefinition Width="Auto" />
             <!--  cutter number  -->
@@ -33,14 +33,14 @@
 
         <!--  machine id #  -->
         <Border x:Name="MachineNumber" Grid.Column="0" MinWidth="80"
-                HorizontalAlignment="Stretch">
+                MaxWidth="120" HorizontalAlignment="Stretch">
             <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
                     Content="{Binding MachineNumber, UpdateSourceTrigger=PropertyChanged}"
                     BorderThickness="0"
                     BorderBrush="{x:Null}"
                     FontFamily="{StaticResource RobotoFlexRegular}"
                     Style="{StaticResource TransparentButtonStyle}"
-                    Command="{Binding OpenSetCutterFormCommand}"/>
+                    Command="{Binding OpenSetCutterFormCommand}" />
         </Border>
 
         <!--  machine status  -->
@@ -98,7 +98,8 @@
         </Border>
 
         <!--  machine item edit button  -->
-        <Border Grid.Column="7" Width="30" HorizontalAlignment="Stretch">
+        <Border x:Name="PopupTarget" Grid.Column="7" Width="30"
+                HorizontalAlignment="Stretch">
             <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
                     HorizontalContentAlignment="Center"
                     Content="{StaticResource VerticalEllipsisIcon}"
@@ -106,6 +107,14 @@
                     FontFamily="{StaticResource SolidIcon}"
                     Style="{StaticResource MachineItemEditButtonStyle}" />
         </Border>
+
+        <Popup IsOpen="{Binding IsPopupOpen}"
+               PlacementTarget="{Binding ElementName=PopupTarget}"
+               Placement="MousePoint"
+               HorizontalOffset="{Binding UseHorizontalOffSet, Converter={local:BooleanToHorizontalOffsetConverter}}"
+               StaysOpen="True" PopupAnimation="Fade" AllowsTransparency="True">
+            <local:MachineOptionsPopupControl d:DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:MachineItemCollectionControl}}}" />
+        </Popup>
 
     </Grid>
 

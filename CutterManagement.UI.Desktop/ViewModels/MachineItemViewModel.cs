@@ -72,6 +72,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public bool IsPopupOpen { get; set; }
 
+
+        public bool UseHorizontalOffSet { get; set; }
+
         /// <summary>
         /// The kind of command to run
         /// </summary>

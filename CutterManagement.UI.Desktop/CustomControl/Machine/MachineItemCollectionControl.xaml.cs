@@ -29,7 +29,7 @@ namespace CutterManagement.UI.Desktop
                 //TODO: Add a dummy data with a message showing that list is empty if we don't have any item on the list
 
                 // make sure we have content presenter
-                if (itemsControlContentPresenter is not null)
+                if (false)
                 {
                     // Get machine-item-control
                     MachineItemControl machineItemControl = (MachineItemControl)VisualTreeHelper.GetChild(itemsControlContentPresenter, 0);
@@ -58,8 +58,10 @@ namespace CutterManagement.UI.Desktop
                 }
             };
 
+
+
             // Listen out for when pop is visible or not visible
-            PopupControl.IsVisibleChanged += PopupControl_IsVisibleChanged;
+            //PopupControl.IsVisibleChanged += PopupControl_IsVisibleChanged;
         }
 
         /// <summary>
@@ -82,42 +84,42 @@ namespace CutterManagement.UI.Desktop
                 return; 
             }
 
-            // Make sure pop up control size is calculated properly
-            if(PopupControl.ActualWidth == 0 || PopupControl.ActualHeight == 0)
-            {
-                PopupControl.UpdateLayout();
-            }
+            //// Make sure pop up control size is calculated properly
+            //if(PopupControl.ActualWidth == 0 || PopupControl.ActualHeight == 0)
+            //{
+            //    PopupControl.UpdateLayout();
+            //}
 
-            // Focus on pop-up control
-            PopupControl.Focus();
+            //// Focus on pop-up control
+            //PopupControl.Focus();
 
-            // Get mouse location relative to pop up container
-            Point mousePointerPosition = Mouse.GetPosition(PopupControlContainer);
+            //// Get mouse location relative to pop up container
+            //Point mousePointerPosition = Mouse.GetPosition(PopupControlContainer);
 
-            // Account for bottom right corner
-            if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.ActualWidth && ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.ActualHeight)
-            {
-                Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.ActualWidth);
-                Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1) - PopupControl.ActualHeight);
-            }
-            // Account for right edge
-            else if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.ActualWidth)
-            {
-                Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.ActualWidth);
-                Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1));
-            }
-            // Account for top edge
-            else if (ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.ActualHeight)
-            {
-                Canvas.SetLeft(PopupControl, (mousePointerPosition.X + 1));
-                Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1) - PopupControl.ActualHeight);
-            }
-            // If pop up wont overflow, set position
-            else
-            {
-                Canvas.SetLeft(PopupControl, (mousePointerPosition.X + 1));
-                Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1));
-            }
+            //// Account for bottom right corner
+            //if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.ActualWidth && ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.ActualHeight)
+            //{
+            //    Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.ActualWidth);
+            //    Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1) - PopupControl.ActualHeight);
+            //}
+            //// Account for right edge
+            //else if (ItemsContainer.ActualWidth - mousePointerPosition.X < PopupControl.ActualWidth)
+            //{
+            //    Canvas.SetLeft(PopupControl, (mousePointerPosition.X - 1) - PopupControl.ActualWidth);
+            //    Canvas.SetTop(PopupControl, (mousePointerPosition.Y - 1));
+            //}
+            //// Account for top edge
+            //else if (ItemsContainer.ActualHeight - mousePointerPosition.Y < PopupControl.ActualHeight)
+            //{
+            //    Canvas.SetLeft(PopupControl, (mousePointerPosition.X + 1));
+            //    Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1) - PopupControl.ActualHeight);
+            //}
+            //// If pop up wont overflow, set position
+            //else
+            //{
+            //    Canvas.SetLeft(PopupControl, (mousePointerPosition.X + 1));
+            //    Canvas.SetTop(PopupControl, (mousePointerPosition.Y + 1));
+            //}
         }
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

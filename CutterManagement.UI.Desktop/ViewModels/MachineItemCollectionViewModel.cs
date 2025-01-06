@@ -349,6 +349,8 @@ namespace CutterManagement.UI.Desktop
             // Reset pop up
             _machineItemViewModel.IsPopupOpen = false;
 
+            _machineItemViewModel.UseHorizontalOffSet = selectedItem?.Owner is Department.Ring ? true : false;
+
             // Make sure event source isn't null
             if (selectedItem is not null)
             {

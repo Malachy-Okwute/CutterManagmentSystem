@@ -81,15 +81,17 @@
                 </ItemsControl>
 
                 <!--  pop-up  -->
-                <Canvas x:Name="PopupControlContainer" Grid.Column="0" Grid.ColumnSpan="2"
+                <!--<Canvas x:Name="PopupControlContainer" Grid.Column="0" Grid.ColumnSpan="2"
                         DataContext="{Binding MachineItemViewModel}"
                         Visibility="{Binding IsPopupOpen, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}}">
 
-                    <!--  machine popup menu  -->
+                -->
+                <!--  machine popup menu  -->
+                <!--
                     <local:MachineOptionsPopupControl x:Name="PopupControl" Panel.ZIndex="10"
                                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:MachineItemCollectionControl}}}" />
 
-                </Canvas>
+                </Canvas>-->
 
             </Grid>
         </ScrollViewer>
