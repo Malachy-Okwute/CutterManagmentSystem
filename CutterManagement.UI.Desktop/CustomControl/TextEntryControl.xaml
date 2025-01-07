@@ -1,7 +1,8 @@
-﻿<UserControl x:Class="CutterManagement.UI.Desktop.TextEntryControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
-             mc:Ignorable="d" local:FocusAttachedProperty.SetFocus="True" Focusable="True"
-             x:Name="TextEntry">
+﻿<UserControl x:Class="CutterManagement.UI.Desktop.TextEntryControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+             x:Name="TextEntry" local:FocusAttachedProperty.SetFocus="True"
+             Focusable="True" mc:Ignorable="d">
 
     <UserControl.Resources>
         <Style x:Key="TextEntryStyle" TargetType="{x:Type TextBox}">
@@ -30,7 +31,8 @@
                             <Grid>
 
                                 <!--  place holder  -->
-                                <TextBlock x:Name="PlaceHolder" Padding="2,1,0,0" HorizontalAlignment="Left"
+                                <TextBlock x:Name="PlaceHolder" Padding="2,1,0,0"
+                                           HorizontalAlignment="Left"
                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                            Text="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=PlaceHolderText}"
                                            FontFamily="{TemplateBinding FontFamily}"
@@ -39,7 +41,8 @@
                                            Foreground="{DynamicResource ForegroundColorBrush2}"
                                            Visibility="Collapsed" />
 
-                                <TextBlock x:Name="PlaceHolderIcon" Padding="0,1,10,0" HorizontalAlignment="Right"
+                                <TextBlock x:Name="PlaceHolderIcon" Padding="0,1,10,0"
+                                           HorizontalAlignment="Right"
                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                            Text="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=PlaceHolderIcon}"
                                            FontFamily="{StaticResource RegularIcon}"
@@ -49,8 +52,9 @@
                                            Visibility="Collapsed" />
 
                                 <!--  control content  -->
-                                <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,66,0" HorizontalContentAlignment="Left"
-                                              VerticalContentAlignment="Center" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="0,0,66,0"
+                                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                              VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden" />
 
 
                             </Grid>
@@ -71,8 +75,8 @@
     </UserControl.Resources>
     <Grid>
         <TextBox x:Name="ActualText"
+                 local:FocusAttachedProperty.SetFocus="{Binding IsFocused, RelativeSource={RelativeSource AncestorType=UserControl}}"
                  Text="{Binding ControlContent, ElementName=TextEntry, UpdateSourceTrigger=PropertyChanged}"
-                 Style="{StaticResource TextEntryStyle}"
-                 local:FocusAttachedProperty.SetFocus="{Binding IsFocused, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                 Style="{StaticResource TextEntryStyle}" />
     </Grid>
 </UserControl>

@@ -102,4 +102,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UIManager\" />
+  </ItemGroup>
+
 </Project>

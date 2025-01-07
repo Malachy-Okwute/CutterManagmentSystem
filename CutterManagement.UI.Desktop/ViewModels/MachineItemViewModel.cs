@@ -72,7 +72,10 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public bool IsPopupOpen { get; set; }
 
-
+        /// <summary>
+        /// True if horizontal offset should be used to offset popup location 
+        /// Otherwise, false
+        /// </summary>
         public bool UseHorizontalOffSet { get; set; }
 
         /// <summary>
@@ -96,9 +99,9 @@ namespace CutterManagement.UI.Desktop
         #region Public Events
 
         /// <summary>
-        /// Event that gets fired when this item gets clicked on
+        /// Event that gets broadcasted whenever this item gets selected
         /// </summary>
-        public event EventHandler<CommandKind> ItemSelected;
+        public event EventHandler ItemSelected;
 
         #endregion
 
@@ -106,13 +109,18 @@ namespace CutterManagement.UI.Desktop
 
         /// <summary>
         /// Command to open pop up control 
-        /// <para>
-        /// <see cref="MachineOptionsPopupControl"/>
-        /// </para>
         /// </summary>
         public ICommand OpenPopupCommand { get; set; }
 
-        public ICommand OpenSetCutterFormCommand { get; set; }
+        /// <summary>
+        /// Command to open machine configuration form
+        /// </summary>
+        public ICommand OpenMachineConfigurationFormCommand { get; set; }
+
+        /// <summary>
+        /// Command to open machine set status form
+        /// </summary>
+        public ICommand OpenSetStatusFormCommand { get; set; }
 
         #endregion
 
@@ -124,10 +132,28 @@ namespace CutterManagement.UI.Desktop
         public MachineItemViewModel()
         {
             // Create commands
-            OpenPopupCommand = new RelayCommand(() => ItemSelected?.Invoke(this, CommandKind.PopCommand));
-            OpenSetCutterFormCommand = new RelayCommand(() => ItemSelected?.Invoke(this, CommandKind.DataFormCommand));
+            OpenPopupCommand = new RelayCommand(OpenPopup);
+            OpenMachineConfigurationFormCommand = new RelayCommand(OpenMachineConfigurationForm);
+        }
+        #endregion
+
+
+        private void OpenMachineConfigurationForm()
+        {
+
         }
 
-        #endregion
+        /// <summary>
+        /// Opens the popup control
+        /// </summary>
+        private void OpenPopup()
+        {
+            // Broadcast item selected event
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            // Set this item as the selected item
+            IsPopupOpen = true;
+        }
+
     }
 }

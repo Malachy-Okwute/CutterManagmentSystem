@@ -341,38 +341,19 @@ namespace CutterManagement.UI.Desktop
         /// <param name="sender">The event source</param>
         /// <param name="commandKind">The event args</param>
         [SuppressPropertyChangedWarnings]
-        private void OnItemSelectionChanged(object? sender, CommandKind commandKind)
+        private void OnItemSelectionChanged(object? sender, EventArgs args)
         {
-            // Get source of event
-            MachineItemViewModel? selectedItem = (sender as MachineItemViewModel);
+            MachineItemViewModel? pinItem = _pinItems.FirstOrDefault(item => item.IsPopupOpen is true);
+            MachineItemViewModel? ringItem = _ringItems.FirstOrDefault(item => item.IsPopupOpen is true);
 
-            // Reset pop up
-            _machineItemViewModel.IsPopupOpen = false;
-
-            _machineItemViewModel.UseHorizontalOffSet = selectedItem?.Owner is Department.Ring ? true : false;
-
-            // Make sure event source isn't null
-            if (selectedItem is not null)
+            if (pinItem is not null)
             {
-                // Set pop up control data context
-                _machineItemViewModel = selectedItem;
-
-                // Sort and apply command accordingly
-                switch (commandKind)
-                {
-                    case CommandKind.DataFormCommand:
-                        break;
-
-                    case CommandKind.PopCommand:
-                        _machineItemViewModel.IsPopupOpen = true;
-                        break;
-
-                    default:
-                        Debugger.Break();
-                        throw new InvalidOperationException("Command not configured");
-                }
-                // Update pop up control as needed
-                OnPropertyChanged(nameof(MachineItemViewModel));
+                pinItem!.IsPopupOpen = false;
+            }
+            
+            if(ringItem is not null)
+            {
+                ringItem!.IsPopupOpen = false;
             }
         }
 

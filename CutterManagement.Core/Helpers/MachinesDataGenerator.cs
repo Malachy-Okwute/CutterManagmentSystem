@@ -30,8 +30,8 @@
                     Status = MachineStatus.Warning,
                     StatusMessage = "Machine need to be configured by admin",
                     FrequencyCheckResult = FrequencyCheckResult.SETUP,
-                    DateTimeLastModified = DateTime.UtcNow,
-                    DateCreated = DateTime.UtcNow,
+                    DateTimeLastModified = DateTime.Now,
+                    DateCreated = DateTime.Now,
                     CutterChangeInfo = CutterChangeInformation.None
                 });
             }
