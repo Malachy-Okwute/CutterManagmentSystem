@@ -11,7 +11,7 @@ namespace CutterManagement.UI.Desktop
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(Application.Current.MainWindow.WindowState is WindowState.Maximized)
+            if (Application.Current.MainWindow?.WindowState is WindowState.Maximized)
             {
                 return 0;
             }

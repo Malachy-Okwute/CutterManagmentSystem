@@ -119,7 +119,7 @@
         <Popup IsOpen="{Binding IsPopupOpen}"
                PlacementTarget="{Binding ElementName=PopupTarget}"
                Placement="MousePoint"
-               HorizontalOffset="{Binding UseHorizontalOffSet, Converter={local:BooleanToHorizontalOffsetConverter}}"
+               HorizontalOffset="{Binding UseHorizontalOffSet, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToHorizontalOffsetConverter}}"
                StaysOpen="True" PopupAnimation="Fade"
                AllowsTransparency="True">
             <local:MachineOptionsPopupControl d:DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:MachineItemCollectionControl}}}" />

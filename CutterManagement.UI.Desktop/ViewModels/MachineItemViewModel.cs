@@ -153,6 +153,8 @@ namespace CutterManagement.UI.Desktop
 
             // Set this item as the selected item
             IsPopupOpen = true;
+            UseHorizontalOffSet = Owner is Department.Ring ?  true : false;
+
         }
 
     }
