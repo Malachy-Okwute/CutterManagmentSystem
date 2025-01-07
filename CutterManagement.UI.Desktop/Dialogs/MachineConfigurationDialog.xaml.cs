@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Interaction logic for MachineConfigurationControl.xaml
+    /// Interaction logic for MachineConfigurationDialog.xaml
     /// </summary>
-    public partial class MachineConfigurationControl : UserControl
+    public partial class MachineConfigurationDialog : UserControl
     {
-        public MachineConfigurationControl()
+        public MachineConfigurationDialog()
         {
             InitializeComponent();
         }

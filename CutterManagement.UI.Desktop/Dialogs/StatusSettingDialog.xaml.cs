@@ -3,11 +3,11 @@
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Interaction logic for SetStatusControl.xaml
+    /// Interaction logic for StatusSettingDialog.xaml
     /// </summary>
-    public partial class SetStatusControl : UserControl
+    public partial class StatusSettingDialog : UserControl
     {
-        public SetStatusControl()
+        public StatusSettingDialog()
         {
             InitializeComponent();
         }

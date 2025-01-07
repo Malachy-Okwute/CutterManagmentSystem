@@ -6,7 +6,7 @@ using System.Windows.Markup;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// View model base for this application view models
+    /// View model base for all view models
     /// </summary>
     public class ViewModelBase : INotifyPropertyChanged
     {

@@ -1,13 +1,12 @@
-﻿<Window x:Class="CutterManagement.UI.Desktop.DialogWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+﻿<Window x:Class="CutterManagement.UI.Desktop.DialogWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
         local:WindowAttachedProperty.AnimateWindow="True"
         Style="{StaticResource CMSWindowStyle}"
-        WindowStartupLocation="CenterOwner" WindowStyle="None"
-        WindowState="Normal" AllowsTransparency="True"
-        Background="Transparent" ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterOwner" WindowStyle="None" WindowState="Normal"
+        AllowsTransparency="True" Background="Transparent" ResizeMode="NoResize"
         mc:Ignorable="d">
     <Grid>
-        <ContentControl Content="{Binding Content}" />
+        <ContentControl Content="{Binding Content}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
 </Window>

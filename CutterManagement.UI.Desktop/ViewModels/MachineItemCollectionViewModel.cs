@@ -348,12 +348,12 @@ namespace CutterManagement.UI.Desktop
 
             if (pinItem is not null)
             {
-                pinItem!.IsPopupOpen = false;
+                pinItem.IsPopupOpen = false;
             }
             
             if(ringItem is not null)
             {
-                ringItem!.IsPopupOpen = false;
+                ringItem.IsPopupOpen = false;
             }
         }
 

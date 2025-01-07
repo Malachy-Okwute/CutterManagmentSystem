@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="ViewModels\.Base\ApplicationMainViewModel.cs" />
     <Compile Include="ViewModels\.Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemCollectionDesignModel.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemDesignModel.cs" />

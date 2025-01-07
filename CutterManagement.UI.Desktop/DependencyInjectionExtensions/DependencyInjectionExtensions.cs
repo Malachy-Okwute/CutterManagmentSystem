@@ -18,7 +18,6 @@ namespace CutterManagement.UI.Desktop
 
             // Singletons
             services.AddSingleton<NavigationBarViewModel>();
-            services.AddSingleton<ApplicationMainViewModel>();
             services.AddSingleton(provider => new HomePageViewModel(provider.GetRequiredService<MachineItemCollectionViewModel>()));
             services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IDataAccessServiceFactory>()));
 

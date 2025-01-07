@@ -73,17 +73,6 @@ namespace CutterManagement.UI.Desktop
         public bool IsPopupOpen { get; set; }
 
         /// <summary>
-        /// True if horizontal offset should be used to offset popup location 
-        /// Otherwise, false
-        /// </summary>
-        public bool UseHorizontalOffSet { get; set; }
-
-        /// <summary>
-        /// The kind of command to run
-        /// </summary>
-        public CommandKind CommandKind { get; set; }
-
-        /// <summary>
         /// The owner of this machine
         /// </summary>
         public Department Owner { get; set; }
@@ -153,7 +142,6 @@ namespace CutterManagement.UI.Desktop
 
             // Set this item as the selected item
             IsPopupOpen = true;
-            UseHorizontalOffSet = Owner is Department.Ring ?  true : false;
 
         }
 

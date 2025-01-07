@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace CutterManagement.UI.Desktop
@@ -8,13 +9,25 @@ namespace CutterManagement.UI.Desktop
         public static void Invoke(Action action)
         {
             Dispatcher dispatchObject = Application.Current.Dispatcher;
-            if (dispatchObject == null || dispatchObject.CheckAccess())
+
+            try
             {
-                action();
+                if (dispatchObject == null || dispatchObject.CheckAccess())
+                {
+                    action();
+                }
+                else
+                {
+                    dispatchObject.Invoke(action);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                dispatchObject.Invoke(action);
+                Debug.WriteLine(ex.Message);
+                Debugger.Break();
+            }
+            finally
+            {
             }
         }
     }
