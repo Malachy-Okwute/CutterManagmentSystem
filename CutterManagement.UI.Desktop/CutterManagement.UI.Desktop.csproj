@@ -11,14 +11,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UIManager\**" />
     <Compile Remove="Validation\**" />
+    <EmbeddedResource Remove="UIManager\**" />
     <EmbeddedResource Remove="Validation\**" />
+    <None Remove="UIManager\**" />
     <None Remove="Validation\**" />
+    <Page Remove="UIManager\**" />
     <Page Remove="Validation\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="ViewModels\.Base\ApplicationMainViewModel.cs" />
+    <Compile Include="ViewModels\.Base\DialogViewModelBase.cs" />
     <Compile Include="ViewModels\.Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemCollectionDesignModel.cs" />
     <Compile Include="ViewModels\.DesignModel\MachineItemDesignModel.cs" />
@@ -101,10 +105,6 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UIManager\" />
   </ItemGroup>
 
 </Project>

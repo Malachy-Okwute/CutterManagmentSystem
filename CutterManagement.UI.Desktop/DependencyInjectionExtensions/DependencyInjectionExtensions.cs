@@ -14,7 +14,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public static IServiceCollection AddViewModels(this IServiceCollection services)
         {
-            // Add services
+            // Add view models
 
             // Singletons
             services.AddSingleton<NavigationBarViewModel>();
@@ -67,8 +67,8 @@ namespace CutterManagement.UI.Desktop
                 }
             });
 
-            //services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
             services.AddScoped<IDataAccessServiceFactory, DataAccessServiceFactory>();
+            //services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
 
             // Return services
             return services;
@@ -81,7 +81,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public static IServiceCollection AddViews(this IServiceCollection services)
         {
-            // Add services
+            // Add views
             services.AddSingleton<MainWindow>();
 
             // Return services

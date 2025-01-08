@@ -1,15 +1,12 @@
-﻿<UserControl x:Class="CutterManagement.UI.Desktop.MachineConfigurationDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+﻿<UserControl x:Class="CutterManagement.UI.Desktop.MachineConfigurationDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
              mc:Ignorable="d">
-    <Border Width="400" Height="400"
-            Padding="10" HorizontalAlignment="Center"
-            VerticalAlignment="Center"
+    <Border Width="400" Height="400" Padding="10"
+            HorizontalAlignment="Center" VerticalAlignment="Center"
             Background="{DynamicResource BackgroundColorBrush1}">
 
         <Border.Effect>
-            <DropShadowEffect BlurRadius="12" ShadowDepth="0"
-                              Opacity="0.25" />
+            <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.25" />
         </Border.Effect>
 
         <Grid>
@@ -28,27 +25,23 @@
             </Grid.RowDefinitions>
 
             <!--  message  -->
-            <Grid Grid.RowSpan="5" Height="80"
-                  Margin="14" Panel.ZIndex="10"
-                  d:Visibility="Collapsed"
+            <Grid Grid.RowSpan="5" Height="80" Margin="14"
+                  Panel.ZIndex="10" d:Visibility="Collapsed"
                   Visibility="{Binding ShowMessage, Converter={local:BooleanToVisibilityConverter}}"
                   Background="{Binding IsConfigurationSuccessful, Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}">
 
                 <Grid.Effect>
-                    <DropShadowEffect BlurRadius="12" ShadowDepth="0"
-                                      Opacity="0.25" />
+                    <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.25" />
                 </Grid.Effect>
 
-                <Label Grid.Row="3" Margin="4,0"
-                       Padding="18,8" HorizontalContentAlignment="Left"
-                       VerticalContentAlignment="Center"
+                <Label Grid.Row="3" Margin="4,0" Padding="18,8"
+                       HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                        Content="{Binding Message}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        FontSize="{StaticResource Small}"
                        Foreground="{Binding IsConfigurationSuccessful, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />
 
-                <TextBlock Padding="18,8" HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
+                <TextBlock Padding="18,8" HorizontalAlignment="Right" VerticalAlignment="Center"
                            Text="{Binding IsConfigurationSuccessful, Converter={local:BooleanToIconConverter}}"
                            FontFamily="{StaticResource RegularIcon}"
                            FontSize="{StaticResource Large}"
@@ -60,15 +53,14 @@
 
                 <StackPanel Orientation="Horizontal">
 
-                    <Label Padding="20,4" HorizontalAlignment="Left"
-                           VerticalAlignment="Center" Content="Configuration : "
+                    <Label Padding="20,4" HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Content="Configuration : "
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontSize="{StaticResource Large}"
                            FontFamily="{StaticResource RobotoFlexRegular}"
                            FontWeight="Bold" />
 
-                    <Label Padding="40,4" HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
+                    <Label Padding="40,4" HorizontalAlignment="Right" VerticalAlignment="Center"
                            Content="{Binding Label, Mode=TwoWay, FallbackValue=000}"
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontSize="{StaticResource Large}"
@@ -81,41 +73,35 @@
             <local:TextEntryControl Grid.Row="1" PlaceHolderText="Enter machine #"
                                     ControlContent="{Binding MachineNumber, Mode=TwoWay}" />
 
-            <local:TextEntryControl Grid.Row="2" PlaceHolderText="Enter machine set #"
-                                    Focusable="False"
+            <local:TextEntryControl Grid.Row="2" PlaceHolderText="Enter machine set #" Focusable="False"
                                     ControlContent="{Binding MachineSetNumber, Mode=TwoWay}" />
 
-            <ComboBox Grid.Row="3" Height="35"
-                      Margin="5"
+            <ComboBox Grid.Row="3" Height="35" Margin="5"
                       ItemsSource="{Binding StatusCollection}"
                       SelectedValue="{Binding CurrentStatus, Mode=TwoWay}"
                       SelectedValuePath="Key" DisplayMemberPath="Value" />
 
             <!--  desgin-time-only  -->
-            <d:ComboBox Grid.Row="3" Height="35"
-                        Margin="5">
+            <d:ComboBox Grid.Row="3" Height="35" Margin="5">
                 <ComboBoxItem Content="Is Running" IsSelected="True" />
             </d:ComboBox>
 
-            <TextBox Grid.Row="4" Height="100"
-                     Margin="5" VerticalContentAlignment="Top"
-                     Tag="Comment" AcceptsReturn="True"
+            <TextBox Grid.Row="4" Height="100" Margin="5"
+                     VerticalContentAlignment="Top" Tag="Comment" AcceptsReturn="True"
                      Style="{StaticResource RegularTextBoxStyle}"
                      Text="{Binding MachineStatusMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <Grid Grid.Row="5" Margin="5">
-                <Button Width="130" Height="34"
-                        HorizontalAlignment="Left" Content="Cancel"
-                        IsCancel="True"
+                <Button Width="130" Height="34" HorizontalAlignment="Left"
+                        Content="Cancel" IsCancel="True"
                         FontFamily="{StaticResource RobotoFlexRegular}"
                         FontSize="{StaticResource XSmall}"
                         Style="{StaticResource TransparentButtonStyle}"
                         BorderThickness="1"
                         BorderBrush="{DynamicResource BorderColorBrush6}"
                         Command="{Binding CancelCommand}" />
-                <Button Width="130" Height="34"
-                        HorizontalAlignment="Right" Content="Update"
-                        IsDefault="True"
+                <Button Width="130" Height="34" HorizontalAlignment="Right"
+                        Content="Update" IsDefault="True"
                         BorderBrush="{DynamicResource BorderColorBrush3}"
                         FontFamily="{StaticResource RobotoFlexRegular}"
                         FontSize="{StaticResource XSmall}"

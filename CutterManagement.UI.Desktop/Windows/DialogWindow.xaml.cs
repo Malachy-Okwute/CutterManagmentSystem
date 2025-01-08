@@ -19,17 +19,15 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public partial class DialogWindow : Window
     {
-        /// <summary>
-        /// The view model of this window
-        /// </summary>
-        public DialogWindowViewModel ViewModel { get; set; }
-
         public DialogWindow()
         {
             InitializeComponent();
 
-            // Set data context
-            DataContext = ViewModel;
+            ShowInTaskbar = false;
+            Owner = Application.Current.MainWindow;
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            Height = Owner.ActualHeight;
+            Width = Owner.ActualWidth;
         }
-    }
+    } 
 }

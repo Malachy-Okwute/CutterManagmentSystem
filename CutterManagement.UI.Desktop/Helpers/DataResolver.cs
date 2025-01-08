@@ -11,7 +11,7 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="MachineItemViewModel"/></returns>
         public static MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData, EventHandler eventHandler)
         {
-            MachineItemViewModel items = new MachineItemViewModel
+            MachineItemViewModel items = new MachineItemViewModel()
             {
                 Id = machineData.Id,
                 MachineSetNumber = machineData.MachineSetId,

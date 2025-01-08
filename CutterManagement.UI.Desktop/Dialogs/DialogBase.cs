@@ -19,9 +19,9 @@ namespace CutterManagement.UI.Desktop
 
         public DialogBase()
         {
-            _dialogWindow = new DialogWindow();
-            _dialogWindow.ViewModel = new DialogWindowViewModel();
-            _taskCompletionSource = new TaskCompletionSource<bool>();
+            //_dialogWindow = new DialogWindow();
+            //_dialogWindow.ViewModel = new DialogWindowViewModel();
+            //_taskCompletionSource = new TaskCompletionSource<bool>();
 
             CloseCommand = new RelayCommand(()  => _dialogWindow.Close());
         }

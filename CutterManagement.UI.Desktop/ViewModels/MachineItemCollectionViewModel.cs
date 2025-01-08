@@ -37,7 +37,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// <see cref="MachineConfigurationViewModel"/>
         /// </summary>
-        private MachineConfigurationViewModel _machineConfigurationViewModel;
+        private MachineConfigurationDialogViewModel _machineConfigurationViewModel;
 
         /// <summary>
         /// <see cref="MachineSetStatusViewModel"/>
@@ -88,7 +88,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// <see cref="MachineConfigurationViewModel"/>
         /// </summary>
-        public MachineConfigurationViewModel MachineConfigurationViewModel 
+        public MachineConfigurationDialogViewModel MachineConfigurationViewModel 
         {
             get => _machineConfigurationViewModel;
             set => _machineConfigurationViewModel = value;
@@ -140,7 +140,6 @@ namespace CutterManagement.UI.Desktop
         {
             // Initialize
             _dataAccessService = dataAccessService;
-            _machineItemViewModel = new MachineItemViewModel();
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
 
@@ -175,7 +174,6 @@ namespace CutterManagement.UI.Desktop
             IsConfigurationFormOpen = true;
 
             // Create machine configuration view model
-            _machineConfigurationViewModel = new MachineConfigurationViewModel(MachineItemViewModel, _dataAccessService, this);
 
             // Update machine configuration view model property
             OnPropertyChanged(nameof(MachineConfigurationViewModel));

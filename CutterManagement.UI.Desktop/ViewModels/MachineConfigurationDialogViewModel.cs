@@ -5,31 +5,16 @@ using System.Windows.Input;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// View model for <see cref="MachineConfigurationControl"/>
+    /// View model for <see cref="MachineConfigurationDialogControl"/>
     /// </summary>
-    public class MachineConfigurationViewModel : ViewModelBase
+    public class MachineConfigurationDialogViewModel : DialogViewModelBase
     {
         #region Private Fields
-
-        /// <summary>
-        /// Machine item
-        /// </summary>
-        private MachineItemViewModel _machineItemViewModel;
-
-        /// <summary>
-        /// Collection of machine items
-        /// </summary>
-        private MachineItemCollectionViewModel _machineItemCollectionVM;
 
         /// <summary>
         /// Machine configuration service
         /// </summary>
         private IMachineService _machineService;
-
-        /// <summary>
-        /// Data access service
-        /// </summary>
-        private IDataAccessServiceFactory _dataAccessService;
 
         /// <summary>
         /// The current status of the item to configure
@@ -121,17 +106,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="machineItemViewModel">The machine item to update</param>
         /// <param name="dataAccessService">Access to database tables</param>
-        /// <param name="machineItemCollectionVM">Origin of machine item</param>
-        public MachineConfigurationViewModel(MachineItemViewModel machineItemViewModel, IDataAccessServiceFactory dataAccessService, MachineItemCollectionViewModel machineItemCollectionVM)
+        public MachineConfigurationDialogViewModel(IMachineService machineService)
         {
             // Initialize
-            _machineItemViewModel = machineItemViewModel;
-            _machineItemCollectionVM = machineItemCollectionVM;
-            _dataAccessService = dataAccessService;
-            CurrentStatus = _machineItemViewModel.Status;
-            Label = _machineItemViewModel.MachineNumber;
             StatusCollection = new Dictionary<MachineStatus, string>();
-            _machineService = new MachineService(_dataAccessService);
+            _machineService = machineService;
 
             foreach (MachineStatus status in Enum.GetValues<MachineStatus>())
             {
@@ -143,7 +122,6 @@ namespace CutterManagement.UI.Desktop
             UpdateCommand = new RelayCommand(UpdateData);
             CancelCommand = new RelayCommand(() =>
             {
-                _machineItemCollectionVM.IsConfigurationFormOpen = false;
                 ClearDataResidue();
             });
         }
@@ -161,8 +139,8 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel newData = new MachineDataModel
             {
                 // Set incoming data
-                Id = _machineItemViewModel.Id,
-                Owner = _machineItemViewModel.Owner,
+                //Id = Id,
+                //Owner = Owner,
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
                 Status = CurrentStatus,
@@ -179,6 +157,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="machineItem">The machine to configure</param>
         public void ConfigureMachine(MachineDataModel newData)
         {
+            return;
             Task.Run(async () => 
             {
                 try
@@ -193,7 +172,7 @@ namespace CutterManagement.UI.Desktop
                     if (result.Item1.IsValid && result.Item2 is not null)
                     {
                         // Update UI
-                        _machineItemCollectionVM.UpdateMachineCollection(result.Item2);
+                        //_machineItemCollectionVM.UpdateMachineCollection(result.Item2);
                         // Set success flag
                         IsConfigurationSuccessful = true;
                     }
@@ -210,7 +189,7 @@ namespace CutterManagement.UI.Desktop
                         if (result.Item1.IsValid)
                         {
                             // Close configuration form
-                            _machineItemCollectionVM.IsConfigurationFormOpen = false;
+                            //_machineItemCollectionVM.IsConfigurationFormOpen = false;
 
                             // Close message
                             ShowMessage = false;

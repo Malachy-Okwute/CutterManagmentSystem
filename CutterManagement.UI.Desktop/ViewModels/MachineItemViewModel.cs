@@ -8,6 +8,10 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class MachineItemViewModel : ViewModelBase
     {
+        private IDialogService _dialogService;
+        private IMachineService _machineService;
+        private MachineConfigurationDialogViewModel _machineConfiguration;
+
         #region Public Properties
 
         /// <summary>
@@ -129,7 +133,13 @@ namespace CutterManagement.UI.Desktop
 
         private void OpenMachineConfigurationForm()
         {
-
+            _dialogService = new DialogService();
+            _machineConfiguration = new MachineConfigurationDialogViewModel(_machineService);
+            _dialogService.ShowDialog(_machineConfiguration, showDialogCallback =>
+            {
+                var result = showDialogCallback;
+                IsPopupOpen = false;
+            });
         }
 
         /// <summary>
@@ -142,7 +152,6 @@ namespace CutterManagement.UI.Desktop
 
             // Set this item as the selected item
             IsPopupOpen = true;
-
         }
 
     }

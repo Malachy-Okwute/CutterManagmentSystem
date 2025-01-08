@@ -25,169 +25,169 @@ namespace CutterManagement.UI.Desktop
             //new CutterDataModel { Id = "X12345" };
 
             // design-time dummy data
-            RingItems = new ObservableCollection<MachineItemViewModel>
-            {
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-                new MachineItemViewModel()
-                {
-                    MachineNumber = "123",
-                    StatusMessage = "IsRunning",
-                    CutterNumber = "X12345-67890",
-                    PartNumber = "123456789",
-                    Count = "1000",
-                    //ResultOfLastPartChecked = "PASSED",
-                    //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
-                },
-            };
+            //RingItems = new ObservableCollection<MachineItemViewModel>
+            //{
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //    new MachineItemViewModel()
+            //    {
+            //        MachineNumber = "123",
+            //        StatusMessage = "IsRunning",
+            //        CutterNumber = "X12345-67890",
+            //        PartNumber = "123456789",
+            //        Count = "1000",
+            //        //ResultOfLastPartChecked = "PASSED",
+            //        //DateAndTimeOfLastCheck = "10-10-2024 ~ 12:36 AM"
+            //    },
+            //};
         }
     }
 }
