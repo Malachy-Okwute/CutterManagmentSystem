@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CutterManagement.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,8 +24,8 @@ namespace CutterManagement.UI.Desktop
         {
             InitializeComponent();
 
-            ShowInTaskbar = false;
             Owner = Application.Current.MainWindow;
+            ShowInTaskbar = false;
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
             Height = Owner.ActualHeight;
             Width = Owner.ActualWidth;

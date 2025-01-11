@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using CutterManagement.Core.Services;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -9,7 +10,7 @@ namespace CutterManagement.UI.Desktop
     public class MachineItemViewModel : ViewModelBase
     {
         private IDialogService _dialogService;
-        private IMachineService _machineService;
+        private IDataAccessServiceFactory _dataFactory;
         private MachineConfigurationDialogViewModel _machineConfiguration;
 
         #region Public Properties
@@ -95,7 +96,7 @@ namespace CutterManagement.UI.Desktop
         /// Event that gets broadcasted whenever this item gets selected
         /// </summary>
         public event EventHandler ItemSelected;
-
+ 
         #endregion
 
         #region Public Commands
@@ -122,24 +123,32 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemViewModel()
+        public MachineItemViewModel(IDataAccessServiceFactory? dataFactory)
         {
+            if(dataFactory is not null)
+            {
+                _dataFactory = dataFactory;
+            }
+
             // Create commands
             OpenPopupCommand = new RelayCommand(OpenPopup);
             OpenMachineConfigurationFormCommand = new RelayCommand(OpenMachineConfigurationForm);
         }
-        #endregion
 
+        #endregion
 
         private void OpenMachineConfigurationForm()
         {
-            _dialogService = new DialogService();
-            _machineConfiguration = new MachineConfigurationDialogViewModel(_machineService);
-            _dialogService.ShowDialog(_machineConfiguration, showDialogCallback =>
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+            _machineConfiguration = new MachineConfigurationDialogViewModel(new MachineService(_dataFactory))
             {
-                var result = showDialogCallback;
-                IsPopupOpen = false;
-            });
+                Id = Id,
+                Owner = Owner,
+                Label = MachineNumber,
+                CurrentStatus = Status
+            };
+
+            DialogService.InvokeDialog(_machineConfiguration);
         }
 
         /// <summary>
@@ -151,7 +160,7 @@ namespace CutterManagement.UI.Desktop
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Set this item as the selected item
-            IsPopupOpen = true;
+            IsPopupOpen ^= true;
         }
 
     }

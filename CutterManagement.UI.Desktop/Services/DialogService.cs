@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using CutterManagement.Core.Services;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -15,7 +16,7 @@ namespace CutterManagement.UI.Desktop
             _dialogWindow = new DialogWindow();
         }
 
-        public static void RegisterDialog<TViewModel, TView>()
+        public static void RegisterDialog<TViewModel, TView>() where TViewModel : IDialogWindowCloseRequested
         {
             if(typeof(TViewModel).BaseType != typeof(DialogViewModelBase))
             {
@@ -30,27 +31,42 @@ namespace CutterManagement.UI.Desktop
             _dialogMappings.Add(typeof(TViewModel), typeof(TView));
         }
 
-        public void ShowDialog<TViewModel>(TViewModel viewModel, Action<string?> showDialogCallback)
+        public void ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequested
         {
-            EventHandler? dialogCallback = null;
-            dialogCallback += (s, e) =>
-            {
-                showDialogCallback.Invoke(_dialogWindow.DialogResult.ToString());
-                _dialogWindow!.Closed -= dialogCallback;
-            };
-            _dialogWindow.Closed += dialogCallback;
-
             Type viewType = _dialogMappings[typeof(TViewModel)];
 
             object? dialog = Activator.CreateInstance(viewType);
 
             if(dialog == null) return;
 
+            EventHandler<DialogWindowCloseRequestedEventArgs>? dialogCallback = null;
+            dialogCallback += (s, e) =>
+            {
+                viewModel.DialogWindowCloseRequested -= dialogCallback;
+
+                if(e.DialogResult.HasValue)
+                {
+                    _dialogWindow.DialogResult = e.DialogResult;
+                }
+                else
+                {
+                    _dialogWindow.Close();
+                }
+            };
+
+            viewModel.DialogWindowCloseRequested += dialogCallback;
+
             ((UserControl)dialog).DataContext = viewModel;
             
             _dialogWindow.ContentControl.Content = dialog;
 
             _dialogWindow.ShowDialog();
+        }
+
+        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequested
+        {
+            var test = new DialogService();
+            test.ShowDialog(viewModel);
         }
     }
 }

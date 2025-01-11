@@ -9,9 +9,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
         /// <returns><see cref="MachineItemViewModel"/></returns>
-        public static MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData, EventHandler eventHandler)
+        public static MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData, IDataAccessServiceFactory dataFactory, EventHandler eventHandler)
         {
-            MachineItemViewModel items = new MachineItemViewModel()
+            MachineItemViewModel items = new MachineItemViewModel(dataFactory)
             {
                 Id = machineData.Id,
                 MachineSetNumber = machineData.MachineSetId,

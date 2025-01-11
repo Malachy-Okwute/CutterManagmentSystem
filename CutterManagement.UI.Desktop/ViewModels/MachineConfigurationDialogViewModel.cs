@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using CutterManagement.Core.Services;
 using System.Diagnostics;
 using System.Windows.Input;
 
@@ -7,7 +8,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineConfigurationDialogControl"/>
     /// </summary>
-    public class MachineConfigurationDialogViewModel : DialogViewModelBase
+    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequested
     {
         #region Private Fields
 
@@ -30,10 +31,14 @@ namespace CutterManagement.UI.Desktop
 
         #region Public Properties
 
+        public int Id { get; set; }
+
         /// <summary>
         /// Label indicating current machine number
         /// </summary>
         public string Label { get; set; }
+
+        public Department Owner { get; set; }
 
         /// <summary>
         /// New machine number
@@ -85,6 +90,8 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequested;
+
         #region Public Commands
 
         /// <summary>
@@ -112,6 +119,8 @@ namespace CutterManagement.UI.Desktop
             StatusCollection = new Dictionary<MachineStatus, string>();
             _machineService = machineService;
 
+            Title = "Configuration";
+
             foreach (MachineStatus status in Enum.GetValues<MachineStatus>())
             {
                 // Add every status
@@ -119,9 +128,10 @@ namespace CutterManagement.UI.Desktop
             }
 
             // Create commands
-            UpdateCommand = new RelayCommand(UpdateData);
+            UpdateCommand = new RelayCommand(async () => await UpdateData());
             CancelCommand = new RelayCommand(() =>
             {
+                DialogWindowCloseRequested?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
                 ClearDataResidue();
             });
         }
@@ -133,14 +143,14 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Update machine item with new data
         /// </summary>
-        private void UpdateData()
+        private async Task UpdateData()
         {
             // Create a new machine data model
             MachineDataModel newData = new MachineDataModel
             {
                 // Set incoming data
-                //Id = Id,
-                //Owner = Owner,
+                Id = Id,
+                Owner = Owner,
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
                 Status = CurrentStatus,
@@ -148,71 +158,75 @@ namespace CutterManagement.UI.Desktop
             };
 
             // Configure machine with new data
-            ConfigureMachine(newData);
+            await ConfigureMachine(newData);
+
+            // If configuration is successful
+            if (IsConfigurationSuccessful)
+            {
+                // Send dialog window close request
+                DialogWindowCloseRequested?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
+            }
+
         }
 
         /// <summary>
         /// Configures a machine item
         /// </summary>
         /// <param name="machineItem">The machine to configure</param>
-        public void ConfigureMachine(MachineDataModel newData)
+        public async Task ConfigureMachine(MachineDataModel newData)
         {
-            return;
-            Task.Run(async () => 
+            try
             {
-                try
+                // Try configuring machine with new data, get the result of the process
+                (ValidationResult, MachineDataModel?) result =  await _machineService.Configure(newData);
+
+                // Set message
+                _message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
+
+                // If process is successful...
+                if (result.Item1.IsValid)
                 {
-                    // Try configuring machine with new data, get the result of the process
-                    (ValidationResult, MachineDataModel?) result =  await _machineService.Configure(newData);
+                    // Set configuration success here to update UI faster.
+                    // NOTE: This is used in binding to change background / foreground color in UI
+                    //
+                    // Mark configuration as successful
+                    IsConfigurationSuccessful = true; 
+                }
 
-                    // Set message
-                    _message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
+                // Show message
+                ShowMessage = true;
 
-                    // If process is successful 
-                    if (result.Item1.IsValid && result.Item2 is not null)
+                // Update UI with the current message
+                OnPropertyChanged(nameof(Message));
+
+                // Wait for 2 seconds
+                await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>
+                {
+                    // If process is successful...
+                    if (result.Item1.IsValid)
                     {
-                        // Update UI
-                        //_machineItemCollectionVM.UpdateMachineCollection(result.Item2);
-                        // Set success flag
-                        IsConfigurationSuccessful = true;
+                        // Close message
+                        ShowMessage = false;
+
+                        // Clear data
+                        ClearDataResidue();
                     }
-
-                    // Show message
-                    ShowMessage = true;
-                    // Update UI with the current message
-                    OnPropertyChanged(nameof(Message));
-
-                    // Wait for 2 seconds
-                    await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>
+                    // Otherwise
+                    else
                     {
-                        // If process is successful...
-                        if (result.Item1.IsValid)
-                        {
-                            // Close configuration form
-                            //_machineItemCollectionVM.IsConfigurationFormOpen = false;
+                        // Set success flag
+                        IsConfigurationSuccessful = false;
 
-                            // Close message
-                            ShowMessage = false;
-
-                            ClearDataResidue();
-                        }
-                        // Otherwise
-                        else
-                        {
-                            // Set success flag
-                            IsConfigurationSuccessful = false;
-
-                            // Close message
-                            ShowMessage = false;
-                        }
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Debugger.Break();
-                    Debug.WriteLine(ex.Message);
-                }
-            });
+                        // Close message
+                        ShowMessage = false;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Debugger.Break();
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         public void ClearDataResidue()

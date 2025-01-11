@@ -243,7 +243,7 @@ namespace CutterManagement.UI.Desktop
                     // Create new machine record in the database
                     await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
                     // Populate item list
-                    _pinItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
+                    _pinItems.Add(DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
                 }
 
                 // Create join table for machine and user
@@ -258,7 +258,7 @@ namespace CutterManagement.UI.Desktop
                     // Create new machine record in the database
                     await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
                     // Populate item list
-                    _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged));
+                    _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
                 }
             }
 
@@ -266,7 +266,7 @@ namespace CutterManagement.UI.Desktop
             foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
             {
                 // Resolve data
-                MachineItemViewModel machineItem = DataResolver.ResolveToMachineItemViewModel(data, OnItemSelectionChanged);
+                MachineItemViewModel machineItem = DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged);
 
                 // If machine data is owned by pinion
                 if (machineItem.Owner is Department.Pinion)
@@ -291,7 +291,7 @@ namespace CutterManagement.UI.Desktop
         public void UpdateMachineCollection(MachineDataModel machineItem) 
         {
             // Resolve the new item that changed
-            MachineItemViewModel newItem = DataResolver.ResolveToMachineItemViewModel(machineItem, OnItemSelectionChanged);
+            MachineItemViewModel newItem = DataResolver.ResolveToMachineItemViewModel(machineItem, _dataAccessService, OnItemSelectionChanged);
 
             // If new item is pinion
             if(newItem.Owner is Department.Pinion)

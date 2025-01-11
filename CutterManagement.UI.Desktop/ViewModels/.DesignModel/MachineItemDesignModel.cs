@@ -1,4 +1,6 @@
-﻿namespace CutterManagement.UI.Desktop
+﻿using CutterManagement.Core;
+
+namespace CutterManagement.UI.Desktop
 {
     /// <summary>
     /// Design model for <see cref="MachineItemControl"/>
@@ -8,12 +10,12 @@
         /// <summary>
         /// A singleton instance of this design-model
         /// </summary>
-        public static readonly MachineItemDesignModel Instance = new();
+        public static readonly MachineItemDesignModel Instance = new(null!);
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemDesignModel() 
+        public MachineItemDesignModel(IDataAccessServiceFactory factory) : base(factory) 
         {
             // Dummy data
             MachineNumber = "123";

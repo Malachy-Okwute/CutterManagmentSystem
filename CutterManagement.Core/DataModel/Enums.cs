@@ -44,7 +44,7 @@ namespace CutterManagement.Core
 
     public enum UserShift 
     {
-        [Description("---")]
+        [Description("Select user shift")]
         None,
 
         [Description("1st Shift")]
