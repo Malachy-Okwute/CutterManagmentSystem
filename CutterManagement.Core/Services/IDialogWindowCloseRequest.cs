@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CutterManagement.Core.Services
 {
-    public interface IDialogWindowCloseRequested
+    public interface IDialogWindowCloseRequest
     {
-        event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequested;
+        event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
     }
 }

@@ -119,9 +119,6 @@ namespace CutterManagement.UI.Desktop
                 await db.SaveChangesAsync();
             }
 
-            // Register dialog for machine configuration 
-            DialogService.RegisterDialog<MachineConfigurationDialogViewModel, MachineConfigurationDialog>();
-
             // TODO: Check if there is an app update available - if new update is available
             //      - notify user to update the application
             //      - if app is not updated... automatically update app at the end of shift.

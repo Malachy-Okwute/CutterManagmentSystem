@@ -3,7 +3,7 @@
     /// <summary>
     /// A basic user data model
     /// </summary>
-    public class UserDataModel : DataModelBase
+    public class UserDataModel : DataModelBase, IMessage
     {
         /// <summary>
         /// User first name 

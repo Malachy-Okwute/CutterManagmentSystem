@@ -12,15 +12,6 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!--  Admin control  -->
-            <local:AdminLoginControl Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="10"
-                                     Visibility="{Binding IsLoginFormVisible, Converter={local:BooleanToVisibilityConverter}}"
-                                     d:Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center" />
-
-            <local:CreateUserFormControl Grid.Row="0" Grid.RowSpan="3" Panel.ZIndex="10"
-                                         Visibility="{Binding ShowUserCreationForm, Converter={local:BooleanToVisibilityConverter}}"
-                                         d:Visibility="Collapsed" VerticalAlignment="Center" HorizontalAlignment="Center" />
-
             <Label Grid.Row="0" Content="Users" Margin="6,10"
                    Foreground="{DynamicResource ForegroundColorBrush3}"
                    FontFamily="{StaticResource RobotoFlexRegular}"
@@ -48,7 +39,7 @@
                 <Button Grid.Column="3" Width="100"
                         Content="{StaticResource UsersIcon}"
                         Tag="Admin" Margin="10,0"
-                        Command="{Binding ShowLoginFormCommand}"
+                        Command="{Binding OpenAdminLoginDialogCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
             </Grid>
 

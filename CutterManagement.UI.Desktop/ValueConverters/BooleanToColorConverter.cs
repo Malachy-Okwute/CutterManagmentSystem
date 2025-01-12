@@ -16,9 +16,17 @@ namespace CutterManagement.UI.Desktop
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if(parameter == null)
+            {
                 return (bool)value ? ColorHelpers.GetColor(ColorKind.BackgroundColor1) : ColorHelpers.GetColor(ColorKind.BackgroundColor6);
+            }
+            else if(parameter as string is "SessionStatus")
+            {
+                return (bool)value ? ColorHelpers.GetColor(ColorKind.AccentColor5) : ColorHelpers.GetColor(ColorKind.ForegroundColor5);
+            }
             else
+            {
                 return (bool)value ? ColorHelpers.GetColor(ColorKind.ForegroundColor3) : ColorHelpers.GetColor(ColorKind.ForegroundColor8);
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

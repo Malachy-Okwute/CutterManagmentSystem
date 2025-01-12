@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
 using PropertyChanged;
+using System.CodeDom;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -261,7 +262,10 @@ namespace CutterManagement.UI.Desktop
         /// <param name="message">The message received</param>
         public void ReceiveMessage(IMessage message)
         {
-            UpdateMachineCollection((MachineDataModel)message);
+            if(message.GetType() == typeof(MachineDataModel))
+            {
+                UpdateMachineCollection((MachineDataModel)message);
+            }
         }
 
         #endregion

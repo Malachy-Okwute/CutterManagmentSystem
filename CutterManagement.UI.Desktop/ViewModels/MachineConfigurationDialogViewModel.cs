@@ -8,7 +8,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineConfigurationDialogControl"/>
     /// </summary>
-    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequested, ISubscribeToMessages
+    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest, ISubscribeToMessages
     {
         #region Private Fields
 
@@ -92,7 +92,7 @@ namespace CutterManagement.UI.Desktop
 
         #region Public Events
 
-        public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequested;
+        public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
 
         #endregion
 
@@ -135,7 +135,7 @@ namespace CutterManagement.UI.Desktop
             UpdateCommand = new RelayCommand(async () => await UpdateData());
             CancelCommand = new RelayCommand(() =>
             {
-                DialogWindowCloseRequested?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
                 ClearDataResidue();
             });
 
@@ -171,7 +171,7 @@ namespace CutterManagement.UI.Desktop
             if (IsConfigurationSuccessful)
             {
                 // Send dialog window close request
-                DialogWindowCloseRequested?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
             }
 
         }

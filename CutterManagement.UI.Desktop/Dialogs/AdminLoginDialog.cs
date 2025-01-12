@@ -19,11 +19,11 @@ using System.Windows.Shapes;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Interaction logic for AdminLoginControl.xaml
+    /// Interaction logic for AdminLoginDialog.xaml
     /// </summary>
-    public partial class AdminLoginControl : UserControl, ISecurePassword
+    public partial class AdminLoginDialog : UserControl, ISecurePassword
     {
-        public AdminLoginControl()
+        public AdminLoginDialog()
         {
             InitializeComponent();
         }

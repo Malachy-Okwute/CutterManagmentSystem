@@ -16,7 +16,7 @@ namespace CutterManagement.UI.Desktop
             _dialogWindow = new DialogWindow();
         }
 
-        public static void RegisterDialog<TViewModel, TView>() where TViewModel : IDialogWindowCloseRequested
+        public static void RegisterDialog<TViewModel, TView>() where TViewModel : IDialogWindowCloseRequest
         {
             if(typeof(TViewModel).BaseType != typeof(DialogViewModelBase))
             {
@@ -31,7 +31,7 @@ namespace CutterManagement.UI.Desktop
             _dialogMappings.Add(typeof(TViewModel), typeof(TView));
         }
 
-        public void ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequested
+        public void ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest
         {
             Type viewType = _dialogMappings[typeof(TViewModel)];
 
@@ -42,7 +42,7 @@ namespace CutterManagement.UI.Desktop
             EventHandler<DialogWindowCloseRequestedEventArgs>? dialogCallback = null;
             dialogCallback += (s, e) =>
             {
-                viewModel.DialogWindowCloseRequested -= dialogCallback;
+                viewModel.DialogWindowCloseRequest -= dialogCallback;
 
                 if(e.DialogResult.HasValue)
                 {
@@ -54,7 +54,7 @@ namespace CutterManagement.UI.Desktop
                 }
             };
 
-            viewModel.DialogWindowCloseRequested += dialogCallback;
+            viewModel.DialogWindowCloseRequest += dialogCallback;
 
             ((UserControl)dialog).DataContext = viewModel;
             
@@ -63,7 +63,7 @@ namespace CutterManagement.UI.Desktop
             _dialogWindow.ShowDialog();
         }
 
-        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequested => new DialogService().ShowDialog(viewModel);
+        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest => new DialogService().ShowDialog(viewModel);
         
     }
 }

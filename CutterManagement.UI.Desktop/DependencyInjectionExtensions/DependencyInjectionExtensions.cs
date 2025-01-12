@@ -70,6 +70,12 @@ namespace CutterManagement.UI.Desktop
             services.AddScoped<IDataAccessServiceFactory, DataAccessServiceFactory>();
             //services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
 
+            // Register dialog service
+            DialogService.RegisterDialog<AdminLoginDialogViewModel, AdminLoginDialog>();
+            DialogService.RegisterDialog<CreateUserDialogViewModel, CreateUserDialog>();
+            DialogService.RegisterDialog<MachineConfigurationDialogViewModel, MachineConfigurationDialog>();
+
+
             // Return services
             return services;
         }

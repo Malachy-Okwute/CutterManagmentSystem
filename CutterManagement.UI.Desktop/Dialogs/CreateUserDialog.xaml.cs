@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Interaction logic for CreateUserFormControl.xaml
+    /// Interaction logic for CreateUserDialog.xaml
     /// </summary>
-    public partial class CreateUserFormControl : UserControl
+    public partial class CreateUserDialog : UserControl
     {
-        public CreateUserFormControl()
+        public CreateUserDialog()
         {
             InitializeComponent();
         }
