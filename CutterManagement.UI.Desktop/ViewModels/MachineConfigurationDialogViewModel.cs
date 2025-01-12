@@ -8,7 +8,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineConfigurationDialogControl"/>
     /// </summary>
-    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequested
+    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequested, ISubscribeToMessages
     {
         #region Private Fields
 
@@ -90,7 +90,11 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Public Events
+
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequested;
+
+        #endregion
 
         #region Public Commands
 
@@ -134,6 +138,9 @@ namespace CutterManagement.UI.Desktop
                 DialogWindowCloseRequested?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
                 ClearDataResidue();
             });
+
+            // Register this class to receive messages from messenger
+            Messenger.MessageSender.RegisterMessenger(this);
         }
 
         #endregion
@@ -184,13 +191,16 @@ namespace CutterManagement.UI.Desktop
                 _message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
 
                 // If process is successful...
-                if (result.Item1.IsValid)
+                if (result.Item1.IsValid && result.Item2 is not null)
                 {
                     // Set configuration success here to update UI faster.
                     // NOTE: This is used in binding to change background / foreground color in UI
                     //
                     // Mark configuration as successful
                     IsConfigurationSuccessful = true; 
+
+                    // Send out message
+                    Messenger.MessageSender.SendMessage(result.Item2);
                 }
 
                 // Show message
@@ -234,6 +244,11 @@ namespace CutterManagement.UI.Desktop
             Label = string.Empty;
             MachineNumber = string.Empty;
             MachineStatusMessage = string.Empty;
+        }
+
+        public void ReceiveMessage(IMessage message)
+        {
+            // Empty
         }
 
         #endregion

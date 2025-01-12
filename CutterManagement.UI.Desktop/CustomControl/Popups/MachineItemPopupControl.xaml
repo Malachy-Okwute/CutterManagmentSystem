@@ -23,8 +23,8 @@
                         Command="{Binding}" />
                 <Button Content="Configuration" Focusable="False"
                         Style="{StaticResource MachineOptionsPopupStyle}"
-                        IsEnabled="{Binding MachineItemViewModel.IsAdminLoggedIn}"
-                        Command="{Binding OpenMachineConfigurationFormCommand}" />
+                        IsEnabled="{Binding IsAdminLoggedIn}"
+                        Command="{Binding OpenMachineConfigurationDialogCommand}" />
             </StackPanel>
 
         </Border>

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -15,7 +16,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineItemCollectionControl"/>
     /// </summary>
-    public class MachineItemCollectionViewModel : ViewModelBase
+    public class MachineItemCollectionViewModel : ViewModelBase, ISubscribeToMessages
     {
         #region Private Fields
 
@@ -28,21 +29,6 @@ namespace CutterManagement.UI.Desktop
         /// Collection of <see cref="MachineItemControl"/> representing pins
         /// </summary>
         private ObservableCollection<MachineItemViewModel> _pinItems;
-
-        /// <summary>
-        /// <see cref="MachineItemViewModel"/>
-        /// </summary>
-        private MachineItemViewModel _machineItemViewModel;
-
-        /// <summary>
-        /// <see cref="MachineConfigurationViewModel"/>
-        /// </summary>
-        private MachineConfigurationDialogViewModel _machineConfigurationViewModel;
-
-        /// <summary>
-        /// <see cref="MachineSetStatusViewModel"/>
-        /// </summary>
-        private MachineSetStatusViewModel _machineSetStatusViewModel;
 
         /// <summary>
         /// Data service factory
@@ -76,59 +62,6 @@ namespace CutterManagement.UI.Desktop
             set => _pinItems = value;
         }
 
-        /// <summary>
-        /// <see cref="MachineItemViewModel"/>
-        /// </summary>
-        public MachineItemViewModel MachineItemViewModel
-        {
-            get => _machineItemViewModel;
-            set => _machineItemViewModel = value;
-        }
-
-        /// <summary>
-        /// <see cref="MachineConfigurationViewModel"/>
-        /// </summary>
-        public MachineConfigurationDialogViewModel MachineConfigurationViewModel 
-        {
-            get => _machineConfigurationViewModel;
-            set => _machineConfigurationViewModel = value;
-        }
-
-        /// <summary>
-        /// <see cref="MachineSetStatusViewModel"/>
-        /// </summary>
-        public MachineSetStatusViewModel MachineSetStatusViewModel
-        {
-            get => _machineSetStatusViewModel;
-            set => _machineSetStatusViewModel = value;
-        }
-
-        /// <summary>
-        /// True if configuration form is open
-        /// otherwise false
-        /// </summary>
-        public bool IsConfigurationFormOpen { get; set; }
-
-        /// <summary>
-        /// True if set status form is open
-        /// otherwise false
-        /// </summary>
-        public bool IsSetStatusFormOpen { get; set; }
-
-        #endregion
-
-        #region Commands
-
-        /// <summary>
-        /// Command to open machine configuration form
-        /// </summary>
-        public ICommand OpenMachineConfigurationFormCommand { get; set; }
-
-        /// <summary>
-        /// Command to open machine set status form
-        /// </summary>
-        public ICommand OpenSetStatusFormCommand { get; set; }
-
         #endregion
 
         #region Constructor
@@ -143,58 +76,11 @@ namespace CutterManagement.UI.Desktop
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
 
-            // Event hook up
-            //_dataAccessService.DataChanged += UpdateMachineCollection;
-
-            // Create commands
-            OpenMachineConfigurationFormCommand = new RelayCommand(OpenMachineConfigurationForm);
-            OpenSetStatusFormCommand = new RelayCommand(OpenSetStatusForm);
-
             // Load data
             _dataLoader = LoadMachineData();
-        }
 
-        #endregion
-
-        #region Command Methods
-
-        /// <summary>
-        /// Opens configuration used in configuring machine item
-        /// </summary>
-        /// <param name="parameter">The machine to configure</param>
-        private void OpenMachineConfigurationForm()
-        {
-            // Turn off pop up control
-            MachineItemViewModel.IsPopupOpen = false;
-
-            // Make sure admin user is authorized
-            if (AuthenticationService.IsAdminUserAuthorized is false) return;
-
-            // Open configuration form
-            IsConfigurationFormOpen = true;
-
-            // Create machine configuration view model
-
-            // Update machine configuration view model property
-            OnPropertyChanged(nameof(MachineConfigurationViewModel));
-        }
-
-        /// <summary>
-        /// Opens status form
-        /// </summary>
-        private void OpenSetStatusForm()
-        {
-            // Turn off pop up control
-            MachineItemViewModel.IsPopupOpen = false;
-
-            // Open form
-            IsSetStatusFormOpen = true;
-
-            // Create machine configuration view model
-            _machineSetStatusViewModel = new MachineSetStatusViewModel(MachineItemViewModel, _dataAccessService, this);
-
-            // Update machine configuration view model property
-            OnPropertyChanged(nameof(MachineSetStatusViewModel));
+            // Register this object to receive messages from messenger
+            Messenger.MessageSender.RegisterMessenger(this);
         }
 
         #endregion
@@ -315,18 +201,23 @@ namespace CutterManagement.UI.Desktop
         /// <param name="itemList">The list to insert item into</param>
         private void InsertNewItem(MachineItemViewModel item, ObservableCollection<MachineItemViewModel> itemList)
         {
+            // Find the incoming item
             MachineItemViewModel? currentItemToChange = itemList.FirstOrDefault(x => x.Id == item.Id);
 
+            // If the item exists
             if (currentItemToChange is not null)
             {
+                // Get item index on the collection 
                 int index = itemList.IndexOf(currentItemToChange);
 
+                // Replace the item with the latest data
                 DispatcherService.Invoke(() =>
                 {
                     itemList.RemoveAt(index);
                     itemList.Insert(index, item);
                 });
             }
+            // Otherwise we assume the new item is an item being created
         }
 
         #endregion
@@ -341,18 +232,36 @@ namespace CutterManagement.UI.Desktop
         [SuppressPropertyChangedWarnings]
         private void OnItemSelectionChanged(object? sender, EventArgs args)
         {
+            // In both collections, find item that is previously selected
             MachineItemViewModel? pinItem = _pinItems.FirstOrDefault(item => item.IsPopupOpen is true);
             MachineItemViewModel? ringItem = _ringItems.FirstOrDefault(item => item.IsPopupOpen is true);
 
+            // Make sure item is not null
             if (pinItem is not null)
             {
+                // Reset it's selection 
                 pinItem.IsPopupOpen = false;
             }
             
+            // Make sure item is not null
             if(ringItem is not null)
             {
+                // Reset it's selection 
                 ringItem.IsPopupOpen = false;
             }
+        }
+
+        #endregion
+
+        #region Messages
+
+        /// <summary>
+        /// Receive message from <see cref="Messenger"/>
+        /// </summary>
+        /// <param name="message">The message received</param>
+        public void ReceiveMessage(IMessage message)
+        {
+            UpdateMachineCollection((MachineDataModel)message);
         }
 
         #endregion

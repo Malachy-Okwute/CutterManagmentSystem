@@ -58,12 +58,5 @@ namespace CutterManagement.UI.Desktop
                 }
             };
         }
-
-        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            MachineItemCollectionViewModel popups = ((MachineItemCollectionViewModel)DataContext);
-
-            popups.IsConfigurationFormOpen = popups.IsSetStatusFormOpen = false;
-        }
     }
 }

@@ -9,9 +9,19 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class MachineItemViewModel : ViewModelBase
     {
-        private IDialogService _dialogService;
+        #region Private Fields
+
+        /// <summary>
+        /// Data access factory
+        /// </summary>
         private IDataAccessServiceFactory _dataFactory;
+
+        /// <summary>
+        /// Machine configuration view model
+        /// </summary>
         private MachineConfigurationDialogViewModel _machineConfiguration;
+
+        #endregion
 
         #region Public Properties
 
@@ -109,7 +119,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Command to open machine configuration form
         /// </summary>
-        public ICommand OpenMachineConfigurationFormCommand { get; set; }
+        public ICommand OpenMachineConfigurationDialogCommand { get; set; }
 
         /// <summary>
         /// Command to open machine set status form
@@ -132,12 +142,15 @@ namespace CutterManagement.UI.Desktop
 
             // Create commands
             OpenPopupCommand = new RelayCommand(OpenPopup);
-            OpenMachineConfigurationFormCommand = new RelayCommand(OpenMachineConfigurationForm);
+            OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
         }
 
         #endregion
 
-        private void OpenMachineConfigurationForm()
+        /// <summary>
+        /// Opens machine configuration dialog
+        /// </summary>
+        private void OpenMachineConfigurationDialog()
         {
             ItemSelected?.Invoke(this, EventArgs.Empty);
             _machineConfiguration = new MachineConfigurationDialogViewModel(new MachineService(_dataFactory))
@@ -148,6 +161,7 @@ namespace CutterManagement.UI.Desktop
                 CurrentStatus = Status
             };
 
+            // Show dialog
             DialogService.InvokeDialog(_machineConfiguration);
         }
 

@@ -3,7 +3,7 @@
     /// <summary>
     /// Machine data model
     /// </summary>
-    public class MachineDataModel : DataModelBase
+    public class MachineDataModel : DataModelBase, IMessage
     {
         /// <summary>
         /// The unique number assigned to this machine object

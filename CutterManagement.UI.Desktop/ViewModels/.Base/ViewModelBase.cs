@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using CutterManagement.Core;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Markup;

@@ -63,10 +63,7 @@ namespace CutterManagement.UI.Desktop
             _dialogWindow.ShowDialog();
         }
 
-        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequested
-        {
-            var test = new DialogService();
-            test.ShowDialog(viewModel);
-        }
+        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequested => new DialogService().ShowDialog(viewModel);
+        
     }
 }
