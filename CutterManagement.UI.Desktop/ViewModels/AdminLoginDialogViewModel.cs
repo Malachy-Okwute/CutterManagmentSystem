@@ -45,7 +45,7 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
-        /// Event that is invoked when user cancels or proceed with admin login
+        /// Event that is invoked when user cancels or proceeds with admin login
         /// </summary>
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
 

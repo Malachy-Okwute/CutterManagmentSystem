@@ -196,6 +196,10 @@ namespace CutterManagement.UI.Desktop
 
         #region Messages
 
+        /// <summary>
+        /// Receive message from <see cref="Messenger"/>
+        /// </summary>
+        /// <param name="message">The message received</param>
         public void ReceiveMessage(IMessage message)
         {
             if (message.GetType() == typeof(UserDataModel))

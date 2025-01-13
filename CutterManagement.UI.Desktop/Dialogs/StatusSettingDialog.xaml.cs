@@ -11,5 +11,6 @@ namespace CutterManagement.UI.Desktop
         {
             InitializeComponent();
         }
+
     }
 }

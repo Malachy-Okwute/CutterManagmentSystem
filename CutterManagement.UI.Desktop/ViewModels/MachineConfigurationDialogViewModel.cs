@@ -13,7 +13,7 @@ namespace CutterManagement.UI.Desktop
         #region Private Fields
 
         /// <summary>
-        /// Machine configuration service
+        /// Machine service
         /// </summary>
         private IMachineService _machineService;
 
@@ -92,6 +92,9 @@ namespace CutterManagement.UI.Desktop
 
         #region Public Events
 
+        /// <summary>
+        /// When user cancels or proceeds with configuring machine
+        /// </summary>
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
 
         #endregion
@@ -119,11 +122,9 @@ namespace CutterManagement.UI.Desktop
         /// <param name="dataAccessService">Access to database tables</param>
         public MachineConfigurationDialogViewModel(IMachineService machineService)
         {
-            // Initialize
+            Title = "Configuration";
             StatusCollection = new Dictionary<MachineStatus, string>();
             _machineService = machineService;
-
-            Title = "Configuration";
 
             foreach (MachineStatus status in Enum.GetValues<MachineStatus>())
             {
@@ -152,7 +153,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task UpdateData()
         {
-            // Create a new machine data model
+            // Create a new machine data model with data we care about sending to db
             MachineDataModel newData = new MachineDataModel
             {
                 // Set incoming data
@@ -160,7 +161,7 @@ namespace CutterManagement.UI.Desktop
                 Owner = Owner,
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
-                Status = CurrentStatus,
+                Status = _currentStatus,
                 StatusMessage = MachineStatusMessage,
             };
 

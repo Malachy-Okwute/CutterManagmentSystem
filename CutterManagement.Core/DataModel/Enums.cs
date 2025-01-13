@@ -9,8 +9,10 @@ namespace CutterManagement.Core
 
     public enum MachineStatus
     {
+        [Description("Select machine status")]
+        None = 0, 
         [Description("Is running")]
-        IsRunning = 0, 
+        IsRunning,
         [Description("Warning")]
         Warning, 
         [Description("Is down for maintenance")]

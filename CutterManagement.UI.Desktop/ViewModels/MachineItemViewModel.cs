@@ -117,14 +117,14 @@ namespace CutterManagement.UI.Desktop
         public ICommand OpenPopupCommand { get; set; }
 
         /// <summary>
-        /// Command to open machine configuration form
+        /// Command to open machine configuration dialog
         /// </summary>
         public ICommand OpenMachineConfigurationDialogCommand { get; set; }
 
         /// <summary>
-        /// Command to open machine set status form
+        /// Command to open machine set status dialog
         /// </summary>
-        public ICommand OpenSetStatusFormCommand { get; set; }
+        public ICommand OpenStatusSettingDialogCommand { get; set; }
 
         #endregion
 
@@ -142,10 +142,24 @@ namespace CutterManagement.UI.Desktop
 
             // Create commands
             OpenPopupCommand = new RelayCommand(OpenPopup);
+            OpenStatusSettingDialogCommand = new RelayCommand(OpenStatusSettingDialog);
             OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
         }
 
         #endregion
+
+        private void OpenStatusSettingDialog()
+        {
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+            var statusSettingVM = new MachineStatusSettingDialogViewModel(_dataFactory, new MachineService(_dataFactory))
+            {
+                Id = Id,
+                Owner = Owner,
+                Label = MachineNumber,
+                CurrentStatus = Status
+            };
+            DialogService.InvokeDialog(statusSettingVM);
+        }
 
         /// <summary>
         /// Opens machine configuration dialog

@@ -1,8 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 
 namespace CutterManagement.UI.Desktop
 {

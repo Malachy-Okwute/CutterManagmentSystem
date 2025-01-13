@@ -16,7 +16,7 @@
                 <Button Content="Set status"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
-                        Command="{Binding OpenSetStatusFormCommand}" />
+                        Command="{Binding OpenStatusSettingDialogCommand}" />
                 <Button Content="Data swap"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
