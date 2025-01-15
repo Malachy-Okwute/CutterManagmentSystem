@@ -1,7 +1,7 @@
 ﻿namespace CutterManagement.Core
 {
     /// <summary>
-    /// Configuration service for machine items
+    /// Provides services for machine items
     /// </summary>
     public interface IMachineService 
     {

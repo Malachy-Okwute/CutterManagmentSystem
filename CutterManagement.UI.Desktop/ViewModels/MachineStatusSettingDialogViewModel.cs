@@ -3,6 +3,7 @@ using CutterManagement.Core.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -12,6 +13,8 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class MachineStatusSettingDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest
     {
+        #region Private Fields
+
         /// <summary>
         /// Machine service
         /// </summary>
@@ -37,7 +40,14 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private string _message;
 
+        /// <summary>
+        /// Task loader
+        /// </summary>
         private Task _taskLoader;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// The unique id of this machine 
@@ -78,8 +88,6 @@ namespace CutterManagement.UI.Desktop
             set => _user = value;
         }
 
-        public string CurrentUserName { get; set; }
-
         /// <summary>
         /// The current status of the item to configure
         /// </summary>
@@ -98,13 +106,32 @@ namespace CutterManagement.UI.Desktop
             set => _message = value;
         }
 
+        #endregion
+
+        #region Events
+
         /// <summary>
         /// When user cancels or proceeds with setting machine status
         /// </summary>
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
 
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// Command to update machine status
+        /// </summary>
         public ICommand UpdateStatusCommand { get; set; }
+
+        /// <summary>
+        /// Command to cancel setting machine status
+        /// </summary>
         public ICommand CancelCommand { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Default constructor
@@ -131,9 +158,15 @@ namespace CutterManagement.UI.Desktop
             // Create commands
             CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(false)));
             UpdateStatusCommand = new RelayCommand(UpdateMachineStatus);
-
         }
 
+        #endregion
+
+        #region Command Methods
+
+        /// <summary>
+        /// Updates machine status
+        /// </summary>
         private void UpdateMachineStatus()
         {
             MachineDataModel newData = new MachineDataModel
@@ -151,21 +184,39 @@ namespace CutterManagement.UI.Desktop
             };
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Load users
+        /// </summary>
+        /// <returns><see cref="Task"/></returns>
         private async Task GetUsers()
         {
+            // Get user db table
             IDataAccessService<UserDataModel> users = _dataFactory.GetDbTable<UserDataModel>();
 
             foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
             {
-                UsersCollection.Add(userData, userData.FirstName + " " + userData.LastName);
+                // Do not load admin user
+                if(userData.LastName is "admin")
+                    continue;
+
+                UsersCollection.Add(userData, userData.FirstName.PadRight(10) + userData.LastName);
             }
 
-            OnPropertyChanged(nameof(UsersCollection));
+            // Set current user
+            _user = UsersCollection.FirstOrDefault().Key;
+
+            // Update UI
+            OnPropertyChanged(nameof(User));
+
+            // Refresh UI
+            CollectionViewSource.GetDefaultView(UsersCollection).Refresh();
         }
 
-        public void ClearDataResidue()
-        {
-            MachineStatusMessage = string.Empty;
-        }
+        #endregion
     }
 }
+

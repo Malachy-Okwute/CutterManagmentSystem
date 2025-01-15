@@ -82,12 +82,12 @@
             </d:ComboBox>
 
             <TextBox Grid.Row="2" Tag="Comment" VerticalContentAlignment="Top"
-                     Margin="5" Height="120" AcceptsReturn="True"
+                     Margin="5" Height="100" AcceptsReturn="True"
                      Style="{StaticResource RegularTextBoxStyle}"
                      Text="{Binding MachineStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
 
             <ComboBox Grid.Row="3" Height="35" Margin="5"
-                      ItemsSource="{Binding UsersCollection}"
+                      ItemsSource="{Binding UsersCollection, UpdateSourceTrigger=PropertyChanged}"
                       SelectedValue="{Binding User, Mode=TwoWay}"
                       SelectedValuePath="Key" DisplayMemberPath="Value" />
 
