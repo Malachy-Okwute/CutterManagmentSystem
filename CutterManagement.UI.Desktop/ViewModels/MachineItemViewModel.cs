@@ -156,6 +156,8 @@ namespace CutterManagement.UI.Desktop
                 Id = Id,
                 Owner = Owner,
                 Label = MachineNumber,
+                MachineNumber = MachineNumber,
+                MachineSetNumber = MachineSetNumber
             };
 
             DialogService.InvokeDialog(statusSettingVM);

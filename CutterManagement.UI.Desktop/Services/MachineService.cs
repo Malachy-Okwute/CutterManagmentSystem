@@ -74,28 +74,53 @@ namespace CutterManagement.UI.Desktop
         }
 
 
-        public async Task SetStatus(MachineDataModel newData)
+        public async Task<ValidationResult> SetStatus(MachineDataModel newData, int userId, Action<MachineDataModel> callback)
         {
-            // Get machine table
+            // Data that will be changing
+            MachineDataModel? data = null;
+
+            // Get tables
             IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
+            IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
+            IDataAccessService<MachineDataModelUserDataModel> machineUserJoinTable = _dataAccessService.GetDbTable<MachineDataModelUserDataModel>();
 
-            // Get the specific item from db
+            // Listen for when data actually changed
+            machineTable.DataChanged += (s, e) => 
+            {
+                data = e as MachineDataModel;
+                callback?.Invoke(data ?? throw new ArgumentNullException("Cannot find machine"));
+            };
+
+            // Get items from db
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
+            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
 
-            // TODO: Validate data, make sure comment is required
+            // Register machine validation
+            DataValidationService.RegisterValidator(new MachineValidation());
+
+            // Validate incoming data
+            ValidationResult result = DataValidationService.Validate(newData);
 
             // Make sure we have the item and incoming data is valid
-            if (machineData is not null)
+            if (machineData is not null && result.IsValid)
             {
                 // Wire new data 
                 machineData.Status = newData.Status;
-                machineData.StatusMessage = newData.StatusMessage ?? string.Empty;
+                machineData.StatusMessage = newData.StatusMessage;
                 machineData.DateTimeLastModified = DateTime.Now;
-                 
+
+                MachineDataModelUserDataModel machineUserJoinData = new MachineDataModelUserDataModel
+                {
+                    MachineDataModel = machineData,
+                    UserDataModel = user ?? throw new ArgumentNullException("User not found")
+                };
+
                 // Save new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
+                await machineUserJoinTable.CreateNewEntityAsync(machineUserJoinData);
             }
 
+            return result;
         }
     }
 }

@@ -54,6 +54,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public int Id { get; set; }
 
+        public string MachineNumber { get; set; }
+        public string MachineSetNumber { get; set; }
+
         /// <summary>
         /// The owner of this machine
         /// </summary>
@@ -171,20 +174,23 @@ namespace CutterManagement.UI.Desktop
         {
             MachineDataModel newData = new MachineDataModel
             {
+                Id = Id,
+                Owner = Owner,
                 Status = _currentStatus,
+                MachineNumber = MachineNumber,
+                MachineSetId = MachineSetNumber,
                 StatusMessage = MachineStatusMessage,
             };
 
-            var machineUser = new MachineDataModelUserDataModel
-            {
-                UserDataModel = _user,
-                UserDataModelId = _user.Id,
-                MachineDataModel = newData,
-                MachineDataModelId = Id,
-            };
+            _machineService.SetStatus(newData, _user.Id, OnStatusUpdated);
         }
 
         #endregion
+
+        private void OnStatusUpdated(MachineDataModel model)
+        {
+
+        }
 
         #region Methods
 

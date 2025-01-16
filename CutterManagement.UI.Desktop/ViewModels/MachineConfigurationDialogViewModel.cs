@@ -27,6 +27,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private string _message;
 
+        /// <summary>
+        /// Machine data model
+        /// </summary>
+        private MachineDataModel _machineDataModel;
+
         #endregion
 
         #region Public Properties
@@ -123,8 +128,9 @@ namespace CutterManagement.UI.Desktop
         public MachineConfigurationDialogViewModel(IMachineService machineService)
         {
             Title = "Configuration";
-            StatusCollection = new Dictionary<MachineStatus, string>();
             _machineService = machineService;
+            _machineDataModel = new MachineDataModel();
+            StatusCollection = new Dictionary<MachineStatus, string>();
 
             foreach (MachineStatus status in Enum.GetValues<MachineStatus>())
             {
