@@ -135,25 +135,25 @@ namespace CutterManagement.UI.Desktop
 
                 // Create join table for machine and user
                 // NOTE: Default machine is generated using admin user 
-                foreach (MachineDataModel data in defaultRingMachineData)
+                foreach (MachineDataModel machineData in defaultRingMachineData)
                 {
                     MachineDataModelUserDataModel machineUserJoinData = new MachineDataModelUserDataModel
                     {
-                        MachineDataModel = data,
+                        MachineDataModel = machineData,
                         UserDataModel = admin!
                     };
                     // Create new machine record in the database
                     await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
                     // Populate item list
-                    _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
+                    _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(machineData, _dataAccessService, OnItemSelectionChanged));
                 }
             }
 
             // Go through data from database
-            foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
+            foreach (MachineDataModel machineData in await machineTable.GetAllEntitiesAsync())
             {
                 // Resolve data
-                MachineItemViewModel machineItem = DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged);
+                MachineItemViewModel machineItem = DataResolver.ResolveToMachineItemViewModel(machineData, _dataAccessService, OnItemSelectionChanged);
 
                 // If machine data is owned by pinion
                 if (machineItem.Owner is Department.Pinion)
@@ -203,7 +203,7 @@ namespace CutterManagement.UI.Desktop
         private void InsertNewItem(MachineItemViewModel item, ObservableCollection<MachineItemViewModel> itemList)
         {
             // Find the incoming item
-            MachineItemViewModel? currentItemToChange = itemList.FirstOrDefault(x => x.Id == item.Id);
+            MachineItemViewModel? currentItemToChange = itemList.FirstOrDefault(x => x.MachineDataModel.Id == item.MachineDataModel.Id);
 
             // If the item exists
             if (currentItemToChange is not null)
