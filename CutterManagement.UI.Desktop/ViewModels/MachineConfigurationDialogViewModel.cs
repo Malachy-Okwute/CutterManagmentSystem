@@ -30,31 +30,18 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Machine data model
         /// </summary>
-        private MachineDataModel _machineDataModel = null!;
+        private MachineDataModel _machineDataModel;
 
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        /// Machine data model
-        /// </summary>
-        public MachineDataModel MachineDataModel
-        {
-            get => _machineDataModel;
-            set => _machineDataModel = value;
-        }
 
         public int Id { get; set; }
 
         /// <summary>
         /// Label indicating current machine number
         /// </summary>
-        public string Label
-        {
-            get => _machineDataModel.MachineNumber;
-            set => _machineDataModel.MachineNumber = value;
-        }
+        public string Label { get; set; }
 
         public Department Owner { get; set; }
 
@@ -142,6 +129,7 @@ namespace CutterManagement.UI.Desktop
         {
             Title = "Configuration";
             _machineService = machineService;
+            _machineDataModel = new MachineDataModel();
             StatusCollection = new Dictionary<MachineStatus, string>();
 
             foreach (MachineStatus status in Enum.GetValues<MachineStatus>())
@@ -172,27 +160,19 @@ namespace CutterManagement.UI.Desktop
         private async Task UpdateData()
         {
             // Create a new machine data model with data we care about sending to db
-            //MachineDataModel newData = new MachineDataModel
-            //{
-            //    // Set incoming data
-            //    Id = Id,
-            //    Owner = Owner,
-            //    MachineNumber = MachineNumber,
-            //    MachineSetId = MachineSetNumber,
-            //    Status = _currentStatus,
-            //    StatusMessage = MachineStatusMessage,
-            //};
-
-            if(_machineDataModel is not null)
+            MachineDataModel newData = new MachineDataModel
             {
-                _machineDataModel.MachineNumber = MachineNumber;
-                _machineDataModel.MachineSetId = MachineSetNumber;
-                _machineDataModel.Status = _currentStatus;
-                _machineDataModel.StatusMessage = MachineStatusMessage;
+                // Set incoming data
+                Id = Id,
+                Owner = Owner,
+                MachineNumber = MachineNumber,
+                MachineSetId = MachineSetNumber,
+                Status = _currentStatus,
+                StatusMessage = MachineStatusMessage,
+            };
 
-                // Configure machine with new data
-                await ConfigureMachine(_machineDataModel);
-            }
+            // Configure machine with new data
+            await ConfigureMachine(newData);
 
             // If configuration is successful
             if (IsConfigurationSuccessful)

@@ -11,27 +11,22 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="MachineItemViewModel"/></returns>
         public static MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData, IDataAccessServiceFactory dataFactory, EventHandler eventHandler)
         {
-            MachineItemViewModel item = new MachineItemViewModel(dataFactory)
+            MachineItemViewModel items = new MachineItemViewModel(dataFactory)
             {
-                MachineDataModel = machineData
+                Id = machineData.Id,
+                MachineSetNumber = machineData.MachineSetId,
+                MachineNumber = machineData.MachineNumber,
+                Status = machineData.Status,
+                StatusMessage = machineData.StatusMessage,
+                Owner = machineData.Owner,
+                FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
+                DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
             };
 
-            //MachineItemViewModel items = new MachineItemViewModel(dataFactory)
-            //{
-            //    Id = machineData.Id,
-            //    MachineSetNumber = machineData.MachineSetId,
-            //    MachineNumber = machineData.MachineNumber,
-            //    Status = machineData.Status,
-            //    StatusMessage = machineData.StatusMessage,
-            //    Owner = machineData.Owner,
-            //    FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
-            //    DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
-            //};
-
             // Hook in selection changed event
-            item.ItemSelected += eventHandler;
+            items.ItemSelected += eventHandler;
 
-            return item;
+            return items;
         }
 
     }

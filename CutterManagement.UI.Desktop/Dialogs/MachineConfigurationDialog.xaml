@@ -61,7 +61,7 @@
                            FontWeight="Bold" />
 
                     <Label Padding="40,4" HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Content="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=---}"
+                           Content="{Binding Label, Mode=TwoWay, FallbackValue=000}"
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontSize="{StaticResource Large}"
                            FontFamily="{StaticResource RobotoFlexRegular}"

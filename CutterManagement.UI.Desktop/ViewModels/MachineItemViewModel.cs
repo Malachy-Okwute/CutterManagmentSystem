@@ -1,6 +1,5 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
-using SQLitePCL;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -18,133 +17,33 @@ namespace CutterManagement.UI.Desktop
         private IDataAccessServiceFactory _dataFactory;
 
         /// <summary>
-        /// Machine data
+        /// Machine configuration view model
         /// </summary>
-        private MachineDataModel _machineDataModel;
+        private MachineConfigurationDialogViewModel _machineConfiguration;
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        /// Machine data
-        /// </summary>
-        public MachineDataModel MachineDataModel
-        {
-            get => _machineDataModel;
-            set => _machineDataModel = value;
-        }
-
-        /// <summary>
         /// The unique Id of this machine
         /// </summary>
-        public int Id
-        {
-            get => _machineDataModel.Id;
-            set => _machineDataModel.Id = value;
-        }
+        public int Id { get; set; }
 
         /// <summary>
         /// Unique number assigned to this machine
         /// </summary>
-        public string MachineNumber
-        {
-            get => _machineDataModel.MachineNumber;
-            set => _machineDataModel.MachineNumber = value;
-        }
+        public string MachineNumber { get; set; }
 
         /// <summary>
         /// Unique set number assigned to this machine
         /// </summary>
-        public string MachineSetNumber
-        {
-            get => _machineDataModel.MachineSetId;
-            set => _machineDataModel.MachineSetId = value;
-        }
-
-        /// <summary>
-        /// The current status of this machine 
-        /// </summary>
-        public MachineStatus Status
-        {
-            get => _machineDataModel.Status;
-            set => _machineDataModel.Status = value;
-        }
-
-        /// <summary>
-        /// Comment related to the status of this machine
-        /// </summary>
-        public string StatusMessage
-        {
-            get => _machineDataModel.StatusMessage;
-            set => _machineDataModel.StatusMessage = value;
-        }
-
-        /// <summary>
-        /// The owner of this machine
-        /// </summary>
-        public Department Owner
-        {
-            get => _machineDataModel.Owner;
-            set => _machineDataModel.Owner = value;
-        }
-
-        /// <summary>
-        /// Result of the last part checked 
-        /// <para>SETUP | PASSED | FAILED</para>
-        /// </summary>
-        public string FrequencyCheckResult
-        {
-            get => _machineDataModel.FrequencyCheckResult.ToString();
-            set
-            {
-                if (Enum.TryParse(value, out FrequencyCheckResult result))
-                {
-                    _machineDataModel.FrequencyCheckResult = result;
-                    FrequencyCheckResult = value;
-                }
-                else
-                {
-                    throw new InvalidOperationException("Invalid result, notify developer");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Date and time of the last checked part on this machine
-        /// </summary>
-        public string DateTimeLastModified 
-        {
-            get => _machineDataModel.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"); 
-            set 
-            { 
-                if (DateTime.TryParse(value, out DateTime result))
-                {
-                    _machineDataModel.DateTimeLastModified = result;
-                    DateTimeLastModified = value; 
-                } 
-                else
-                {
-                    throw new InvalidOperationException("Invalid date, notify developer");
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Part unique id number running on this machine
-        /// </summary>
-        public string? PartNumber { get; set; }
+        public string MachineSetNumber { get; set; } 
 
         /// <summary>
         /// Cutter id number currently setup on this machine
         /// </summary>
-        public string? CutterNumber { get; set; }
-
-        /// <summary>
-        /// Number of parts produced by this machine with the current cutter
-        /// </summary>
-        public string? Count { get; set; }
+        public string? CutterNumber { get; set; } 
 
         /// <summary>
         /// True if this machine is running, false if it's sitting idle or down for maintenance
@@ -152,10 +51,46 @@ namespace CutterManagement.UI.Desktop
         public bool IsRunning { get; set; }
 
         /// <summary>
+        /// The current status of this machine 
+        /// </summary>
+        public MachineStatus Status { get; set; }
+
+        /// <summary>
+        /// Comment related to the status of this machine
+        /// </summary>
+        public string StatusMessage { get; set; } 
+
+        /// <summary>
+        /// Part unique id number running on this machine
+        /// </summary>
+        public string? PartNumber { get; set; }
+
+        /// <summary>
+        /// Number of parts produced by this machine with the current cutter
+        /// </summary>
+        public string? Count { get; set; }
+
+        /// <summary>
+        /// Result of the last part checked 
+        /// <para>SETUP | PASSED | FAILED</para>
+        /// </summary>
+        public string FrequencyCheckResult { get; set; } 
+
+        /// <summary>
+        /// Date and time of the last checked part on this machine
+        /// </summary>
+        public string DateTimeLastModified { get; set; }
+
+        /// <summary>
         /// True if pop up should show in the view 
         /// otherwise false
         /// </summary>
         public bool IsPopupOpen { get; set; }
+
+        /// <summary>
+        /// The owner of this machine
+        /// </summary>
+        public Department Owner { get; set; }
 
         /// <summary>
         /// True if admin user is currently logged in
@@ -234,13 +169,16 @@ namespace CutterManagement.UI.Desktop
         private void OpenMachineConfigurationDialog()
         {
             ItemSelected?.Invoke(this, EventArgs.Empty);
-            var machineConfiguration = new MachineConfigurationDialogViewModel(new MachineService(_dataFactory))
+            _machineConfiguration = new MachineConfigurationDialogViewModel(new MachineService(_dataFactory))
             {
-                MachineDataModel = _machineDataModel
+                Id = Id,
+                Owner = Owner,
+                Label = MachineNumber,
+                CurrentStatus = Status
             };
 
             // Show dialog
-            DialogService.InvokeDialog(machineConfiguration);
+            DialogService.InvokeDialog(_machineConfiguration);
         }
 
         /// <summary>
