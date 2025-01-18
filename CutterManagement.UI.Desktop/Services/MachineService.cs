@@ -94,6 +94,8 @@ namespace CutterManagement.UI.Desktop
             // Get items from db
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
+            MachineDataModelUserDataModel? machineAndUser = (await machineUserJoinTable.GetAllEntitiesAsync())
+                                                            .FirstOrDefault(e => e.MachineDataModelId == machineData?.Id);
 
             // Register machine validation
             DataValidationService.RegisterValidator(new MachineValidation());
@@ -102,22 +104,20 @@ namespace CutterManagement.UI.Desktop
             ValidationResult result = DataValidationService.Validate(newData);
 
             // Make sure we have the item and incoming data is valid
-            if (machineData is not null && result.IsValid)
+            if (machineData is not null && machineAndUser is not null && result.IsValid)
             {
-                // Wire new data 
+                // Wire new machine data 
                 machineData.Status = newData.Status;
                 machineData.StatusMessage = newData.StatusMessage;
                 machineData.DateTimeLastModified = DateTime.Now;
 
-                MachineDataModelUserDataModel machineUserJoinData = new MachineDataModelUserDataModel
-                {
-                    MachineDataModel = machineData,
-                    UserDataModel = user ?? throw new ArgumentNullException("User not found")
-                };
+                // Wire new machine and user data 
+                machineAndUser.MachineDataModel = machineData;
+                machineAndUser.UserDataModel = user ?? throw new ArgumentNullException("User not found");
 
-                // Save new data
+                // Update db with the new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
-                await machineUserJoinTable.UpdateEntityAsync(machineUserJoinData);
+                await machineUserJoinTable.UpdateEntityAsync(machineAndUser);
 
                 // Unhook event
                 machineTable.DataChanged -= delegate { };
