@@ -7,7 +7,7 @@
             ValidationResult result = CreateValidationInstance();
 
             if (data is null)
-               return ErrorReport(result, "A valid user item is required");
+               return ErrorReport(result, "A valid user is required");
 
             if (string.IsNullOrEmpty(data.FirstName))
                 return ErrorReport(result, "User's first name is required");

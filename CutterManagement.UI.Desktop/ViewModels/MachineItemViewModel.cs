@@ -174,7 +174,6 @@ namespace CutterManagement.UI.Desktop
                 Id = Id,
                 Owner = Owner,
                 Label = MachineNumber,
-                CurrentStatus = Status
             };
 
             // Show dialog

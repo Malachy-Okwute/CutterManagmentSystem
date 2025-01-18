@@ -135,7 +135,9 @@ namespace CutterManagement.UI.Desktop
         private void GetCurrentLoginSessionStatus()
         {
             _sessionStatus = AuthenticationService.IsAdminUserAuthorized ? "Currently logged in" : "Not logged in";
+
             OnPropertyChanged(nameof(SessionStatus));
+            OnPropertyChanged(nameof(IsAdminLoggedIn));
 
             // TODO: Broadcast and listen to live event of when login session starts or ended
             //       So we can get live update and update UI with the latest information

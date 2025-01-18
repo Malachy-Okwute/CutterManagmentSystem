@@ -2,6 +2,7 @@
 using CutterManagement.Core.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -11,7 +12,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="StatusSettingDialog"/>
     /// </summary>
-    public class MachineStatusSettingDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest
+    public class MachineStatusSettingDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest, ISubscribeToMessagingSystem
     {
         #region Private Fields
 
@@ -54,7 +55,14 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// Machine number
+        /// </summary>
         public string MachineNumber { get; set; }
+
+        /// <summary>
+        /// Machine Set number
+        /// </summary>
         public string MachineSetNumber { get; set; }
 
         /// <summary>
@@ -71,6 +79,17 @@ namespace CutterManagement.UI.Desktop
         /// New machine status message
         /// </summary>
         public string MachineStatusMessage { get; set; }
+
+        /// <summary>
+        /// True if message is to be displayed to user
+        /// Otherwise false
+        /// </summary>
+        public bool ShowMessage { get; set; }
+
+        /// <summary>
+        /// True if attempt to set machine status succeeded
+        /// </summary>
+        public bool IsStatusSettingSuccessful { get; set; }
 
         /// <summary>
         /// Collection of status options available
@@ -159,7 +178,7 @@ namespace CutterManagement.UI.Desktop
             }
 
             // Create commands
-            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(false)));
+            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsStatusSettingSuccessful)));
             UpdateStatusCommand = new RelayCommand(UpdateMachineStatus);
         }
 
@@ -170,7 +189,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Updates machine status
         /// </summary>
-        private void UpdateMachineStatus()
+        private async void UpdateMachineStatus()
         {
             MachineDataModel newData = new MachineDataModel
             {
@@ -182,13 +201,69 @@ namespace CutterManagement.UI.Desktop
                 StatusMessage = MachineStatusMessage,
             };
 
-            _machineService.SetStatus(newData, _user.Id, OnStatusUpdated);
+            await SetMachineStatus(newData);
+
+            // If configuration is successful
+            if (IsStatusSettingSuccessful)
+            {
+                // Send dialog window close request
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsStatusSettingSuccessful));
+            }
+
         }
 
         #endregion
 
-        private void OnStatusUpdated(MachineDataModel model)
+        public async Task SetMachineStatus(MachineDataModel data)
         {
+            MachineDataModel? machineDataModel = null;
+
+            try
+            {
+                ValidationResult result = await _machineService.SetStatus(data, _user.Id, (data) =>
+                {
+                    machineDataModel = data;
+                });
+
+                // Set message
+                _message = string.IsNullOrEmpty(result.ErrorMessage) ? "Machine status successfully set " : result.ErrorMessage;
+
+                if(result.IsValid)
+                {
+                    IsStatusSettingSuccessful = true;
+                    Messenger.MessageSender.SendMessage(machineDataModel ?? throw new ArgumentNullException($"{machineDataModel} is null"));
+                }
+
+                OnPropertyChanged(nameof(Message));
+
+                ShowMessage = true;
+
+                // Wait for 2 seconds
+                await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>
+                {
+                    // If process is successful...
+                    if (result.IsValid)
+                    {
+                        // Close message
+                        ShowMessage = false;
+                    }
+                    // Otherwise
+                    else
+                    {
+                        // Reset success flag
+                        IsStatusSettingSuccessful = false;
+
+                        // Close message
+                        ShowMessage = false;
+                    }
+                });
+
+            }
+            catch (Exception ex)
+            {
+                Debugger.Break();
+                Debug.WriteLine(ex.Message);
+            }
 
         }
 
@@ -223,6 +298,16 @@ namespace CutterManagement.UI.Desktop
         }
 
         #endregion
+
+        #region Messages
+
+        public void ReceiveMessage(IMessage message)
+        {
+            // Empty
+        }
+
+        #endregion
+
     }
 }
 

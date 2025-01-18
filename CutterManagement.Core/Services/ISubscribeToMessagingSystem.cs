@@ -3,7 +3,7 @@
     /// <summary>
     /// Subscriber to messages sent via <see cref="IMessenger"/>
     /// </summary>
-    public interface ISubscribeToMessages
+    public interface ISubscribeToMessagingSystem
     {
         /// <summary>
         /// Receives message sent via <see cref="IMessenger"/>

@@ -8,7 +8,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineConfigurationDialogControl"/>
     /// </summary>
-    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest, ISubscribeToMessages
+    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest, ISubscribeToMessagingSystem
     {
         #region Private Fields
 
@@ -27,11 +27,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private string _message;
 
-        /// <summary>
-        /// Machine data model
-        /// </summary>
-        private MachineDataModel _machineDataModel;
-
         #endregion
 
         #region Public Properties
@@ -43,6 +38,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public string Label { get; set; }
 
+        /// <summary>
+        /// Owner of machine 
+        /// </summary>
         public Department Owner { get; set; }
 
         /// <summary>
@@ -129,7 +127,7 @@ namespace CutterManagement.UI.Desktop
         {
             Title = "Configuration";
             _machineService = machineService;
-            _machineDataModel = new MachineDataModel();
+            CurrentStatus = MachineStatus.None;
             StatusCollection = new Dictionary<MachineStatus, string>();
 
             foreach (MachineStatus status in Enum.GetValues<MachineStatus>())
@@ -210,11 +208,11 @@ namespace CutterManagement.UI.Desktop
                     Messenger.MessageSender.SendMessage(result.Item2);
                 }
 
-                // Show message
-                ShowMessage = true;
-
                 // Update UI with the current message
                 OnPropertyChanged(nameof(Message));
+
+                // Show message
+                ShowMessage = true;
 
                 // Wait for 2 seconds
                 await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>

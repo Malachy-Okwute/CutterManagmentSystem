@@ -27,6 +27,9 @@
             else if (machine.MachineSetId.Count() > 3 || machine.MachineSetId.Count() < 3)
                 return ErrorReport(result, "Machine set ID must be a 3 digits number");
             
+            else if (machine.Status is MachineStatus.None)
+                return ErrorReport(result, "Choose machine status");
+
             else if (string.IsNullOrEmpty(machine.StatusMessage))
                 return ErrorReport(result, "Comment is required");
 

@@ -9,7 +9,7 @@
         /// Registers members that wants to send or receive messages
         /// </summary>
         /// <param name="subscriber">The subscriber</param>
-        void RegisterMessenger(ISubscribeToMessages subscriber);
+        void RegisterMessenger(ISubscribeToMessagingSystem subscriber);
 
         /// <summary>
         /// Sends message to subscriber

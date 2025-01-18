@@ -36,6 +36,9 @@ namespace CutterManagement.UI.Desktop
         {
             switch((MachineStatus)value)
             {
+                case MachineStatus.None:
+                    return "---";
+
                 case MachineStatus.IsRunning:
                     return new RippleEffectIndicatorControl();
 

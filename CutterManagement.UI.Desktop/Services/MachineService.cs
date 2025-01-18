@@ -88,7 +88,7 @@ namespace CutterManagement.UI.Desktop
             machineTable.DataChanged += (s, e) => 
             {
                 data = e as MachineDataModel;
-                callback?.Invoke(data ?? throw new ArgumentNullException("Cannot find machine"));
+                callback?.Invoke(data ?? throw new ArgumentNullException("Cannot find machine item that changed"));
             };
 
             // Get items from db
@@ -117,7 +117,10 @@ namespace CutterManagement.UI.Desktop
 
                 // Save new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
-                await machineUserJoinTable.CreateNewEntityAsync(machineUserJoinData);
+                await machineUserJoinTable.UpdateEntityAsync(machineUserJoinData);
+
+                // Unhook event
+                machineTable.DataChanged -= delegate { };
             }
 
             return result;

@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
 {
-    public class UsersPageViewModel : ViewModelBase, ISubscribeToMessages
+    public class UsersPageViewModel : ViewModelBase, ISubscribeToMessagingSystem
     {
         #region Private Fields
 
@@ -127,6 +127,8 @@ namespace CutterManagement.UI.Desktop
                     // Add users
                     AddUserToUserCollection(user);
                 }
+
+                OnPropertyChanged(nameof(IsUserCollectionEmpty));
             });
         }
 
