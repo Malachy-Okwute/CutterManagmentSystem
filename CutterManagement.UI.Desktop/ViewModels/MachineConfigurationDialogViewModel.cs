@@ -8,7 +8,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineConfigurationDialogControl"/>
     /// </summary>
-    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest, ISubscribeToMessagingSystem
+    public class MachineConfigurationDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest, ISubscribeToMessages
     {
         #region Private Fields
 

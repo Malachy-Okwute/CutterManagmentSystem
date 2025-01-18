@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
 {
-    public class UsersPageViewModel : ViewModelBase, ISubscribeToMessagingSystem
+    public class UsersPageViewModel : ViewModelBase, ISubscribeToMessages
     {
         #region Private Fields
 

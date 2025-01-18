@@ -12,7 +12,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="StatusSettingDialog"/>
     /// </summary>
-    public class MachineStatusSettingDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest, ISubscribeToMessagingSystem
+    public class MachineStatusSettingDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest, ISubscribeToMessages
     {
         #region Private Fields
 

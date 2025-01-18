@@ -16,7 +16,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Collection of subscribers
         /// </summary>
-        private ICollection<ISubscribeToMessagingSystem> _subscribers = new List<ISubscribeToMessagingSystem>();
+        private ICollection<ISubscribeToMessages> _subscribers = new List<ISubscribeToMessages>();
 
         /// <summary>
         /// Message sender
@@ -28,7 +28,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="subscriber">The subscriber</param>
         /// <exception cref="ArgumentException">Throws an exception if subscriber already subscribes to messenger</exception>
-        public void RegisterMessenger(ISubscribeToMessagingSystem subscriber)
+        public void RegisterMessenger(ISubscribeToMessages subscriber)
         {
             if (_subscribers.Contains(subscriber))
             {
@@ -52,7 +52,7 @@ namespace CutterManagement.UI.Desktop
                 sender = frame[1].GetMethod()?.DeclaringType;
             }
 
-            foreach (ISubscribeToMessagingSystem subscriber in _subscribers)
+            foreach (ISubscribeToMessages subscriber in _subscribers)
             {
                 // Do not send current message to the current message sender
                 if(subscriber.GetType().FullName == sender?.DeclaringType?.FullName)

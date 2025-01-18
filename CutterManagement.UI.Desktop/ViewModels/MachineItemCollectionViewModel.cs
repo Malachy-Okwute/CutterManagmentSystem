@@ -17,7 +17,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="MachineItemCollectionControl"/>
     /// </summary>
-    public class MachineItemCollectionViewModel : ViewModelBase, ISubscribeToMessagingSystem
+    public class MachineItemCollectionViewModel : ViewModelBase, ISubscribeToMessages
     {
         #region Private Fields
 
