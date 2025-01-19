@@ -42,8 +42,13 @@
         public DateTime LastUsedDate { get; set; }
 
         /// <summary>
-        /// Machine and cutters skip navigation properties
+        /// Navigation property id
         /// </summary>
-        public ICollection<MachineDataModelCutterDataModel> MachinesAndCutters { get; set; }
+        public int? MachineDataModelId { get; set; }
+
+        /// <summary>
+        /// Navigation property
+        /// </summary>
+        public MachineDataModel MachineDataModel { get; set; }
     }
 }

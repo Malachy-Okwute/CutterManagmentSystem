@@ -111,7 +111,7 @@ namespace CutterManagement.UI.Desktop
                 {
                     FirstName = "resource",
                     LastName = "admin",
-                    DateCreated = DateTime.UtcNow,
+                    DateCreated = DateTime.Now,
                     Shift = UserShift.First
                 });
 

@@ -27,8 +27,13 @@
         public PartKind Kind { get; set; }
 
         /// <summary>
-        /// Machine and parts skip navigation properties
+        /// Navigation property id
         /// </summary>
-        public ICollection<MachineDataModelPartDataModel> MachinesAndParts { get; set; }
+        public int? MachineDataModelId { get; set; }
+
+        /// <summary>
+        /// Navigation property
+        /// </summary>
+        public MachineDataModel MachineDataModel { get; set; }
     }
 }

@@ -82,7 +82,6 @@ namespace CutterManagement.UI.Desktop
             // Get tables
             IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
             IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
-            IDataAccessService<MachineDataModelUserDataModel> machineUserJoinTable = _dataAccessService.GetDbTable<MachineDataModelUserDataModel>();
 
             // Listen for when data actually changed
             machineTable.DataChanged += (s, e) => 
@@ -94,8 +93,6 @@ namespace CutterManagement.UI.Desktop
             // Get items from db
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
-            MachineDataModelUserDataModel? machineAndUser = (await machineUserJoinTable.GetAllEntitiesAsync())
-                                                            .FirstOrDefault(e => e.MachineDataModelId == machineData?.Id);
 
             // Register machine validation
             DataValidationService.RegisterValidator(new MachineValidation());
@@ -104,20 +101,18 @@ namespace CutterManagement.UI.Desktop
             ValidationResult result = DataValidationService.Validate(newData);
 
             // Make sure we have the item and incoming data is valid
-            if (machineData is not null && machineAndUser is not null && result.IsValid)
+            if (machineData is not null && result.IsValid)
             {
                 // Wire new machine data 
                 machineData.Status = newData.Status;
                 machineData.StatusMessage = newData.StatusMessage;
                 machineData.DateTimeLastModified = DateTime.Now;
 
-                // Wire new machine and user data 
-                machineAndUser.MachineDataModel = machineData;
-                machineAndUser.UserDataModel = user ?? throw new ArgumentNullException("User not found");
+                // Set the user performing this operation
+                machineData.Users.Add(user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"));
 
                 // Update db with the new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
-                await machineUserJoinTable.UpdateEntityAsync(machineAndUser);
 
                 // Unhook event
                 machineTable.DataChanged -= delegate { };

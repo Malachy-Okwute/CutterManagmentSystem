@@ -101,7 +101,6 @@ namespace CutterManagement.UI.Desktop
             // Get tables needed
             IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
             IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
-            IDataAccessService<MachineDataModelUserDataModel> machineUserTable = _dataAccessService.GetDbTable<MachineDataModelUserDataModel>();
 
             // Ensure pin and ring collections are empty
             _pinItems.Clear();
@@ -115,41 +114,41 @@ namespace CutterManagement.UI.Desktop
                 var defaultRingMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Ring, 14);
 
                 // Get admin user
-                UserDataModel? admin = (await userTable.GetAllEntitiesAsync()).ToList().FirstOrDefault(user => user.LastName is "admin");
+                UserDataModel admin = (await userTable.GetAllEntitiesAsync()).ToList().First(user => user.LastName is "admin");
 
-                // Go through generated pinion data
                 foreach (MachineDataModel data in defaultPinionMachineData)
                 {
-                    // Create join table for machine and user
-                    // NOTE: Default machine is generated using admin user 
-                    MachineDataModelUserDataModel machineUserJoinData = new MachineDataModelUserDataModel 
-                    {
-                        MachineDataModel = data, 
-                        UserDataModel = admin! 
-                    };
-                    // Create new machine record in the database
-                    await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
+                    // NOTE: Default machine is generated using admin as default user 
+
+                    // Set admin as the default user for the generated machines
+                    data.Users.Add(admin);
+
+                    // Create machine db entity
+                    await machineTable.CreateNewEntityAsync(data);
+                  
                     // Populate item list
                     _pinItems.Add(DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
                 }
 
-                // Create join table for machine and user
-                // NOTE: Default machine is generated using admin user 
                 foreach (MachineDataModel data in defaultRingMachineData)
                 {
-                    MachineDataModelUserDataModel machineUserJoinData = new MachineDataModelUserDataModel
-                    {
-                        MachineDataModel = data,
-                        UserDataModel = admin!
-                    };
-                    // Create new machine record in the database
-                    await machineUserTable.CreateNewEntityAsync(machineUserJoinData);
+                    // NOTE: Default machine is generated using admin as default user 
+
+                    // Set admin as the default user for the generated machines
+                    data.Users.Add(admin ?? throw new NullReferenceException($"User with the name {admin?.FirstName.PadRight(6)} {admin?.LastName} not found"));
+
+                    // Create machine db entity
+                    await machineTable.CreateNewEntityAsync(data);
+
                     // Populate item list
                     _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
                 }
+
+                // Do nothing else
+                return;
             }
 
-            // Go through data from database
+            // Go through each data from database
             foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
             {
                 // Resolve data

@@ -32,7 +32,7 @@
             <Grid Grid.RowSpan="5" Height="80"
                   Margin="14" Panel.ZIndex="10"
                   Background="{Binding IsStatusSettingSuccessful, Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}"
-                  Visibility="{Binding ShowMessage, Converter={local:BooleanToVisibilityConverter}}"  >
+                  Visibility="{Binding ShowMessage, Converter={local:BooleanToVisibilityConverter}}">
 
                 <Grid.Effect>
                     <DropShadowEffect BlurRadius="12" ShadowDepth="0"

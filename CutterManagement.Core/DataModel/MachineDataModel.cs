@@ -31,6 +31,11 @@
         public DateTime DateTimeLastModified { get; set; }
 
         /// <summary>
+        /// The most recent date and time this machine was setup with part and cutter
+        /// </summary>
+        public DateTime DateTimeLastSetup { get; set; } = DateTime.MinValue;
+
+        /// <summary>
         /// The dept. owner of this machine
         /// </summary>
         public Department Owner { get; set; }
@@ -62,19 +67,23 @@
         public FrequencyCheckResult FrequencyCheckResult { get; set; }
 
         /// <summary>
-        /// Machine and parts skip navigation properties
+        /// Cutter navigation property id
         /// </summary>
-        public ICollection<MachineDataModelPartDataModel> MachinesAndParts { get; set; }
+        public int? CutterDataModelId { get; set; }
 
         /// <summary>
-        /// Machine and cutters skip navigation properties
+        /// Cutter navigation property
         /// </summary>
-        public ICollection<MachineDataModelCutterDataModel> MachinesAndCutters { get; set; }
+        public CutterDataModel Cutter { get; set; }
 
         /// <summary>
-        /// Machine and users skip navigation properties
+        /// Parts skip navigation property
         /// </summary>
-        public ICollection<MachineDataModelUserDataModel> MachinesAndUsers { get; set; }
+        public ICollection<PartDataModel> Parts { get; set; } 
 
+        /// <summary>
+        /// Users skip navigation property
+        /// </summary>
+        public ICollection<UserDataModel> Users { get; set; } = new List<UserDataModel>();
     }
 }

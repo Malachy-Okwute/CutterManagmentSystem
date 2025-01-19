@@ -31,21 +31,6 @@ namespace CutterManagement.DataAccess
         /// </summary>
         public DbSet<CutterDataModel> Cutters => Set<CutterDataModel>();
 
-        /// <summary>
-        /// Machine and users many to many relationship table
-        /// </summary>
-        public DbSet<MachineDataModelUserDataModel> MachineDataModelUserDataModels => Set<MachineDataModelUserDataModel>();
-
-        /// <summary>
-        /// Machine and parts many to many relationship table
-        /// </summary>
-        public DbSet<MachineDataModelPartDataModel> MachineDataModelPartDataModels => Set<MachineDataModelPartDataModel>();
-
-        /// <summary>
-        /// Machine and cutters many to many relationship table
-        /// </summary>
-        public DbSet<MachineDataModelCutterDataModel> MachineDataModelCutterDataModels => Set<MachineDataModelCutterDataModel>();
-
         #endregion
 
         #region Constructor
@@ -75,11 +60,19 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<MachineDataModel>().Property(x => x.PartToothSize).HasMaxLength(100).IsRequired(false);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.StatusMessage).HasMaxLength(100).IsRequired(false);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.DateCreated).HasMaxLength(100);
+            modelBuilder.Entity<MachineDataModel>().Property(x => x.DateTimeLastSetup).HasMaxLength(100);
+            modelBuilder.Entity<MachineDataModel>().Property(x => x.DateTimeLastModified).HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.Owner).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.Status).HasConversion<string>().HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.FrequencyCheckResult).HasConversion<string>().HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.CutterChangeInfo).HasConversion<string>().HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.CutterChangeComment).HasMaxLength(400).IsRequired(false);
+
+            // Configure relationships
+            modelBuilder.Entity<UserDataModel>().HasMany(u => u.MachineDataModel).WithMany(m => m.Users);
+            modelBuilder.Entity<MachineDataModel>().HasMany(u => u.Users).WithMany(m => m.MachineDataModel);
+            modelBuilder.Entity<PartDataModel>().HasOne(p => p.MachineDataModel).WithMany(m => m.Parts).HasForeignKey(p => p.MachineDataModelId);
+            modelBuilder.Entity<MachineDataModel>().HasOne(m => m.Cutter).WithOne(c => c.MachineDataModel).HasForeignKey<CutterDataModel>(c => c.MachineDataModelId);
 
             #endregion
 
@@ -112,25 +105,6 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).HasConversion<string>().IsRequired().HasMaxLength(100);
 
             #endregion
-
-            #region Many To Many Relationship Configurations
-
-            // Machine and user
-            modelBuilder.Entity<MachineDataModelUserDataModel>().HasKey(mu => new {mu.MachineDataModelId, mu.UserDataModelId });
-            modelBuilder.Entity<MachineDataModelUserDataModel>().HasOne(mu => mu.UserDataModel).WithMany(x => x.MachinesAndUsers).HasForeignKey(mu => mu.UserDataModelId);
-            modelBuilder.Entity<MachineDataModelUserDataModel>().HasOne(mu => mu.MachineDataModel).WithMany(x => x.MachinesAndUsers).HasForeignKey(mu => mu.MachineDataModelId);
-
-            // Machine and part
-            modelBuilder.Entity<MachineDataModelPartDataModel>().HasKey(mp => new { mp.MachineDataModelId, mp.PartDataModelId });
-            modelBuilder.Entity<MachineDataModelPartDataModel>().HasOne(mp => mp.PartDataModel).WithMany(x => x.MachinesAndParts).HasForeignKey(mp => mp.PartDataModelId);
-            modelBuilder.Entity<MachineDataModelPartDataModel>().HasOne(mp => mp.MachineDataModel).WithMany(x => x.MachinesAndParts).HasForeignKey(mp => mp.MachineDataModelId);
-
-            // Machine and cutter
-            modelBuilder.Entity<MachineDataModelCutterDataModel>().HasKey(mc => new { mc.MachineDataModelId, mc.CutterDataModelId});
-            modelBuilder.Entity<MachineDataModelCutterDataModel>().HasOne(mc => mc.CutterDataModel).WithMany(x => x.MachinesAndCutters).HasForeignKey(mp => mp.CutterDataModelId);
-            modelBuilder.Entity<MachineDataModelCutterDataModel>().HasOne(mc => mc.MachineDataModel).WithMany(x => x.MachinesAndCutters).HasForeignKey(mp => mp.MachineDataModelId);
-
-            #endregion
         }
 
         /// <summary>
@@ -143,7 +117,7 @@ namespace CutterManagement.DataAccess
             try
             {
                 // Run migration
-                await Database.MigrateAsync();
+                //await Database.MigrateAsync();
             }
             catch (Exception ex)
             {
