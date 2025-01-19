@@ -68,12 +68,6 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<MachineDataModel>().Property(x => x.CutterChangeInfo).HasConversion<string>().HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.CutterChangeComment).HasMaxLength(400).IsRequired(false);
 
-            // Configure relationships
-            modelBuilder.Entity<UserDataModel>().HasMany(u => u.MachineDataModel).WithMany(m => m.Users);
-            modelBuilder.Entity<MachineDataModel>().HasMany(u => u.Users).WithMany(m => m.MachineDataModel);
-            modelBuilder.Entity<PartDataModel>().HasOne(p => p.MachineDataModel).WithMany(m => m.Parts).HasForeignKey(p => p.MachineDataModelId);
-            modelBuilder.Entity<MachineDataModel>().HasOne(m => m.Cutter).WithOne(c => c.MachineDataModel).HasForeignKey<CutterDataModel>(c => c.MachineDataModelId);
-
             #endregion
 
             #region User Data Model Configuration
@@ -105,6 +99,19 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).HasConversion<string>().IsRequired().HasMaxLength(100);
 
             #endregion
+
+            #region Relationship Configurations
+
+            // Users and machines
+            modelBuilder.Entity<UserDataModel>().HasMany(u => u.MachineDataModel).WithMany(m => m.Users);
+            modelBuilder.Entity<MachineDataModel>().HasMany(u => u.Users).WithMany(m => m.MachineDataModel);
+            // Parts and machines
+            modelBuilder.Entity<PartDataModel>().HasMany(p => p.MachineDataModel).WithMany(m => m.Parts);
+            modelBuilder.Entity<MachineDataModel>().HasMany(p => p.Parts).WithMany(m => m.MachineDataModel);
+            // Cutter and machine
+            modelBuilder.Entity<MachineDataModel>().HasOne(m => m.Cutter).WithOne(c => c.MachineDataModel).HasForeignKey<CutterDataModel>(c => c.MachineDataModelId);
+
+            #endregion
         }
 
         /// <summary>
@@ -117,7 +124,7 @@ namespace CutterManagement.DataAccess
             try
             {
                 // Run migration
-                //await Database.MigrateAsync();
+                await Database.MigrateAsync();
             }
             catch (Exception ex)
             {

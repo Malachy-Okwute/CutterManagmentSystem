@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CutterManagement.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDatabaseMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,6 +38,40 @@ namespace CutterManagement.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Parts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PartNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PartToothCount = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Model = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Kind = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    MachineDataModelId = table.Column<int>(type: "int", nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Shift = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cutters",
                 columns: table => new
                 {
@@ -64,48 +98,51 @@ namespace CutterManagement.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parts",
+                name: "MachineDataModelPartDataModel",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PartNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PartToothCount = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Model = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Kind = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    MachineDataModelId = table.Column<int>(type: "int", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    MachineDataModelId = table.Column<int>(type: "int", nullable: false),
+                    PartsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parts", x => x.Id);
+                    table.PrimaryKey("PK_MachineDataModelPartDataModel", x => new { x.MachineDataModelId, x.PartsId });
                     table.ForeignKey(
-                        name: "FK_Parts_Machines_MachineDataModelId",
+                        name: "FK_MachineDataModelPartDataModel_Machines_MachineDataModelId",
                         column: x => x.MachineDataModelId,
                         principalTable: "Machines",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MachineDataModelPartDataModel_Parts_PartsId",
+                        column: x => x.PartsId,
+                        principalTable: "Parts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "MachineDataModelUserDataModel",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Shift = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    MachineDataModelId = table.Column<int>(type: "int", nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    MachineDataModelId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_MachineDataModelUserDataModel", x => new { x.MachineDataModelId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_Users_Machines_MachineDataModelId",
+                        name: "FK_MachineDataModelUserDataModel_Machines_MachineDataModelId",
                         column: x => x.MachineDataModelId,
                         principalTable: "Machines",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MachineDataModelUserDataModel_Users_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -116,14 +153,14 @@ namespace CutterManagement.DataAccess.Migrations
                 filter: "[MachineDataModelId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parts_MachineDataModelId",
-                table: "Parts",
-                column: "MachineDataModelId");
+                name: "IX_MachineDataModelPartDataModel_PartsId",
+                table: "MachineDataModelPartDataModel",
+                column: "PartsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_MachineDataModelId",
-                table: "Users",
-                column: "MachineDataModelId");
+                name: "IX_MachineDataModelUserDataModel_UsersId",
+                table: "MachineDataModelUserDataModel",
+                column: "UsersId");
         }
 
         /// <inheritdoc />
@@ -133,13 +170,19 @@ namespace CutterManagement.DataAccess.Migrations
                 name: "Cutters");
 
             migrationBuilder.DropTable(
+                name: "MachineDataModelPartDataModel");
+
+            migrationBuilder.DropTable(
+                name: "MachineDataModelUserDataModel");
+
+            migrationBuilder.DropTable(
                 name: "Parts");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Machines");
 
             migrationBuilder.DropTable(
-                name: "Machines");
+                name: "Users");
         }
     }
 }

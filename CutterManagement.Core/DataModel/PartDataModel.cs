@@ -32,8 +32,8 @@
         public int? MachineDataModelId { get; set; }
 
         /// <summary>
-        /// Navigation property
+        /// Machine navigation property collection 
         /// </summary>
-        public MachineDataModel MachineDataModel { get; set; }
+        public ICollection<MachineDataModel> MachineDataModel { get; set; } = new List<MachineDataModel>();
     }
 }

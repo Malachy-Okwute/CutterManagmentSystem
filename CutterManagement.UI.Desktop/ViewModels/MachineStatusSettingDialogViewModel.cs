@@ -1,9 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -191,6 +188,20 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async void UpdateMachineStatus()
         {
+            // If no user is available
+            if (_user is null)
+            {
+                // Set message
+                Message = "Please add a user to continue";
+                // Show message
+                ShowMessage = true;
+                // Reset Show-message flag
+                await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) => ShowMessage = false);
+                // Do nothing else
+                return;
+            }
+
+            // Create new machine model
             MachineDataModel newData = new MachineDataModel
             {
                 Id = Id,
@@ -198,9 +209,10 @@ namespace CutterManagement.UI.Desktop
                 Status = _currentStatus,
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
-                StatusMessage = MachineStatusMessage,
+                StatusMessage = MachineStatusMessage.Trim(),
             };
 
+            // Attempt to set machine status
             await SetMachineStatus(newData);
 
             // If configuration is successful
@@ -209,33 +221,47 @@ namespace CutterManagement.UI.Desktop
                 // Send dialog window close request
                 DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsStatusSettingSuccessful));
             }
-
         }
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Sets status <see cref="MachineStatus"/> to the specified machine item
+        /// </summary>
+        /// <param name="data">The machine to set it's status</param>
+        /// <returns><see cref="Task"/></returns>
+        /// <exception cref="ArgumentNullException">
+        /// Exception that gets thrown if attempt to set status fails
+        /// </exception>
         public async Task SetMachineStatus(MachineDataModel data)
         {
             MachineDataModel? machineDataModel = null;
 
             try
             {
-                ValidationResult result = await _machineService.SetStatus(data, _user.Id, (data) =>
+                // Try setting status and also grab result coming from the process
+                ValidationResult result = await _machineService.SetStatus(data, _user.Id, (callbackData) =>
                 {
-                    machineDataModel = data;
+                    machineDataModel = callbackData;
                 });
 
                 // Set message
                 _message = string.IsNullOrEmpty(result.ErrorMessage) ? "Machine status successfully set " : result.ErrorMessage;
 
+                // If we succeed
                 if(result.IsValid)
                 {
+                    // Set flag
                     IsStatusSettingSuccessful = true;
+                    // Send out message to subscriber that needs to know about the data that changed
                     Messenger.MessageSender.SendMessage(machineDataModel ?? throw new ArgumentNullException($"{machineDataModel} is null"));
                 }
 
+                // Update message
                 OnPropertyChanged(nameof(Message));
-
+                // Show message
                 ShowMessage = true;
 
                 // Wait for 2 seconds
@@ -266,8 +292,6 @@ namespace CutterManagement.UI.Desktop
             }
 
         }
-
-        #region Methods
 
         /// <summary>
         /// Load users
@@ -307,7 +331,6 @@ namespace CutterManagement.UI.Desktop
         }
 
         #endregion
-
     }
 }
 

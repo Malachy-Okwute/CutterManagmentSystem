@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250119032021_Update")]
-    partial class Update
+    [Migration("20250119045644_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,8 +189,6 @@ namespace CutterManagement.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MachineDataModelId");
-
                     b.ToTable("Parts");
                 });
 
@@ -215,9 +213,6 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("MachineDataModelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Shift")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -225,9 +220,37 @@ namespace CutterManagement.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MachineDataModelId");
-
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MachineDataModelPartDataModel", b =>
+                {
+                    b.Property<int>("MachineDataModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PartsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MachineDataModelId", "PartsId");
+
+                    b.HasIndex("PartsId");
+
+                    b.ToTable("MachineDataModelPartDataModel");
+                });
+
+            modelBuilder.Entity("MachineDataModelUserDataModel", b =>
+                {
+                    b.Property<int>("MachineDataModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MachineDataModelId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("MachineDataModelUserDataModel");
                 });
 
             modelBuilder.Entity("CutterManagement.Core.CutterDataModel", b =>
@@ -239,32 +262,40 @@ namespace CutterManagement.DataAccess.Migrations
                     b.Navigation("MachineDataModel");
                 });
 
-            modelBuilder.Entity("CutterManagement.Core.PartDataModel", b =>
+            modelBuilder.Entity("MachineDataModelPartDataModel", b =>
                 {
-                    b.HasOne("CutterManagement.Core.MachineDataModel", "MachineDataModel")
-                        .WithMany("Parts")
-                        .HasForeignKey("MachineDataModelId");
+                    b.HasOne("CutterManagement.Core.MachineDataModel", null)
+                        .WithMany()
+                        .HasForeignKey("MachineDataModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("MachineDataModel");
+                    b.HasOne("CutterManagement.Core.PartDataModel", null)
+                        .WithMany()
+                        .HasForeignKey("PartsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("CutterManagement.Core.UserDataModel", b =>
+            modelBuilder.Entity("MachineDataModelUserDataModel", b =>
                 {
-                    b.HasOne("CutterManagement.Core.MachineDataModel", "MachineDataModel")
-                        .WithMany("Users")
-                        .HasForeignKey("MachineDataModelId");
+                    b.HasOne("CutterManagement.Core.MachineDataModel", null)
+                        .WithMany()
+                        .HasForeignKey("MachineDataModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("MachineDataModel");
+                    b.HasOne("CutterManagement.Core.UserDataModel", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CutterManagement.Core.MachineDataModel", b =>
                 {
                     b.Navigation("Cutter")
                         .IsRequired();
-
-                    b.Navigation("Parts");
-
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

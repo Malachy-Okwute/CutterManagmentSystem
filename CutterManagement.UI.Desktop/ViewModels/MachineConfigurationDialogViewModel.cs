@@ -150,7 +150,7 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
-        #region Methods
+        #region Command Methods
 
         /// <summary>
         /// Update machine item with new data
@@ -166,7 +166,7 @@ namespace CutterManagement.UI.Desktop
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
                 Status = _currentStatus,
-                StatusMessage = MachineStatusMessage,
+                StatusMessage = MachineStatusMessage.Trim(),
             };
 
             // Configure machine with new data
@@ -180,6 +180,10 @@ namespace CutterManagement.UI.Desktop
             }
 
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Configures a machine item

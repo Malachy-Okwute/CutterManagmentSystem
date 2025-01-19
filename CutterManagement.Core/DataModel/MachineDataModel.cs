@@ -77,12 +77,12 @@
         public CutterDataModel Cutter { get; set; }
 
         /// <summary>
-        /// Parts skip navigation property
+        /// Parts navigation property collection
         /// </summary>
-        public ICollection<PartDataModel> Parts { get; set; } 
+        public ICollection<PartDataModel> Parts { get; set; } = new List<PartDataModel>();
 
         /// <summary>
-        /// Users skip navigation property
+        /// Users navigation property collection
         /// </summary>
         public ICollection<UserDataModel> Users { get; set; } = new List<UserDataModel>();
     }

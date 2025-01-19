@@ -135,7 +135,7 @@ namespace CutterManagement.UI.Desktop
                     // NOTE: Default machine is generated using admin as default user 
 
                     // Set admin as the default user for the generated machines
-                    data.Users.Add(admin ?? throw new NullReferenceException($"User with the name {admin?.FirstName.PadRight(6)} {admin?.LastName} not found"));
+                    data.Users.Add(admin);
 
                     // Create machine db entity
                     await machineTable.CreateNewEntityAsync(data);

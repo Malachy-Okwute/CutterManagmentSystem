@@ -73,7 +73,16 @@ namespace CutterManagement.UI.Desktop
             return (result, data);
         }
 
-
+        /// <summary>
+        /// Set machine status <see cref="MachineStatus"/>
+        /// <para>
+        /// T is <see cref="ValidationResult"/>
+        /// </para>
+        /// </summary>
+        /// <param name="newData">Machine containing the status to set</param>
+        /// <param name="userId">The user executing this status set procedure</param>
+        /// <param name="callback">Status set callback</param>
+        /// <returns><see cref="Task{T}"/></returns>
         public async Task<ValidationResult> SetStatus(MachineDataModel newData, int userId, Action<MachineDataModel> callback)
         {
             // Data that will be changing

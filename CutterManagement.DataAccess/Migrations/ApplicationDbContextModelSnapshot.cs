@@ -145,9 +145,6 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("UserDataModelId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Machines");
@@ -189,8 +186,6 @@ namespace CutterManagement.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MachineDataModelId");
-
                     b.ToTable("Parts");
                 });
 
@@ -215,9 +210,6 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("MachineDataModelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Shift")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -226,6 +218,21 @@ namespace CutterManagement.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MachineDataModelPartDataModel", b =>
+                {
+                    b.Property<int>("MachineDataModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PartsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MachineDataModelId", "PartsId");
+
+                    b.HasIndex("PartsId");
+
+                    b.ToTable("MachineDataModelPartDataModel");
                 });
 
             modelBuilder.Entity("MachineDataModelUserDataModel", b =>
@@ -252,13 +259,19 @@ namespace CutterManagement.DataAccess.Migrations
                     b.Navigation("MachineDataModel");
                 });
 
-            modelBuilder.Entity("CutterManagement.Core.PartDataModel", b =>
+            modelBuilder.Entity("MachineDataModelPartDataModel", b =>
                 {
-                    b.HasOne("CutterManagement.Core.MachineDataModel", "MachineDataModel")
-                        .WithMany("Parts")
-                        .HasForeignKey("MachineDataModelId");
+                    b.HasOne("CutterManagement.Core.MachineDataModel", null)
+                        .WithMany()
+                        .HasForeignKey("MachineDataModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("MachineDataModel");
+                    b.HasOne("CutterManagement.Core.PartDataModel", null)
+                        .WithMany()
+                        .HasForeignKey("PartsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MachineDataModelUserDataModel", b =>
@@ -280,8 +293,6 @@ namespace CutterManagement.DataAccess.Migrations
                 {
                     b.Navigation("Cutter")
                         .IsRequired();
-
-                    b.Navigation("Parts");
                 });
 #pragma warning restore 612, 618
         }
