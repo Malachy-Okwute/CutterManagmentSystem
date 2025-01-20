@@ -27,10 +27,18 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private string _message;
 
+        /// <summary>
+        /// New machine status message
+        /// </summary>
+        private string _machineStatusMessage;
+
         #endregion
 
         #region Public Properties
 
+        /// <summary>
+        /// Unique id of machine to be configured
+        /// </summary>
         public int Id { get; set; }
 
         /// <summary>
@@ -56,7 +64,19 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// New machine status message
         /// </summary>
-        public string MachineStatusMessage { get; set; }
+        public string MachineStatusMessage 
+        { 
+            get => _machineStatusMessage;
+            set
+            {
+                if(string.IsNullOrEmpty(_machineStatusMessage) is false)
+                {
+                    _machineStatusMessage.Trim();
+                }
+
+                _machineStatusMessage = value;
+            }
+        }
 
         /// <summary>
         /// True if message should be shown, otherwise false
@@ -166,8 +186,8 @@ namespace CutterManagement.UI.Desktop
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
                 Status = _currentStatus,
-                StatusMessage = MachineStatusMessage.Trim(),
                 IsConfigured = true,
+                StatusMessage = _machineStatusMessage,
             };
 
             // Configure machine with new data
