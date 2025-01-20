@@ -19,6 +19,7 @@ namespace CutterManagement.UI.Desktop
                 Status = machineData.Status,
                 StatusMessage = machineData.StatusMessage,
                 Owner = machineData.Owner,
+                IsConfigured = machineData.IsConfigured,
                 FrequencyCheckResult = machineData.FrequencyCheckResult.ToString(),
                 DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
             };

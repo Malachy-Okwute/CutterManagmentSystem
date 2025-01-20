@@ -8,7 +8,7 @@ namespace CutterManagement.UI.Desktop
 {
     public class SettingsPageViewModel : ViewModelBase
     {
-        public string Test { get; set; } = "Settings View model";
+        public string Test { get; set; } = "Coming soon";
         public SettingsPageViewModel()
         {
         }

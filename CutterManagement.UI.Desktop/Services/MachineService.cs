@@ -58,6 +58,7 @@ namespace CutterManagement.UI.Desktop
                 machineData.Status = newData.Status;
                 machineData.StatusMessage = newData.StatusMessage ?? string.Empty;
                 machineData.DateTimeLastModified = DateTime.Now;
+                machineData.IsConfigured = newData.IsConfigured;
 
                 // Save new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
@@ -127,6 +128,7 @@ namespace CutterManagement.UI.Desktop
                 machineTable.DataChanged -= delegate { };
             }
 
+            // Return result
             return result;
         }
     }

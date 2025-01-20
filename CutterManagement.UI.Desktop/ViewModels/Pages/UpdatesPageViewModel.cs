@@ -8,6 +8,6 @@ namespace CutterManagement.UI.Desktop
 {
     public class UpdatesPageViewModel : ViewModelBase
     {
-        public string Test { get; set; } = "Updates page view model";
+        public string Test { get; set; } = "Coming soon";
     }
 }

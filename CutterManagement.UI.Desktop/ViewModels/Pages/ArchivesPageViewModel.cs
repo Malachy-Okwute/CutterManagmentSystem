@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CutterManagement.UI.Desktop
 {
-    public class InfoPageViewModel : ViewModelBase
+    public class ArchivesPageViewModel : ViewModelBase
     {
-        public string Test { get; set; } = "Info page view model";
+        public string Test { get; set; } = "Coming soon";
+
     }
 }

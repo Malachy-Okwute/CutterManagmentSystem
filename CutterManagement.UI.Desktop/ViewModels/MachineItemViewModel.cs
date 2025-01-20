@@ -1,5 +1,4 @@
 ﻿using CutterManagement.Core;
-using CutterManagement.Core.Services;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -49,6 +48,12 @@ namespace CutterManagement.UI.Desktop
         /// True if this machine is running, false if it's sitting idle or down for maintenance
         /// </summary>
         public bool IsRunning { get; set; }
+
+        /// <summary>
+        /// True if this machine item is configured, 
+        /// Otherwise false
+        /// </summary>
+        public bool IsConfigured { get; set; }
 
         /// <summary>
         /// The current status of this machine 
@@ -148,27 +153,38 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Command Method
+
+        /// <summary>
+        /// Opens a dialog to set machine status
+        /// </summary>
         private void OpenStatusSettingDialog()
         {
             ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            // Machine status view model
             var statusSettingVM = new MachineStatusSettingDialogViewModel(_dataFactory, new MachineService(_dataFactory))
             {
                 Id = Id,
                 Owner = Owner,
                 Label = MachineNumber,
                 MachineNumber = MachineNumber,
-                MachineSetNumber = MachineSetNumber
+                MachineSetNumber = MachineSetNumber,
+                IsConfigured = IsConfigured,
             };
 
+            // Show dialog
             DialogService.InvokeDialog(statusSettingVM);
         }
 
         /// <summary>
-        /// Opens machine configuration dialog
+        /// Opens a dialog to configure machine
         /// </summary>
         private void OpenMachineConfigurationDialog()
         {
             ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            // Machine configuration view model
             _machineConfiguration = new MachineConfigurationDialogViewModel(new MachineService(_dataFactory))
             {
                 Id = Id,
@@ -192,5 +208,6 @@ namespace CutterManagement.UI.Desktop
             IsPopupOpen ^= true;
         }
 
+        #endregion
     }
 }

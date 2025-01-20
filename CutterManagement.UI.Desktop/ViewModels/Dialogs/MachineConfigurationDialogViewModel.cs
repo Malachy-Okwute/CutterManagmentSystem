@@ -167,6 +167,7 @@ namespace CutterManagement.UI.Desktop
                 MachineSetId = MachineSetNumber,
                 Status = _currentStatus,
                 StatusMessage = MachineStatusMessage.Trim(),
+                IsConfigured = true,
             };
 
             // Configure machine with new data

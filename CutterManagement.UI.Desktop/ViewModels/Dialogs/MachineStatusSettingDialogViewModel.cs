@@ -89,6 +89,12 @@ namespace CutterManagement.UI.Desktop
         public bool IsStatusSettingSuccessful { get; set; }
 
         /// <summary>
+        /// True if this machine item is configured, 
+        /// Otherwise false
+        /// </summary>
+        public bool IsConfigured { get; set; }
+
+        /// <summary>
         /// Collection of status options available
         /// </summary>
         public Dictionary<MachineStatus, string> StatusCollection { get; set; }
@@ -188,7 +194,20 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async void UpdateMachineStatus()
         {
-            // If no user is available
+            // Make sure machine is configured
+            if (IsConfigured is false)
+            {
+                // Set message
+                Message = "Machine need to be configured first by admin";
+                // Show message
+                ShowMessage = true;
+                // Reset Show-message flag
+                await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) => ShowMessage = false);
+                // Do nothing else
+                return;
+            }
+
+            // Make sure we have a user
             if (_user is null)
             {
                 // Set message
@@ -210,6 +229,7 @@ namespace CutterManagement.UI.Desktop
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
                 StatusMessage = MachineStatusMessage.Trim(),
+                IsConfigured = IsConfigured,
             };
 
             // Attempt to set machine status

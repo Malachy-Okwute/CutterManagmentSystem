@@ -24,6 +24,25 @@
         /// Measured tooth size of part
         /// </summary>
         public string PartToothSize { get; set; }
+        /// <summary>
+        /// Comment related to the status of this machine
+        /// </summary>
+        public string StatusMessage { get; set; }
+
+        /// <summary>
+        /// Extra information relating to the reason cutter is pulled
+        /// </summary>
+        public string CutterChangeComment { get; set; }
+
+        /// <summary>
+        /// Cutter navigation property id
+        /// </summary>
+        public int? CutterDataModelId { get; set; }
+
+        /// <summary>
+        /// Flag indicating if this machine is configured of not
+        /// </summary>
+        public bool IsConfigured { get; set; }
 
         /// <summary>
         /// The most recent date and time this table was modified
@@ -46,30 +65,15 @@
         public MachineStatus Status { get; set; }
 
         /// <summary>
-        /// Comment related to the status of this machine
-        /// </summary>
-        public string StatusMessage { get; set; }
-
-        /// <summary>
         /// The reason cutter assigned to this machine was pulled from this machine
         /// </summary>
         public CutterChangeInformation CutterChangeInfo{ get; set; }
-
-        /// <summary>
-        /// Extra information relating to the reason cutter is pulled
-        /// </summary>
-        public string CutterChangeComment { get; set; }
 
         /// <summary>
         /// The result of a frequency check
         /// Options = Passed or Failed
         /// </summary>
         public FrequencyCheckResult FrequencyCheckResult { get; set; }
-
-        /// <summary>
-        /// Cutter navigation property id
-        /// </summary>
-        public int? CutterDataModelId { get; set; }
 
         /// <summary>
         /// Cutter navigation property
