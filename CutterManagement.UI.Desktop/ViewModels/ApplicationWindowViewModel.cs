@@ -134,9 +134,9 @@ namespace CutterManagement.UI.Desktop
             Navigation = navigation;
 
             // Create commands
-            MinimizeWindowCommand = new RelayCommand(() => _appWindow.WindowState = WindowState.Minimized);
-            //MaximizeWindowCommand = new RelayCommand(() => _appWindow.WindowState ^= WindowState.Maximized, canExecuteCommand => this != null);
             CloseWindowCommand = new RelayCommand(() => _appWindow.Close());
+            MinimizeWindowCommand = new RelayCommand(() => _appWindow.WindowState = WindowState.Minimized);
+            //MaximizeWindowCommand = new RelayCommand(() => _appWindow.WindowState ^= WindowState.Maximized);
         }
 
         #endregion
