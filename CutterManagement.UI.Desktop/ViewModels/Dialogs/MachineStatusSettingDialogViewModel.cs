@@ -246,7 +246,6 @@ namespace CutterManagement.UI.Desktop
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
                 StatusMessage = _machineStatusMessage,
-                IsConfigured = IsConfigured,
             };
 
             // Attempt to set machine status

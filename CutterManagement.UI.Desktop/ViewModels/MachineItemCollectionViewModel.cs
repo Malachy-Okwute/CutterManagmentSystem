@@ -1,16 +1,6 @@
 ﻿using CutterManagement.Core;
-using CutterManagement.DataAccess;
 using PropertyChanged;
-using System.CodeDom;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace CutterManagement.UI.Desktop
 {
