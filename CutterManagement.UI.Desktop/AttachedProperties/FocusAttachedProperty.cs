@@ -26,13 +26,7 @@ namespace CutterManagement.UI.Desktop
 
             if(control is null) return;
 
-            control.IsVisibleChanged += (s, e) =>
-            {
-                if (control.IsVisible)
-                {
-                    control.Focus();
-                }
-            };
+            control.Loaded += (s, e) => { control.Focus(); };
         }
     }
 }
