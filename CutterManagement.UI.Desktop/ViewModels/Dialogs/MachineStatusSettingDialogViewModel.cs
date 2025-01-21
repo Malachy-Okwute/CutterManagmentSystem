@@ -29,6 +29,11 @@ namespace CutterManagement.UI.Desktop
         private MachineStatus _currentStatus;
 
         /// <summary>
+        /// New machine status message
+        /// </summary>
+        private string _machineStatusMessage;
+
+        /// <summary>
         /// User that is setting this machine status
         /// </summary>
         private UserDataModel _user;
@@ -75,7 +80,19 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// New machine status message
         /// </summary>
-        public string MachineStatusMessage { get; set; }
+        public string MachineStatusMessage
+        {
+            get => _machineStatusMessage;
+            set
+            {
+                if (string.IsNullOrEmpty(_machineStatusMessage) is false)
+                {
+                    _machineStatusMessage.Trim();
+                }
+
+                _machineStatusMessage = value;
+            }
+        }
 
         /// <summary>
         /// True if message is to be displayed to user
@@ -228,7 +245,7 @@ namespace CutterManagement.UI.Desktop
                 Status = _currentStatus,
                 MachineNumber = MachineNumber,
                 MachineSetId = MachineSetNumber,
-                StatusMessage = MachineStatusMessage.Trim(),
+                StatusMessage = _machineStatusMessage,
                 IsConfigured = IsConfigured,
             };
 

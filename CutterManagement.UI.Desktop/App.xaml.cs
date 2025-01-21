@@ -49,6 +49,11 @@ namespace CutterManagement.UI.Desktop
         {
             // Create splash window
             _splashWindow = new SplashWindow();
+
+            if(_environment is "")
+            {
+
+            }
         }
 
         #endregion

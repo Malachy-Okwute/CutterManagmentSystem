@@ -21,6 +21,11 @@
         public string Model { get; set; }
 
         /// <summary>
+        /// Extra information relating to the reason cutter is pulled
+        /// </summary>
+        public string CutterChangeComment { get; set; }
+
+        /// <summary>
         /// The kind of <see cref="PartKind"/> this cutter is made for
         /// </summary>
         public PartKind Kind { get; set; }
@@ -35,6 +40,11 @@
         /// Options = Brand new or used
         /// </summary>
         public CutterCondition Condition { get; set; }
+
+        /// <summary>
+        /// The reason cutter assigned to this machine was pulled from this machine
+        /// </summary>
+        public CutterChangeInformation CutterChangeInfo { get; set; }
 
         /// <summary>
         /// The date this cutter was last used

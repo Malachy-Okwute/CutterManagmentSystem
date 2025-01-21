@@ -90,10 +90,10 @@
                         Margin="5">
                 <ComboBoxItem Content="Is running" IsSelected="True" />
             </d:ComboBox>
-
+            
             <TextBox Grid.Row="2" Height="100"
                      Margin="5" VerticalContentAlignment="Top"
-                     Tag="Comment" AcceptsReturn="True"
+                     Tag="Comment" AcceptsReturn="True" 
                      Style="{StaticResource RegularTextBoxStyle}"
                      Text="{Binding MachineStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
 

@@ -15,11 +15,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private IDataAccessServiceFactory _dataFactory;
 
-        /// <summary>
-        /// Machine configuration view model
-        /// </summary>
-        private MachineConfigurationDialogViewModel _machineConfiguration;
-
         #endregion
 
         #region Public Properties
@@ -185,7 +180,7 @@ namespace CutterManagement.UI.Desktop
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Machine configuration view model
-            _machineConfiguration = new MachineConfigurationDialogViewModel(new MachineService(_dataFactory))
+            var machineConfiguration = new MachineConfigurationDialogViewModel(new MachineService(_dataFactory))
             {
                 Id = Id,
                 Owner = Owner,
@@ -193,7 +188,7 @@ namespace CutterManagement.UI.Desktop
             };
 
             // Show dialog
-            DialogService.InvokeDialog(_machineConfiguration);
+            DialogService.InvokeDialog(machineConfiguration);
         }
 
         /// <summary>
