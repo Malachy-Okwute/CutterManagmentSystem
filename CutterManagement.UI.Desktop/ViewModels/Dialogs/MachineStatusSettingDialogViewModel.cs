@@ -278,7 +278,7 @@ namespace CutterManagement.UI.Desktop
             try
             {
                 // Try setting status and also grab result coming from the process
-                ValidationResult result = await _machineService.SetStatus(data, _user.Id, (callbackData) =>
+                ValidationResult result = await ((MachineStatusSettingService)_machineService).SetStatus(data, _user.Id, (callbackData) =>
                 {
                     machineDataModel = callbackData;
                 });

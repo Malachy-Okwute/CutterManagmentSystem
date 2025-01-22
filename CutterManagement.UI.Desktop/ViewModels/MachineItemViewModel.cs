@@ -158,7 +158,7 @@ namespace CutterManagement.UI.Desktop
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Machine status view model
-            var statusSettingVM = new MachineStatusSettingDialogViewModel(_dataFactory, new MachineService(_dataFactory))
+            var statusSettingVM = new MachineStatusSettingDialogViewModel(_dataFactory, new MachineStatusSettingService(_dataFactory))
             {
                 Id = Id,
                 Owner = Owner,
@@ -180,7 +180,7 @@ namespace CutterManagement.UI.Desktop
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Machine configuration view model
-            var machineConfiguration = new MachineConfigurationDialogViewModel(new MachineService(_dataFactory))
+            var machineConfiguration = new MachineConfigurationDialogViewModel(new MachineConfigurationService(_dataFactory))
             {
                 Id = Id,
                 Owner = Owner,
