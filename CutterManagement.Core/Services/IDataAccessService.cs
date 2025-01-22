@@ -20,7 +20,7 @@
         /// <summary>
         /// Get all entities in the database table
         /// </summary>
-        /// <returns><see cref="Task"/> of <see cref="List{T}"/></returns>
+        /// <returns><see cref="Task"/> of <see cref="IReadOnlyList{T}"/></returns>
         Task<IReadOnlyList<T>> GetAllEntitiesAsync();
 
         /// <summary>

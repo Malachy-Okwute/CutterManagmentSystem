@@ -69,7 +69,7 @@ namespace CutterManagement.DataAccess
         /// <summary>
         /// Get all entities in the database table
         /// </summary>
-        /// <returns><see cref="Task"/> of <see cref="List{T}"/></returns>
+        /// <returns><see cref="Task"/> of <see cref="IReadOnlyList{T}"/></returns>
         public async Task<IReadOnlyList<T>> GetAllEntitiesAsync()
         {
             return await _dbTable.ToListAsync();

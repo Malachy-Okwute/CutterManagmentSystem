@@ -19,6 +19,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private ObservableCollection<UserItemViewModel> _users;
 
+        /// <summary>
+        /// Task loader
+        /// </summary>
+        private Task _loader;
+
         #endregion
 
         #region Public Properties
@@ -66,7 +71,7 @@ namespace CutterManagement.UI.Desktop
             _dataServiceFactory = dataServiceFactory;
             _users = new ObservableCollection<UserItemViewModel>();
            
-            LoadUsers();
+            _loader = LoadUsers();
             
             // Create commands
             AddUserCommand = new RelayCommand(OpenCreateUserDialog);
@@ -111,27 +116,23 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Loads users from db
         /// </summary>
-        private void LoadUsers()
+        private async Task LoadUsers()
         {
             // Get users table
             IDataAccessService<UserDataModel> userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
-            Task.Run(async () =>
+            foreach (UserDataModel user in await userTable.GetAllEntitiesAsync())
             {
-                foreach (UserDataModel user in await userTable.GetAllEntitiesAsync())
-                {
-                    // If user is admin user 
-                    if (user.FirstName is "resource" && user.LastName is "admin")
-                        // Do not add it
-                        continue;
+                // If user is admin user 
+                if (user.FirstName is "resource" && user.LastName is "admin")
+                    // Do not add it
+                    continue;
 
-                    // Add users
-                    AddUserToUserCollection(user);
-                }
+                // Add users
+                AddUserToUserCollection(user);
+            }
 
-                CollectionViewSource.GetDefaultView(Users).Refresh();
-
-            }).ContinueWith((action) => OnPropertyChanged(nameof(IsUserCollectionEmpty)));
+            //CollectionViewSource.GetDefaultView(Users).Refresh();
         }
 
         /// <summary>
