@@ -38,6 +38,13 @@ namespace CutterManagement.DataAccess.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
+                    b.Property<string>("CutterChangeComment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CutterChangeInfo")
+                        .HasColumnType("int");
+
                     b.Property<string>("CutterNumber")
                         .IsRequired()
                         .HasMaxLength(100)
