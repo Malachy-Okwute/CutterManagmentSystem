@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using System.Collections.ObjectModel;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -128,8 +129,9 @@ namespace CutterManagement.UI.Desktop
                     AddUserToUserCollection(user);
                 }
 
-                OnPropertyChanged(nameof(IsUserCollectionEmpty));
-            });
+                CollectionViewSource.GetDefaultView(Users).Refresh();
+
+            }).ContinueWith((action) => OnPropertyChanged(nameof(IsUserCollectionEmpty)));
         }
 
         /// <summary>
