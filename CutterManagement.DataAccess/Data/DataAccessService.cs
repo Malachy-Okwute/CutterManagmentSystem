@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace CutterManagement.DataAccess
 {
@@ -79,10 +80,24 @@ namespace CutterManagement.DataAccess
         /// Get an entity by id
         /// </summary>
         /// <param name="entityId">The id of the entity to get</param>
-        /// <returns><see cref="Task"/> of <see cref="T"/></returns>
+        /// <returns><see cref="Task{T}"/> of <see cref="T"/></returns>
         public async Task<T?> GetEntityByIdAsync(int? entityId)
         {
            return await _dbTable.FindAsync(entityId);
+        }
+
+        /// <summary>
+        /// Gets an entity including it's list many navigation properties
+        /// </summary>
+        /// <typeparam name="TProperty">The navigation property</typeparam>
+        /// <param name="entityId">The main entity id to get</param>
+        /// <param name="includeExpression">Expression used to get the navigation properties</param>
+        /// <returns><see cref="Task{T}"/> of <see cref="T"/></returns>
+        public async Task<T> GetEntityByIdIncludingRelatedPropertiesAsync<TProperty>(int entityId, Expression<Func<T, ICollection<TProperty>>> includeExpression) where TProperty : class
+        {
+            return await _dbTable.Include(includeExpression)
+                           .FirstAsync(entity => EF.Property<int>(entity, "Id") == entityId);
+
         }
 
         /// <summary>

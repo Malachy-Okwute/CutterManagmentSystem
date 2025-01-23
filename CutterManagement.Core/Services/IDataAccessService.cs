@@ -1,4 +1,6 @@
-﻿namespace CutterManagement.Core
+﻿using System.Linq.Expressions;
+
+namespace CutterManagement.Core
 {
     /// <summary>
     /// Provides access to the application database
@@ -29,6 +31,15 @@
         /// <param name="entityId">The id of the entity to get</param>
         /// <returns><see cref="Task"/> of <see cref="T"/></returns>
         Task<T?> GetEntityByIdAsync(int? entityId);
+
+        /// <summary>
+        /// Gets an entity including it's list many navigation properties
+        /// </summary>
+        /// <typeparam name="TProperty">The navigation property</typeparam>
+        /// <param name="entityId">The main entity id to get</param>
+        /// <param name="includeExpression">Expression used to get the navigation properties</param>
+        /// <returns><see cref="Task{T}"/> of <see cref="T"/></returns>
+        Task<T> GetEntityByIdIncludingRelatedPropertiesAsync<TProperty>(int entityId, Expression<Func<T, ICollection<TProperty>>> includeExpression) where TProperty : class;
 
         /// <summary>
         /// Update an entity

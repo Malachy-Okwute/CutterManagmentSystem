@@ -48,7 +48,8 @@ namespace CutterManagement.UI.Desktop
             };
 
             // Get items from db
-            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
+            //MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
+            MachineDataModel machineData = await machineTable.GetEntityByIdIncludingRelatedPropertiesAsync(newData.Id, u => u.Users);
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
 
             // Register machine validation
@@ -64,6 +65,13 @@ namespace CutterManagement.UI.Desktop
                 machineData.Status = newData.Status;
                 machineData.StatusMessage = newData.StatusMessage;
                 machineData.DateTimeLastModified = DateTime.Now;
+
+                // If we already have current user
+                if(user is not null && machineData.Users.Contains(user))
+                {
+                    // Remove it
+                    machineData.Users.Remove(user);
+                }
 
                 // Set the user performing this operation
                 machineData.Users.Add(user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"));
