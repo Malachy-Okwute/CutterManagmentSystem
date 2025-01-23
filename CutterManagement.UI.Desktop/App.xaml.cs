@@ -127,6 +127,7 @@ namespace CutterManagement.UI.Desktop
             // TODO: Check if there is an app update available - if new update is available
             //      - notify user to update the application
             //      - if app is not updated... automatically update app at the end of shift.
+
             // TODO: Check if we have database connection string - if not - request that dev team should provide a database connection.
 
             // Lunch main application window
@@ -200,7 +201,6 @@ namespace CutterManagement.UI.Desktop
             // Make sure we have window
             ArgumentNullException.ThrowIfNull(nameof(MainWindow));
 
-            // TODO: Find a better/smarter way to implement this
             // Fade window out of view, then close it
             await Animations.FadeElementOutOfView(_splashWindow);
 

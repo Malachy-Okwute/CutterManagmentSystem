@@ -43,7 +43,7 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task"/></returns>
         public static async Task FadeElementOutOfView(FrameworkElement element)
         {
-            // TODO: Find a better way to implement this
+            // TODO: Simplify
             Fade(element, AnimationEasingKind.QuinticEase, EasingMode.EaseInOut, easingFactor: 3, duration: 0.6, to: 0, from: 1);
 
             // Allow time for animation to play

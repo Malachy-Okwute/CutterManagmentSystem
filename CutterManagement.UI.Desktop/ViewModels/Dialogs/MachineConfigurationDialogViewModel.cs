@@ -67,15 +67,7 @@ namespace CutterManagement.UI.Desktop
         public string MachineStatusMessage 
         { 
             get => _machineStatusMessage;
-            set
-            {
-                if(string.IsNullOrEmpty(_machineStatusMessage) is false)
-                {
-                    _machineStatusMessage.Trim();
-                }
-
-                _machineStatusMessage = value;
-            }
+            set => _machineStatusMessage = value;
         }
 
         /// <summary>
@@ -177,6 +169,13 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task UpdateData()
         {
+            // If we have message...
+            if (string.IsNullOrWhiteSpace(_machineStatusMessage) is false)
+            {
+                // Trim message
+                _machineStatusMessage = _machineStatusMessage.Trim(Environment.NewLine.ToCharArray());
+            }
+
             // Create a new machine data model with data we care about sending to db
             MachineDataModel newData = new MachineDataModel
             {

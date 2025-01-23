@@ -113,7 +113,7 @@ namespace CutterManagement.UI.Desktop
                 // Hook into left mouse down event
                 captionArea.MouseLeftButtonDown += (sender, e) =>
                 {
-                    // TODO: support double click on laptop track pad
+                    // TODO: Add support for double click on laptop track pad
 
                     // check if user double clicked the title bar
                     if (e.ClickCount.Equals(2))

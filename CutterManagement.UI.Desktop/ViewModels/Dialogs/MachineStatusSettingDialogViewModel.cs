@@ -83,15 +83,7 @@ namespace CutterManagement.UI.Desktop
         public string MachineStatusMessage
         {
             get => _machineStatusMessage;
-            set
-            {
-                if (string.IsNullOrEmpty(_machineStatusMessage) is false)
-                {
-                    _machineStatusMessage.Trim();
-                }
-
-                _machineStatusMessage = value;
-            }
+            set => _machineStatusMessage = value;
         }
 
         /// <summary>
@@ -235,6 +227,13 @@ namespace CutterManagement.UI.Desktop
                 await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) => ShowMessage = false);
                 // Do nothing else
                 return;
+            }
+
+            // If we have message...
+            if (string.IsNullOrWhiteSpace(_machineStatusMessage) is false)
+            {
+                // Trim message
+                _machineStatusMessage = _machineStatusMessage.Trim(Environment.NewLine.ToCharArray());
             }
 
             // Create new machine model
