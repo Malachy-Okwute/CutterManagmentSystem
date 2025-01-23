@@ -1,3 +1,3 @@
 # Cutter Management System
 
-A system that facilitates the management of cutters and their relations with machines and parts.
+A program that facilitates collection of machine management, and their associated cutters and parts condition.
