@@ -12,7 +12,6 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public partial class MachineItemCollectionControl : UserControl
     {
-
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -23,6 +22,9 @@ namespace CutterManagement.UI.Desktop
             // Hook into items-control size changed event
             Items.SizeChanged += (s, e) =>
             {
+                // Make sure item layout is available 
+                Items.UpdateLayout();
+
                 // Get the content present of items control
                 ContentPresenter itemsControlContentPresenter = (ContentPresenter)Items.ItemContainerGenerator.ContainerFromIndex(0);
 
