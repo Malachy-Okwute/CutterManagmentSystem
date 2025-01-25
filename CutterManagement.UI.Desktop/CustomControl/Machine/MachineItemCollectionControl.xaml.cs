@@ -1,8 +1,4 @@
-﻿using CutterManagement.Core;
-using CutterManagement.DataAccess;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace CutterManagement.UI.Desktop
