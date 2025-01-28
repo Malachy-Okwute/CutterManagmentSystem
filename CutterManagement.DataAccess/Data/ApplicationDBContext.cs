@@ -90,7 +90,7 @@ namespace CutterManagement.DataAccess
 
             #endregion
 
-            #region Part Data Model Configuration
+            #region Cutter Data Model Configuration
 
             modelBuilder.Entity<CutterDataModel>().HasKey(x => x.Id);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
