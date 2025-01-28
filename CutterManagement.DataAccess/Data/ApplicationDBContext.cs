@@ -98,6 +98,7 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Kind).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Owner).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).HasConversion<string>().IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterChangeInfo).HasConversion<string>().IsRequired().HasMaxLength(100);
 
             #endregion
 

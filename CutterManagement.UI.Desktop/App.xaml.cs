@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace CutterManagement.UI.Desktop
@@ -40,7 +39,7 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
-        #region Default Constructor
+        #region Constructor
 
         /// <summary>
         /// Default constructor
@@ -49,11 +48,6 @@ namespace CutterManagement.UI.Desktop
         {
             // Create splash window
             _splashWindow = new SplashWindow();
-
-            if(_environment is "")
-            {
-
-            }
         }
 
         #endregion

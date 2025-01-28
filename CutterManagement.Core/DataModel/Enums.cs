@@ -26,7 +26,7 @@ namespace CutterManagement.Core
 
     public enum CutterCondition
     {
-        NewCutter = 0, UsedCutter, DevelopmentCutter
+        New = 0, Used, Development
     }
 
     public enum FrequencyCheckResult

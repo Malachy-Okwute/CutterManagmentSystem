@@ -3,9 +3,45 @@
       mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
       Title="ArchivesPage">
 
-    <Grid>
-        <TextBlock Text="{Binding Test}"
-                   FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    <Border Background="{DynamicResource BackgroundColorBrush1}" Padding="12">
 
-    </Grid>
+        <!--<TextBlock Text="{Binding Test}"
+                   FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" />-->
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Content="Records" Margin="6,10"
+                   Foreground="{DynamicResource ForegroundColorBrush3}"
+                   FontFamily="{StaticResource RobotoFlexRegular}"
+                   FontSize="{StaticResource XXLarge}"
+                   FontWeight="Black" />
+
+            <Grid Grid.Row="1" Height="40">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Content="Plus" Tag="Add part #"
+                        Width="120" Margin="10,0"
+                        Command="{Binding AddUserCommand}"
+                        Style="{StaticResource TransparentButtonWithTextStyle}" />
+                <Button Grid.Column="1" Width="100"
+                        Content="{StaticResource CubeIcon}"
+                        Tag="Manage" Margin="10,0"
+                        Command="{Binding ManageUserCommand}"
+                        Style="{StaticResource TransparentButtonWithTextStyle}" />
+            </Grid>
+
+        </Grid>
+
+    </Border>
 </Page>
