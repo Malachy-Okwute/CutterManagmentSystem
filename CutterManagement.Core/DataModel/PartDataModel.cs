@@ -21,6 +21,11 @@
         public string Model { get; set; }
 
         /// <summary>
+        /// The summary this part is associated to
+        /// </summary>
+        public string SummaryNumber { get; set; }
+
+        /// <summary>
         /// The type of this part
         /// Ring or pinion
         /// </summary>

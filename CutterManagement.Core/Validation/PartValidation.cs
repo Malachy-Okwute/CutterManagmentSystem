@@ -23,13 +23,16 @@
                 return ErrorReport(result, "A valid part ID is required");
 
             else if (string.IsNullOrEmpty(part.PartToothCount))
-                return ErrorReport(result, "PartDataModel tooth count is required");
+                return ErrorReport(result, "Tooth count is required");
 
             else if (int.TryParse(part.PartToothCount, out var number) is false)
-                return ErrorReport(result, "PartDataModel tooth count must be a number");
+                return ErrorReport(result, "Tooth count must be a number");
 
-            else if (part.Model is null)
-                return ErrorReport(result, "PartDataModel model is required");
+            else if (string.IsNullOrEmpty(part.Model))
+                return ErrorReport(result, "Model number is required");
+
+            else if (string.IsNullOrEmpty(part.SummaryNumber))
+                return ErrorReport(result, "Summary number is required");
 
             // Return validation result to the caller
             return result;

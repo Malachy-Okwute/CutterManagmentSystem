@@ -1,6 +1,5 @@
 ﻿using CutterManagement.Core;
 using System.Collections.ObjectModel;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop

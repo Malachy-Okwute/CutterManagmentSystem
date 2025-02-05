@@ -21,7 +21,14 @@ namespace CutterManagement.Core
 
     public enum PartKind
     {
-        Pinion = 0, Ring
+        [Description("Select user shift")]
+        None = 0,
+
+        [Description("Pinion")]
+        Pinion,
+        
+        [Description("Ring")]
+        Ring
     }
 
     public enum CutterCondition
@@ -47,7 +54,7 @@ namespace CutterManagement.Core
     public enum UserShift 
     {
         [Description("Select user shift")]
-        None,
+        None = 0,
 
         [Description("1st Shift")]
         First,

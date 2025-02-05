@@ -32,7 +32,7 @@
                 <Button Grid.Column="0" Width="120"
                         Margin="10,0" Content="Plus"
                         Tag="Add part #"
-                        Command="{Binding AddUserCommand}"
+                        Command="{Binding OpenAddPartDialogCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
                 <Button Grid.Column="1" Width="100"
                         Margin="10,0"
@@ -71,10 +71,10 @@
 
 
                 <Border Grid.Row="1" Padding="20"
+                        d:Visibility="{Binding IsUserCollectionEmpty, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=Invert}"
                         BorderThickness="1"
                         BorderBrush="{DynamicResource BorderColorBrush1}"
-                        Visibility="Collapsed"
-                        d:Visibility="{Binding IsUserCollectionEmpty, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=Invert}">
+                        Visibility="Collapsed">
 
                     <TextBlock Padding="20" HorizontalAlignment="Center"
                                VerticalAlignment="Top" Text="No part available"

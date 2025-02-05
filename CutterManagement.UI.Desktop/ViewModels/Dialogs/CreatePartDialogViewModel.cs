@@ -3,14 +3,14 @@
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// View model for <see cref="PartItemControl"/>
+    /// View model for <see cref="CreatePartDialog"/>
     /// </summary>
-    public class PartItemViewModel : ViewModelBase
+    public class CreatePartDialogViewModel : ViewModelBase
     {
         /// <summary>
-        /// Id number of this part item
+        /// The kind of part (Gear / Pinion)
         /// </summary>
-        public int Id { get; set; }
+        private PartKind _kind;
 
         /// <summary>
         /// The unique part number
@@ -35,6 +35,15 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// The kind of part (Gear / Pinion)
         /// </summary>
-        public PartKind Kind { get; set; }
+        public PartKind Kind 
+        { 
+            get => _kind;
+            set => _kind = value; 
+        }
+
+        /// <summary>
+        /// Kind of parts
+        /// </summary>
+        public Dictionary<PartKind, string> PartKindCollection { get; set; }
     }
 }

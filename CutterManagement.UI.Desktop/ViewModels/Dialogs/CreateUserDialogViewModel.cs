@@ -23,15 +23,6 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
-        #region Events
-
-        /// <summary>
-        /// Event to close dialog window
-        /// </summary>
-        public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
-
-        #endregion
-
         #region Properties
 
         /// <summary>
@@ -79,6 +70,15 @@ namespace CutterManagement.UI.Desktop
         /// Message to display to client user if user creation is successful or not
         /// </summary>
         public string Message { get; set; }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Event to close dialog window
+        /// </summary>
+        public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
 
         #endregion
 
