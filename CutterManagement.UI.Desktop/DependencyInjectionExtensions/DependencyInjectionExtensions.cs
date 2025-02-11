@@ -72,10 +72,10 @@ namespace CutterManagement.UI.Desktop
 
             // Register dialog service
             DialogService.RegisterDialog<AdminLoginDialogViewModel, AdminLoginDialog>();
+            DialogService.RegisterDialog<CreatePartDialogViewModel, CreatePartDialog>();
             DialogService.RegisterDialog<CreateUserDialogViewModel, CreateUserDialog>();
             DialogService.RegisterDialog<MachineStatusSettingDialogViewModel, StatusSettingDialog>();
             DialogService.RegisterDialog<MachineConfigurationDialogViewModel, MachineConfigurationDialog>();
-
 
             // Return services
             return services;

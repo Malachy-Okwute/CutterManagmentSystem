@@ -32,7 +32,7 @@
                 <Button Grid.Column="0" Width="120"
                         Margin="10,0" Content="Plus"
                         Tag="Add part #"
-                        Command="{Binding OpenAddPartDialogCommand}"
+                        Command="{Binding OpenCreatePartDialogCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
                 <Button Grid.Column="1" Width="100"
                         Margin="10,0"

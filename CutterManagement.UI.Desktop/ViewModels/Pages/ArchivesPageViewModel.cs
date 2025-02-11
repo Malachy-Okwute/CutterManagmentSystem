@@ -51,7 +51,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Command to open a dialog that will be used to introduce a non existing part into parts collection
         /// </summary>
-        public ICommand OpenAddPartDialogCommand { get; set; }
+        public ICommand OpenCreatePartDialogCommand { get; set; }
 
         #endregion
 
@@ -69,14 +69,15 @@ namespace CutterManagement.UI.Desktop
             _loader = LoadParts();
 
             // Create commands
-            OpenAddPartDialogCommand = new RelayCommand(OpenAddPartDialog);
+            OpenCreatePartDialogCommand = new RelayCommand(OpenCreatePartDialog);
         }
 
         #endregion
 
-        private void OpenAddPartDialog()
+        private void OpenCreatePartDialog()
         {
-
+            CreatePartDialogViewModel createPartVM = new CreatePartDialogViewModel(_dataServiceFactory);
+            DialogService.InvokeDialog(createPartVM);
         }
 
         /// <summary>

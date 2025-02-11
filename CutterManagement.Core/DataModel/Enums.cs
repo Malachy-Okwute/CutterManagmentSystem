@@ -21,7 +21,7 @@ namespace CutterManagement.Core
 
     public enum PartKind
     {
-        [Description("Select user shift")]
+        [Description("Select type of part")]
         None = 0,
 
         [Description("Pinion")]
