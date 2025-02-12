@@ -134,7 +134,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Message to display about the configuration process result
         /// </summary>
-        public string Message
+        public new string Message
         {
             get => _message;
             set => _message = value;
@@ -192,6 +192,7 @@ namespace CutterManagement.UI.Desktop
             // Create commands
             CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsStatusSettingSuccessful)));
             UpdateStatusCommand = new RelayCommand(UpdateMachineStatus);
+
         }
 
         #endregion

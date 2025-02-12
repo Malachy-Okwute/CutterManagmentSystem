@@ -9,5 +9,8 @@
         /// The title of dialog 
         /// </summary>
         public string Title { get; set; }
+
+        public string Message { get; set; }
+        public bool IsMessageSuccess { get; set; }
     }
 }

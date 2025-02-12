@@ -57,6 +57,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
 
+        public event EventHandler FeedbackRequested;
+
         /// <summary>
         /// Default constructor
         /// </summary>

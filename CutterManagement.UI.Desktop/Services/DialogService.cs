@@ -8,10 +8,12 @@ namespace CutterManagement.UI.Desktop
     {
         private static IDictionary<Type, Type> _dialogMappings = new Dictionary<Type, Type>();
         private DialogWindow _dialogWindow;
+        private FeedbackDialogWindow _feedbackDialogWindow;
 
         public DialogService()
         {
             _dialogWindow = new DialogWindow();
+            _feedbackDialogWindow = new FeedbackDialogWindow();
         }
 
         public static void RegisterDialog<TViewModel, TView>() where TViewModel : IDialogWindowCloseRequest
@@ -59,6 +61,21 @@ namespace CutterManagement.UI.Desktop
             _dialogWindow.ContentControl.Content = dialog;
 
             _dialogWindow.ShowDialog();
+        }
+
+        public void ShowFeedback(object viewModel)
+        {
+            _feedbackDialogWindow.Owner = _dialogWindow;
+
+            var dataContext = new FeedbackDialogWindowViewModel();
+
+            dataContext.Message = ((DialogViewModelBase)viewModel).Message;
+
+            dataContext.IsMessageSuccess = ((DialogViewModelBase)viewModel).IsMessageSuccess;
+
+            _feedbackDialogWindow.DataContext = dataContext;
+
+            _feedbackDialogWindow.ShowDialog();
         }
 
         public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest => new DialogService().ShowDialog(viewModel);
