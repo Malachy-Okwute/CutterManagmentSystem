@@ -49,28 +49,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public Dictionary<UserShift, string> UserShiftCollection { get; set; }
 
-        /// <summary>
-        /// Shows a message to client user in regards to creating a user
-        /// </summary>
-        public bool ShowMessage { get; set; }
-
-        /// <summary>
-        /// True if error message is to be shown 
-        /// Otherwise false
-        /// </summary>
-        public bool ShowErrorMessage { get; set; }
-
-        /// <summary>
-        /// True if success message is to be shown 
-        /// Otherwise false
-        /// </summary>
-        public bool ShowSuccessMessage { get; set; }
-
-        /// <summary>
-        /// Message to display to client user if user creation is successful or not
-        /// </summary>
-        public string Message { get; set; }
-
         #endregion
 
         #region Events
@@ -123,7 +101,7 @@ namespace CutterManagement.UI.Desktop
         private void CancelUserCreation()
         {
             ClearUserCreationDataResidue();
-            DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(false));
+            DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
         }
 
         /// <summary>
@@ -146,6 +124,8 @@ namespace CutterManagement.UI.Desktop
             // Validate incoming data
             ValidationResult result = DataValidationService.Validate(newUser);
 
+            IsMessageSuccess = result.IsValid;
+
             // If validation passes
             if (result.IsValid)
             {
@@ -155,32 +135,22 @@ namespace CutterManagement.UI.Desktop
                 userTable.DataChanged += UserTable_DataChanged;
                 // commit the newly created user to the users table
                 await userTable.CreateNewEntityAsync(newUser);
-                // Set flag
-                ShowSuccessMessage = true;
                 // Unhook event
                 userTable.DataChanged -= UserTable_DataChanged;
             }
 
-            // Show message
-            ShowMessage = true;
             // Set message
             Message = result.IsValid ? "User created successfully" : result.ErrorMessage;
 
             // Briefly show message
-            await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>
+            await DialogService.InvokeDialogFeedbackMessage(this);
+
+            // If successful...
+            if(IsMessageSuccess)
             {
-                if (result.IsValid)         // TODO: make sure db transaction is successful
-                {
-                    ClearUserCreationDataResidue();
-                    DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(result.IsValid)));
-                }
-                else
-                {
-                    Message = result.ErrorMessage;
-                    ShowSuccessMessage = false;
-                    ShowMessage = false;
-                }
-            });
+                // Clear data
+                ClearUserCreationDataResidue();
+            }
         }
 
         #endregion
@@ -195,8 +165,6 @@ namespace CutterManagement.UI.Desktop
             FirstName = string.Empty;
             LastName = string.Empty;
             NewUserShift = UserShift.None;
-            ShowMessage = false;
-            ShowSuccessMessage = false;
         }
 
         /// <summary>
@@ -227,6 +195,5 @@ namespace CutterManagement.UI.Desktop
         
 
         #endregion
-
     }
 }

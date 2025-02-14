@@ -23,11 +23,6 @@ namespace CutterManagement.UI.Desktop
         private MachineStatus _currentStatus;
 
         /// <summary>
-        /// Message to display about the configuration process result
-        /// </summary>
-        private string _message;
-
-        /// <summary>
         /// New machine status message
         /// </summary>
         private string _machineStatusMessage;
@@ -71,16 +66,6 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
-        /// True if message should be shown, otherwise false
-        /// </summary>
-        public bool ShowMessage { get; set; }
-
-        /// <summary>
-        /// True if configuration process ran successfully, otherwise false
-        /// </summary>
-        public bool IsConfigurationSuccessful { get; set; }
-
-        /// <summary>
         /// Collection of status options available
         /// </summary>
         public Dictionary<MachineStatus, string> StatusCollection { get; set; }
@@ -94,15 +79,6 @@ namespace CutterManagement.UI.Desktop
             set => _currentStatus = value;
         }
         
-        /// <summary>
-        /// Message to display about the configuration process result
-        /// </summary>
-        public string Message
-        {
-            get => _message;
-            set => _message = value;
-        }
-
         #endregion
 
         #region Public Events
@@ -152,7 +128,7 @@ namespace CutterManagement.UI.Desktop
             UpdateCommand = new RelayCommand(async () => await UpdateData());
             CancelCommand = new RelayCommand(() =>
             {
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
                 ClearDataResidue();
             });
 
@@ -193,10 +169,10 @@ namespace CutterManagement.UI.Desktop
             await ConfigureMachine(newData);
 
             // If configuration is successful
-            if (IsConfigurationSuccessful)
+            if (IsMessageSuccess)
             {
                 // Send dialog window close request
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsConfigurationSuccessful));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
             }
 
         }
@@ -217,17 +193,14 @@ namespace CutterManagement.UI.Desktop
                 (ValidationResult, MachineDataModel?) result =  await ((MachineConfigurationService)_machineService).Configure(newData);
 
                 // Set message
-                _message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
+                Message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
+
+                // Mark configuration as successful
+                IsMessageSuccess = result.Item1.IsValid;
 
                 // If process is successful...
                 if (result.Item1.IsValid && result.Item2 is not null)
                 {
-                    // Set configuration success here to update UI faster.
-                    // NOTE: This is used in binding to change background / foreground color in UI
-                    //
-                    // Mark configuration as successful
-                    IsConfigurationSuccessful = true; 
-
                     // Send out message
                     Messenger.MessageSender.SendMessage(result.Item2);
                 }
@@ -235,31 +208,15 @@ namespace CutterManagement.UI.Desktop
                 // Update UI with the current message
                 OnPropertyChanged(nameof(Message));
 
-                // Show message
-                ShowMessage = true;
+                // Show feed back message
+                await DialogService.InvokeDialogFeedbackMessage(this);
 
-                // Wait for 2 seconds
-                await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>
+                // If success...
+                if(IsMessageSuccess)
                 {
-                    // If process is successful...
-                    if (result.Item1.IsValid)
-                    {
-                        // Close message
-                        ShowMessage = false;
-
-                        // Clear data
-                        ClearDataResidue();
-                    }
-                    // Otherwise
-                    else
-                    {
-                        // Set success flag
-                        IsConfigurationSuccessful = false;
-
-                        // Close message
-                        ShowMessage = false;
-                    }
-                });
+                    // Clear data
+                    ClearDataResidue();
+                }
             }
             catch (Exception ex)
             {

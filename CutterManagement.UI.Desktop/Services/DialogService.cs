@@ -6,6 +6,7 @@ namespace CutterManagement.UI.Desktop
 {
     public class DialogService : IDialogService
     {
+        private static DialogService DialogInstance => new DialogService();
         private static IDictionary<Type, Type> _dialogMappings = new Dictionary<Type, Type>();
         private DialogWindow _dialogWindow;
         private FeedbackDialogWindow _feedbackDialogWindow;
@@ -31,7 +32,7 @@ namespace CutterManagement.UI.Desktop
             _dialogMappings.Add(typeof(TViewModel), typeof(TView));
         }
 
-        public void ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest
+        private void ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest
         {
             Type viewType = _dialogMappings[typeof(TViewModel)];
 
@@ -63,22 +64,28 @@ namespace CutterManagement.UI.Desktop
             _dialogWindow.ShowDialog();
         }
 
-        public void ShowFeedback(object viewModel)
+        private async Task ShowFeedback<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase
         {
-            _feedbackDialogWindow.Owner = _dialogWindow;
-
             var dataContext = new FeedbackDialogWindowViewModel();
 
-            dataContext.Message = ((DialogViewModelBase)viewModel).Message;
+            dataContext.Message = viewModel.Message;
 
-            dataContext.IsMessageSuccess = ((DialogViewModelBase)viewModel).IsMessageSuccess;
+            dataContext.IsMessageSuccess = viewModel.IsMessageSuccess;
 
             _feedbackDialogWindow.DataContext = dataContext;
 
-            _feedbackDialogWindow.ShowDialog();
+            await Task.Run(() => 
+            {
+                DispatcherService.Invoke(() => _feedbackDialogWindow.ShowDialog());
+
+            }).WaitAsync(TimeSpan.FromSeconds(2)).ContinueWith( _ =>
+            {
+                DispatcherService.Invoke(_feedbackDialogWindow.Close);
+            });
         }
 
-        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest => new DialogService().ShowDialog(viewModel);
+        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest => DialogInstance.ShowDialog(viewModel);
+        public static async Task InvokeDialogFeedbackMessage<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase => await DialogInstance.ShowFeedback(viewModel);
         
     }
 }

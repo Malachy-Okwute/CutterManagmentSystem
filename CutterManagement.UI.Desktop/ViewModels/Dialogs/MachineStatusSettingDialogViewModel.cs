@@ -39,11 +39,6 @@ namespace CutterManagement.UI.Desktop
         private UserDataModel _user;
 
         /// <summary>
-        /// Message to display about the configuration process result
-        /// </summary>
-        private string _message;
-
-        /// <summary>
         /// Task loader
         /// </summary>
         private Task _taskLoader;
@@ -87,17 +82,6 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
-        /// True if message is to be displayed to user
-        /// Otherwise false
-        /// </summary>
-        public bool ShowMessage { get; set; }
-
-        /// <summary>
-        /// True if attempt to set machine status succeeded
-        /// </summary>
-        public bool IsStatusSettingSuccessful { get; set; }
-
-        /// <summary>
         /// True if this machine item is configured, 
         /// Otherwise false
         /// </summary>
@@ -129,15 +113,6 @@ namespace CutterManagement.UI.Desktop
         {
             get => _currentStatus;
             set => _currentStatus = value;
-        }
-
-        /// <summary>
-        /// Message to display about the configuration process result
-        /// </summary>
-        public new string Message
-        {
-            get => _message;
-            set => _message = value;
         }
 
         #endregion
@@ -190,9 +165,8 @@ namespace CutterManagement.UI.Desktop
             }
 
             // Create commands
-            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsStatusSettingSuccessful)));
+            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
             UpdateStatusCommand = new RelayCommand(UpdateMachineStatus);
-
         }
 
         #endregion
@@ -209,10 +183,10 @@ namespace CutterManagement.UI.Desktop
             {
                 // Set message
                 Message = "Machine need to be configured first by admin";
-                // Show message
-                ShowMessage = true;
-                // Reset Show-message flag
-                await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) => ShowMessage = false);
+
+                // Show feed back message
+                await DialogService.InvokeDialogFeedbackMessage(this);
+
                 // Do nothing else
                 return;
             }
@@ -222,10 +196,10 @@ namespace CutterManagement.UI.Desktop
             {
                 // Set message
                 Message = "Please add a user to continue";
-                // Show message
-                ShowMessage = true;
-                // Reset Show-message flag
-                await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) => ShowMessage = false);
+
+                // Show feed back message
+                await DialogService.InvokeDialogFeedbackMessage(this);
+
                 // Do nothing else
                 return;
             }
@@ -252,10 +226,10 @@ namespace CutterManagement.UI.Desktop
             await SetMachineStatus(newData);
 
             // If configuration is successful
-            if (IsStatusSettingSuccessful)
+            if (IsMessageSuccess)
             {
                 // Send dialog window close request
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsStatusSettingSuccessful));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
             }
         }
 
@@ -284,41 +258,23 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Set message
-                _message = string.IsNullOrEmpty(result.ErrorMessage) ? "Machine status successfully set " : result.ErrorMessage;
+                Message = string.IsNullOrEmpty(result.ErrorMessage) ? "Machine status successfully set " : result.ErrorMessage;
+
+                // Set flag
+                IsMessageSuccess = result.IsValid;
 
                 // If we succeed
-                if(result.IsValid)
+                if (result.IsValid)
                 {
-                    // Set flag
-                    IsStatusSettingSuccessful = true;
                     // Send out message to subscriber that needs to know about the data that changed
                     Messenger.MessageSender.SendMessage(machineDataModel ?? throw new ArgumentNullException($"{machineDataModel} is null"));
                 }
 
                 // Update message
                 OnPropertyChanged(nameof(Message));
-                // Show message
-                ShowMessage = true;
 
-                // Wait for 2 seconds
-                await Task.Delay(TimeSpan.FromSeconds(2)).ContinueWith((action) =>
-                {
-                    // If process is successful...
-                    if (result.IsValid)
-                    {
-                        // Close message
-                        ShowMessage = false;
-                    }
-                    // Otherwise
-                    else
-                    {
-                        // Reset success flag
-                        IsStatusSettingSuccessful = false;
-
-                        // Close message
-                        ShowMessage = false;
-                    }
-                });
+                // Show feed back message
+                await DialogService.InvokeDialogFeedbackMessage(this);
 
             }
             catch (Exception ex)

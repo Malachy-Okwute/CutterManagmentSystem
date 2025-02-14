@@ -26,7 +26,6 @@ namespace CutterManagement.UI.Desktop
 
             Owner = Application.Current.MainWindow;
             ShowInTaskbar = false;
-            WindowStartupLocation = WindowStartupLocation.CenterOwner;
             Height = Owner.ActualHeight;
             Width = Owner.ActualWidth;
         }

@@ -278,7 +278,7 @@ namespace CutterManagement.UI.Desktop
                      services.AddDbContext<ApplicationDbContext>(option =>
                      {
                          // TODO: Consider internet connection when using remote database
-                         option.UseSqlServer(hostContext.Configuration.GetConnectionString("RemoteDbConnection")!
+                         option.UseSqlServer(hostContext.Configuration.GetConnectionString("LocalDbConnection")!
                                                                     // https://learn.microsoft.com/en-us/answers/questions/1113995/changing-location-of-database-mdf-file-from-defaul
                                                                     // Create the *.mfd file in the bin folder instead of the user folder
                                                                     .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));                        
