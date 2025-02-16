@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines rules for validating a <see cref="PartDataModel"/>
     /// </summary>
-    public class PartValidation : DataValidationBase<PartDataModel>
+    public class PartValidationPolicy : DataValidationBase<PartDataModel>
     {
         /// <summary>
         /// Validates a part

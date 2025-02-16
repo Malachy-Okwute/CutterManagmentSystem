@@ -52,9 +52,6 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel machineData = await machineTable.GetEntityByIdIncludingRelatedPropertiesAsync(newData.Id, u => u.Users);
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
 
-            // Register machine validation
-            DataValidationService.RegisterValidator(new MachineValidation());
-
             // Validate incoming data
             ValidationResult result = DataValidationService.Validate(newData);
 

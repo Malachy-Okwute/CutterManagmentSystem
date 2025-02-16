@@ -77,6 +77,12 @@ namespace CutterManagement.UI.Desktop
             DialogService.RegisterDialog<MachineStatusSettingDialogViewModel, StatusSettingDialog>();
             DialogService.RegisterDialog<MachineConfigurationDialogViewModel, MachineConfigurationDialog>();
 
+            // Register data validation policy
+            DataValidationService.RegisterValidationPolicy(new UserValidationPolicy());
+            DataValidationService.RegisterValidationPolicy(new PartValidationPolicy());
+            DataValidationService.RegisterValidationPolicy(new MachineValidationPolicy());
+
+
             // Return services
             return services;
         }

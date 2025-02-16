@@ -65,6 +65,10 @@ namespace CutterManagement.UI.Desktop
 
         #region Construction 
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dataServiceFactory">Access to database</param>
         public UsersPageViewModel(IDataAccessServiceFactory dataServiceFactory)
         {
             _dataServiceFactory = dataServiceFactory;
