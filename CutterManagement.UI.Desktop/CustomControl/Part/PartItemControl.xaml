@@ -65,7 +65,7 @@
         <Border Grid.Column="2" Width="140">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
                        d:Text="M100" TextAlignment="Left"
-                       Text="{Binding ModelNumber}"
+                       Text="{Binding ModelNumber, StringFormat=M{0}}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>

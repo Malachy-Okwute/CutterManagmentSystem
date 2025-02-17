@@ -7,7 +7,7 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// View model for <see cref="ArchivesPage"/>
     /// </summary>
-    public class ArchivesPageViewModel : ViewModelBase
+    public class ArchivesPageViewModel : ViewModelBase, ISubscribeToMessages
     {
         #region Private Fields
 
@@ -70,6 +70,9 @@ namespace CutterManagement.UI.Desktop
 
             // Create commands
             OpenCreatePartDialogCommand = new RelayCommand(OpenCreatePartDialog);
+
+            // Register this object to receive messages from messenger
+            Messenger.MessageSender.RegisterMessenger(this);
         }
 
         #endregion
@@ -116,6 +119,28 @@ namespace CutterManagement.UI.Desktop
                 ToothCount = part.PartToothCount,
                 SummaryNumber = part.SummaryNumber
             });
+        }
+
+        private void UpdatePartCollection(PartDataModel message)
+        {
+            if (_partCollection.Any(p => p.Id == message.Id))
+                return;
+
+            AddPartToPartCollection(message);
+
+            OnPropertyChanged(nameof(IsPartCollectionEmpty));
+        }
+
+        /// <summary>
+        /// Receive message from <see cref="Messenger"/>
+        /// </summary>
+        /// <param name="message">The message received</param>
+        public void ReceiveMessage(IMessage message)
+        {
+            if (message.GetType() == typeof(PartDataModel))
+            {
+                UpdatePartCollection((PartDataModel)message);
+            }
         }
     }
 }

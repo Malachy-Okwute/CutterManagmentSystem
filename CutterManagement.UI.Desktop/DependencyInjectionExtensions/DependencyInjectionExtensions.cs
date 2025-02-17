@@ -82,7 +82,6 @@ namespace CutterManagement.UI.Desktop
             DataValidationService.RegisterValidationPolicy(new PartValidationPolicy());
             DataValidationService.RegisterValidationPolicy(new MachineValidationPolicy());
 
-
             // Return services
             return services;
         }

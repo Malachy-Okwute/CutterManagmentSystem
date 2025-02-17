@@ -3,7 +3,7 @@
     /// <summary>
     /// Part data model
     /// </summary>
-    public class PartDataModel : DataModelBase
+    public class PartDataModel : DataModelBase, IMessage
     {
         /// <summary>
         /// Unique part number

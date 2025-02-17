@@ -194,7 +194,7 @@ namespace CutterManagement.UI.Desktop
         #region Event Methods
 
         /// <summary>
-        /// Update users list with the most current users that exists in the database
+        /// Update users list with with latest data from database
         /// </summary>
         /// <param name="sender">Origin of this event</param>
         /// <param name="e">The actual data that changed</param>

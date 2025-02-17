@@ -101,12 +101,13 @@ namespace CutterManagement.UI.Desktop
                 PartKindCollection.Add(part, EnumHelpers.GetDescription(part));
             }
 
-            CreatePartCommand = new RelayCommand(CreatePart);
+            CreatePartCommand = new RelayCommand(async () => await CreatePart());
             CancelPartCreationCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
         }
 
-        private void CreatePart()
+        private async Task CreatePart()
         {
+            // Create new part
             PartDataModel newPart = new PartDataModel
             {
                 PartNumber = PartNumber,
@@ -121,7 +122,40 @@ namespace CutterManagement.UI.Desktop
 
             // Set success flag
             IsMessageSuccess = result.IsValid;
+
+            // If validation passes
+            if (result.IsValid)
+            {
+                // Get parts table
+                IDataAccessService<PartDataModel> partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+                // Listen for when parts is created
+                partsTable.DataChanged += PartsTable_DataChanged;
+                // commit the newly created part to the parts table
+                await partsTable.CreateNewEntityAsync(newPart);
+                // Unhook event
+                partsTable.DataChanged -= PartsTable_DataChanged;
+            }
+
+            // Set message
+            Message = result.IsValid ? "Part created successfully" : result.ErrorMessage;
+
+            // Briefly show message
+            await DialogService.InvokeDialogFeedbackMessage(this);
+
+            // If successful...
+            if (IsMessageSuccess)
+            {
+                // Send dialog window close request
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+            }
         }
+
+        /// <summary>
+        /// Update parts list with latest data from database
+        /// </summary>
+        /// <param name="sender">Origin of this event</param>
+        /// <param name="e">The actual data that changed</param>
+        private void PartsTable_DataChanged(object? sender, object e) => Messenger.MessageSender.SendMessage((PartDataModel)e);
 
         #endregion
 
