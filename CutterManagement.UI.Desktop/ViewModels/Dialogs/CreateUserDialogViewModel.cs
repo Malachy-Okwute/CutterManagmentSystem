@@ -76,6 +76,10 @@ namespace CutterManagement.UI.Desktop
 
         #region Constructor
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="dataServiceFactory">Access to database</param>
         public CreateUserDialogViewModel(IDataAccessServiceFactory dataServiceFactory)
         {
             _dataServiceFactory = dataServiceFactory;
@@ -101,6 +105,8 @@ namespace CutterManagement.UI.Desktop
         private void CancelUserCreation()
         {
             ClearUserCreationDataResidue();
+
+            // Send dialog window close request
             DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
         }
 
@@ -118,12 +124,10 @@ namespace CutterManagement.UI.Desktop
                 Shift = NewUserShift,
             };
 
-            // Register user validation
-            DataValidationService.RegisterValidator(new UserValidation());
-
             // Validate incoming data
             ValidationResult result = DataValidationService.Validate(newUser);
 
+            // Set success flag
             IsMessageSuccess = result.IsValid;
 
             // If validation passes
@@ -150,6 +154,9 @@ namespace CutterManagement.UI.Desktop
             {
                 // Clear data
                 ClearUserCreationDataResidue();
+
+                // Send dialog window close request
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
             }
         }
 

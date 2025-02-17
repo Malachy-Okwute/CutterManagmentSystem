@@ -6,10 +6,10 @@ namespace CutterManagement.UI.Desktop
 {
     public class DialogService : IDialogService
     {
-        private static DialogService DialogInstance => new DialogService();
-        private static IDictionary<Type, Type> _dialogMappings = new Dictionary<Type, Type>();
         private DialogWindow _dialogWindow;
         private FeedbackDialogWindow _feedbackDialogWindow;
+        private static DialogService DialogInstance => new DialogService();
+        private static IDictionary<Type, Type> _dialogMappings = new Dictionary<Type, Type>();
 
         public DialogService()
         {

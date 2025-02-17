@@ -1,6 +1,6 @@
 ﻿namespace CutterManagement.Core
 {
-    public class MachineValidation : DataValidationBase<MachineDataModel> 
+    public class MachineValidationPolicy : DataValidationBase<MachineDataModel> 
     {
         public override ValidationResult Validate(MachineDataModel machine)
         {

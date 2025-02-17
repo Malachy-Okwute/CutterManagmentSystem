@@ -1,6 +1,6 @@
 ﻿namespace CutterManagement.Core
 {
-    public class UserValidation : DataValidationBase<UserDataModel>
+    public class UserValidationPolicy : DataValidationBase<UserDataModel>
     {
         public override ValidationResult Validate(UserDataModel data)
         {

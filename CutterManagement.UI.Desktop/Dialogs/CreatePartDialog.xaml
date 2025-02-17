@@ -80,7 +80,7 @@
                         Style="{StaticResource TransparentButtonStyle}"
                         BorderThickness="1"
                         BorderBrush="{DynamicResource BorderColorBrush6}"
-                        Command="{Binding CancelUserCreationCommand}" />
+                        Command="{Binding CancelPartCreationCommand}" />
                 <Button Width="130" Height="34"
                         HorizontalAlignment="Right" Content="Create"
                         IsDefault="True"
@@ -89,7 +89,7 @@
                         FontSize="{StaticResource XSmall}"
                         BorderThickness="2"
                         Style="{StaticResource TransparentButtonStyle}"
-                        Command="{Binding CreateCommand}" />
+                        Command="{Binding CreatePartCommand}" />
             </Grid>
         </Grid>
 

@@ -15,7 +15,7 @@
         /// </summary>
         /// <typeparam name="T">The validation type to register</typeparam>
         /// <param name="validator">The validation rules</param>
-        public static void RegisterValidator<T>(IValidator<T> validator)
+        public static void RegisterValidationPolicy<T>(IValidator<T> validator)
         {
             _dataValidationRegistry[typeof(T)] = validator;
         }

@@ -42,7 +42,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// True if part collection has no part, Otherwise false
         /// </summary>
-        public bool IsPartCollectionEmpty { get; set; }
+        public bool IsPartCollectionEmpty => _partCollection.Any();
 
         #endregion
 

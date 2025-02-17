@@ -43,9 +43,6 @@ namespace CutterManagement.UI.Desktop
             // Get the specific item from db
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
 
-            // Register machine validation
-            DataValidationService.RegisterValidator(new MachineValidation());
-
             // Validate incoming data
             ValidationResult result = DataValidationService.Validate(newData);
 
