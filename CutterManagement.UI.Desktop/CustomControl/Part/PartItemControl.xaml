@@ -1,8 +1,6 @@
-﻿<UserControl x:Class="CutterManagement.UI.Desktop.PartItemControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
-             Height="48" d:Width="700"
-             mc:Ignorable="d">
+﻿<UserControl x:Class="CutterManagement.UI.Desktop.PartItemControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+             Height="48" d:Width="700" mc:Ignorable="d">
 
     <UserControl.Resources>
         <Style x:Key="ItemHoverStyle" TargetType="{x:Type Grid}">
@@ -21,8 +19,7 @@
 
         <!--  dropshadow effect  -->
         <Grid.Effect>
-            <DropShadowEffect BlurRadius="12" ShadowDepth="0"
-                              Opacity="0.12" />
+            <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.12" />
         </Grid.Effect>
 
         <Grid.ColumnDefinitions>
@@ -32,58 +29,57 @@
             <ColumnDefinition Width="Auto" />
             <!--  Model  -->
             <ColumnDefinition Width="Auto" />
-            <!--  Part kind  -->
-            <ColumnDefinition Width="Auto" />
             <!--  Teeth count  -->
+            <ColumnDefinition Width="Auto" />
+            <!--  Part kind  -->
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="bgPanel" Grid.Column="0"
-              Grid.ColumnSpan="5" Panel.ZIndex="4"
+        <Grid x:Name="bgPanel" Grid.Column="0" Grid.ColumnSpan="5"
+              Panel.ZIndex="4"
               Style="{StaticResource ItemHoverStyle}" />
 
         <!--  Part number  -->
-        <Border x:Name="PartNumber" Grid.Column="0"
-                Width="160" Padding="20,0">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       d:Text="1234567890"
+        <Border x:Name="PartNumber" Grid.Column="0" Width="160"
+                Padding="20,0">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="1234567890"
                        Text="{Binding PartNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
         <!--  Summary  -->
-        <Border Grid.Column="1" Width="140">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       d:Text="12345" TextAlignment="Left"
+        <Border x:Name="SummaryNumber" Grid.Column="1" Width="140">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="12345"
+                       TextAlignment="Left"
                        Text="{Binding SummaryNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
         <!--  Model  -->
-        <Border Grid.Column="2" Width="140">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       d:Text="M100" TextAlignment="Left"
+        <Border x:Name="Model" Grid.Column="2" Width="140">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="M100"
+                       TextAlignment="Left"
                        Text="{Binding ModelNumber, StringFormat=M{0}}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
         <!--  Teeth count  -->
-        <Border Grid.Column="3" Width="140"
+        <Border x:Name="TeethCount" Grid.Column="3" Width="140"
                 HorizontalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       d:Text="10" TextAlignment="Left"
-                       Text="{Binding TeethCount}"
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="10"
+                       TextAlignment="Left"
+                       Text="{Binding ToothCount}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
         <!--  Part kind  -->
-        <Border Grid.Column="4">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       d:Text="Pinion" TextAlignment="Left"
+        <Border x:Name="PartType" Grid.Column="4">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="Pinion"
+                       TextAlignment="Left"
                        Text="{Binding Kind}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />

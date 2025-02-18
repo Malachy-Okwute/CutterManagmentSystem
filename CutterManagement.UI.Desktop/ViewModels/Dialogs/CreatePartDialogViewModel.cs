@@ -1,7 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CutterManagement.UI.Desktop
 {

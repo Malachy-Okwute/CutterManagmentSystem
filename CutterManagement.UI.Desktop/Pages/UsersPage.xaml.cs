@@ -32,7 +32,7 @@ namespace CutterManagement.UI.Desktop
                 // make sure we have content presenter
                 if (itemsControlContentPresenter is not null)
                 {
-                    // Get machine-item-control
+                    // Get item-control
                     UserItemControl userItemControl = (UserItemControl)VisualTreeHelper.GetChild(itemsControlContentPresenter, 0);
 
                     #region Label Width
