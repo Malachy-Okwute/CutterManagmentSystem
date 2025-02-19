@@ -45,8 +45,8 @@
                 </Grid.RowDefinitions>
 
                 <!--  label  -->
-                <local:PartItemLabelControl x:Name="PartsItemLabel" Grid.Row="0"
-                                            Margin="10,10" HorizontalAlignment="Stretch" />
+                <local:PartItemLabelControl x:Name="PartsItemLabel" Grid.Row="0" Margin="10,10"
+                                            HorizontalAlignment="Stretch" />
 
                 <!--  items  -->
                 <ScrollViewer Grid.Row="1" Padding="7,0" VerticalScrollBarVisibility="Hidden"

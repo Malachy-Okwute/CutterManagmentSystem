@@ -77,6 +77,11 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Open dialog to create a new part
+        /// </summary>
         private void OpenCreatePartDialog()
         {
             CreatePartDialogViewModel createPartVM = new CreatePartDialogViewModel(_dataServiceFactory);
@@ -91,8 +96,10 @@ namespace CutterManagement.UI.Desktop
             // Get parts table
             IDataAccessService<PartDataModel> partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
 
-            if((await partsTable.GetAllEntitiesAsync()).Any() is false)
+            // Check if there is any part in the database
+            if ((await partsTable.GetAllEntitiesAsync()).Any() is false)
             {
+                // Update UI
                 OnPropertyChanged(nameof(IsPartCollectionEmpty));
                 return;
             }
@@ -103,11 +110,16 @@ namespace CutterManagement.UI.Desktop
                 AddPartToPartCollection(part);
             }
 
+            // Update UI
             OnPropertyChanged(nameof(IsPartCollectionEmpty));
 
             //CollectionViewSource.GetDefaultView(Users).Refresh();
         }
 
+        /// <summary>
+        /// Add a part to part-collection
+        /// </summary>
+        /// <param name="part">The part to add to the collection</param>
         private void AddPartToPartCollection(PartDataModel part)
         {
             _partCollection.Add(new PartItemViewModel
@@ -121,13 +133,21 @@ namespace CutterManagement.UI.Desktop
             });
         }
 
-        private void UpdatePartCollection(PartDataModel message)
+        /// <summary>
+        /// Update part collection
+        /// </summary>
+        /// <param name="part">The part to update our collection with</param>
+        private void UpdatePartCollection(PartDataModel part)
         {
-            if (_partCollection.Any(p => p.Id == message.Id))
+            // Check if part is already in collection
+            if (_partCollection.Any(p => p.Id == part.Id))
+                // If it is, don't add it 
                 return;
 
-            AddPartToPartCollection(message);
+            // If it isn't, add it
+            AddPartToPartCollection(part);
 
+            // Update UI
             OnPropertyChanged(nameof(IsPartCollectionEmpty));
         }
 
@@ -142,5 +162,7 @@ namespace CutterManagement.UI.Desktop
                 UpdatePartCollection((PartDataModel)message);
             }
         }
+
+        #endregion
     }
 }

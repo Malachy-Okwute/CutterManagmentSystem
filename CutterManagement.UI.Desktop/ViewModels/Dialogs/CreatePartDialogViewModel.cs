@@ -106,6 +106,12 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Create a new part
+        /// </summary>
+        /// <returns><see cref="Task"/></returns>
         private async Task CreatePart()
         {
             // Get parts table
@@ -165,6 +171,10 @@ namespace CutterManagement.UI.Desktop
             }
         }
 
+        #endregion
+
+        #region Event Methods
+
         /// <summary>
         /// Update parts list with latest data from database
         /// </summary>
@@ -172,5 +182,6 @@ namespace CutterManagement.UI.Desktop
         /// <param name="e">The actual data that changed</param>
         private void PartsTable_DataChanged(object? sender, object e) => Messenger.MessageSender.SendMessage((PartDataModel)e);
 
+        #endregion
     }
 }
