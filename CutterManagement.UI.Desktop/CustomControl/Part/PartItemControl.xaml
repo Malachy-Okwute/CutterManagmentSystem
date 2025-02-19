@@ -23,6 +23,8 @@
         </Grid.Effect>
 
         <Grid.ColumnDefinitions>
+            <!--  Icon  -->
+            <ColumnDefinition Width="Auto" />
             <!--  Part number  -->
             <ColumnDefinition Width="Auto" />
             <!--  Summary  -->
@@ -35,13 +37,22 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="bgPanel" Grid.Column="0" Grid.ColumnSpan="5"
+        <!--  hover effect  -->
+        <Grid x:Name="bgPanel" Grid.Column="0" Grid.ColumnSpan="10"
               Panel.ZIndex="4"
               Style="{StaticResource ItemHoverStyle}" />
 
-        <!--  Part number  -->
-        <Border x:Name="PartNumber" Grid.Column="0" Width="160"
+        <!--  Icon  -->
+        <Border x:Name="Icon" Grid.Column="0" Width="120"
                 Padding="20,0">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="&#xe5e9;"
+                       FontFamily="{StaticResource LightIcon}"
+                       FontSize="{StaticResource Large}"
+                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+        </Border>
+
+        <!--  Part number  -->
+        <Border x:Name="PartNumber" Grid.Column="1" Width="140">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="1234567890"
                        Text="{Binding PartNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
@@ -49,7 +60,7 @@
         </Border>
 
         <!--  Summary  -->
-        <Border x:Name="SummaryNumber" Grid.Column="1" Width="140">
+        <Border x:Name="SummaryNumber" Grid.Column="2" Width="140">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="12345"
                        TextAlignment="Left"
                        Text="{Binding SummaryNumber}"
@@ -58,7 +69,7 @@
         </Border>
 
         <!--  Model  -->
-        <Border x:Name="Model" Grid.Column="2" Width="140">
+        <Border x:Name="Model" Grid.Column="3" Width="140">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="M100"
                        TextAlignment="Left"
                        Text="{Binding ModelNumber, StringFormat=M{0}}"
@@ -67,7 +78,7 @@
         </Border>
 
         <!--  Teeth count  -->
-        <Border x:Name="TeethCount" Grid.Column="3" Width="140"
+        <Border x:Name="TeethCount" Grid.Column="4" Width="140"
                 HorizontalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="10"
                        TextAlignment="Left"
@@ -77,7 +88,7 @@
         </Border>
 
         <!--  Part kind  -->
-        <Border x:Name="PartType" Grid.Column="4">
+        <Border x:Name="PartType" Grid.Column="5">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" d:Text="Pinion"
                        TextAlignment="Left"
                        Text="{Binding Kind}"

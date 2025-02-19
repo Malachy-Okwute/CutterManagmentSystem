@@ -4,6 +4,7 @@ using CutterManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250219171155_RemovedPartMachineRelationShip")]
+    partial class RemovedPartMachineRelationShip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,6 +148,9 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("PartDataModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PartToothSize")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -159,6 +165,8 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PartDataModelId");
 
                     b.ToTable("Machines");
                 });
@@ -179,6 +187,9 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("MachineDataModelId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -196,8 +207,7 @@ namespace CutterManagement.DataAccess.Migrations
 
                     b.Property<string>("SummaryNumber")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -259,6 +269,13 @@ namespace CutterManagement.DataAccess.Migrations
                     b.Navigation("MachineDataModel");
                 });
 
+            modelBuilder.Entity("CutterManagement.Core.MachineDataModel", b =>
+                {
+                    b.HasOne("CutterManagement.Core.PartDataModel", null)
+                        .WithMany("MachineDataModel")
+                        .HasForeignKey("PartDataModelId");
+                });
+
             modelBuilder.Entity("MachineDataModelUserDataModel", b =>
                 {
                     b.HasOne("CutterManagement.Core.MachineDataModel", null)
@@ -278,6 +295,11 @@ namespace CutterManagement.DataAccess.Migrations
                 {
                     b.Navigation("Cutter")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CutterManagement.Core.PartDataModel", b =>
+                {
+                    b.Navigation("MachineDataModel");
                 });
 #pragma warning restore 612, 618
         }

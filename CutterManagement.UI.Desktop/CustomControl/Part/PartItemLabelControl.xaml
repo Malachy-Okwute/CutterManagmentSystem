@@ -3,7 +3,8 @@
              mc:Ignorable="d" FontWeight="SemiBold">
     <Grid>
         <Grid.ColumnDefinitions>
-
+            <!--  icon  -->
+            <ColumnDefinition Width="120" />
             <!--  part #  -->
             <ColumnDefinition Width="Auto" />
             <!--  Summary #  -->
@@ -16,35 +17,38 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="PartNumberLabel" Grid.Column="0" HorizontalAlignment="Stretch"
+        <!--  icon area  -->
+        <Border Grid.Column="0" />
+
+        <TextBlock x:Name="PartNumberLabel" Grid.Column="1" HorizontalAlignment="Stretch"
                    VerticalAlignment="Center" d:Width="80" Text="PART #"
                    FontSize="{StaticResource XSmall}"
                    FontFamily="{StaticResource RobotoFlexRegular}"
                    Foreground="{DynamicResource ForegroundColorBrush3}"
-                   TextAlignment="Center" />
+                   TextAlignment="Left" />
 
-        <TextBlock x:Name="SummaryNumberLabel" Grid.Column="1" HorizontalAlignment="Stretch"
+        <TextBlock x:Name="SummaryNumberLabel" Grid.Column="2" HorizontalAlignment="Stretch"
                    VerticalAlignment="Center" d:Width="80" Text="SUMMARY #"
                    FontSize="{StaticResource XSmall}"
                    FontFamily="{StaticResource RobotoFlexRegular}"
                    Foreground="{DynamicResource ForegroundColorBrush3}"
                    TextAlignment="Left" />
 
-        <TextBlock x:Name="ModelLabel" Grid.Column="2" HorizontalAlignment="Stretch"
+        <TextBlock x:Name="ModelLabel" Grid.Column="3" HorizontalAlignment="Stretch"
                    VerticalAlignment="Center" d:Width="80" Text="MODEL"
                    FontSize="{StaticResource XSmall}"
                    FontFamily="{StaticResource RobotoFlexRegular}"
                    Foreground="{DynamicResource ForegroundColorBrush3}"
                    TextAlignment="Left" />
 
-        <TextBlock x:Name="TeethCountLabel" Grid.Column="3" HorizontalAlignment="Stretch"
+        <TextBlock x:Name="TeethCountLabel" Grid.Column="4" HorizontalAlignment="Stretch"
                    VerticalAlignment="Center" d:Width="80" Text="TEETH"
                    FontSize="{StaticResource XSmall}"
                    FontFamily="{StaticResource RobotoFlexRegular}"
                    Foreground="{DynamicResource ForegroundColorBrush3}"
                    TextAlignment="Left" />
 
-        <TextBlock x:Name="TypeLabel" Grid.Column="4" HorizontalAlignment="Stretch"
+        <TextBlock x:Name="TypeLabel" Grid.Column="5" HorizontalAlignment="Stretch"
                    VerticalAlignment="Center" d:Width="80" Text="TYPE"
                    FontSize="{StaticResource XSmall}"
                    FontFamily="{StaticResource RobotoFlexRegular}"

@@ -34,11 +34,11 @@
         /// <summary>
         /// Navigation property id
         /// </summary>
-        public int? MachineDataModelId { get; set; }
+        //public int? MachineDataModelId { get; set; }
 
         /// <summary>
         /// Machine navigation property collection 
         /// </summary>
-        public ICollection<MachineDataModel> MachineDataModel { get; set; } = new List<MachineDataModel>();
+        //public ICollection<MachineDataModel> MachineDataModel { get; set; } = new List<MachineDataModel>();
     }
 }

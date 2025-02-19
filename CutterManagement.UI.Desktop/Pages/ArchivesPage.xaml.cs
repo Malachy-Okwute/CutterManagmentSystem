@@ -54,7 +54,7 @@ namespace CutterManagement.UI.Desktop
 
                 if (Items.Items.Count == 0)
                 {
-                    PartsItemLabel.PartNumberLabel.Width = 160;
+                    PartsItemLabel.PartNumberLabel.Width = 140;
                     PartsItemLabel.SummaryNumberLabel.Width = 140;
                     PartsItemLabel.ModelLabel.Width = 140;
                     PartsItemLabel.TeethCountLabel.Width = 140;

@@ -83,7 +83,7 @@
         /// <summary>
         /// Parts navigation property collection
         /// </summary>
-        public ICollection<PartDataModel> Parts { get; set; } = new List<PartDataModel>();
+        //public ICollection<PartDataModel> Parts { get; set; } = new List<PartDataModel>();
 
         /// <summary>
         /// Users navigation property collection

@@ -104,8 +104,13 @@ namespace CutterManagement.UI.Desktop
             CancelPartCreationCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
         }
 
+        #endregion
+
         private async Task CreatePart()
         {
+            // Get parts table
+            IDataAccessService<PartDataModel> partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+
             // Create new part
             PartDataModel newPart = new PartDataModel
             {
@@ -125,8 +130,19 @@ namespace CutterManagement.UI.Desktop
             // If validation passes
             if (result.IsValid)
             {
-                // Get parts table
-                IDataAccessService<PartDataModel> partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+                // Make sure part doesn't already exist
+                if ((await partsTable.GetAllEntitiesAsync()).Any(part => part.PartNumber.Equals(newPart.PartNumber)))
+                {
+                    // Set message
+                    Message = "Part number already exists";
+                    // Set success flag
+                    IsMessageSuccess = false;
+                    // Briefly show message
+                    await DialogService.InvokeDialogFeedbackMessage(this);
+                    // Do nothing else
+                    return;
+                }
+
                 // Listen for when parts is created
                 partsTable.DataChanged += PartsTable_DataChanged;
                 // commit the newly created part to the parts table
@@ -155,8 +171,6 @@ namespace CutterManagement.UI.Desktop
         /// <param name="sender">Origin of this event</param>
         /// <param name="e">The actual data that changed</param>
         private void PartsTable_DataChanged(object? sender, object e) => Messenger.MessageSender.SendMessage((PartDataModel)e);
-
-        #endregion
 
     }
 }

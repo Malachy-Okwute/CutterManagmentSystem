@@ -85,6 +85,7 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<PartDataModel>().HasKey(x => x.Id);
             modelBuilder.Entity<PartDataModel>().Property(x => x.PartNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<PartDataModel>().Property(x => x.PartToothCount).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<PartDataModel>().Property(x => x.SummaryNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<PartDataModel>().Property(x => x.Model).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<PartDataModel>().Property(x => x.Kind).HasConversion<string>().IsRequired().HasMaxLength(100);
 
@@ -108,8 +109,8 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<UserDataModel>().HasMany(u => u.MachineDataModel).WithMany(m => m.Users);
             modelBuilder.Entity<MachineDataModel>().HasMany(u => u.Users).WithMany(m => m.MachineDataModel);
             // Parts and machines
-            modelBuilder.Entity<PartDataModel>().HasMany(p => p.MachineDataModel).WithMany(m => m.Parts);
-            modelBuilder.Entity<MachineDataModel>().HasMany(p => p.Parts).WithMany(m => m.MachineDataModel);
+            //modelBuilder.Entity<PartDataModel>().HasMany(p => p.MachineDataModel).WithMany(m => m.Parts);
+            //modelBuilder.Entity<MachineDataModel>().HasMany(p => p.Parts).WithMany(m => m.MachineDataModel);
             // Cutter and machine
             modelBuilder.Entity<MachineDataModel>().HasOne(m => m.Cutter).WithOne(c => c.MachineDataModel).HasForeignKey<CutterDataModel>(c => c.MachineDataModelId);
 
