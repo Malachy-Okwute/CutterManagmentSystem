@@ -42,7 +42,7 @@
                     BorderThickness="0"
                     BorderBrush="{x:Null}"
                     FontFamily="{StaticResource RobotoFlexRegular}"
-                    Style="{StaticResource TransparentButtonStyle}" />
+                    Style="{StaticResource TransparentButtonStyle}" Command="{Binding OpenMachineDialogCommand}"/>
         </Border>
 
         <!--  machine status  -->

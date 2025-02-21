@@ -126,6 +126,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand OpenStatusSettingDialogCommand { get; set; }
 
+        /// <summary>
+        /// Command to open machine dialog
+        /// </summary>
+        public ICommand OpenMachineDialogCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -144,6 +149,7 @@ namespace CutterManagement.UI.Desktop
             OpenPopupCommand = new RelayCommand(OpenPopup);
             OpenStatusSettingDialogCommand = new RelayCommand(OpenStatusSettingDialog);
             OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
+            OpenMachineDialogCommand = new RelayCommand(OpenMachineDialog);
         }
 
         #endregion
@@ -196,12 +202,22 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private void OpenPopup()
         {
-            // Broadcast item selected event
+            // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Set this item as the selected item
             IsPopupOpen ^= true;
         }
+
+
+        private void OpenMachineDialog()
+        {
+            // Broadcast that this item was selected
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+
+
+        }
+
 
         #endregion
     }
