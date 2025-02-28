@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace CutterManagement.UI.Desktop
@@ -84,7 +85,20 @@ namespace CutterManagement.UI.Desktop
             });
         }
 
-        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest => DialogInstance.ShowDialog(viewModel);
+        public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest
+        {
+            MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+
+            // Apply blur effect to the main window
+            BlurHelper.ApplyBlurEffect(mainWindow.MainAppWindow);
+
+            // Show dialog window
+            DialogInstance.ShowDialog(viewModel);
+
+            // Remove blur effect from the main window
+            BlurHelper.RemoveBlurEffect(mainWindow.MainAppWindow);
+        }
+
         public static async Task InvokeDialogFeedbackMessage<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase => await DialogInstance.ShowFeedback(viewModel);
         
     }

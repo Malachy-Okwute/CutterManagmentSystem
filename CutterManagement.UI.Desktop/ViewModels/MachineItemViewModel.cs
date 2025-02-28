@@ -215,6 +215,10 @@ namespace CutterManagement.UI.Desktop
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
+            // If status == setup
+            // Open setup dialog
+            // Else 
+            // Open frequency check dialog
 
         }
 

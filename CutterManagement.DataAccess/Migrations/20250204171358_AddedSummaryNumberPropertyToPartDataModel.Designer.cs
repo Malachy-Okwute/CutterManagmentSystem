@@ -13,7 +13,7 @@ namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250204171358_added-summary-number-property-to-partdatamodel")]
-    partial class addedsummarynumberpropertytopartdatamodel
+    partial class AddedSummaryNumberPropertyToPartDataModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

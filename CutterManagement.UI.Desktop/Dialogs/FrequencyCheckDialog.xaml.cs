@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Interaction logic for MachineDialog.xaml
+    /// Interaction logic for FrequencyCheckDialog.xaml
     /// </summary>
-    public partial class MachineDialog : UserControl
+    public partial class FrequencyCheckDialog : UserControl
     {
-        public MachineDialog()
+        public FrequencyCheckDialog()
         {
             InitializeComponent();
         }

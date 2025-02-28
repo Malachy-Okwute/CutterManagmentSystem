@@ -5,7 +5,7 @@
 namespace CutterManagement.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class addedsummarynumberpropertytopartdatamodel : Migration
+    public partial class AddedSummaryNumberPropertyToPartDataModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
