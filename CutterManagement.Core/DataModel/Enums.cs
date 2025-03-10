@@ -38,7 +38,7 @@ namespace CutterManagement.Core
 
     public enum FrequencyCheckResult
     {
-        PASSED = 0, FAILED, SETUP
+        Passed = 0, Failed, Setup
     }
 
     public enum CutterChangeInformation

@@ -22,13 +22,13 @@ namespace CutterManagement.UI.Desktop
 
             switch((string)value)
             {
-                case "SETUP":
+                case "Setup":
                     return ColorHelpers.GetColor(ColorKind.AccentColor6);
                     
-                case "PASSED":
+                case "Passed":
                     return ColorHelpers.GetColor(ColorKind.AccentColor5);
 
-                case "FAILED":
+                case "Failed":
                     return ColorHelpers.GetColor(ColorKind.AccentColor2);
 
                 default:

@@ -3,6 +3,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
              mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <Style x:Key="FCResultButton" TargetType="{x:Type RadioButton}">
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush7}" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border BorderThickness="0"
+                                BorderBrush="{x:Null}"
+                                UseLayoutRounding="True">
+
+                            <Grid>
+
+                                <Border x:Name="CheckMark"
+                                        Background="{Binding ElementName=Content, Path=Content, Converter={local:FrequencyCheckToColorConverter}}"
+                                        MouseLeftButtonDown="CheckMark_MouseLeftButtonDown" />
+
+                                <ContentPresenter x:Name="Content" HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" TextBlock.TextAlignment="Center"
+                                                  Content="{TemplateBinding Content}"
+                                                  RecognizesAccessKey="True">
+
+                                </ContentPresenter>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="CheckMark" Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush3}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Grid x:Name="MainControl" Background="{DynamicResource BackgroundColorBrush1}">
 
         <Grid.ColumnDefinitions>
@@ -14,13 +51,15 @@
             <ColumnDefinition Width="*" />
             <!--  size  -->
             <ColumnDefinition Width="*" />
-            <!--  result of the recently checked part  -->
+            <!--  passed  -->
+            <ColumnDefinition Width="*" />
+            <!--  failed  -->
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!--  padding around this control  -->
-        <Border Grid.ColumnSpan="5" d:Padding="14"
-                Panel.ZIndex="1" BorderThickness="1"
+        <Border Grid.ColumnSpan="6" Panel.ZIndex="1"
+                d:Padding="14" BorderThickness="1"
                 BorderBrush="{DynamicResource BorderColorBrush6}" />
 
         <!--  machine id #  -->
@@ -29,19 +68,10 @@
                 HorizontalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
                        d:Text="123" TextAlignment="Center"
-                       Text="{Binding PartNumber}"
+                       Text="{Binding MachineNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
 
-            <!--<Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
-                    d:Content="123"
-                    Content="{Binding MachineNumber, UpdateSourceTrigger=PropertyChanged}"
-                    BorderThickness="0"
-                    BorderBrush="{x:Null}"
-                    FontSize="{StaticResource XSmall}"
-                    FontFamily="{StaticResource RobotoFlexRegular}"
-                    Style="{StaticResource TransparentButtonStyle}"
-                    Command="{Binding OpenMachineDialogCommand}" />-->
         </Border>
 
         <!--  part number currently being run by this machine  -->
@@ -59,7 +89,7 @@
                 MinWidth="60" HorizontalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
                        d:Text="0" TextAlignment="Center"
-                       Text="{Binding Count}"
+                       Text="{Binding PartCount}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
@@ -69,22 +99,20 @@
                 MinWidth="60" HorizontalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
                        d:Text="10" TextAlignment="Center"
-                       Text="{Binding Count}"
+                       Text="{Binding PartSize}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
-        <!--  result of the recently checked part  -->
-        <Border x:Name="ResultOfLastPartChecked" Grid.Column="4"
-                MinWidth="90" HorizontalAlignment="Stretch"
-                Background="{Binding ElementName=FrequencyCheck, Path=Text, Converter={local:FrequencyCheckToColorConverter}}">
-            <TextBlock x:Name="FrequencyCheck" HorizontalAlignment="Stretch"
-                       VerticalAlignment="Center" d:Text="PASSED"
-                       TextAlignment="Center"
-                       Text="{Binding FrequencyCheckResult}"
-                       FontFamily="{StaticResource RobotoFlexRegular}"
-                       Foreground="{DynamicResource ForegroundColorBrush7}" />
-        </Border>
+        <!--  frequency check (pass)  -->
+        <RadioButton Grid.Column="4" Content="Passed"
+                     IsChecked="True"
+                     Style="{StaticResource FCResultButton}" />
+
+        <!--  frequency check (fail)  -->
+        <RadioButton Grid.Column="5" Content="Failed"
+                     IsChecked="False"
+                     Style="{StaticResource FCResultButton}" />
 
     </Grid>
 </UserControl>

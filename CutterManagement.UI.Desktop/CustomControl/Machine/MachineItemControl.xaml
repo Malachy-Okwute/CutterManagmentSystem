@@ -42,7 +42,8 @@
                     BorderThickness="0"
                     BorderBrush="{x:Null}"
                     FontFamily="{StaticResource RobotoFlexRegular}"
-                    Style="{StaticResource TransparentButtonStyle}" Command="{Binding OpenMachineDialogCommand}"/>
+                    Style="{StaticResource TransparentButtonStyle}"
+                    Command="{Binding OpenMachineDialogCommand}" />
         </Border>
 
         <!--  machine status  -->
@@ -88,7 +89,7 @@
                 Background="{Binding ElementName=FrequencyCheck, Path=Text, Converter={local:FrequencyCheckToColorConverter}}">
             <TextBlock x:Name="FrequencyCheck" HorizontalAlignment="Stretch"
                        VerticalAlignment="Center" TextAlignment="Center"
-                       Text="{Binding FrequencyCheckResult}"
+                       Text="{Binding FrequencyCheckResult}" d:Text="Setup"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush7}" />
         </Border>

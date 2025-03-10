@@ -29,7 +29,7 @@
                     PartToothSize = "0",
                     Status = MachineStatus.Warning,
                     StatusMessage = "Machine need to be configured by admin",
-                    FrequencyCheckResult = FrequencyCheckResult.SETUP,
+                    FrequencyCheckResult = FrequencyCheckResult.Setup,
                     DateTimeLastModified = DateTime.Now,
                     DateCreated = DateTime.Now,
                     CutterChangeInfo = CutterChangeInformation.None,

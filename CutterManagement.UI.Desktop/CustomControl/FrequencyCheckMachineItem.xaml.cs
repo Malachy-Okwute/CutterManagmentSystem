@@ -24,5 +24,19 @@ namespace CutterManagement.UI.Desktop
         {
             InitializeComponent();
         }
+
+        private void CheckMark_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            RadioButton parent = (RadioButton)((Border)sender).TemplatedParent;
+
+            if(parent.IsChecked is true)
+            {
+                return;
+            }
+            else
+            {
+                parent.IsChecked ^= true;
+            }
+        }
     }
 }

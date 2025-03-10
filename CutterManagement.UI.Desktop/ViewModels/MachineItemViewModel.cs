@@ -215,6 +215,18 @@ namespace CutterManagement.UI.Desktop
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
+            var frequencyCheck = new FrequencyCheckDialogViewModel
+            {
+                Id = Id,
+                PartNumber = "123456789",
+                MachineNumber = "123",
+                PartCount = "50",
+                PartSize = "10",
+                FrequencyCheckResult = "Pass"
+            };
+
+            DialogService.InvokeDialog(frequencyCheck);
+
             // If status == setup
             // Open setup dialog
             // Else 
