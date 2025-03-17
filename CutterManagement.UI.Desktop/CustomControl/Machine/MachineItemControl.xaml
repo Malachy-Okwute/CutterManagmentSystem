@@ -1,6 +1,5 @@
-﻿<UserControl x:Class="CutterManagement.UI.Desktop.MachineItemControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+﻿<UserControl x:Class="CutterManagement.UI.Desktop.MachineItemControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
              Height="48"
              d:DataContext="{x:Static local:MachineItemDesignModel.Instance}"
              mc:Ignorable="d">
@@ -10,8 +9,7 @@
 
         <!--  dropshadow effect  -->
         <Grid.Effect>
-            <DropShadowEffect BlurRadius="12" ShadowDepth="0"
-                              Opacity="0.12" />
+            <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.12" />
         </Grid.Effect>
 
         <Grid.ColumnDefinitions>
@@ -34,9 +32,8 @@
         </Grid.ColumnDefinitions>
 
         <!--  machine id #  -->
-        <Border x:Name="MachineNumber" Grid.Column="0"
-                MinWidth="80" MaxWidth="120"
-                HorizontalAlignment="Stretch">
+        <Border x:Name="MachineNumber" Grid.Column="0" MinWidth="80"
+                MaxWidth="120" HorizontalAlignment="Stretch">
             <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
                     Content="{Binding MachineNumber, UpdateSourceTrigger=PropertyChanged}"
                     BorderThickness="0"
@@ -47,68 +44,62 @@
         </Border>
 
         <!--  machine status  -->
-        <Border x:Name="MachineStatus" Grid.Column="1"
-                MinWidth="60" HorizontalAlignment="Stretch">
+        <Border x:Name="MachineStatus" Grid.Column="1" MinWidth="60"
+                HorizontalAlignment="Stretch">
             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center"
                             Content="{Binding Status, Converter={local:MachineStatusConverter}}" />
         </Border>
 
         <!--  cutter number  -->
-        <Border x:Name="CutterNumber" Grid.Column="2"
-                MinWidth="80" HorizontalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+        <Border x:Name="CutterNumber" Grid.Column="2" MinWidth="80"
+                HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding CutterNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
         <!--  part number currently being run by this machine  -->
-        <Border x:Name="CurrentRunningPartNumber" Grid.Column="3"
-                MinWidth="80" HorizontalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+        <Border x:Name="CurrentRunningPartNumber" Grid.Column="3" MinWidth="80"
+                HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding PartNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
         <!--  amount of part made by this machine  -->
-        <Border x:Name="ProducedPartCount" Grid.Column="4"
-                MinWidth="60" HorizontalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+        <Border x:Name="ProducedPartCount" Grid.Column="4" MinWidth="60"
+                HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding Count}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
         <!--  result of the recently checked part  -->
-        <Border x:Name="ResultOfLastPartChecked" Grid.Column="5"
-                MinWidth="90" HorizontalAlignment="Stretch"
+        <Border x:Name="ResultOfLastPartChecked" Grid.Column="5" MinWidth="90"
+                HorizontalAlignment="Stretch"
                 Background="{Binding ElementName=FrequencyCheck, Path=Text, Converter={local:FrequencyCheckToColorConverter}}">
-            <TextBlock x:Name="FrequencyCheck" HorizontalAlignment="Stretch"
-                       VerticalAlignment="Center" d:Text="Setup"
-                       TextAlignment="Center"
+            <TextBlock x:Name="FrequencyCheck" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                       d:Text="Setup" TextAlignment="Center"
                        Text="{Binding FrequencyCheckResult}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush7}" />
         </Border>
 
         <!--  date and time of last check  -->
-        <Border x:Name="DateAndTimeOfLastCheck" Grid.Column="6"
-                MinWidth="160" HorizontalAlignment="Stretch"
-                d:Padding="8,0">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+        <Border x:Name="DateAndTimeOfLastCheck" Grid.Column="6" MinWidth="160"
+                HorizontalAlignment="Stretch" d:Padding="8,0">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" TextAlignment="Center"
                        Text="{Binding DateTimeLastModified}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
         </Border>
 
         <!--  machine item edit button  -->
-        <Border x:Name="PopupTarget" Grid.Column="7"
-                Width="30" HorizontalAlignment="Stretch">
+        <Border x:Name="PopupTarget" Grid.Column="7" Width="30"
+                HorizontalAlignment="Stretch">
             <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
                     HorizontalContentAlignment="Center"
                     Content="{StaticResource VerticalEllipsisIcon}"
@@ -120,8 +111,8 @@
         <Popup x:Name="Popup"
                IsOpen="{Binding IsPopupOpen}"
                PlacementTarget="{Binding ElementName=PopupTarget}"
-               Placement="MousePoint" StaysOpen="True"
-               PopupAnimation="Fade" AllowsTransparency="True">
+               Placement="MousePoint" StaysOpen="True" PopupAnimation="Fade"
+               AllowsTransparency="True">
             <local:MachineItemPopupControl />
         </Popup>
 
