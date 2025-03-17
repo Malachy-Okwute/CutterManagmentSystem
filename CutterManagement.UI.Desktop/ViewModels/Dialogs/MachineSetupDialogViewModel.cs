@@ -41,6 +41,12 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private Dictionary<int, string> _partNumberCollection;
 
+        /// <summary>
+        /// True if cutter number is valid
+        /// Otherwise false
+        /// </summary>
+        private bool _isCutterNumberValid => _cutterNumber.Count() >= 5;
+
         #endregion
 
         #region Public Properties
@@ -78,14 +84,19 @@ namespace CutterManagement.UI.Desktop
             {
                 _cutterNumber = value;
 
-
-                if (_cutterNumber.Count() >= 5)
+                if (_isCutterNumberValid)
                 {
                     GetCorrespondingPartNumbers();
                 }
                 else if (_partNumberCollection.Count > 1)
                 {
                     ClearPartCollection();
+                }
+
+                if (_isCutterNumberValid is false)
+                {
+                    CutterCondition = string.Empty;
+                    CutterType = string.Empty;
                 }
 
                 OnPropertyChanged();

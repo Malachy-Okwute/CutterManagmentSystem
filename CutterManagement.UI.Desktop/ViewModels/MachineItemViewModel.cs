@@ -225,10 +225,7 @@ namespace CutterManagement.UI.Desktop
             // If machine is in setup mode
             if(FrequencyCheckResult == setupMode.ToString())
             {
-                var setupDialog = new MachineSetupDialogViewModel(_dataFactory)
-                {
-                    MachineNumber = MachineNumber
-                };
+                var setupDialog = new MachineSetupDialogViewModel(_dataFactory) { MachineNumber = MachineNumber };
 
                 // Invoke setup dialog
                 DialogService.InvokeDialog(setupDialog);
