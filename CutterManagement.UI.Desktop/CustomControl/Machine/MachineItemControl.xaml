@@ -88,8 +88,9 @@
                 MinWidth="90" HorizontalAlignment="Stretch"
                 Background="{Binding ElementName=FrequencyCheck, Path=Text, Converter={local:FrequencyCheckToColorConverter}}">
             <TextBlock x:Name="FrequencyCheck" HorizontalAlignment="Stretch"
-                       VerticalAlignment="Center" TextAlignment="Center"
-                       Text="{Binding FrequencyCheckResult}" d:Text="Setup"
+                       VerticalAlignment="Center" d:Text="Setup"
+                       TextAlignment="Center"
+                       Text="{Binding FrequencyCheckResult}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush7}" />
         </Border>

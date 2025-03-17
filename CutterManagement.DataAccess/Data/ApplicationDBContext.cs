@@ -94,11 +94,12 @@ namespace CutterManagement.DataAccess
             #region Cutter Data Model Configuration
 
             modelBuilder.Entity<CutterDataModel>().HasKey(x => x.Id);
-            modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Model).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Kind).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Owner).HasConversion<string>().IsRequired().HasMaxLength(100);
-            modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).HasConversion<string>().IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).IsRequired().HasMaxLength(100);
+            //modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterChangeInfo).HasConversion<string>().IsRequired().HasMaxLength(100);
 
             #endregion

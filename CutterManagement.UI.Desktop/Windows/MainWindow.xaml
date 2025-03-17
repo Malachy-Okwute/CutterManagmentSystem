@@ -87,6 +87,5 @@
             </Grid>
 
         </Border>
-
     </Grid>
 </local:ApplicationWindow>

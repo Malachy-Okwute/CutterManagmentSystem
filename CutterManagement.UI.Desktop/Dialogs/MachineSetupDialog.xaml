@@ -1,12 +1,12 @@
-﻿<UserControl x:Class="CutterManagement.UI.Desktop.MachineConfigurationDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl x:Class="CutterManagement.UI.Desktop.MachineSetupDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
              mc:Ignorable="d">
-    <Border Width="400" Height="400"
+
+    <Border Width="400" Height="440"
             Padding="10" HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Background="{DynamicResource BackgroundColorBrush1}">
-
         <Border.Effect>
             <DropShadowEffect BlurRadius="12" ShadowDepth="0"
                               Opacity="0.25" />
@@ -14,7 +14,7 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1.6*" />
                 <!--  Machine number  -->
                 <RowDefinition Height="*" />
                 <!--  Machine set number  -->
@@ -22,7 +22,7 @@
                 <!--  Machine status  -->
                 <RowDefinition Height="*" />
                 <!--  Machine status message with date and time [required]  -->
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="*" />
                 <!--  Cancel and submit button  -->
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -33,7 +33,7 @@
 
                     <Label Padding="20,4" HorizontalAlignment="Left"
                            VerticalAlignment="Center"
-                           Content="{Binding Title, StringFormat=${0}, FallbackValue=Configuration}"
+                           Content="{Binding Title, StringFormat=${0}, FallbackValue=Setup}"
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontSize="{StaticResource Large}"
                            FontFamily="{StaticResource RobotoFlexRegular}"
@@ -41,7 +41,7 @@
 
                     <Label Padding="40,4" HorizontalAlignment="Right"
                            VerticalAlignment="Center"
-                           Content="{Binding Label, Mode=TwoWay, FallbackValue=000}"
+                           Content="{Binding MachineNumber, Mode=TwoWay, FallbackValue=000}"
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontSize="{StaticResource Large}"
                            FontFamily="{StaticResource RobotoFlexRegular}"
@@ -50,30 +50,40 @@
                 </StackPanel>
             </Grid>
 
-            <local:TextEntryControl Grid.Row="1" PlaceHolderText="Enter machine #"
-                                    ControlContent="{Binding MachineNumber, Mode=TwoWay}" />
+            <local:TextEntryControl Grid.Row="1" PlaceHolderText="Enter cutter #"
+                                    ControlContent="{Binding CutterNumber, Mode=TwoWay}" />
 
-            <local:TextEntryControl Grid.Row="2" PlaceHolderText="Enter machine set #"
-                                    Focusable="False"
-                                    ControlContent="{Binding MachineSetNumber, Mode=TwoWay}" />
+            <local:TextEntryControl Grid.Row="2" IsEnabled="False"
+                                    Visibility="Collapsed" PlaceHolderText="New cutter: 0"
+                                    ControlContent="{Binding CutterCondition, Mode=TwoWay}" />
 
-            <ComboBox Grid.Row="3" Height="35"
+            <TextBox Grid.Row="2" Margin="4,10"
+                     Padding="2" VerticalContentAlignment="Center"
+                     IsEnabled="False" Tag="Cutter condition: 0"
+                     Style="{StaticResource RegularTextBoxStyle}"
+                     Text="{Binding CutterCondition, UpdateSourceTrigger=PropertyChanged}" />
+
+            <local:TextEntryControl Grid.Row="3" IsEnabled="False"
+                                    Visibility="Collapsed" PlaceHolderText="Pinion"
+                                    ControlContent="{Binding CutterType, Mode=TwoWay}" />
+
+            <TextBox Grid.Row="3" Margin="4,10"
+                     Padding="2" VerticalContentAlignment="Center"
+                     IsEnabled="False" Tag="Cutter kind"
+                     Style="{StaticResource RegularTextBoxStyle}"
+                     Text="{Binding CutterType, UpdateSourceTrigger=PropertyChanged}" />
+
+            <ComboBox Grid.Row="4" Height="45"
                       Margin="5"
-                      ItemsSource="{Binding StatusCollection}"
-                      SelectedValue="{Binding CurrentStatus, Mode=TwoWay}"
+                      ItemsSource="{Binding PartNumberCollection, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValue="{Binding SelectedPart, Mode=TwoWay}"
                       SelectedValuePath="Key" DisplayMemberPath="Value" />
 
             <!--  desgin-time-only  -->
-            <d:ComboBox Grid.Row="3" Height="35"
+            <d:ComboBox Grid.Row="4" Height="45"
                         Margin="5">
-                <ComboBoxItem Content="Is Running" IsSelected="True" />
+                <ComboBoxItem Content="12345678" IsSelected="True" />
             </d:ComboBox>
-
-            <TextBox Grid.Row="4" Height="100"
-                     Margin="5" VerticalContentAlignment="Top"
-                     Tag="Comment" AcceptsReturn="True"
-                     Style="{StaticResource RegularTextBoxStyle}"
-                     Text="{Binding MachineStatusMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <Grid Grid.Row="5" Margin="5">
                 <Button Width="130" Height="34"

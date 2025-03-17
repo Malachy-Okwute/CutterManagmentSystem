@@ -63,7 +63,7 @@
                 <!--  desgin-time-only  -->
                 <d:ComboBox Grid.Row="3" Height="35"
                             Margin="5">
-                    <ComboBoxItem Content="Select a user" IsSelected="True" />
+                    <d:ComboBoxItem Content="Select a user" IsSelected="True" />
                 </d:ComboBox>
 
                 <Grid Grid.Row="4" Margin="5">

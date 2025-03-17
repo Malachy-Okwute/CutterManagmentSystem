@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -209,31 +210,46 @@ namespace CutterManagement.UI.Desktop
             IsPopupOpen ^= true;
         }
 
-
+        /// <summary>
+        /// Open machine dialog
+        /// <para>Setup dialog | Frequency-check dialog</para>
+        /// </summary>
         private void OpenMachineDialog()
         {
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
-            var frequencyCheck = new FrequencyCheckDialogViewModel
+            // Setup mode
+            FrequencyCheckResult setupMode = Core.FrequencyCheckResult.Setup;
+
+            // If machine is in setup mode
+            if(FrequencyCheckResult == setupMode.ToString())
             {
-                Id = Id,
-                PartNumber = "123456789",
-                MachineNumber = "123",
-                PartCount = "50",
-                PartSize = "10",
-                FrequencyCheckResult = "Pass"
-            };
+                var setupDialog = new MachineSetupDialogViewModel(_dataFactory)
+                {
+                    MachineNumber = MachineNumber
+                };
 
-            DialogService.InvokeDialog(frequencyCheck);
+                // Invoke setup dialog
+                DialogService.InvokeDialog(setupDialog);
+            }
+            // Otherwise
+            else
+            {
+                var frequencyCheck = new FrequencyCheckDialogViewModel(_dataFactory)
+                {
+                    Id = Id,
+                    PartNumber = "12345678",
+                    MachineNumber = "123",
+                    PartCount = "50",
+                    PartSize = "10",
+                    FrequencyCheckResult = "Pass"
+                };
 
-            // If status == setup
-            // Open setup dialog
-            // Else 
-            // Open frequency check dialog
-
+                // Invoke frequency check dialog
+                DialogService.InvokeDialog(frequencyCheck);
+            }
         }
-
 
         #endregion
     }

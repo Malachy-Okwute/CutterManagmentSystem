@@ -33,7 +33,14 @@ namespace CutterManagement.Core
 
     public enum CutterCondition
     {
-        New = 0, Used, Development
+        [Description("New cutter")]
+        New = 0,
+
+        [Description("Used cutter")]
+        Used, 
+        
+        [Description("Development cutter")]
+        Development
     }
 
     public enum FrequencyCheckResult
