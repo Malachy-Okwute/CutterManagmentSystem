@@ -58,6 +58,7 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<MachineDataModel>().Property(x => x.MachineSetId).HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.Count).HasMaxLength(100);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.IsConfigured).HasMaxLength(100);
+            modelBuilder.Entity<MachineDataModel>().Property(x => x.PartNumber).HasMaxLength(100).IsRequired(false);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.PartToothSize).HasMaxLength(100).IsRequired(false);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.StatusMessage).HasMaxLength(100).IsRequired(false);
             modelBuilder.Entity<MachineDataModel>().Property(x => x.DateCreated).HasMaxLength(100);

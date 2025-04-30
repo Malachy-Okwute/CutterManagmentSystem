@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Threading.Tasks;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -9,9 +10,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
         /// <returns><see cref="MachineItemViewModel"/></returns>
-        public static MachineItemViewModel ResolveToMachineItemViewModel(MachineDataModel machineData, IDataAccessServiceFactory dataFactory, EventHandler eventHandler)
+        public static async Task<MachineItemViewModel> ResolveToMachineItemViewModel(MachineDataModel machineData, IDataAccessServiceFactory dataFactory, EventHandler eventHandler)
         {
-            MachineItemViewModel items = new MachineItemViewModel(dataFactory)
+            MachineItemViewModel item = new MachineItemViewModel(dataFactory)
             {
                 Id = machineData.Id,
                 MachineSetNumber = machineData.MachineSetId,
@@ -24,10 +25,23 @@ namespace CutterManagement.UI.Desktop
                 DateTimeLastModified = machineData.DateTimeLastModified.ToString("MM-dd-yyyy ~ hh:mm tt"),
             };
 
-            // Hook in selection changed event
-            items.ItemSelected += eventHandler;
+            if(machineData.CutterDataModelId is not null)
+            {
+                IDataAccessService<CutterDataModel> cutterTable = dataFactory.GetDbTable<CutterDataModel>();
+                CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(machineData.CutterDataModelId);
 
-            return items;
+                if(cutter is not null)
+                {
+                    item.CutterNumber = cutter.CutterNumber;
+                    item.PartNumber = machineData.PartNumber;
+                    item.Count = cutter.Count.ToString();
+                }
+            }
+
+            // Hook in selection changed event
+            item.ItemSelected += eventHandler;
+
+            return item;
         }
 
     }

@@ -24,6 +24,12 @@
         /// Measured tooth size of part
         /// </summary>
         public string PartToothSize { get; set; }
+
+        /// <summary>
+        /// The part number this machine is running
+        /// </summary>
+        public string PartNumber{ get; set; }
+
         /// <summary>
         /// Comment related to the status of this machine
         /// </summary>
@@ -33,11 +39,6 @@
         /// Extra information relating to the reason cutter is pulled
         /// </summary>
         public string CutterChangeComment { get; set; }
-
-        /// <summary>
-        /// Cutter navigation property id
-        /// </summary>
-        public int? CutterDataModelId { get; set; }
 
         /// <summary>
         /// Flag indicating if this machine is configured of not
@@ -76,14 +77,19 @@
         public FrequencyCheckResult FrequencyCheckResult { get; set; }
 
         /// <summary>
+        /// Cutter navigation property id
+        /// </summary>
+        public int? CutterDataModelId { get; set; }
+
+        /// <summary>
         /// Cutter navigation property
         /// </summary>
         public CutterDataModel Cutter { get; set; }
 
-        /// <summary>
-        /// Parts navigation property collection
-        /// </summary>
-        //public ICollection<PartDataModel> Parts { get; set; } = new List<PartDataModel>();
+        ///// <summary>
+        ///// Parts navigation property collection
+        ///// </summary>
+        //public PartDataModel Part { get; set; }
 
         /// <summary>
         /// Users navigation property collection

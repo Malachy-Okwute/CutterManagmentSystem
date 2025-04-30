@@ -150,7 +150,7 @@ namespace CutterManagement.UI.Desktop
             OpenPopupCommand = new RelayCommand(OpenPopup);
             OpenStatusSettingDialogCommand = new RelayCommand(OpenStatusSettingDialog);
             OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
-            OpenMachineDialogCommand = new RelayCommand(OpenMachineDialog);
+            OpenMachineDialogCommand = new RelayCommand(async () => await OpenMachineDialog());
         }
 
         #endregion
@@ -214,7 +214,7 @@ namespace CutterManagement.UI.Desktop
         /// Open machine dialog
         /// <para>Setup dialog | Frequency-check dialog</para>
         /// </summary>
-        private void OpenMachineDialog()
+        private async Task OpenMachineDialog()
         {
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
@@ -223,9 +223,24 @@ namespace CutterManagement.UI.Desktop
             FrequencyCheckResult setupMode = Core.FrequencyCheckResult.Setup;
 
             // If machine is in setup mode
-            if(FrequencyCheckResult == setupMode.ToString())
+            if (FrequencyCheckResult == setupMode.ToString())
             {
-                var setupDialog = new MachineSetupDialogViewModel(_dataFactory) { MachineNumber = MachineNumber };
+                // Setup dialog view model
+                var setupDialog = new MachineSetupDialogViewModel(_dataFactory);
+                setupDialog.GetMachineItem(this);
+
+                // Make sure machine is configured
+                if (IsConfigured is false)
+                {
+                    // Define a message
+                    setupDialog.Message = "Machine not yet configured for production";
+
+                    // Show feed back message
+                    await DialogService.InvokeDialogFeedbackMessage(setupDialog);
+
+                    // Do nothing else
+                    return;
+                }
 
                 // Invoke setup dialog
                 DialogService.InvokeDialog(setupDialog);
@@ -233,6 +248,7 @@ namespace CutterManagement.UI.Desktop
             // Otherwise
             else
             {
+                // TODO: Remove dummy data
                 var frequencyCheck = new FrequencyCheckDialogViewModel(_dataFactory)
                 {
                     Id = Id,

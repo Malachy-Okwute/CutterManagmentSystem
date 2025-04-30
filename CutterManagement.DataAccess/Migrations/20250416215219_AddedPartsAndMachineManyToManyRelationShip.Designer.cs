@@ -4,6 +4,7 @@ using CutterManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250416215219_AddedPartsAndMachineManyToManyRelationShip")]
+    partial class AddedPartsAndMachineManyToManyRelationShip
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,10 +147,6 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("PartNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("PartToothSize")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -238,6 +237,21 @@ namespace CutterManagement.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MachineDataModelPartDataModel", b =>
+                {
+                    b.Property<int>("MachineDataModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PartsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MachineDataModelId", "PartsId");
+
+                    b.HasIndex("PartsId");
+
+                    b.ToTable("MachineDataModelPartDataModel");
+                });
+
             modelBuilder.Entity("MachineDataModelUserDataModel", b =>
                 {
                     b.Property<int>("MachineDataModelId")
@@ -260,6 +274,21 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasForeignKey("CutterManagement.Core.CutterDataModel", "MachineDataModelId");
 
                     b.Navigation("MachineDataModel");
+                });
+
+            modelBuilder.Entity("MachineDataModelPartDataModel", b =>
+                {
+                    b.HasOne("CutterManagement.Core.MachineDataModel", null)
+                        .WithMany()
+                        .HasForeignKey("MachineDataModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CutterManagement.Core.PartDataModel", null)
+                        .WithMany()
+                        .HasForeignKey("PartsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MachineDataModelUserDataModel", b =>

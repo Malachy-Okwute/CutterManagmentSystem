@@ -117,7 +117,7 @@ namespace CutterManagement.UI.Desktop
                     await machineTable.CreateNewEntityAsync(data);
                   
                     // Populate item list
-                    _pinItems.Add(DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
+                    _pinItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
                 }
 
                 foreach (MachineDataModel data in defaultRingMachineData)
@@ -131,7 +131,7 @@ namespace CutterManagement.UI.Desktop
                     await machineTable.CreateNewEntityAsync(data);
 
                     // Populate item list
-                    _ringItems.Add(DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
+                    _ringItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
                 }
 
                 // Do nothing else
@@ -142,7 +142,7 @@ namespace CutterManagement.UI.Desktop
             foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
             {
                 // Resolve data
-                MachineItemViewModel machineItem = DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged);
+                MachineItemViewModel machineItem = await DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged);
 
                 // If machine data is owned by pinion
                 if (machineItem.Owner is Department.Pinion)
@@ -167,19 +167,23 @@ namespace CutterManagement.UI.Desktop
         public void UpdateMachineCollection(MachineDataModel machineItem) 
         {
             // Resolve the new item that changed
-            MachineItemViewModel newItem = DataResolver.ResolveToMachineItemViewModel(machineItem, _dataAccessService, OnItemSelectionChanged);
+            MachineItemViewModel newItem = Task.Run(async () => await DataResolver.ResolveToMachineItemViewModel(machineItem, _dataAccessService, OnItemSelectionChanged)).Result;
 
-            // If new item is pinion
-            if(newItem.Owner is Department.Pinion)
+            // Make sure new item is not null
+            if(newItem is not null)
             {
-                // Insert item into pinion list
-                InsertNewItem(newItem, _pinItems);
-            }
-            // Otherwise
-            else
-            {
-                // Insert item into ring list
-                InsertNewItem(newItem, _ringItems);
+                // If new item is pinion
+                if(newItem.Owner is Department.Pinion)
+                {
+                    // Insert item into pinion list
+                    InsertNewItem(newItem, _pinItems);
+                }
+                // Otherwise
+                else
+                {
+                    // Insert item into ring list
+                    InsertNewItem(newItem, _ringItems);
+                }
             }
         }
 

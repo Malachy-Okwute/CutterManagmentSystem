@@ -1,6 +1,8 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using CutterManagement.DataAccess;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace CutterManagement.UI.Desktop
@@ -16,6 +18,11 @@ namespace CutterManagement.UI.Desktop
         /// Data factory
         /// </summary>
         private IDataAccessServiceFactory _dataFactory;
+
+        /// <summary>
+        /// Machine item that is being setup
+        /// </summary>
+        private MachineItemViewModel _machineItemViewModel;
 
         /// <summary>
         /// Get available cutters
@@ -140,6 +147,20 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Commands
+
+        /// <summary>
+        /// Command to cancel machine setup process
+        /// </summary>
+        public ICommand CancelCommand { get; set; }
+
+        /// <summary>
+        /// Command to Setup machine 
+        /// </summary>
+        public ICommand SetupMachineCommand { get; set; }
+
+        #endregion 
+
         #region Constructor
 
         /// <summary>
@@ -159,11 +180,90 @@ namespace CutterManagement.UI.Desktop
                 { 0, "Select a part" }
             };
             SelectedPart = PartNumberCollection.First().Key;
+
+            // Commands
+            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
+            SetupMachineCommand = new RelayCommand(async () => await SetupMachine());
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Get the machine we're currently setting up
+        /// </summary>
+        /// <param name="machineItemViewModel">The actual machine</param>
+        public void GetMachineItem(MachineItemViewModel machineItemViewModel) 
+        {
+            _machineItemViewModel = machineItemViewModel;
+            MachineNumber = _machineItemViewModel.MachineNumber;
+        }
+
+        /// <summary>
+        /// Set up machine with the desired available information 
+        /// </summary>
+        private async Task SetupMachine()
+        {
+            // If no part was selected
+            if (SelectedPart == 0)
+            {
+                // Define a message
+                Message = "Select a part number";
+
+                // Show feed back message
+                await DialogService.InvokeDialogFeedbackMessage(this);
+
+                // Do nothing else
+                return;
+            }
+
+            // -------- If we get to this point --------- //
+
+            // Mark message as a success
+            IsMessageSuccess = true;
+
+            // Data that will be changing
+            MachineDataModel? data = null;
+
+            // Get the current cutter 
+            CutterDataModel currentCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == CutterNumber);
+
+            // Get machine table
+            IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();
+
+            // Listen for when machine table data actually changed
+            machineTable.DataChanged += (s, e) =>
+            {
+                data = e as MachineDataModel;
+                // Send out message
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Machine data cannot be null"));
+            };
+
+            // Find the actual machine
+            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(_machineItemViewModel.Id);
+
+            if (machineData is not null)
+            {
+                // Update machine information
+                machineData.Cutter = currentCutter;
+                machineData.CutterDataModelId = currentCutter.Id;
+                machineData.PartNumber = PartNumberCollection[SelectedPart];
+                machineData.FrequencyCheckResult = FrequencyCheckResult.Setup;
+                machineData.Status = MachineStatus.IsRunning;
+                machineData.DateTimeLastModified = DateTime.Now;
+
+                // Update machine information
+                await machineTable.UpdateEntityAsync(machineData);
+
+                // Unhook event
+                machineTable.DataChanged -= delegate { };
+
+                // Close dialog
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+            }
+
+        }
 
         /// <summary>
         /// Fetch cutters 
@@ -196,6 +296,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private void GetCorrespondingPartNumbers()
         {
+            // TODO: separate cutter by part type e.g. pinion and ring
+
             // Get parts
             Task.Run(GetParts).ContinueWith(_ =>
             {
