@@ -95,12 +95,12 @@ namespace CutterManagement.UI.Desktop
                 {
                     _cutterNumber = string.Empty;
                     ClearPartCollection();
-                    //IsDoneButtonActive = false;
+                    IsDoneButtonActive = false;
                     return;
                 }
                 else
                 {
-                    //IsDoneButtonActive = true;
+                    IsDoneButtonActive = true;
                 }
 
                 if (value.Count() > 1 && int.TryParse(value.Substring(1), out var number) is false)
@@ -365,7 +365,7 @@ namespace CutterManagement.UI.Desktop
             // Refresh part number collection in view
             DispatcherService.Invoke(() => CollectionViewSource.GetDefaultView(PartNumberCollection).Refresh());
         }
-
+        
         #endregion    
     }
 }
