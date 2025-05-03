@@ -1,9 +1,6 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -33,6 +30,11 @@ namespace CutterManagement.UI.Desktop
         /// Previous <see cref="Window.Height"/>
         /// </summary>
         private double _windowPreviousHeight;
+
+        /// <summary>
+        /// Previous widow width
+        /// </summary>
+        //private double _windowPreviousWidth;
 
         #endregion
 
@@ -69,16 +71,22 @@ namespace CutterManagement.UI.Desktop
 
                 // If window edge is on the left | top left | bottom left of the screen...
                 if ((Left == workArea.Left && Top == workArea.Top) || (Left == workArea.Left && (Height + Top) == workArea.Bottom))
+                {
                     // Disable drop shadow
                     viewModel.DropShadowPadding = 0;
+                }
                 // If window edge is on the right | top right | bottom right of the screen...
                 else if ((Left + Width == workArea.Right && Top == workArea.Top) || ((Left + Width) == workArea.Right && (Height + Top) == workArea.Bottom))
+                {
                     // Disable drop shadow
                     viewModel.DropShadowPadding = 0;
+                }
                 // If window edge is on the top and bottom of the screen...
                 else if ((Top == workArea.Top) && (Height == workArea.Bottom))
+                {
                     // Disable drop shadow
                     viewModel.DropShadowPadding = 0;
+                }
                 // Otherwise
                 else
                 {
@@ -113,7 +121,7 @@ namespace CutterManagement.UI.Desktop
                 // Hook into left mouse down event
                 captionArea.MouseLeftButtonDown += (sender, e) =>
                 {
-                    // TODO: Add support for double click on laptop track pad
+                    _windowPreviousLeft = Left;
 
                     // check if user double clicked the title bar
                     if (e.ClickCount.Equals(2))
@@ -127,8 +135,7 @@ namespace CutterManagement.UI.Desktop
                             // Set flag to true
                             isWindowMaximized = true;
 
-                        // If window is extended to max vertically
-                        if (Top == SystemParameters.WorkArea.Top)
+                        if (Top == SystemParameters.WorkArea.Top && (Left + ActualWidth) == SystemParameters.WorkArea.Right || (Left + ActualWidth) == SystemParameters.WorkArea.Left)
                         {
                             // Make sure left mouse button is pressed
                             if (Mouse.LeftButton == MouseButtonState.Pressed)
@@ -136,7 +143,22 @@ namespace CutterManagement.UI.Desktop
                                 // Get mouse location 
                                 double mousePos = e.GetPosition(this).Y;
 
-                                // Set window new location and previous size
+                                // Set location 
+                                Left = _windowPreviousLeft - 54;
+                                Top = mousePos - 15;  
+                                Height = _windowPreviousHeight;
+                            }
+                        }
+                        // If window is extended to max vertically
+                        else if (Top == SystemParameters.WorkArea.Top)
+                        {
+                            // Make sure left mouse button is pressed
+                            if (Mouse.LeftButton == MouseButtonState.Pressed)
+                            {
+                                // Get mouse location 
+                                double mousePos = e.GetPosition(this).Y;
+
+                                // Set window location 
                                 Left = _windowPreviousLeft;
                                 Top = mousePos - 54; // Account for drop shadow and margin | padding 
                                 Height = _windowPreviousHeight;
@@ -188,7 +210,7 @@ namespace CutterManagement.UI.Desktop
                 };
             }
 
-            // If we have window limit element...
+            // If we have window limit...
             if (windowLimitMargin != null)
             {
                 // Monitor when size of this window changes
@@ -196,7 +218,7 @@ namespace CutterManagement.UI.Desktop
                 {
                     // If window is maximized...
                     if (WindowState == WindowState.Maximized)
-                        // Fix over size window size
+                        // Fix over-sized window size
                         windowLimitMargin.Margin = GetMaximizedMarginThickness();
                     // Otherwise
                     else
@@ -360,7 +382,7 @@ namespace CutterManagement.UI.Desktop
                     // Set cursor offset
                     _cursorOffset = cursorOffset;
 
-                    // If window is not maximized and window is height is not at max
+                    // If window is not maximized and window height is not at max
                     if(Top != SystemParameters.WorkArea.Top && WindowState != WindowState.Maximized)
                     {
                         // Capture windows Left and height values

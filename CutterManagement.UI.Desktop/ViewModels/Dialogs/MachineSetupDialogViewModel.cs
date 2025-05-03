@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
 using CutterManagement.DataAccess;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -53,7 +54,7 @@ namespace CutterManagement.UI.Desktop
         /// True if cutter number is valid
         /// Otherwise false
         /// </summary>
-        private bool _isCutterNumberValid => _cutterNumber.Count() >= 5;
+        private bool _isCutterNumberValid => _cutterNumber.Count() >= 6;
 
         #endregion
 
@@ -90,7 +91,24 @@ namespace CutterManagement.UI.Desktop
             get => _cutterNumber;
             set
             {
-                _cutterNumber = value;
+                if(!(value.StartsWith("P", true, null) || value.StartsWith("R", true, null)))
+                {
+                    _cutterNumber = string.Empty;
+                    ClearPartCollection();
+                    //IsDoneButtonActive = false;
+                    return;
+                }
+                else
+                {
+                    //IsDoneButtonActive = true;
+                }
+
+                if (value.Count() > 1 && int.TryParse(value.Substring(1), out var number) is false)
+                {
+                    value = value.Remove(value.Count() - 1);
+                }
+
+                _cutterNumber = value.ToUpper();
 
                 if (_isCutterNumberValid)
                 {
@@ -135,6 +153,8 @@ namespace CutterManagement.UI.Desktop
             get => _partNumberCollection;
             set => _partNumberCollection = value;
         }
+
+        public bool IsDoneButtonActive { get; set; }
 
         #endregion
 
@@ -262,7 +282,6 @@ namespace CutterManagement.UI.Desktop
                 // Close dialog
                 DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
             }
-
         }
 
         /// <summary>
@@ -296,15 +315,14 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private void GetCorrespondingPartNumbers()
         {
-            // TODO: separate cutter by part type e.g. pinion and ring
-
             // Get parts
             Task.Run(GetParts).ContinueWith(_ =>
             {
                 // Get cutter
                 CutterDataModel? cutter = _cutters.FirstOrDefault(c => c.CutterNumber == CutterNumber);
 
-                if (cutter is null)
+                // If owners do not match or we can't find cutter...
+                if (cutter is null || !(_machineItemViewModel.Owner.Equals(cutter?.Owner)))
                 {
                     ClearPartCollection();
                     CutterType = "Unknown";

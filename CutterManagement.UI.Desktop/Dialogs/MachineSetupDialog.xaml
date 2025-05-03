@@ -90,6 +90,7 @@
                 <Button Width="130" Height="34"
                         HorizontalAlignment="Right" Content="Done"
                         IsDefault="True"
+                        IsEnabled="{Binding IsDoneButtonActive}"
                         BorderBrush="{DynamicResource BorderColorBrush3}"
                         FontFamily="{StaticResource RobotoFlexRegular}"
                         FontSize="{StaticResource XSmall}"
