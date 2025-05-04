@@ -94,6 +94,11 @@ namespace CutterManagement.UI.Desktop
         public Department Owner { get; set; }
 
         /// <summary>
+        /// True is this machine has cutter, Otherwise false
+        /// </summary>
+        public bool HasCutter => CutterNumber is not null;
+
+        /// <summary>
         /// True if admin user is currently logged in
         /// otherwise false
         /// </summary>
@@ -223,7 +228,7 @@ namespace CutterManagement.UI.Desktop
             FrequencyCheckResult setupMode = Core.FrequencyCheckResult.Setup;
 
             // If machine is in setup mode
-            if (FrequencyCheckResult == setupMode.ToString())
+            if (FrequencyCheckResult == setupMode.ToString() && HasCutter is false)
             {
                 // Setup dialog view model
                 var setupDialog = new MachineSetupDialogViewModel(_dataFactory);

@@ -56,6 +56,21 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private bool _isCutterNumberValid => _cutterNumber.Count() >= 6;
 
+        /// <summary>
+        /// Cutter database table
+        /// </summary>
+        private IDataAccessService<CutterDataModel> _cutterTable => _dataFactory.GetDbTable<CutterDataModel>();
+
+        /// <summary>
+        /// Machine database table
+        /// </summary>
+        private IDataAccessService<MachineDataModel> _machineTable => _dataFactory.GetDbTable<MachineDataModel>();
+
+        /// <summary>
+        /// Part database table
+        /// </summary>
+        private IDataAccessService<PartDataModel> _partTable => _dataFactory.GetDbTable<PartDataModel>();
+
         #endregion
 
         #region Public Properties
@@ -94,8 +109,8 @@ namespace CutterManagement.UI.Desktop
                 if(!(value.StartsWith("P", true, null) || value.StartsWith("R", true, null)))
                 {
                     _cutterNumber = string.Empty;
-                    ClearPartCollection();
                     IsDoneButtonActive = false;
+                    ClearPartCollection();
                     return;
                 }
                 else
@@ -154,6 +169,10 @@ namespace CutterManagement.UI.Desktop
             set => _partNumberCollection = value;
         }
 
+        /// <summary>
+        /// True if done button should be active 
+        /// Otherwise false
+        /// </summary>
         public bool IsDoneButtonActive { get; set; }
 
         #endregion
@@ -250,7 +269,7 @@ namespace CutterManagement.UI.Desktop
             CutterDataModel currentCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == CutterNumber);
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();
+            IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();    // Use this variable in order to fire off DataChanged event
 
             // Listen for when machine table data actually changed
             machineTable.DataChanged += (s, e) =>
@@ -261,7 +280,7 @@ namespace CutterManagement.UI.Desktop
             };
 
             // Find the actual machine
-            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(_machineItemViewModel.Id);
+            MachineDataModel? machineData = await _machineTable.GetEntityByIdAsync(_machineItemViewModel.Id);
 
             if (machineData is not null)
             {
@@ -270,7 +289,8 @@ namespace CutterManagement.UI.Desktop
                 machineData.CutterDataModelId = currentCutter.Id;
                 machineData.PartNumber = PartNumberCollection[SelectedPart];
                 machineData.FrequencyCheckResult = FrequencyCheckResult.Setup;
-                machineData.Status = MachineStatus.IsRunning;
+                machineData.Status = MachineStatus.Warning;
+                machineData.StatusMessage = "Machine setup.";
                 machineData.DateTimeLastModified = DateTime.Now;
 
                 // Update machine information
@@ -291,10 +311,10 @@ namespace CutterManagement.UI.Desktop
         private async Task GetCutters()
         {
             // Get cutter table
-            IDataAccessService<CutterDataModel> cutterTable = _dataFactory.GetDbTable<CutterDataModel>();
+            //IDataAccessService<CutterDataModel> cutterTable = _dataFactory.GetDbTable<CutterDataModel>();
 
             // Add every cutter to cutter collection
-            (await cutterTable.GetAllEntitiesAsync()).ToList().ForEach(_cutters.Add);
+            (await _cutterTable.GetAllEntitiesAsync()).ToList().ForEach(_cutters.Add);
         }
 
         /// <summary>
@@ -304,10 +324,10 @@ namespace CutterManagement.UI.Desktop
         private async Task GetParts()
         {
             // Get part table
-            IDataAccessService<PartDataModel> partTable = _dataFactory.GetDbTable<PartDataModel>();
+            //IDataAccessService<PartDataModel> partTable = _dataFactory.GetDbTable<PartDataModel>();
 
             // Add every cutter to part collection
-            (await partTable.GetAllEntitiesAsync()).ToList().ForEach(_parts.Add);
+            (await _partTable.GetAllEntitiesAsync()).ToList().ForEach(_parts.Add);
         }
 
         /// <summary>
@@ -316,7 +336,7 @@ namespace CutterManagement.UI.Desktop
         private void GetCorrespondingPartNumbers()
         {
             // Get parts
-            Task.Run(GetParts).ContinueWith(_ =>
+            Task.Run(GetParts).ContinueWith(async _ =>
             {
                 // Get cutter
                 CutterDataModel? cutter = _cutters.FirstOrDefault(c => c.CutterNumber == CutterNumber);
@@ -329,6 +349,31 @@ namespace CutterManagement.UI.Desktop
                     CutterCondition = "Cutter not found";
                     SelectedPart = PartNumberCollection.First().Key;
                     return;
+                }
+
+                // Make sure cutter is not already being used by another machine
+                foreach(var item in await _machineTable.GetAllEntitiesAsync())
+                {
+                    // Filter a specific kind of cutter
+                    if (!(item.Owner.Equals(cutter.Owner))) continue;
+
+                    // If cutter number is found
+                    if(cutter.CutterNumber.Equals(item.Cutter?.CutterNumber))
+                    {
+                        // Define a message
+                        Message = $"Cutter already in use";
+
+                        // Run on UI thread
+                        DispatcherService.Invoke(async () =>
+                        {
+                            // Show feed back message
+                            await DialogService.InvokeDialogFeedbackMessage(this);
+
+                        });
+
+                        // Do nothing else
+                        return;
+                    }
                 }
 
                 // Get all part numbers that uses the current cutter number
@@ -361,6 +406,8 @@ namespace CutterManagement.UI.Desktop
 
                 _partNumberCollection.Remove(item.Key);
             }
+
+            SelectedPart = PartNumberCollection.First().Key;
 
             // Refresh part number collection in view
             DispatcherService.Invoke(() => CollectionViewSource.GetDefaultView(PartNumberCollection).Refresh());
