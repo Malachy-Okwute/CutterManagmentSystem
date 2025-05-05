@@ -35,6 +35,7 @@ namespace CutterManagement.UI.Desktop
                     item.CutterNumber = $"{cutter.CutterNumber}-{cutter.Model}";
                     item.PartNumber = machineData.PartNumber;
                     item.Count = cutter.Count.ToString();
+                    item.PartPreviousToothSize = machineData.PartToothSize;
                 }
             }
 

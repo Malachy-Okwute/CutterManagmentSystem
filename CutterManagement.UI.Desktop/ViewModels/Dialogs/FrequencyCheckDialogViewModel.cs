@@ -53,7 +53,17 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Part tooth size
         /// </summary>
-        public string PartSize { get; set; }
+        public string? PartToothSize { get; set; }
+
+        /// <summary>
+        /// Previous part count
+        /// </summary>
+        public string PreviousPartCount { get; set; }
+
+        /// <summary>
+        /// Previous part tooth size
+        /// </summary>
+        public string? PreviousPartToothSize { get; set; }
 
         /// <summary>
         /// True if part size can be entered by user

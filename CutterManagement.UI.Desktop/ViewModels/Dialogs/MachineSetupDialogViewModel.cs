@@ -1,10 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
-using CutterManagement.DataAccess;
-using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace CutterManagement.UI.Desktop
 {

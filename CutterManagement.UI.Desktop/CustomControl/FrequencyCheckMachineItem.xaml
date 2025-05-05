@@ -87,21 +87,28 @@
         <!--  count  -->
         <Border x:Name="ProducedPartCount" Grid.Column="2"
                 MinWidth="60" HorizontalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       d:Text="0" TextAlignment="Center"
-                       Text="{Binding PartCount}"
-                       FontFamily="{StaticResource RobotoFlexRegular}"
-                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+            <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                     d:Text="0" local:FocusAttachedProperty.SetFocus="True"
+                     TextAlignment="Center"
+                     Text="{Binding PartCount}"
+                     Tag="{Binding PreviousPartCount}"
+                     FontFamily="{StaticResource RobotoFlexRegular}"
+                     Foreground="{DynamicResource ForegroundColorBrush3}"
+                     BorderBrush="{x:Null}"
+                     Style="{StaticResource DataInputTextBoxStyle}" />
         </Border>
 
         <!--  size  -->
         <Border x:Name="PartSize" Grid.Column="3"
                 MinWidth="60" HorizontalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       d:Text="10" TextAlignment="Center"
-                       Text="{Binding PartSize}"
-                       FontFamily="{StaticResource RobotoFlexRegular}"
-                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+            <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                     d:Text="10" TextAlignment="Center"
+                     Text="{Binding PartToothSize}"
+                     Tag="{Binding PreviousPartToothSize, TargetNullValue=n/a}"
+                     FontFamily="{StaticResource RobotoFlexRegular}"
+                     Foreground="{DynamicResource ForegroundColorBrush3}"
+                     BorderBrush="{x:Null}"
+                     Style="{StaticResource DataInputTextBoxStyle}" />
         </Border>
 
         <!--  frequency check (pass)  -->

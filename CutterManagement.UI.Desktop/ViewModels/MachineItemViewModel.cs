@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using Microsoft.IdentityModel.Tokens;
 using System.Windows;
 using System.Windows.Input;
 
@@ -69,7 +70,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Number of parts produced by this machine with the current cutter
         /// </summary>
-        public string? Count { get; set; }
+        public string Count { get; set; }
 
         /// <summary>
         /// Result of the last part checked 
@@ -97,6 +98,11 @@ namespace CutterManagement.UI.Desktop
         /// True is this machine has cutter, Otherwise false
         /// </summary>
         public bool HasCutter => CutterNumber is not null;
+
+        /// <summary>
+        /// Size of part tooth
+        /// </summary>
+        public string PartPreviousToothSize { get; set; }
 
         /// <summary>
         /// True if admin user is currently logged in
@@ -257,11 +263,10 @@ namespace CutterManagement.UI.Desktop
                 var frequencyCheck = new FrequencyCheckDialogViewModel(_dataFactory)
                 {
                     Id = Id,
-                    PartNumber = "12345678",
-                    MachineNumber = "123",
-                    PartCount = "50",
-                    PartSize = "10",
-                    FrequencyCheckResult = "Pass"
+                    PartNumber = PartNumber ?? "Part number unknown",
+                    MachineNumber = MachineNumber,
+                    PreviousPartCount = Count,
+                    PreviousPartToothSize = PartPreviousToothSize.Equals("0") ? null : PartPreviousToothSize,
                 };
 
                 // Invoke frequency check dialog
