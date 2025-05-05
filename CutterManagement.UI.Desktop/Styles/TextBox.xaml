@@ -167,6 +167,9 @@
                         <Trigger Property="Text" Value="">
                             <Setter TargetName="PlaceHolder" Property="Visibility" Value="Visible" />
                         </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush2}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
 
                 </ControlTemplate>
