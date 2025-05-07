@@ -46,6 +46,16 @@ namespace CutterManagement.UI.Desktop
             // Validate incoming data
             ValidationResult result = DataValidationService.Validate(newData);
 
+            // Make sure new machine number is not already being used
+            foreach (var item in await machineTable.GetAllEntitiesAsync())
+            {
+                if(item.MachineNumber.Equals(newData.MachineNumber))
+                {
+                    result.ErrorMessage = "Machine number already exist";
+                    result.IsValid = false;
+                }
+            }
+
             // Make sure we have the item and incoming data is valid
             if (machineData is not null && result.IsValid)
             {

@@ -127,7 +127,7 @@
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColorBrush3}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource ForegroundColorBrush3}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderColorBrush6}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="3" />
 
@@ -168,7 +168,9 @@
                             <Setter TargetName="PlaceHolder" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush2}" />
+                            <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush3}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderColorBrush3}" />
+                            <Setter Property="BorderThickness" Value="1.5" />
                         </Trigger>
                     </ControlTemplate.Triggers>
 

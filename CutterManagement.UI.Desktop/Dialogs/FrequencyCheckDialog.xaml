@@ -52,7 +52,7 @@
                          VerticalContentAlignment="Top" Tag="Comment"
                          AcceptsReturn="True"
                          Style="{StaticResource RegularTextBoxStyle}"
-                         Text="{Binding MachineStatusMessage, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" />
 
                 <ComboBox Grid.Row="3" Height="35"
                           Margin="5"
@@ -84,7 +84,7 @@
                             FontSize="{StaticResource XSmall}"
                             BorderThickness="2"
                             Style="{StaticResource TransparentButtonStyle}"
-                            Command="{Binding UpdateStatusCommand}" />
+                            Command="{Binding UpdateCommand}" />
                 </Grid>
 
             </Grid>

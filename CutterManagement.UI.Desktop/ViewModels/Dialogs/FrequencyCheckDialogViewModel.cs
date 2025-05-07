@@ -1,6 +1,8 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using Microsoft.IdentityModel.Tokens;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -58,7 +60,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Previous part count
         /// </summary>
-        public string PreviousPartCount { get; set; }
+        public string PreviousPartCount { get; set; } 
 
         /// <summary>
         /// Previous part tooth size
@@ -66,14 +68,34 @@ namespace CutterManagement.UI.Desktop
         public string? PreviousPartToothSize { get; set; }
 
         /// <summary>
-        /// True if part size can be entered by user
+        /// Comment
         /// </summary>
-        public bool CanEnterPartSize { get; set; }
+        public string? Comment { get; set; }
 
         /// <summary>
-        /// The result of this check
+        /// True if part size can be entered by user
         /// </summary>
-        public string FrequencyCheckResult { get; set; }
+        //public bool CanEnterPartSize { get; set; }
+
+        /// <summary>
+        /// True if frequency check passed
+        /// </summary>
+        public bool PassedCheck { get; set; }
+
+        /// <summary>
+        /// True if frequency check failed
+        /// </summary>
+        public bool FailedCheck { get; set; }
+
+        /// <summary>
+        /// Passed check
+        /// </summary>
+        private FrequencyCheckResult _passedCheck = FrequencyCheckResult.Passed;
+
+        /// <summary>
+        /// Failed check
+        /// </summary>
+        private FrequencyCheckResult _failedCheck = FrequencyCheckResult.Failed;
 
         /// <summary>
         /// Collection of users
@@ -100,6 +122,20 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Public Commands
+
+        /// <summary>
+        /// Command to cancel frequency check process
+        /// </summary>
+        public ICommand CancelCommand { get; set; }
+
+        /// <summary>
+        /// Command to update machine data
+        /// </summary>
+        public ICommand UpdateCommand { get; set; }
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -112,6 +148,75 @@ namespace CutterManagement.UI.Desktop
 
             _taskLoader = GetUsers();
 
+            // Create commands
+            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
+            UpdateCommand = new RelayCommand(async () => await UpdateMachine());
+        }
+
+        #endregion    
+
+        /// <summary>
+        /// Updates machine info
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        private async Task UpdateMachine()
+        {
+            MachineDataModel? data = null;
+
+            IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();
+
+            machineTable.DataChanged += (s, e) =>
+            {
+                data = e as MachineDataModel;
+                // Send out message
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Machine data cannot be null"));
+            };
+
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
+
+            if(machine is not null)
+            {
+                if(PartCount.IsNullOrEmpty())
+                {
+                    Message = $"Enter part piece-count";
+
+                    await DialogService.InvokeDialogFeedbackMessage(this);
+
+                    return;
+                }
+
+                if(int.Parse(PartCount) < machine.Cutter.Count)
+                {
+                    Message = $"Piece-count must be greater than previous-count";
+
+                    await DialogService.InvokeDialogFeedbackMessage(this);
+
+                    return;
+                }
+
+                if (PassedCheck is false && FailedCheck is false)
+                {
+                    Message = $"Choose \" Passed \" or \" Failed \" ";
+
+                    await DialogService.InvokeDialogFeedbackMessage(this);
+
+                    return;
+                }
+
+                machine.Cutter.Count = int.Parse(PartCount);
+                machine.PartToothSize = PartToothSize ?? machine.PartToothSize;
+                machine.Status = MachineStatus.IsRunning;
+                machine.FrequencyCheckResult = PassedCheck ? _passedCheck : _failedCheck;
+                machine.StatusMessage = Comment ?? "Running good";
+
+                await machineTable.UpdateEntityAsync(machine);
+
+                machineTable.DataChanged -= delegate { };
+
+                // Close dialog
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+            }
         }
 
         /// <summary>
@@ -141,8 +246,5 @@ namespace CutterManagement.UI.Desktop
             // Refresh UI
             CollectionViewSource.GetDefaultView(UsersCollection).Refresh();
         }
-
-
-        #endregion    
     }
 }

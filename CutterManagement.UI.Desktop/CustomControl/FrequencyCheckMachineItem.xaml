@@ -93,7 +93,7 @@
                      d:Text="0" local:FocusAttachedProperty.SetFocus="True"
                      TextAlignment="Center"
                      Text="{Binding PartCount}"
-                     Tag="{Binding PreviousPartCount}"
+                     Tag="{Binding PreviousPartCount, StringFormat=Count: {0}}"
                      FontFamily="{StaticResource RobotoFlexRegular}"
                      Foreground="{DynamicResource ForegroundColorBrush3}"
                      Style="{StaticResource DataInputTextBoxStyle}" />
@@ -106,7 +106,7 @@
             <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center"
                      d:Text="10" TextAlignment="Center"
                      Text="{Binding PartToothSize}"
-                     Tag="{Binding PreviousPartToothSize, TargetNullValue=n/a}"
+                     Tag="{Binding PreviousPartToothSize, StringFormat=Size: {0}, TargetNullValue=n/a}"
                      FontFamily="{StaticResource RobotoFlexRegular}"
                      Foreground="{DynamicResource ForegroundColorBrush3}"
                      Style="{StaticResource DataInputTextBoxStyle}" />
@@ -114,12 +114,12 @@
 
         <!--  frequency check (pass)  -->
         <RadioButton Grid.Column="4" Content="Passed"
-                     IsChecked="True"
+                     IsChecked="{Binding PassedCheck}"
                      Style="{StaticResource FCResultButton}" />
 
         <!--  frequency check (fail)  -->
         <RadioButton Grid.Column="5" Content="Failed"
-                     IsChecked="False"
+                     IsChecked="{Binding FailedCheck}"
                      Style="{StaticResource FCResultButton}" />
 
     </Grid>

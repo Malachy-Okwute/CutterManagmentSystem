@@ -256,17 +256,20 @@ namespace CutterManagement.UI.Desktop
                 // Invoke setup dialog
                 DialogService.InvokeDialog(setupDialog);
             }
+            //else if(FrequencyCheckResult == setupMode.ToString() && HasCutter)
+            //{
+            //    // Show form to enter CMM data
+            //}
             // Otherwise
             else
             {
-                // TODO: Remove dummy data
                 var frequencyCheck = new FrequencyCheckDialogViewModel(_dataFactory)
                 {
                     Id = Id,
                     PartNumber = PartNumber ?? "Part number unknown",
                     MachineNumber = MachineNumber,
-                    PreviousPartCount = Count,
-                    PreviousPartToothSize = PartPreviousToothSize.Equals("0") ? null : PartPreviousToothSize,
+                    PreviousPartCount = string.Format("Count: {0}",Count),
+                    PreviousPartToothSize = PartPreviousToothSize.Equals("0") ? string.Format("Size: {0}", "n/a") : string.Format("Size: {0}",PartPreviousToothSize),
                 };
 
                 // Invoke frequency check dialog
