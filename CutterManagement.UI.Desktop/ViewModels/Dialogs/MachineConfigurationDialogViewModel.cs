@@ -225,6 +225,9 @@ namespace CutterManagement.UI.Desktop
             }
         }
 
+        /// <summary>
+        /// Clears data from memory
+        /// </summary>
         public void ClearDataResidue()
         {
             Label = string.Empty;

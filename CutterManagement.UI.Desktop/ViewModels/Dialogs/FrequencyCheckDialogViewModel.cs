@@ -153,30 +153,38 @@ namespace CutterManagement.UI.Desktop
             UpdateCommand = new RelayCommand(async () => await UpdateMachine());
         }
 
-        #endregion    
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Updates machine info
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <returns><see cref="Task"/></returns>
         private async Task UpdateMachine()
         {
+            // New data from database
             MachineDataModel? data = null;
 
+            // Get machine table
             IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();
 
+            // Listen for changes 
             machineTable.DataChanged += (s, e) =>
             {
+                // Set new data
                 data = e as MachineDataModel;
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Machine data cannot be null"));
             };
 
+            // Get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
 
+            // If machine is not null...
             if(machine is not null)
             {
+                // Make sure piece count is entered
                 if(PartCount.IsNullOrEmpty())
                 {
                     Message = $"Enter part piece-count";
@@ -186,7 +194,8 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
-                if(int.Parse(PartCount) < machine.Cutter.Count)
+                // Make sure new piece count is greater than current count
+                if(int.Parse(PartCount) <= machine.Cutter.Count)
                 {
                     Message = $"Piece-count must be greater than previous-count";
 
@@ -195,6 +204,7 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
+                // Make sure either "Pass" or "Fail" is selected
                 if (PassedCheck is false && FailedCheck is false)
                 {
                     Message = $"Choose \" Passed \" or \" Failed \" ";
@@ -204,14 +214,17 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
+                // Set new information
                 machine.Cutter.Count = int.Parse(PartCount);
                 machine.PartToothSize = PartToothSize ?? machine.PartToothSize;
                 machine.Status = MachineStatus.IsRunning;
                 machine.FrequencyCheckResult = PassedCheck ? _passedCheck : _failedCheck;
                 machine.StatusMessage = Comment ?? "Running good";
 
+                // Update machine on database
                 await machineTable.UpdateEntityAsync(machine);
 
+                // Stop listening for changes
                 machineTable.DataChanged -= delegate { };
 
                 // Close dialog
@@ -246,5 +259,7 @@ namespace CutterManagement.UI.Desktop
             // Refresh UI
             CollectionViewSource.GetDefaultView(UsersCollection).Refresh();
         }
+
+        #endregion
     }
 }

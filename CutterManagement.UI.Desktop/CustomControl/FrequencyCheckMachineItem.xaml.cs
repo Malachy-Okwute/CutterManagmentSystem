@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -36,6 +38,20 @@ namespace CutterManagement.UI.Desktop
             else
             {
                 parent.IsChecked ^= true;
+            }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string input = ((TextBox)sender).Text;
+
+            bool isInputValid = int.TryParse(input, out int result);
+
+            if (isInputValid is false && input.IsNullOrEmpty() is false)
+            {
+                input = input.Remove(input.Length - 1);
+                ((TextBox)sender).Text = input;
+                ((TextBox)sender).CaretIndex = input.Length;
             }
         }
     }
