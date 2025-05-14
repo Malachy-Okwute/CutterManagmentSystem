@@ -219,7 +219,7 @@ namespace CutterManagement.UI.Desktop
                 machine.PartToothSize = PartToothSize ?? machine.PartToothSize;
                 machine.Status = MachineStatus.IsRunning;
                 machine.FrequencyCheckResult = PassedCheck ? _passedCheck : _failedCheck;
-                machine.StatusMessage = Comment ?? "Running good";
+                machine.StatusMessage = Comment ?? "Meets specifications (CMM check)";
 
                 // Update machine on database
                 await machineTable.UpdateEntityAsync(machine);

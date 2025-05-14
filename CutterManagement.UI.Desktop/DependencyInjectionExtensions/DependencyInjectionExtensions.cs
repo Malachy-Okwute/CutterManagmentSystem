@@ -71,6 +71,7 @@ namespace CutterManagement.UI.Desktop
             //services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
 
             // Register dialog service
+            DialogService.RegisterDialog<CMMCheckDialogViewModel, CMMCheckDialog>();
             DialogService.RegisterDialog<AdminLoginDialogViewModel, AdminLoginDialog>();
             DialogService.RegisterDialog<CreatePartDialogViewModel, CreatePartDialog>();
             DialogService.RegisterDialog<CreateUserDialogViewModel, CreateUserDialog>();

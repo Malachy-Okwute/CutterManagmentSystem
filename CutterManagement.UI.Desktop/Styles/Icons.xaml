@@ -26,5 +26,6 @@
     <system:String x:Key="ShieldIcon">&#xf132;</system:String>
     <system:String x:Key="CubeIcon">&#xf6d1;</system:String>
     <system:String x:Key="NodeIcon">&#xf78a;</system:String>
+    <system:String x:Key="ScaleIcon">&#xf515;</system:String>
 
 </ResourceDictionary>

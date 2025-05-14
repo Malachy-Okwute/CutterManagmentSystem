@@ -1,6 +1,4 @@
 ﻿using CutterManagement.Core;
-using Microsoft.IdentityModel.Tokens;
-using System.Windows;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -256,11 +254,17 @@ namespace CutterManagement.UI.Desktop
                 // Invoke setup dialog
                 DialogService.InvokeDialog(setupDialog);
             }
-            //else if(FrequencyCheckResult == setupMode.ToString() && HasCutter)
-            //{
-            //    // Show form to enter CMM data
-            //}
-            // Otherwise
+            else if (FrequencyCheckResult == setupMode.ToString() && HasCutter)
+            {
+                // Show form to enter CMM data
+                var cmmCheck = new CMMCheckDialogViewModel(_dataFactory)
+                {
+                    Id = Id
+                };
+
+                DialogService.InvokeDialog(cmmCheck);
+            }
+            //Otherwise
             else
             {
                 var frequencyCheck = new FrequencyCheckDialogViewModel(_dataFactory)

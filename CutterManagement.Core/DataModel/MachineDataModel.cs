@@ -86,6 +86,17 @@
         /// </summary>
         public CutterDataModel Cutter { get; set; }
 
+        /// <summary>
+        /// Navigation property id
+        /// </summary>
+        public int? CMMDataModelId { get; set; }
+
+        /// <summary>
+        /// Navigation property
+        /// </summary>
+        public CMMDataModel CMMData { get; set; }
+
+
         ///// <summary>
         ///// Parts navigation property collection
         ///// </summary>

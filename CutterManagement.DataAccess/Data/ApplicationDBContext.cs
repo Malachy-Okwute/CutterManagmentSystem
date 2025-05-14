@@ -31,6 +31,11 @@ namespace CutterManagement.DataAccess
         /// </summary>
         public DbSet<CutterDataModel> Cutters => Set<CutterDataModel>();
 
+        /// <summary>
+        /// CMM data
+        /// </summary>
+        public DbSet<CMMDataModel> CMMData => Set<CMMDataModel>();
+
         #endregion
 
         #region Constructor
@@ -105,16 +110,34 @@ namespace CutterManagement.DataAccess
 
             #endregion
 
+            #region CMM Data Model Configuration
+
+            modelBuilder.Entity<CMMDataModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.BeforeCorrections).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.AfterCorrections).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.PressureAngleCoast).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.PressureAngleDrive).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.SpiralAngleCoast).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.SpiralAngleDrive).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.Fr).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.Size).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CMMDataModel>().Property(x => x.Count).IsRequired().HasMaxLength(100);
+
+            #endregion
+
             #region Relationship Configurations
+
+            // Parts and machines
+            //modelBuilder.Entity<PartDataModel>().HasMany(p => p.MachineDataModel).WithMany(m => m.Parts);
+            //modelBuilder.Entity<MachineDataModel>().HasMany(p => p.Parts).WithMany(m => m.MachineDataModel);
 
             // Users and machines
             modelBuilder.Entity<UserDataModel>().HasMany(u => u.MachineDataModel).WithMany(m => m.Users);
             modelBuilder.Entity<MachineDataModel>().HasMany(u => u.Users).WithMany(m => m.MachineDataModel);
-            // Parts and machines
-            //modelBuilder.Entity<PartDataModel>().HasMany(p => p.MachineDataModel).WithMany(m => m.Parts);
-            //modelBuilder.Entity<MachineDataModel>().HasMany(p => p.Parts).WithMany(m => m.MachineDataModel);
             // Cutter and machine
             modelBuilder.Entity<MachineDataModel>().HasOne(m => m.Cutter).WithOne(c => c.MachineDataModel).HasForeignKey<CutterDataModel>(c => c.MachineDataModelId);
+            // CMMData and machine
+            modelBuilder.Entity<MachineDataModel>().HasOne(m => m.CMMData).WithOne(cmm => cmm.MachineDataModel).HasForeignKey<CMMDataModel>(cmm => cmm.MachineDataModelId);
 
             #endregion
         }

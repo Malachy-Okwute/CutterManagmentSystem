@@ -120,7 +120,7 @@ namespace CutterManagement.UI.Desktop
         #region Events
 
         /// <summary>
-        /// When user cancels or proceeds with setting machine status
+        /// Event that is invoked when user cancels or proceeds with setting machine status
         /// </summary>
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
 
