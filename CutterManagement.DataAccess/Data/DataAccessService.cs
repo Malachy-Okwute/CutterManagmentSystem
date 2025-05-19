@@ -117,7 +117,7 @@ namespace CutterManagement.DataAccess
                     DataChanged?.Invoke(this, entity);
                 }
             }
-            catch (Exception msg) // Use custom exception here
+            catch (Exception msg) // TODO: Use custom exception here
             {
                 Debug.WriteLine(msg.Message);
                 Debugger.Break();

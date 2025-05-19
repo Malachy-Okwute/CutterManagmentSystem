@@ -20,6 +20,10 @@
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
                         Command="{Binding OpenStatusSettingDialogCommand}" />
+                <Button Content="Adjust piece count"
+                        Style="{StaticResource MachineOptionsPopupStyle}"
+                        Focusable="False"
+                        Command="{Binding}" />
                 <Button Content="Data swap"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"

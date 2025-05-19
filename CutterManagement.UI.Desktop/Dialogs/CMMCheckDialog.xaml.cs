@@ -40,14 +40,19 @@ namespace CutterManagement.UI.Desktop
         {
             input = input.Trim();
 
-            if(string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input))
             {
                 return input = string.Empty;
             }
 
             char inputChar = input[input.Length - 1];
 
-            if (input == "0")
+            if(char.IsDigit(inputChar) is false && (inputChar != '-' && inputChar != '.'))
+            {
+                return input = input.Remove(input.Length - 1);
+            }
+
+            if (input == "00" && input.Length > 1 && input[0] == '0')
             {
                 return input = input.Remove(input.Length - 1);
             }
@@ -83,7 +88,7 @@ namespace CutterManagement.UI.Desktop
                     input = input.Insert(1, "0");
                 }
 
-                input = decimalPortion.Length > 3 ? input.Remove(input.Length - 1) : input;
+                //input = decimalPortion.Length > 3 ? input.Remove(input.Length - 1) : input;
             }
 
             return input;

@@ -168,6 +168,8 @@ namespace CutterManagement.UI.Desktop
 
             // Get machine table
             IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();
+            // Get user table
+            IDataAccessService<UserDataModel> userTable = _dataFactory.GetDbTable<UserDataModel>();
 
             // Listen for changes 
             machineTable.DataChanged += (s, e) =>
@@ -180,6 +182,9 @@ namespace CutterManagement.UI.Desktop
 
             // Get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
+
+            // Get user
+            UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
 
             // If machine is not null...
             if(machine is not null)
@@ -220,6 +225,9 @@ namespace CutterManagement.UI.Desktop
                 machine.Status = MachineStatus.IsRunning;
                 machine.FrequencyCheckResult = PassedCheck ? _passedCheck : _failedCheck;
                 machine.StatusMessage = Comment ?? "Meets specifications (CMM check)";
+
+                // Set the user performing this operation
+                machine.Users.Add(user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"));
 
                 // Update machine on database
                 await machineTable.UpdateEntityAsync(machine);

@@ -94,8 +94,7 @@
         /// <summary>
         /// Navigation property
         /// </summary>
-        public CMMDataModel CMMData { get; set; }
-
+        public CMMDataModel CMMData { get; set; } 
 
         ///// <summary>
         ///// Parts navigation property collection

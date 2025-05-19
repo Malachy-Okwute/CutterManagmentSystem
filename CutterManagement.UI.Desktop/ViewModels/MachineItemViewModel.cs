@@ -221,7 +221,7 @@ namespace CutterManagement.UI.Desktop
 
         /// <summary>
         /// Open machine dialog
-        /// <para>Setup dialog | Frequency-check dialog</para>
+        /// <para>Setup dialog | CMM-check dialog | Frequency-check dialog</para>
         /// </summary>
         private async Task OpenMachineDialog()
         {
@@ -259,7 +259,8 @@ namespace CutterManagement.UI.Desktop
                 // Show form to enter CMM data
                 var cmmCheck = new CMMCheckDialogViewModel(_dataFactory)
                 {
-                    Id = Id
+                    Id = Id,
+                    CurrentCount = int.Parse(Count) == 0 ? "Count" : Count,
                 };
 
                 DialogService.InvokeDialog(cmmCheck);
