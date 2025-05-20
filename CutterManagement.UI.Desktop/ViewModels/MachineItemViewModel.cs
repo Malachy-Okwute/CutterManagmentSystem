@@ -157,7 +157,7 @@ namespace CutterManagement.UI.Desktop
 
             // Create commands
             OpenPopupCommand = new RelayCommand(OpenPopup);
-            OpenStatusSettingDialogCommand = new RelayCommand(OpenStatusSettingDialog);
+            OpenStatusSettingDialogCommand = new RelayCommand(async () => await OpenStatusSettingDialog());
             OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
             OpenMachineDialogCommand = new RelayCommand(async () => await OpenMachineDialog());
         }
@@ -169,7 +169,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Opens a dialog to set machine status
         /// </summary>
-        private void OpenStatusSettingDialog()
+        private async Task OpenStatusSettingDialog()
         {
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
@@ -183,6 +183,19 @@ namespace CutterManagement.UI.Desktop
                 MachineSetNumber = MachineSetNumber,
                 IsConfigured = IsConfigured,
             };
+
+            // Make sure machine is configured
+            if (IsConfigured is false)
+            {
+                // Define a message
+                statusSettingVM.Message = "Machine need to be configured for production";
+
+                // Show feed back message
+                await DialogService.InvokeDialogFeedbackMessage(statusSettingVM);
+
+                // Do nothing else
+                return;
+            }
 
             // Show dialog
             DialogService.InvokeDialog(statusSettingVM);
@@ -242,7 +255,7 @@ namespace CutterManagement.UI.Desktop
                 if (IsConfigured is false)
                 {
                     // Define a message
-                    setupDialog.Message = "Machine not yet configured for production";
+                    setupDialog.Message = "Machine need to be configured for production";
 
                     // Show feed back message
                     await DialogService.InvokeDialogFeedbackMessage(setupDialog);

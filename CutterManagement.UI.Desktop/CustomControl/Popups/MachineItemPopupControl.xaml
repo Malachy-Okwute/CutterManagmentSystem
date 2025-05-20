@@ -13,25 +13,31 @@
             </Border.Effect>
 
             <StackPanel Orientation="Vertical">
-                <Button Content="History"
+                <Button Content="Remove cutter"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False" />
-                <Button Content="Set status"
+                <Button Content="Change part number"
                         Style="{StaticResource MachineOptionsPopupStyle}"
-                        Focusable="False"
-                        Command="{Binding OpenStatusSettingDialogCommand}" />
+                        Focusable="False" />
                 <Button Content="Adjust piece count"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
                         Command="{Binding}" />
-                <Button Content="Data swap"
+                <Button Content="Relocate cutter"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
                         Command="{Binding}" />
-                <Button Content="Relocate Data"
+                <Button Content="Cutter swap"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
                         Command="{Binding}" />
+                <Button Content="Set machine status"
+                        Style="{StaticResource MachineOptionsPopupStyle}"
+                        Focusable="False"
+                        Command="{Binding OpenStatusSettingDialogCommand}" />
+                <Button Content="History"
+                        Style="{StaticResource MachineOptionsPopupStyle}"
+                        Focusable="False" />
                 <Button Content="Configure" Focusable="False"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         IsEnabled="{Binding IsAdminLoggedIn}"
