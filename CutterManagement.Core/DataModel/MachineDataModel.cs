@@ -86,24 +86,14 @@
         /// </summary>
         public CutterDataModel Cutter { get; set; }
 
-        /// <summary>
-        /// Navigation property id
-        /// </summary>
-        public int? CMMDataModelId { get; set; }
-
-        /// <summary>
-        /// Navigation property
-        /// </summary>
-        public CMMDataModel CMMData { get; set; } 
-
         ///// <summary>
         ///// Parts navigation property collection
         ///// </summary>
         //public PartDataModel Part { get; set; }
 
         /// <summary>
-        /// Users navigation property collection
+        /// Machine and users navigation property collection
         /// </summary>
-        public ICollection<UserDataModel> Users { get; set; } = new List<UserDataModel>();
+        public ICollection<MachineUserInteractions> MachineUserInteractions { get; set; } = new List<MachineUserInteractions>();
     }
 }

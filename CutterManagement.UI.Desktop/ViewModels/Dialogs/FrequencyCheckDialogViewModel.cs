@@ -227,7 +227,11 @@ namespace CutterManagement.UI.Desktop
                 machine.StatusMessage = Comment ?? "Meets specifications (CMM check)";
 
                 // Set the user performing this operation
-                machine.Users.Add(user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"));
+                machine.MachineUserInteractions.Add(new MachineUserInteractions
+                {
+                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
+                    MachineDataModel = machine
+                });
 
                 // Update machine on database
                 await machineTable.UpdateEntityAsync(machine);

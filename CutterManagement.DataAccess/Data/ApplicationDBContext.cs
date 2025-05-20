@@ -132,12 +132,14 @@ namespace CutterManagement.DataAccess
             //modelBuilder.Entity<MachineDataModel>().HasMany(p => p.Parts).WithMany(m => m.MachineDataModel);
 
             // Users and machines
-            modelBuilder.Entity<UserDataModel>().HasMany(u => u.MachineDataModel).WithMany(m => m.Users);
-            modelBuilder.Entity<MachineDataModel>().HasMany(u => u.Users).WithMany(m => m.MachineDataModel);
+            modelBuilder.Entity<MachineUserInteractions>().HasOne(u => u.UserDataModel).WithMany(mui => mui.MachineUserInteractions).HasForeignKey(fk => fk.UserDataModelId);
+            modelBuilder.Entity<MachineUserInteractions>().HasOne(m => m.MachineDataModel).WithMany(mui => mui.MachineUserInteractions).HasForeignKey(fk => fk.MachineDataModelId);
+
             // Cutter and machine
             modelBuilder.Entity<MachineDataModel>().HasOne(m => m.Cutter).WithOne(c => c.MachineDataModel).HasForeignKey<CutterDataModel>(c => c.MachineDataModelId);
-            // CMMData and machine
-            modelBuilder.Entity<MachineDataModel>().HasOne(m => m.CMMData).WithOne(cmm => cmm.MachineDataModel).HasForeignKey<CMMDataModel>(cmm => cmm.MachineDataModelId);
+
+            // CMMData and cutter
+            modelBuilder.Entity<CutterDataModel>().HasMany(m => m.CMMData).WithOne(c => c.CutterDataModel).HasForeignKey(c => c.CutterDataModelId);
 
             #endregion
         }

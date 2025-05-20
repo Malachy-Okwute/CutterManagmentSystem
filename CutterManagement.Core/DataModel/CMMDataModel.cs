@@ -51,14 +51,14 @@
         public string Count { get; set; }
 
         /// <summary>
-        /// Navigation property id
+        /// Cutter data model navigation property id
         /// </summary>
-        public int? MachineDataModelId { get; set; }
+        public int? CutterDataModelId { get; set; }
 
         /// <summary>
-        /// Navigation property
+        /// Cutter data model navigation property
         /// </summary>
-        public MachineDataModel MachineDataModel { get; set; }
+        public CutterDataModel CutterDataModel { get; set; }
 
     }
 }

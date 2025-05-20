@@ -52,13 +52,24 @@
         public DateTime LastUsedDate { get; set; }
 
         /// <summary>
-        /// Navigation property id
+        /// Machine data model navigation property id
         /// </summary>
         public int? MachineDataModelId { get; set; }
 
         /// <summary>
-        /// Navigation property
+        /// Machine data model navigation property
         /// </summary>
         public MachineDataModel MachineDataModel { get; set; }
+
+        /// <summary>
+        /// CMM data model navigation property id
+        /// </summary>
+        public int? CMMDataModelId { get; set; }
+
+        /// <summary>
+        /// Collection of CMM data model navigation properties
+        /// </summary>
+        public ICollection<CMMDataModel> CMMData { get; set; } = new List<CMMDataModel>();
+
     }
 }

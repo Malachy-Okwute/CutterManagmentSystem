@@ -313,9 +313,6 @@ namespace CutterManagement.UI.Desktop
             // Get machine table
             IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();
 
-            // Get cutter table
-            IDataAccessService<CutterDataModel> cutterTable = _dataFactory.GetDbTable<CutterDataModel>();
-
             // Get user table
             IDataAccessService<UserDataModel> userTable = _dataFactory.GetDbTable<UserDataModel>();
 
@@ -335,9 +332,9 @@ namespace CutterManagement.UI.Desktop
 
             // Make sure we have machine
             if(machine is not null)
-            {
-                // CMM data
-                machine.CMMData = new CMMDataModel
+            {                
+                // Set cmm data
+                machine.Cutter.CMMData.Add(new CMMDataModel
                 {
                     // Set cmm data
                     BeforeCorrections = BeforeCorrections,
@@ -348,8 +345,8 @@ namespace CutterManagement.UI.Desktop
                     SpiralAngleDrive = SpiralAngleDrive,
                     Fr = Fr,
                     Size = Size,
-                    Count = Count
-                };
+                    Count = Count,
+                });
 
                 machine.Cutter.Count = int.Parse(Count);
                 machine.StatusMessage = Comment;
@@ -358,7 +355,11 @@ namespace CutterManagement.UI.Desktop
                 machine.DateTimeLastModified = DateTime.Now;
 
                 // Set the user performing this operation
-                machine.Users.Add(user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"));
+                machine.MachineUserInteractions.Add(new MachineUserInteractions
+                {
+                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
+                    MachineDataModel = machine
+                });
 
                 // Update machine information
                 await machineTable.UpdateEntityAsync(machine);

@@ -47,9 +47,12 @@ namespace CutterManagement.UI.Desktop
                 callback?.Invoke(data ?? throw new ArgumentNullException("Cannot find machine item that changed"));
             };
 
-            // Get items from db
-            //MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
-            MachineDataModel machineData = await machineTable.GetEntityByIdIncludingRelatedPropertiesAsync(newData.Id, u => u.Users);
+            //MachineDataModel machineData = await machineTable.GetEntityByIdIncludingRelatedPropertiesAsync(newData.Id, u => u.Users);
+
+            // Get machine
+            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
+
+            // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
 
             // Validate incoming data
@@ -64,14 +67,18 @@ namespace CutterManagement.UI.Desktop
                 machineData.DateTimeLastModified = DateTime.Now;
 
                 // If we already have current user
-                if(user is not null && machineData.Users.Contains(user))
-                {
-                    // Remove it
-                    machineData.Users.Remove(user);
-                }
+                //if(user is not null && machineData.Users.Contains(user))
+                //{
+                //    // Remove it
+                //    machineData.Users.Remove(user);
+                //}
 
                 // Set the user performing this operation
-                machineData.Users.Add(user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"));
+                machineData.MachineUserInteractions.Add(new MachineUserInteractions
+                {
+                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
+                    MachineDataModel = machineData
+                });
 
                 // Update db with the new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
