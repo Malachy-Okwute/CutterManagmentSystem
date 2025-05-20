@@ -36,8 +36,10 @@ namespace CutterManagement.UI.Desktop
             // Data that will be changing
             MachineDataModel? data = null;
 
-            // Get tables
+            // Get machines table
             IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
+
+            /// Get users table
             IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
 
             // Listen for when data actually changed
@@ -46,8 +48,6 @@ namespace CutterManagement.UI.Desktop
                 data = e as MachineDataModel;
                 callback?.Invoke(data ?? throw new ArgumentNullException("Cannot find machine item that changed"));
             };
-
-            //MachineDataModel machineData = await machineTable.GetEntityByIdIncludingRelatedPropertiesAsync(newData.Id, u => u.Users);
 
             // Get machine
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
@@ -66,14 +66,7 @@ namespace CutterManagement.UI.Desktop
                 machineData.StatusMessage = newData.StatusMessage;
                 machineData.DateTimeLastModified = DateTime.Now;
 
-                // If we already have current user
-                //if(user is not null && machineData.Users.Contains(user))
-                //{
-                //    // Remove it
-                //    machineData.Users.Remove(user);
-                //}
-
-                // Set the user performing this operation
+                // Set the user performing this operation including the machine involved
                 machineData.MachineUserInteractions.Add(new MachineUserInteractions
                 {
                     UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),

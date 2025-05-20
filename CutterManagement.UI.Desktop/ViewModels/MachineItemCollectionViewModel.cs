@@ -129,7 +129,6 @@ namespace CutterManagement.UI.Desktop
                     // NOTE: Default machine is generated using admin as default user 
 
                     // Set admin as the default user for the generated machines
-                    //data.Users.Add(admin);
                     data.MachineUserInteractions.Add(new MachineUserInteractions
                     {
                         UserDataModel = admin,

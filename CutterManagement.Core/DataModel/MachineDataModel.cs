@@ -86,11 +86,6 @@
         /// </summary>
         public CutterDataModel Cutter { get; set; }
 
-        ///// <summary>
-        ///// Parts navigation property collection
-        ///// </summary>
-        //public PartDataModel Part { get; set; }
-
         /// <summary>
         /// Machine and users navigation property collection
         /// </summary>

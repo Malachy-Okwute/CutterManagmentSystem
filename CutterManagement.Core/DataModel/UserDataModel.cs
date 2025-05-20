@@ -20,11 +20,6 @@
         /// </summary>
          public UserShift Shift { get; set; }
 
-        ///// <summary>
-        ///// Machine navigation property collection 
-        ///// </summary>
-        //public ICollection<MachineDataModel> MachineDataModel { get; set; } = new List<MachineDataModel>();
-
         /// <summary>
         /// Machine and users navigation property collection
         /// </summary>
