@@ -100,8 +100,8 @@ namespace CutterManagement.UI.Desktop
             if ((await machineTable.GetAllEntitiesAsync()).Count < 1)
             {
                 // Generate default ring and pins machine
-                var defaultPinionMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Pinion, 14);
-                var defaultRingMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Ring, 14);
+                var defaultPinionMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Pinion, 15);
+                var defaultRingMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Ring, 15);
 
                 // Get admin user
                 UserDataModel admin = (await userTable.GetAllEntitiesAsync()).ToList().First(user => user.LastName is "admin");
