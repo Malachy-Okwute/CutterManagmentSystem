@@ -107,7 +107,7 @@ namespace CutterManagement.UI.Desktop
             ClearUserCreationDataResidue();
 
             // Send dialog window close request
-            DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+            DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace CutterManagement.UI.Desktop
             ValidationResult result = DataValidationService.Validate(newUser);
 
             // Set success flag
-            IsMessageSuccess = result.IsValid;
+            IsSuccess = result.IsValid;
 
             // If validation passes
             if (result.IsValid)
@@ -150,13 +150,13 @@ namespace CutterManagement.UI.Desktop
             await DialogService.InvokeAlertDialog(this);
 
             // If successful...
-            if(IsMessageSuccess)
+            if(IsSuccess)
             {
                 // Clear data
                 ClearUserCreationDataResidue();
 
                 // Send dialog window close request
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }
         }
 

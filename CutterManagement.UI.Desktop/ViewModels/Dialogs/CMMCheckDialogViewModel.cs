@@ -278,7 +278,7 @@ namespace CutterManagement.UI.Desktop
             _taskLoader = GetUsers();
 
             // Commands
-            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
+            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
             RecordCMMDataCommand = new RelayCommand(async () => await RecordCMMData());
         }
 
@@ -305,7 +305,7 @@ namespace CutterManagement.UI.Desktop
             }
 
             // Mark message as a success
-            IsMessageSuccess = true;
+            IsSuccess = true;
 
             // The data that changed
             MachineDataModel? data = null;
@@ -368,7 +368,7 @@ namespace CutterManagement.UI.Desktop
                 machineTable.DataChanged -= delegate { };
 
                 // Close dialog
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }
         }
 

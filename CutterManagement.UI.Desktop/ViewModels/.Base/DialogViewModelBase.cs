@@ -18,6 +18,6 @@
         /// <summary>
         /// True if operation is successful, Otherwise false
         /// </summary>
-        public bool IsMessageSuccess { get; set; }
+        public bool IsSuccess { get; set; }
     }
 }

@@ -18,7 +18,7 @@
 
         <Grid>
 
-            <Grid Background="{Binding IsMessageSuccess, Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}">
+            <Grid Background="{Binding IsSuccess, Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}">
 
                 <Label Margin="4,0" Padding="18,8"
                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
@@ -29,10 +29,10 @@
 
                 <TextBlock Padding="18,8" HorizontalAlignment="Right"
                            VerticalAlignment="Center"
-                           Text="{Binding IsMessageSuccess, Converter={local:BooleanToIconConverter}}"
+                           Text="{Binding IsSuccess, Converter={local:BooleanToIconConverter}}"
                            FontFamily="{StaticResource RegularIcon}"
                            FontSize="{StaticResource Large}"
-                           Foreground="{Binding IsMessageSuccess, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />
+                           Foreground="{Binding IsSuccess, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />
 
             </Grid>
 

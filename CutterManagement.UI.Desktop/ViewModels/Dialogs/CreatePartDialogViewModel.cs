@@ -101,7 +101,7 @@ namespace CutterManagement.UI.Desktop
             }
 
             CreatePartCommand = new RelayCommand(async () => await CreatePart());
-            CancelPartCreationCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
+            CancelPartCreationCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
         }
 
         #endregion
@@ -131,7 +131,7 @@ namespace CutterManagement.UI.Desktop
             ValidationResult result = DataValidationService.Validate(newPart);
 
             // Set success flag
-            IsMessageSuccess = result.IsValid;
+            IsSuccess = result.IsValid;
 
             // If validation passes
             if (result.IsValid)
@@ -142,7 +142,7 @@ namespace CutterManagement.UI.Desktop
                     // Set message
                     Message = "Part number already exists";
                     // Set success flag
-                    IsMessageSuccess = false;
+                    IsSuccess = false;
                     // Briefly show message
                     await DialogService.InvokeFeedbackDialog(this);
                     // Do nothing else
@@ -164,10 +164,10 @@ namespace CutterManagement.UI.Desktop
             await DialogService.InvokeAlertDialog(this);
 
             // If successful...
-            if (IsMessageSuccess)
+            if (IsSuccess)
             {
                 // Send dialog window close request
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }
         }
 

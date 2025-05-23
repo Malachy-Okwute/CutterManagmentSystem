@@ -92,7 +92,7 @@
             <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center"
                      d:Text="0" local:FocusAttachedProperty.SetFocus="True"
                      TextAlignment="Center"
-                     Text="{Binding PartCount}"
+                     Text="{Binding PartCount, UpdateSourceTrigger=PropertyChanged}"
                      Tag="{Binding PreviousPartCount}"
                      FontFamily="{StaticResource RobotoFlexRegular}"
                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -106,7 +106,7 @@
                 HorizontalAlignment="Stretch">
             <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center"
                      d:Text="10" TextAlignment="Center"
-                     Text="{Binding PartToothSize}"
+                     Text="{Binding PartToothSize, UpdateSourceTrigger=PropertyChanged}"
                      Tag="{Binding PreviousPartToothSize, TargetNullValue=n/a}"
                      FontFamily="{StaticResource RobotoFlexRegular}"
                      Foreground="{DynamicResource ForegroundColorBrush3}"

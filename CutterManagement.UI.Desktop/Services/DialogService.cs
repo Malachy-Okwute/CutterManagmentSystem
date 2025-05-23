@@ -69,11 +69,11 @@ namespace CutterManagement.UI.Desktop
 
         private async Task ProcessAndShowAlertDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase
         {
-            var dataContext = new AlertDialogWindowViewModel();
+            AlertDialogWindowViewModel dataContext = new AlertDialogWindowViewModel();
 
             dataContext.Message = viewModel.Message;
 
-            dataContext.IsMessageSuccess = viewModel.IsMessageSuccess;
+            dataContext.IsMessageSuccess = viewModel.IsSuccess;
 
             _alertDialogWindow.DataContext = dataContext;
 
@@ -87,17 +87,39 @@ namespace CutterManagement.UI.Desktop
             });
         }
 
-        private async Task ProcessAndShowFeedbackDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase
+        private async Task<bool?> ProcessAndShowFeedbackDialog<TViewModel>(TViewModel viewModel, FeedbackDialogKind dialogKind) where TViewModel : DialogViewModelBase
         {
-            var dataContext = new FeedbackDialogWindowViewModel();
+            FeedbackDialogWindowViewModel dataContext = new FeedbackDialogWindowViewModel();
+
+            EventHandler<DialogWindowCloseRequestedEventArgs>? dialogCallback = null;
+            dialogCallback += (s, e) =>
+            {
+                dataContext.DialogWindowCloseRequest -= dialogCallback;
+
+                if (e.DialogResult.HasValue)
+                {
+                    dataContext.Response = e.DialogResult;
+                    _feedbackDialogWindow.DialogResult = e.DialogResult;
+                }
+                else
+                {
+                    DispatcherService.Invoke(_feedbackDialogWindow.Close);
+                }
+            };
+
+            dataContext.DialogWindowCloseRequest += dialogCallback;
 
             dataContext.Message = viewModel.Message;
 
-            dataContext.IsMessageSuccess = viewModel.IsMessageSuccess;
+            dataContext.IsSuccess = viewModel.IsSuccess;
+
+            dataContext.IsPrompt = dialogKind == FeedbackDialogKind.Prompt;
 
             _feedbackDialogWindow.DataContext = dataContext;
 
             await Task.Run(() => DispatcherService.Invoke(() => _feedbackDialogWindow.ShowDialog()));
+
+            return dataContext.Response;
         }
 
         public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest
@@ -115,7 +137,7 @@ namespace CutterManagement.UI.Desktop
         }
 
         public static async Task InvokeAlertDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowAlertDialog(viewModel);
-        public static async Task InvokeFeedbackDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowFeedbackDialog(viewModel);
+        public static async Task<bool?> InvokeFeedbackDialog<TViewModel>(TViewModel viewModel, FeedbackDialogKind dialogKind = FeedbackDialogKind.Alert) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowFeedbackDialog(viewModel, dialogKind);
         
     }
 }

@@ -21,7 +21,7 @@
     <system:Double x:Key="Large">18</system:Double>
     <system:Double x:Key="XLarge">22</system:Double>
     <system:Double x:Key="XXLarge">26</system:Double>
-    <system:Double x:Key="XXXLarge">46</system:Double>
+    <system:Double x:Key="XXXLarge">36</system:Double>
     <system:Double x:Key="BillBoard">60</system:Double>
 
 </ResourceDictionary>

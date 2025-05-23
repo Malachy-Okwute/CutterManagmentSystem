@@ -149,7 +149,7 @@ namespace CutterManagement.UI.Desktop
             _taskLoader = GetUsers();
 
             // Create commands
-            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
+            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
             UpdateCommand = new RelayCommand(async () => await UpdateMachine());
         }
 
@@ -212,11 +212,27 @@ namespace CutterManagement.UI.Desktop
                 // Make sure either "Pass" or "Fail" is selected
                 if (PassedCheck is false && FailedCheck is false)
                 {
-                    Message = $"Choose \" Passed \" or \" Failed \" ";
+                    Message = $"Choose \" Passed \" or \" Failed \" for this check";
 
                     await DialogService.InvokeFeedbackDialog(this);
 
                     return;
+                }
+
+                // If count is greater than previous count by more than 100
+                if ((int.Parse(PartCount) - machine.Cutter.Count) > 100)
+                {
+                    Message = $"Previous count is {machine.Cutter.Count}. Do you mean to enter {PartCount} ?";
+
+                    // Verify piece count is reasonable
+                    bool? response = await DialogService.InvokeFeedbackDialog(this, FeedbackDialogKind.Prompt);
+
+                    // If user did not mean to enter the current part number
+                    if(response is false)
+                    {
+                        // Cancel this process
+                        return;
+                    }
                 }
 
                 // Set new information
@@ -226,13 +242,6 @@ namespace CutterManagement.UI.Desktop
                 machine.Status = (machine.FrequencyCheckResult == _failedCheck) ? MachineStatus.Warning : MachineStatus.IsRunning;
                 machine.StatusMessage = (machine.FrequencyCheckResult == _failedCheck) ? "Previous check failed" : (Comment ?? "In good condition");
                 machine.DateTimeLastModified = DateTime.Now;
-
-                // If count is greater than previous count by more than 50
-                if((machine.Cutter.Count - int.Parse(PreviousPartCount)) > 50)
-                {
-                    // Verify piece count is reasonable
-
-                }
 
                 // Set the user performing this operation
                 machine.MachineUserInteractions.Add(new MachineUserInteractions
@@ -248,7 +257,7 @@ namespace CutterManagement.UI.Desktop
                 machineTable.DataChanged -= delegate { };
 
                 // Close dialog
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }
         }
 

@@ -218,7 +218,7 @@ namespace CutterManagement.UI.Desktop
             SelectedPart = PartNumberCollection.First().Key;
 
             // Commands
-            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess)));
+            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
             SetupMachineCommand = new RelayCommand(async () => await SetupMachine());
         }
 
@@ -257,7 +257,7 @@ namespace CutterManagement.UI.Desktop
             // -------- If we get to this point --------- //
 
             // Mark message as a success
-            IsMessageSuccess = true;
+            IsSuccess = true;
 
             // Data that will be changing
             MachineDataModel? data = null;
@@ -297,7 +297,7 @@ namespace CutterManagement.UI.Desktop
                 machineTable.DataChanged -= delegate { };
 
                 // Close dialog
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }
         }
 

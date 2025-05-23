@@ -128,7 +128,7 @@ namespace CutterManagement.UI.Desktop
             UpdateCommand = new RelayCommand(async () => await UpdateData());
             CancelCommand = new RelayCommand(() =>
             {
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
                 ClearDataResidue();
             });
 
@@ -169,10 +169,10 @@ namespace CutterManagement.UI.Desktop
             await ConfigureMachine(newData);
 
             // If configuration is successful
-            if (IsMessageSuccess)
+            if (IsSuccess)
             {
                 // Send dialog window close request
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsMessageSuccess));
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }
 
         }
@@ -196,7 +196,7 @@ namespace CutterManagement.UI.Desktop
                 Message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
 
                 // Mark configuration as successful
-                IsMessageSuccess = result.Item1.IsValid;
+                IsSuccess = result.Item1.IsValid;
 
                 // Update UI with the current message
                 OnPropertyChanged(nameof(Message));
@@ -216,7 +216,7 @@ namespace CutterManagement.UI.Desktop
                 }
 
                 // If success...
-                if(IsMessageSuccess)
+                if(IsSuccess)
                 {
                     // Clear data
                     ClearDataResidue();

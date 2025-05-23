@@ -66,7 +66,7 @@
                             <TextBox Grid.Column="0" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" local:FocusAttachedProperty.SetFocus="True"
                                      TextAlignment="Center" AcceptsReturn="False"
-                                     Text="{Binding BeforeCorrections}"
+                                     Text="{Binding BeforeCorrections, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="Before corrections" MaxLength="3"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -75,7 +75,7 @@
 
                             <TextBox Grid.Column="1" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" TextAlignment="Center"
-                                     Text="{Binding AfterCorrections}"
+                                     Text="{Binding AfterCorrections, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="After corrections" MaxLength="3"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -98,7 +98,7 @@
 
                             <TextBox Grid.Column="0" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" TextAlignment="Center"
-                                     Text="{Binding PressureAngleCoast}"
+                                     Text="{Binding PressureAngleCoast, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="pa cv" MaxLength="5"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -107,7 +107,7 @@
 
                             <TextBox Grid.Column="1" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" TextAlignment="Center"
-                                     Text="{Binding PressureAngleDrive}"
+                                     Text="{Binding PressureAngleDrive, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="pa cx" MaxLength="5"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -130,7 +130,7 @@
 
                             <TextBox Grid.Column="0" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" TextAlignment="Center"
-                                     Text="{Binding SpiralAngleCoast}"
+                                     Text="{Binding SpiralAngleCoast, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="sa cv" MaxLength="5"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -139,7 +139,7 @@
 
                             <TextBox Grid.Column="1" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" TextAlignment="Center"
-                                     Text="{Binding SpiralAngleDrive}"
+                                     Text="{Binding SpiralAngleDrive, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="sa cx" MaxLength="5"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -162,7 +162,7 @@
 
                             <TextBox Grid.Column="0" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" TextAlignment="Center"
-                                     Text="{Binding Fr}"
+                                     Text="{Binding Fr, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="Fr" MaxLength="3"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -171,7 +171,7 @@
 
                             <TextBox Grid.Column="1" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" TextAlignment="Center"
-                                     Text="{Binding Size}"
+                                     Text="{Binding Size, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="Size" MaxLength="6"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
@@ -180,7 +180,7 @@
 
                             <TextBox Grid.Column="2" HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center" TextAlignment="Center"
-                                     Text="{Binding Count}"
+                                     Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}"
                                      Tag="{Binding CurrentCount, FallbackValue=Count}"
                                      FontFamily="{StaticResource RobotoFlexRegular}"
                                      Foreground="{DynamicResource ForegroundColorBrush3}"
