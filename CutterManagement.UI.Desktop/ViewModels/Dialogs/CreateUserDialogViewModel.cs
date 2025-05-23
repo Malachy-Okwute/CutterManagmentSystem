@@ -147,7 +147,7 @@ namespace CutterManagement.UI.Desktop
             Message = result.IsValid ? "User created successfully" : result.ErrorMessage;
 
             // Briefly show message
-            await DialogService.InvokeDialogFeedbackMessage(this);
+            await DialogService.InvokeAlertDialog(this);
 
             // If successful...
             if(IsMessageSuccess)

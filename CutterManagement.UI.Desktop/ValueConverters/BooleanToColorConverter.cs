@@ -17,7 +17,7 @@ namespace CutterManagement.UI.Desktop
         {
             if(parameter == null)
             {
-                return (bool)value ? ColorHelpers.GetColor(ColorKind.BackgroundColor1) : ColorHelpers.GetColor(ColorKind.BackgroundColor6);
+                return (bool)value ? ColorHelpers.GetColor(ColorKind.SuccessBackgroundColorBrush) : ColorHelpers.GetColor(ColorKind.WarningBackgroundColorBrush);
             }
             else if(parameter as string is "SessionStatus")
             {
@@ -25,7 +25,7 @@ namespace CutterManagement.UI.Desktop
             }
             else
             {
-                return (bool)value ? ColorHelpers.GetColor(ColorKind.ForegroundColor3) : ColorHelpers.GetColor(ColorKind.ForegroundColor8);
+                return (bool)value ? ColorHelpers.GetColor(ColorKind.SuccessForegroundColorBrush) : ColorHelpers.GetColor(ColorKind.WarningForegroundColorBrush);
             }
         }
 

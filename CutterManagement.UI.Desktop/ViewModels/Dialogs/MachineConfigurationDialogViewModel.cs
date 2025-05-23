@@ -198,18 +198,22 @@ namespace CutterManagement.UI.Desktop
                 // Mark configuration as successful
                 IsMessageSuccess = result.Item1.IsValid;
 
+                // Update UI with the current message
+                OnPropertyChanged(nameof(Message));
+
                 // If process is successful...
                 if (result.Item1.IsValid && result.Item2 is not null)
                 {
                     // Send out message
                     Messenger.MessageSender.SendMessage(result.Item2);
+
+                    // Display success message
+                    await DialogService.InvokeAlertDialog(this);
                 }
-
-                // Update UI with the current message
-                OnPropertyChanged(nameof(Message));
-
-                // Show feed back message
-                await DialogService.InvokeDialogFeedbackMessage(this);
+                else
+                {
+                    await DialogService.InvokeFeedbackDialog(this);
+                }
 
                 // If success...
                 if(IsMessageSuccess)

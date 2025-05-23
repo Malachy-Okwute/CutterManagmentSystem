@@ -28,6 +28,16 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private Task _taskLoader;
 
+        /// <summary>
+        /// Passed check
+        /// </summary>
+        private FrequencyCheckResult _passedCheck = FrequencyCheckResult.Passed;
+
+        /// <summary>
+        /// Failed check
+        /// </summary>
+        private FrequencyCheckResult _failedCheck = FrequencyCheckResult.Failed;
+
         #endregion
 
         #region Public Properties
@@ -86,16 +96,6 @@ namespace CutterManagement.UI.Desktop
         /// True if frequency check failed
         /// </summary>
         public bool FailedCheck { get; set; }
-
-        /// <summary>
-        /// Passed check
-        /// </summary>
-        private FrequencyCheckResult _passedCheck = FrequencyCheckResult.Passed;
-
-        /// <summary>
-        /// Failed check
-        /// </summary>
-        private FrequencyCheckResult _failedCheck = FrequencyCheckResult.Failed;
 
         /// <summary>
         /// Collection of users
@@ -194,7 +194,7 @@ namespace CutterManagement.UI.Desktop
                 {
                     Message = $"Enter part piece-count";
 
-                    await DialogService.InvokeDialogFeedbackMessage(this);
+                    await DialogService.InvokeFeedbackDialog(this);
 
                     return;
                 }
@@ -204,7 +204,7 @@ namespace CutterManagement.UI.Desktop
                 {
                     Message = $"Piece-count must be greater than previous-count";
 
-                    await DialogService.InvokeDialogFeedbackMessage(this);
+                    await DialogService.InvokeFeedbackDialog(this);
 
                     return;
                 }
@@ -214,7 +214,7 @@ namespace CutterManagement.UI.Desktop
                 {
                     Message = $"Choose \" Passed \" or \" Failed \" ";
 
-                    await DialogService.InvokeDialogFeedbackMessage(this);
+                    await DialogService.InvokeFeedbackDialog(this);
 
                     return;
                 }
@@ -222,9 +222,17 @@ namespace CutterManagement.UI.Desktop
                 // Set new information
                 machine.Cutter.Count = int.Parse(PartCount);
                 machine.PartToothSize = PartToothSize ?? machine.PartToothSize;
-                machine.Status = MachineStatus.IsRunning;
                 machine.FrequencyCheckResult = PassedCheck ? _passedCheck : _failedCheck;
-                machine.StatusMessage = Comment ?? "Meets specifications (CMM check)";
+                machine.Status = (machine.FrequencyCheckResult == _failedCheck) ? MachineStatus.Warning : MachineStatus.IsRunning;
+                machine.StatusMessage = (machine.FrequencyCheckResult == _failedCheck) ? "Previous check failed" : (Comment ?? "In good condition");
+                machine.DateTimeLastModified = DateTime.Now;
+
+                // If count is greater than previous count by more than 50
+                if((machine.Cutter.Count - int.Parse(PreviousPartCount)) > 50)
+                {
+                    // Verify piece count is reasonable
+
+                }
 
                 // Set the user performing this operation
                 machine.MachineUserInteractions.Add(new MachineUserInteractions

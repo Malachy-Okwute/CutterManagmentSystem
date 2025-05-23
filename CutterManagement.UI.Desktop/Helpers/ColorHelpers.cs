@@ -12,6 +12,8 @@ namespace CutterManagement.UI.Desktop
         ButtonHoverBackgroundColor1,
         BorderColor1, BorderColor2, BorderColor3, BorderColor4, BorderColor5, BorderColor6,
         AccentColor1, AccentColor2, AccentColor3, AccentColor4, AccentColor5, AccentColor6, AccentColor7,
+        SuccessBackgroundColorBrush, WarningBackgroundColorBrush, ErrorBackgroundColorBrush,
+        SuccessForegroundColorBrush, SuccessIconForegroundColorBrush, WarningForegroundColorBrush, WarningIconForegroundColorBrush, ErrorForegroundColorBrush, ErrorIconForegroundColorBrush, 
     }
 
     /// <summary>
@@ -122,6 +124,35 @@ namespace CutterManagement.UI.Desktop
 
                 case ColorKind.AccentColor7:
                     return (SolidColorBrush)new BrushConverter().ConvertFromString("#dddddd")!;
+
+                // Success | Warning | Error Background
+                case ColorKind.SuccessBackgroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#def2d6")!;
+
+                case ColorKind.WarningBackgroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#f8f3d6")!;
+
+                case ColorKind.ErrorBackgroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#ebc8c4")!;
+
+                // Success | Warning | Error Foreground
+                case ColorKind.SuccessForegroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#586c50")!;
+
+                case ColorKind.SuccessIconForegroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#adc1a5")!;
+
+                case ColorKind.WarningForegroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#937d4b")!;
+
+                case ColorKind.WarningIconForegroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#d9d5a5")!;
+
+                case ColorKind.ErrorForegroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#b63947")!;
+
+                case ColorKind.ErrorIconForegroundColorBrush:
+                    return (SolidColorBrush)new BrushConverter().ConvertFromString("#ca9b9b")!;
 
                 default:
                     throw new ArgumentOutOfRangeException("Color not configured yet");

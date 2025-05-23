@@ -185,7 +185,7 @@ namespace CutterManagement.UI.Desktop
                 Message = "Machine need to be configured first by admin";
 
                 // Show feed back message
-                await DialogService.InvokeDialogFeedbackMessage(this);
+                await DialogService.InvokeFeedbackDialog(this);
 
                 // Do nothing else
                 return;
@@ -198,7 +198,7 @@ namespace CutterManagement.UI.Desktop
                 Message = "Please add a user to continue";
 
                 // Show feed back message
-                await DialogService.InvokeDialogFeedbackMessage(this);
+                await DialogService.InvokeFeedbackDialog(this);
 
                 // Do nothing else
                 return;
@@ -263,18 +263,23 @@ namespace CutterManagement.UI.Desktop
                 // Set flag
                 IsMessageSuccess = result.IsValid;
 
+                // Update UI message
+                OnPropertyChanged(nameof(Message));
+
                 // If we succeed
                 if (result.IsValid)
                 {
                     // Send out message to subscriber that needs to know about the data that changed
                     Messenger.MessageSender.SendMessage(machineDataModel ?? throw new ArgumentNullException($"{machineDataModel} is null"));
+
+                    // Show success message
+                    await DialogService.InvokeAlertDialog(this);
+                }
+                else
+                {
+                    await DialogService.InvokeFeedbackDialog(this);
                 }
 
-                // Update message
-                OnPropertyChanged(nameof(Message));
-
-                // Show feed back message
-                await DialogService.InvokeDialogFeedbackMessage(this);
 
             }
             catch (Exception ex)

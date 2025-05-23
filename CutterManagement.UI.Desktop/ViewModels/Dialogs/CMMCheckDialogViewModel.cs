@@ -298,7 +298,7 @@ namespace CutterManagement.UI.Desktop
                 Message = $"Piece-count must be greater than previous-count";
 
                 // Show message
-                await DialogService.InvokeDialogFeedbackMessage(this);
+                await DialogService.InvokeFeedbackDialog(this);
 
                 // Do nothing else
                 return;

@@ -72,4 +72,9 @@ namespace CutterManagement.Core
         [Description("3rd Shift")]
         Third
     }
+
+    public enum FeedbackDialogKind 
+    { 
+        Prompt = 0, Alert 
+    }
 }

@@ -18,7 +18,7 @@ namespace CutterManagement.UI.Desktop
             return (bool)value switch
             {
                 true => IconHelpers.GetIcon(IconKind.CheckMarkIcon),
-                false => IconHelpers.GetIcon(IconKind.WindowCloseIcon),
+                false => IconHelpers.GetIcon(IconKind.WarningIcon),
             };
         }
 

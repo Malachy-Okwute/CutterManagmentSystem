@@ -144,7 +144,7 @@ namespace CutterManagement.UI.Desktop
                     // Set success flag
                     IsMessageSuccess = false;
                     // Briefly show message
-                    await DialogService.InvokeDialogFeedbackMessage(this);
+                    await DialogService.InvokeFeedbackDialog(this);
                     // Do nothing else
                     return;
                 }
@@ -161,7 +161,7 @@ namespace CutterManagement.UI.Desktop
             Message = result.IsValid ? "Part created successfully" : result.ErrorMessage;
 
             // Briefly show message
-            await DialogService.InvokeDialogFeedbackMessage(this);
+            await DialogService.InvokeAlertDialog(this);
 
             // If successful...
             if (IsMessageSuccess)

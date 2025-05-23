@@ -8,6 +8,7 @@ namespace CutterManagement.UI.Desktop
     public class DialogService : IDialogService
     {
         private DialogWindow _dialogWindow;
+        private AlertDialogWindow _alertDialogWindow;
         private FeedbackDialogWindow _feedbackDialogWindow;
         private static DialogService DialogInstance => new DialogService();
         private static IDictionary<Type, Type> _dialogMappings = new Dictionary<Type, Type>();
@@ -15,6 +16,7 @@ namespace CutterManagement.UI.Desktop
         public DialogService()
         {
             _dialogWindow = new DialogWindow();
+            _alertDialogWindow = new AlertDialogWindow();
             _feedbackDialogWindow = new FeedbackDialogWindow();
         }
 
@@ -65,7 +67,27 @@ namespace CutterManagement.UI.Desktop
             _dialogWindow.ShowDialog();
         }
 
-        private async Task ShowFeedback<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase
+        private async Task ProcessAndShowAlertDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase
+        {
+            var dataContext = new AlertDialogWindowViewModel();
+
+            dataContext.Message = viewModel.Message;
+
+            dataContext.IsMessageSuccess = viewModel.IsMessageSuccess;
+
+            _alertDialogWindow.DataContext = dataContext;
+
+            await Task.Run(() =>
+            {
+                DispatcherService.Invoke(() => _alertDialogWindow.ShowDialog());
+
+            }).WaitAsync(TimeSpan.FromSeconds(3)).ContinueWith( _ =>
+            {
+                DispatcherService.Invoke(_alertDialogWindow.Close);
+            });
+        }
+
+        private async Task ProcessAndShowFeedbackDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase
         {
             var dataContext = new FeedbackDialogWindowViewModel();
 
@@ -75,14 +97,7 @@ namespace CutterManagement.UI.Desktop
 
             _feedbackDialogWindow.DataContext = dataContext;
 
-            await Task.Run(() => 
-            {
-                DispatcherService.Invoke(() => _feedbackDialogWindow.ShowDialog());
-
-            }).WaitAsync(TimeSpan.FromSeconds(2)).ContinueWith( _ =>
-            {
-                DispatcherService.Invoke(_feedbackDialogWindow.Close);
-            });
+            await Task.Run(() => DispatcherService.Invoke(() => _feedbackDialogWindow.ShowDialog()));
         }
 
         public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest
@@ -99,7 +114,8 @@ namespace CutterManagement.UI.Desktop
             BlurHelper.RemoveBlurEffect(mainWindow.MainAppWindow);
         }
 
-        public static async Task InvokeDialogFeedbackMessage<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase => await DialogInstance.ShowFeedback(viewModel);
+        public static async Task InvokeAlertDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowAlertDialog(viewModel);
+        public static async Task InvokeFeedbackDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowFeedbackDialog(viewModel);
         
     }
 }

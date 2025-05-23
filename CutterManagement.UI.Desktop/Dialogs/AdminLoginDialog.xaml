@@ -60,10 +60,11 @@
                        Visibility="{Binding ShowErrorMessage, Converter={local:BooleanToVisibilityConverter}}" />
 
                 <!--  success message  -->
+
                 <Grid Grid.RowSpan="5" Width="200"
                       Height="60" d:Visibility="Collapsed"
                       Visibility="{Binding ShowSuccessMessage, Converter={local:BooleanToVisibilityConverter}}"
-                      Background="{DynamicResource BackgroundColorBrush1}">
+                      Background="{DynamicResource SuccessBackgroundColorBrush}">
 
                     <Grid.Effect>
                         <DropShadowEffect BlurRadius="12" ShadowDepth="0"
@@ -75,14 +76,14 @@
                            VerticalContentAlignment="Center" Content="Login successful"
                            FontFamily="{StaticResource RobotoFlexRegular}"
                            FontSize="{StaticResource Small}"
-                           Foreground="{DynamicResource ForegroundColorBrush3}" />
+                           Foreground="{DynamicResource SuccessForegroundColorBrush}" />
 
                     <TextBlock Padding="18,8" HorizontalAlignment="Right"
                                VerticalAlignment="Center"
                                Text="{StaticResource CheckMarkIcon}"
                                FontFamily="{StaticResource RegularIcon}"
                                FontSize="{StaticResource Large}"
-                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+                               Foreground="{DynamicResource SuccessIconForegroundColorBrush}" />
 
                 </Grid>
 

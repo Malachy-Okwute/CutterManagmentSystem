@@ -248,7 +248,7 @@ namespace CutterManagement.UI.Desktop
                 Message = "Select a part number";
 
                 // Show feed back message
-                await DialogService.InvokeDialogFeedbackMessage(this);
+                await DialogService.InvokeFeedbackDialog(this);
 
                 // Do nothing else
                 return;
@@ -287,7 +287,7 @@ namespace CutterManagement.UI.Desktop
                 machineData.PartNumber = PartNumberCollection[SelectedPart];
                 machineData.FrequencyCheckResult = FrequencyCheckResult.Setup;
                 machineData.Status = MachineStatus.Warning;
-                machineData.StatusMessage = "Machine setup.";
+                machineData.StatusMessage = "Machine setup";
                 machineData.DateTimeLastModified = DateTime.Now;
 
                 // Update machine information
@@ -364,7 +364,7 @@ namespace CutterManagement.UI.Desktop
                         DispatcherService.Invoke(async () =>
                         {
                             // Show feed back message
-                            await DialogService.InvokeDialogFeedbackMessage(this);
+                            await DialogService.InvokeFeedbackDialog(this);
 
                         });
 

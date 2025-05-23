@@ -191,7 +191,7 @@ namespace CutterManagement.UI.Desktop
                 statusSettingVM.Message = "Machine need to be configured for production";
 
                 // Show feed back message
-                await DialogService.InvokeDialogFeedbackMessage(statusSettingVM);
+                await DialogService.InvokeFeedbackDialog(statusSettingVM);
 
                 // Do nothing else
                 return;
@@ -206,6 +206,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private void OpenMachineConfigurationDialog()
         {
+            // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Machine configuration view model
@@ -258,7 +259,7 @@ namespace CutterManagement.UI.Desktop
                     setupDialog.Message = "Machine need to be configured for production";
 
                     // Show feed back message
-                    await DialogService.InvokeDialogFeedbackMessage(setupDialog);
+                    await DialogService.InvokeFeedbackDialog(setupDialog);
 
                     // Do nothing else
                     return;

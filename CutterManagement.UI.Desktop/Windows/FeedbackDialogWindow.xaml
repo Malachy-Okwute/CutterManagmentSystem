@@ -7,10 +7,9 @@
         Style="{StaticResource DialogWindowStyle}"
         WindowStartupLocation="CenterOwner" mc:Ignorable="d">
 
-
-    <Border Width="390" Height="100"
-            Margin="14" Padding="10"
-            Background="Transparent">
+    <Border Height="180" Width="450"
+            Margin="14"
+            Background="{DynamicResource BackgroundColorBrush1}">
 
         <Border.Effect>
             <DropShadowEffect BlurRadius="12" ShadowDepth="0"
@@ -19,25 +18,70 @@
 
         <Grid>
 
-            <Grid Background="{Binding IsMessageSuccess, Converter={local:BooleanToColorConverter}, UpdateSourceTrigger=PropertyChanged, FallbackValue=White}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                <Label Margin="4,0" Padding="18,8"
-                       HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                       Content="{Binding Message}"
-                       FontFamily="{StaticResource RobotoFlexRegular}"
-                       FontSize="{StaticResource Small}"
-                       Foreground="{Binding IsMessageSuccess, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />
+            <Border Background="{DynamicResource WarningBackgroundColorBrush}">
 
-                <TextBlock Padding="18,8" HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
-                           Text="{Binding IsMessageSuccess, Converter={local:BooleanToIconConverter}}"
-                           FontFamily="{StaticResource RegularIcon}"
-                           FontSize="{StaticResource Large}"
-                           Foreground="{Binding IsMessageSuccess, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />
+                <Grid>
+
+                    <Label Margin="10,0" Padding="18,8"
+                           HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                           Content="{Binding Message}"
+                           FontFamily="{StaticResource RobotoFlexRegular}"
+                           FontSize="{StaticResource Small}"
+                           Foreground="{DynamicResource WarningForegroundColorBrush}" />
+
+                    <TextBlock Padding="20,8" HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Text="{Binding IsMessageSuccess, Converter={local:BooleanToIconConverter}}"
+                               FontFamily="{StaticResource RegularIcon}"
+                               FontSize="{StaticResource XXXLarge}"
+                               Foreground="{DynamicResource WarningIconForegroundColorBrush}" />
+
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="1" Margin="0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Width="120"
+                        Height="34" HorizontalAlignment="Left"
+                        Content="No"
+                        Style="{StaticResource TransparentButtonStyle}"
+                        BorderBrush="{DynamicResource BorderColorBrush6}"
+                        FontFamily="{StaticResource RobotoFlexRegular}"
+                        FontSize="{StaticResource XSmall}"
+                        BorderThickness="1"
+                        Visibility="{Binding IsPrompt, Converter={local:BooleanToVisibilityConverter}}" />
+                <Button Grid.Column="1" Width="120"
+                        Height="34" Content="Ok"
+                        Style="{StaticResource TransparentButtonStyle}"
+                        BorderBrush="{DynamicResource BorderColorBrush3}"
+                        FontFamily="{StaticResource RobotoFlexRegular}"
+                        FontSize="{StaticResource XSmall}"
+                        BorderThickness="2"
+                        Visibility="{Binding IsPrompt, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=Invert}" />
+                <Button Grid.Column="2" Width="120"
+                        Height="34" HorizontalAlignment="Right"
+                        Content="Yes"
+                        Style="{StaticResource TransparentButtonStyle}"
+                        BorderBrush="{DynamicResource BorderColorBrush3}"
+                        FontFamily="{StaticResource RobotoFlexRegular}"
+                        FontSize="{StaticResource XSmall}"
+                        BorderThickness="2"
+                        Visibility="{Binding IsPrompt, Converter={local:BooleanToVisibilityConverter}}" />
 
             </Grid>
 
         </Grid>
+
     </Border>
 
 </Window>

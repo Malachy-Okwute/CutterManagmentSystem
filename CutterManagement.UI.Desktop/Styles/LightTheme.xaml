@@ -12,6 +12,11 @@
     <Color x:Key="BackgroundColor6">#f7d8d6</Color>
     <Color x:Key="BackgroundColor7">#4e4e64</Color>
 
+    <!--  success | warning | error -> backgroung  -->
+    <Color x:Key="SuccessBackgroundColor">#def2d6</Color>
+    <Color x:Key="WarningBackgroundColor">#f8f3d6</Color>
+    <Color x:Key="ErrorBackgroundColor">#ebc8c4</Color>
+
     <!--  light theme foreground color palette  -->
     <Color x:Key="ForegroundColor1">#000000</Color>
     <Color x:Key="ForegroundColor2">#bbbbbb</Color>
@@ -22,6 +27,13 @@
     <Color x:Key="ForegroundColor7">#ffffff</Color>
     <Color x:Key="ForegroundColor8">#a05859</Color>
 
+    <!--  success | warning | error -> foreground  -->
+    <Color x:Key="SuccessForegroundColor">#586c50</Color>
+    <Color x:Key="SuccessIconForegroundColor">#adc1a5</Color>
+    <Color x:Key="WarningForegroundColor">#937d4b</Color>
+    <Color x:Key="WarningIconForegroundColor">#d9d5a5</Color>
+    <Color x:Key="ErrorForegroundColor">#b63947</Color>
+    <Color x:Key="ErrorIconForegroundColor">#ca9b9b</Color>
 
     <!--  light theme background color palette on hover  -->
     <Color x:Key="ButtonHoverBackgroundColor1">#4e4e64</Color>
@@ -85,6 +97,19 @@
     <SolidColorBrush x:Key="AccentColorBrush5" Color="{StaticResource AccentColor5}" />
     <SolidColorBrush x:Key="AccentColorBrush6" Color="{StaticResource AccentColor6}" />
     <SolidColorBrush x:Key="AccentColorBrush7" Color="{StaticResource AccentColor7}" />
+
+    <!--  success | warning | error -> backgroung  -->
+    <SolidColorBrush x:Key="SuccessBackgroundColorBrush" Color="{StaticResource SuccessBackgroundColor}" />
+    <SolidColorBrush x:Key="WarningBackgroundColorBrush" Color="{StaticResource WarningBackgroundColor}" />
+    <SolidColorBrush x:Key="ErrorBackgroundColorBrush" Color="{StaticResource ErrorBackgroundColor}" />
+
+    <!--  success | warning | error -> foreground  -->
+    <SolidColorBrush x:Key="SuccessForegroundColorBrush" Color="{StaticResource SuccessForegroundColor}" />
+    <SolidColorBrush x:Key="SuccessIconForegroundColorBrush" Color="{StaticResource SuccessIconForegroundColor}" />
+    <SolidColorBrush x:Key="WarningForegroundColorBrush" Color="{StaticResource WarningForegroundColor}" />
+    <SolidColorBrush x:Key="WarningIconForegroundColorBrush" Color="{StaticResource WarningIconForegroundColor}" />
+    <SolidColorBrush x:Key="ErrorForegroundColorBrush" Color="{StaticResource ErrorForegroundColor}" />
+    <SolidColorBrush x:Key="ErrorIconForegroundColorBrush" Color="{StaticResource ErrorIconForegroundColor}" />
 
     <!--#endregion-->
 
