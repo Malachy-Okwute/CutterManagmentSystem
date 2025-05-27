@@ -30,23 +30,32 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public bool IsPrompt { get; set; }
 
-        public bool? Response { get; set; }
-
-        #region Public Events
-
         /// <summary>
         /// Close dialog request event
         /// </summary>
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
 
-        #endregion
-
+        /// <summary>
+        /// Command to run when ok button is pressed
+        /// </summary>
         public ICommand OKButtonCommand { get; set; }
+
+        /// <summary>
+        /// Command to run when no button is pressed
+        /// </summary>
         public ICommand NoButtonCommand { get; set; }
+
+        /// <summary>
+        /// Command to run when yes button is pressed
+        /// </summary>
         public ICommand YesButtonCommand { get; set; }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public FeedbackDialogWindowViewModel()
         {
+            // Create commands
             OKButtonCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(true)));
             YesButtonCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(true)));
             NoButtonCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(false)));

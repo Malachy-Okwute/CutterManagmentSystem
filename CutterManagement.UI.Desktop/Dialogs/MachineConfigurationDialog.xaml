@@ -86,7 +86,7 @@
                         BorderBrush="{DynamicResource BorderColorBrush6}"
                         Command="{Binding CancelCommand}" />
                 <Button Width="130" Height="34"
-                        HorizontalAlignment="Right" Content="Update"
+                        HorizontalAlignment="Right" Content="Configure"
                         IsDefault="True"
                         BorderBrush="{DynamicResource BorderColorBrush3}"
                         FontFamily="{StaticResource RobotoFlexRegular}"

@@ -32,7 +32,7 @@
                     FrequencyCheckResult = FrequencyCheckResult.Setup,
                     DateTimeLastModified = DateTime.Now,
                     DateCreated = DateTime.Now,
-                    CutterChangeInfo = CutterChangeInformation.None,
+                    CutterChangeInfo = CutterRemovalReason.None,
                 });
             }
 

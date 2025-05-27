@@ -68,7 +68,7 @@
         /// <summary>
         /// The reason cutter assigned to this machine was pulled from this machine
         /// </summary>
-        public CutterChangeInformation CutterChangeInfo{ get; set; }
+        public CutterRemovalReason CutterChangeInfo{ get; set; }
 
         /// <summary>
         /// The result of a frequency check

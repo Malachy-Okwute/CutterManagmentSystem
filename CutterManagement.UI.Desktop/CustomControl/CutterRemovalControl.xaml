@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="CutterManagement.UI.Desktop.CutterRemovalControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style x:Key="CutterRemovalOptionButton" TargetType="{x:Type RadioButton}">
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush7}" />
+            <!--<Setter Property="Width" Value="100" />-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border BorderThickness="0"
+                                BorderBrush="{x:Null}"
+                                UseLayoutRounding="True">
+
+                            <Grid>
+
+                                <Border x:Name="CheckMark" Background="{Binding ElementName=Content, Path=Content, Converter={local:FrequencyCheckToColorConverter}}" />
+
+                                <ContentPresenter x:Name="Content" HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" TextBlock.TextAlignment="Center"
+                                                  Content="{TemplateBinding Content}"
+                                                  RecognizesAccessKey="True">
+
+                                </ContentPresenter>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="CheckMark" Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource ForegroundColorBrush3}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid x:Name="MainControl" Background="{DynamicResource BackgroundColorBrush1}">
+
+        <Grid.ColumnDefinitions>
+            <!--  machine id #  -->
+            <ColumnDefinition Width="Auto" />
+            <!--  part number currently being run by this machine  -->
+            <ColumnDefinition Width="*" />
+            <!--  cutter number  -->
+            <ColumnDefinition Width="*" />
+            <!--  count  -->
+            <ColumnDefinition Width="*" />
+            <!--  Send to shelf  -->
+            <ColumnDefinition Width="*" />
+            <!--  Send to rebuild  -->
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  padding around this control  -->
+        <Border Grid.ColumnSpan="6" Panel.ZIndex="1"
+                d:Padding="14" BorderThickness="1"
+                BorderBrush="{DynamicResource BorderColorBrush6}" />
+
+        <!--  machine id #  -->
+        <Border x:Name="MachineNumber" Grid.Column="0"
+                MinWidth="80" MaxWidth="120"
+                HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                       d:Text="123" TextAlignment="Center"
+                       Text="{Binding MachineNumber}"
+                       FontWeight="Bold"
+                       FontSize="{StaticResource Regular}"
+                       FontFamily="{StaticResource RobotoFlexRegular}"
+                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+
+        </Border>
+
+        <!--  part number currently being run by this machine  -->
+        <Border x:Name="CurrentRunningPartNumber" Grid.Column="1"
+                MinWidth="80" HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                       d:Text="12345678" TextAlignment="Center"
+                       Text="{Binding PartNumber}"
+                       FontFamily="{StaticResource RobotoFlexRegular}"
+                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+        </Border>
+
+        <!--  current cutter number on this machine  -->
+        <Border x:Name="CurrentCutterNumber" Grid.Column="2"
+                MinWidth="80" HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                       d:Text="P12345-10000" TextAlignment="Center"
+                       Text="{Binding CutterNumber}"
+                       FontFamily="{StaticResource RobotoFlexRegular}"
+                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+        </Border>
+
+        <!--  count  -->
+        <Border x:Name="ProducedPartCount" Grid.Column="3"
+                MinWidth="60" Margin="14,0"
+                HorizontalAlignment="Stretch">
+            <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                     d:Text="0" local:FocusAttachedProperty.SetFocus="True"
+                     TextAlignment="Center"
+                     Text="{Binding PartCount, UpdateSourceTrigger=PropertyChanged}"
+                     Tag="{Binding PreviousPartCount}"
+                     FontFamily="{StaticResource RobotoFlexRegular}"
+                     Foreground="{DynamicResource ForegroundColorBrush3}"
+                     Style="{StaticResource DataInputTextBoxStyle}" />
+        </Border>
+
+
+        <!--  Keep cutter  -->
+        <RadioButton Grid.Column="4" d:Width="100"
+                     Content="Keep"
+                     IsChecked="{Binding KeepCutter}"
+                     Style="{StaticResource CutterRemovalOptionButton}" />
+
+        <!--  Rebuild cutter  -->
+        <RadioButton Grid.Column="5" d:Width="100"
+                     Content="Rebuild"
+                     IsChecked="{Binding RebuildCutter}"
+                     Style="{StaticResource CutterRemovalOptionButton}" />
+
+    </Grid>
+</UserControl>

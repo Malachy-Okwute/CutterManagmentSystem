@@ -7,7 +7,7 @@
         Style="{StaticResource DialogWindowStyle}"
         WindowStartupLocation="CenterOwner" mc:Ignorable="d">
 
-    <Border Height="180" Width="450"
+    <Border Width="450" Height="180"
             Margin="14"
             Background="{DynamicResource BackgroundColorBrush1}">
 
@@ -34,8 +34,8 @@
                            FontSize="{StaticResource Small}"
                            Foreground="{DynamicResource WarningForegroundColorBrush}" />
 
-                    <TextBlock Padding="20,8" Margin="10,0" HorizontalAlignment="Right"
-                               VerticalAlignment="Center"
+                    <TextBlock Margin="10,0" Padding="20,8"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"
                                Text="{StaticResource WarningIcon}"
                                FontFamily="{StaticResource RegularIcon}"
                                FontSize="{StaticResource XXXLarge}"
@@ -58,15 +58,18 @@
                         BorderBrush="{DynamicResource BorderColorBrush6}"
                         FontFamily="{StaticResource RobotoFlexRegular}"
                         FontSize="{StaticResource XSmall}"
-                        BorderThickness="1" Command="{Binding NoButtonCommand}"
+                        BorderThickness="1"
+                        Command="{Binding NoButtonCommand}"
                         Visibility="{Binding IsPrompt, Converter={local:BooleanToVisibilityConverter}}" />
                 <Button Grid.Column="1" Width="120"
-                        Height="34" Content="Ok" IsDefault="True"
+                        Height="34" Content="Ok"
+                        IsDefault="True"
                         Style="{StaticResource TransparentButtonStyle}"
                         BorderBrush="{DynamicResource BorderColorBrush3}"
                         FontFamily="{StaticResource RobotoFlexRegular}"
                         FontSize="{StaticResource XSmall}"
-                        BorderThickness="2" Command="{Binding OKButtonCommand}"
+                        BorderThickness="2"
+                        Command="{Binding OKButtonCommand}"
                         Visibility="{Binding IsPrompt, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=Invert}" />
                 <Button Grid.Column="2" Width="120"
                         Height="34" HorizontalAlignment="Right"
@@ -75,7 +78,8 @@
                         BorderBrush="{DynamicResource BorderColorBrush3}"
                         FontFamily="{StaticResource RobotoFlexRegular}"
                         FontSize="{StaticResource XSmall}"
-                        BorderThickness="2" Command="{Binding YesButtonCommand}"
+                        BorderThickness="2"
+                        Command="{Binding YesButtonCommand}"
                         Visibility="{Binding IsPrompt, Converter={local:BooleanToVisibilityConverter}}" />
 
             </Grid>

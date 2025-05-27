@@ -48,9 +48,28 @@ namespace CutterManagement.Core
         Passed = 0, Failed, Setup
     }
 
-    public enum CutterChangeInformation
+    public enum CutterRemovalReason
     {
-        None = 0, Unknown, ChangOver, LineOnTheDrive, BrokenBlades
+        [Description("Select reason for removing cutter")]
+        None = 0,
+
+        [Description("Change over")]
+        ChangOver, 
+
+        [Description("Rough coast")]
+        RoughCoast,
+
+        [Description("Rough drive")]
+        RoughDrive,
+
+        [Description("Line on the drive")]
+        LineOnTheDrive,
+
+        [Description("Line on the drive")]
+        LineOnTheDCoast,
+
+        [Description("Broken blades")]
+        BrokenBlades
     }
 
     public enum UserRole 

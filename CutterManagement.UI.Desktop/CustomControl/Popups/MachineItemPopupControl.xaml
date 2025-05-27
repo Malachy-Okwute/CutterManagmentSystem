@@ -15,7 +15,8 @@
             <StackPanel Orientation="Vertical">
                 <Button Content="Remove cutter"
                         Style="{StaticResource MachineOptionsPopupStyle}"
-                        Focusable="False" />
+                        Focusable="False"
+                        Command="{Binding OpenCutterRemovalDialogCommand}" />
                 <Button Content="Change part number"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False" />

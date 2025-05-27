@@ -98,7 +98,6 @@ namespace CutterManagement.UI.Desktop
 
                 if (e.DialogResult.HasValue)
                 {
-                    dataContext.Response = e.DialogResult;
                     _feedbackDialogWindow.DialogResult = e.DialogResult;
                 }
                 else
@@ -119,7 +118,7 @@ namespace CutterManagement.UI.Desktop
 
             await Task.Run(() => DispatcherService.Invoke(() => _feedbackDialogWindow.ShowDialog()));
 
-            return dataContext.Response;
+            return _feedbackDialogWindow.DialogResult;
         }
 
         public static void InvokeDialog<TViewModel>(TViewModel viewModel) where TViewModel : IDialogWindowCloseRequest

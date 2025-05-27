@@ -141,6 +141,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand OpenMachineDialogCommand { get; set; }
 
+        /// <summary>
+        /// Command to open cutter removal dialog
+        /// </summary>
+        public ICommand OpenCutterRemovalDialogCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -160,6 +165,7 @@ namespace CutterManagement.UI.Desktop
             OpenStatusSettingDialogCommand = new RelayCommand(async () => await OpenStatusSettingDialog());
             OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
             OpenMachineDialogCommand = new RelayCommand(async () => await OpenMachineDialog());
+            OpenCutterRemovalDialogCommand = new RelayCommand(async () => await OpenCutterRemovalDialog());
         }
 
         #endregion
@@ -294,6 +300,41 @@ namespace CutterManagement.UI.Desktop
                 // Invoke frequency check dialog
                 DialogService.InvokeDialog(frequencyCheck);
             }
+        }
+
+        /// <summary>
+        /// Opens cutter removal dialog
+        /// </summary>
+        private async Task OpenCutterRemovalDialog()
+        {
+            // Broadcast that this item was selected
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            var cutterRemoval = new CutterRemovalDialogViewModel(_dataFactory)
+            {
+                Id = Id,
+                PartNumber = PartNumber ?? "Part number unknown",
+                CutterNumber = CutterNumber ?? "Cutter number unknown",
+                PreviousPartCount = string.Format("Count: {0}", Count),
+                MachineNumber = MachineNumber,
+            };
+
+            // If machine doesn't currently have cutter..
+            if(HasCutter is false)
+            {
+                //--- Cancel cutter removal process ---//
+
+                // Error message
+                cutterRemoval.Message = $"[{MachineNumber}]    does not currently have any cutter";
+
+                // Show dialog
+                await DialogService.InvokeFeedbackDialog(cutterRemoval);
+
+                // Do nothing else
+                return;
+            }
+
+            DialogService.InvokeDialog(cutterRemoval);
         }
 
         #endregion

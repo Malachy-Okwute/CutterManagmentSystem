@@ -31,6 +31,12 @@ namespace CutterManagement.UI.Desktop
                 case "Failed":
                     return ColorHelpers.GetColor(ColorKind.AccentColor2);
 
+                case "Keep":
+                    return ColorHelpers.GetColor(ColorKind.AccentColor5);
+
+                case "Rebuild":
+                    return ColorHelpers.GetColor(ColorKind.AccentColor2);
+
                 default:
                     throw new InvalidOperationException();
             }

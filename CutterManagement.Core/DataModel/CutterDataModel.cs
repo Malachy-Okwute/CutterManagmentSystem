@@ -44,7 +44,7 @@
         /// <summary>
         /// The reason cutter assigned to this machine was pulled from this machine
         /// </summary>
-        public CutterChangeInformation CutterChangeInfo { get; set; }
+        public CutterRemovalReason CutterChangeInfo { get; set; }
 
         /// <summary>
         /// The date this cutter was last used
