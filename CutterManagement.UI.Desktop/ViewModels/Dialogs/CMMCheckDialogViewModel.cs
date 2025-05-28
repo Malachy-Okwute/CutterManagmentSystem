@@ -292,7 +292,7 @@ namespace CutterManagement.UI.Desktop
         private async Task RecordCMMData()
         {
             // Make sure piece count is greater than current count
-            if(int.Parse(Count) <= int.Parse(CurrentCount))
+            if(int.TryParse(CurrentCount, out int result) is true && int.Parse(Count) <= int.Parse(CurrentCount))
             {
                 // Define message
                 Message = $"Piece-count must be greater than previous-count";
@@ -316,6 +316,9 @@ namespace CutterManagement.UI.Desktop
             // Get user table
             IDataAccessService<UserDataModel> userTable = _dataFactory.GetDbTable<UserDataModel>();
 
+            // Get cutter table
+            IDataAccessService<CutterDataModel> cutterTable = _dataFactory.GetDbTable<CutterDataModel>();
+
             // Listen for when machine table data actually changed
             machineTable.DataChanged += (s, e) =>
             {
@@ -332,7 +335,10 @@ namespace CutterManagement.UI.Desktop
 
             // Make sure we have machine
             if(machine is not null)
-            {                
+            {
+                // Attempt to get current cutter
+                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.Cutter.Id) ?? throw new ArgumentNullException("Cutter not found");
+
                 // Set cmm data
                 machine.Cutter.CMMData.Add(new CMMDataModel
                 {
@@ -348,6 +354,7 @@ namespace CutterManagement.UI.Desktop
                     Count = Count,
                 });
 
+                // Set other machine information
                 machine.Cutter.Count = int.Parse(Count);
                 machine.StatusMessage = Comment;
                 machine.Status = MachineStatus.IsRunning;
@@ -361,8 +368,9 @@ namespace CutterManagement.UI.Desktop
                     MachineDataModel = machine
                 });
 
-                // Update machine information
+                // Update information in database
                 await machineTable.UpdateEntityAsync(machine);
+                await cutterTable.UpdateEntityAsync(cutter);
 
                 // Unhook event
                 machineTable.DataChanged -= delegate { };

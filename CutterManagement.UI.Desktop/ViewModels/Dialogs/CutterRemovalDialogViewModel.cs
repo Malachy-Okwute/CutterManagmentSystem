@@ -195,6 +195,9 @@ namespace CutterManagement.UI.Desktop
             CollectionViewSource.GetDefaultView(UsersCollection).Refresh();
         }
 
+        /// <summary>
+        /// Removes cutter from a machine item
+        /// </summary>
         private async Task RemoveCutter()
         {
             // New data from database
@@ -296,9 +299,13 @@ namespace CutterManagement.UI.Desktop
                 machine.Cutter.MachineDataModelId = null;
                 machine.CutterDataModelId = null;
 
+                // If cutter needs rebuilding...
                 if(KeepCutter is false && RebuildCutter is true)
                 {
+                    // Remove it from database
                     await cutterTable.DeleteEntityAsync(cutter);
+
+                    // ToDo: Record this event in a history database
                 }
 
                 // Set the user performing this operation
@@ -319,7 +326,8 @@ namespace CutterManagement.UI.Desktop
                 DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }
 
-            #endregion
         }
+
+        #endregion
     }
 }

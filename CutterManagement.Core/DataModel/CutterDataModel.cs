@@ -62,11 +62,6 @@
         public MachineDataModel MachineDataModel { get; set; }
 
         /// <summary>
-        /// CMM data model navigation property id
-        /// </summary>
-        public int? CMMDataModelId { get; set; }
-
-        /// <summary>
         /// Collection of CMM data model navigation properties
         /// </summary>
         public ICollection<CMMDataModel> CMMData { get; set; } = new List<CMMDataModel>();
