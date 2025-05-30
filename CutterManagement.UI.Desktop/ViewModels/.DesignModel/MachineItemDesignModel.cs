@@ -15,7 +15,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemDesignModel(IDataAccessServiceFactory factory) : base(factory) 
+        public MachineItemDesignModel(IMachineService machineService) : base(machineService) 
         {
             // Dummy data
             MachineNumber = "123";

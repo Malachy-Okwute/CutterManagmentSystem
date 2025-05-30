@@ -10,9 +10,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
         /// <returns><see cref="MachineItemViewModel"/></returns>
-        public static async Task<MachineItemViewModel> ResolveToMachineItemViewModel(MachineDataModel machineData, IDataAccessServiceFactory dataFactory, EventHandler eventHandler)
+        public static async Task<MachineItemViewModel> ResolveToMachineItemViewModel(MachineDataModel machineData, IMachineService machineService, EventHandler eventHandler)
         {
-            MachineItemViewModel item = new MachineItemViewModel(dataFactory)
+            MachineItemViewModel item = new MachineItemViewModel(machineService)
             {
                 Id = machineData.Id,
                 MachineSetNumber = machineData.MachineSetId,
@@ -27,7 +27,7 @@ namespace CutterManagement.UI.Desktop
 
             if(machineData.CutterDataModelId is not null)
             {
-                IDataAccessService<CutterDataModel> cutterTable = dataFactory.GetDbTable<CutterDataModel>();
+                IDataAccessService<CutterDataModel> cutterTable = machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
                 CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(machineData.CutterDataModelId);
 
                 if(cutter is not null)

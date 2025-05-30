@@ -5,7 +5,8 @@ namespace CutterManagement.UI.Desktop
     /// <summary>
     /// Facilitates setting status of a machine
     /// </summary>
-    public class MachineStatusSettingService : IMachineService
+    [Obsolete("This class is no longer in use")]
+    public class MachineStatusSettingService //: IMachineService
     {
         /// <summary>
         /// Data access factory

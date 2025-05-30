@@ -24,12 +24,17 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Data service factory
         /// </summary>
-        private IDataAccessServiceFactory _dataAccessService;
+        //private IDataAccessServiceFactory _machineService.DataAccess => _machineService.DataAccess;
 
         /// <summary>
         /// Load data asynchronously 
         /// </summary>
         private readonly Task _dataLoader;
+
+        /// <summary>
+        /// Provides services to machine
+        /// </summary>
+        private readonly IMachineService _machineService;
 
         #endregion
 
@@ -60,10 +65,11 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemCollectionViewModel(IDataAccessServiceFactory dataAccessService)
+        public MachineItemCollectionViewModel(IMachineService machineService)
         {
             // Initialize
-            _dataAccessService = dataAccessService;
+            _machineService = machineService;
+            
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
 
@@ -86,11 +92,11 @@ namespace CutterManagement.UI.Desktop
         private async Task LoadMachineData()
         {
             // Makes sure we have service
-            if (_dataAccessService is null) return;
+            if (_machineService.DataBaseAccess is null) return;
 
             // Get tables needed
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
-            IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
+            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             // Ensure pin and ring collections are empty
             _pinItems.Clear();
@@ -121,7 +127,7 @@ namespace CutterManagement.UI.Desktop
                     await machineTable.CreateNewEntityAsync(data);
                   
                     // Populate item list
-                    _pinItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
+                    _pinItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged));
                 }
 
                 foreach (MachineDataModel data in defaultRingMachineData)
@@ -139,7 +145,7 @@ namespace CutterManagement.UI.Desktop
                     await machineTable.CreateNewEntityAsync(data);
 
                     // Populate item list
-                    _ringItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged));
+                    _ringItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged));
                 }
 
                 // Do nothing else
@@ -150,7 +156,7 @@ namespace CutterManagement.UI.Desktop
             foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
             {
                 // Resolve data
-                MachineItemViewModel machineItem = await DataResolver.ResolveToMachineItemViewModel(data, _dataAccessService, OnItemSelectionChanged);
+                MachineItemViewModel machineItem = await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged);
 
                 // If machine data is owned by pinion
                 if (machineItem.Owner is Department.Pinion)
@@ -175,7 +181,7 @@ namespace CutterManagement.UI.Desktop
         public void UpdateMachineCollection(MachineDataModel machineItem) 
         {
             // Resolve the new item that changed
-            MachineItemViewModel newItem = Task.Run(async () => await DataResolver.ResolveToMachineItemViewModel(machineItem, _dataAccessService, OnItemSelectionChanged)).Result;
+            MachineItemViewModel newItem = Task.Run(async () => await DataResolver.ResolveToMachineItemViewModel(machineItem, _machineService, OnItemSelectionChanged)).Result;
 
             // Make sure new item is not null
             if(newItem is not null)

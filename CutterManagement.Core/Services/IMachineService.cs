@@ -3,5 +3,10 @@
     /// <summary>
     /// Provides services for machine items
     /// </summary>
-    public interface IMachineService { }
+    [Obsolete("This class is no longer in use")]
+    public interface IMachineService 
+    { 
+
+
+    }
 }

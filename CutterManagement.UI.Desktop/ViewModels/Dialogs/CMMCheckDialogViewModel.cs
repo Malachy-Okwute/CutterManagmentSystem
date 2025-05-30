@@ -15,7 +15,12 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Data factory
         /// </summary>
-        private IDataAccessServiceFactory _dataFactory;
+        //private IDataAccessServiceFactory _dataFactory;
+
+        /// <summary>
+        /// Provides services to machine
+        /// </summary>
+        private readonly IMachineService _machineService;
 
         /// <summary>
         /// User that verified and confirmed cmm data
@@ -269,11 +274,11 @@ namespace CutterManagement.UI.Desktop
         /// Default constructor
         /// </summary>
         /// <param name="dataFactory"></param>
-        public CMMCheckDialogViewModel(IDataAccessServiceFactory dataFactory)
+        public CMMCheckDialogViewModel(IMachineService machineService)
         {
             UsersCollection = new Dictionary<UserDataModel, string>();
 
-            _dataFactory = dataFactory;
+            _machineService = machineService;
 
             _taskLoader = GetUsers();
 
@@ -311,13 +316,13 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();
+            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
 
             // Get user table
-            IDataAccessService<UserDataModel> userTable = _dataFactory.GetDbTable<UserDataModel>();
+            IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             // Get cutter table
-            IDataAccessService<CutterDataModel> cutterTable = _dataFactory.GetDbTable<CutterDataModel>();
+            IDataAccessService<CutterDataModel> cutterTable = _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
 
             // Listen for when machine table data actually changed
             machineTable.DataChanged += (s, e) =>
@@ -356,7 +361,7 @@ namespace CutterManagement.UI.Desktop
 
                 // Set other machine information
                 machine.Cutter.Count = int.Parse(Count);
-                machine.StatusMessage = Comment;
+                machine.StatusMessage = Comment ?? "Passed CMM check";
                 machine.Status = MachineStatus.IsRunning;
                 machine.FrequencyCheckResult = FrequencyCheckResult.Passed;
                 machine.DateTimeLastModified = DateTime.Now;
@@ -404,7 +409,7 @@ namespace CutterManagement.UI.Desktop
         private async Task GetUsers()
         {
             // Get user db table
-            IDataAccessService<UserDataModel> users = _dataFactory.GetDbTable<UserDataModel>();
+            IDataAccessService<UserDataModel> users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
             {

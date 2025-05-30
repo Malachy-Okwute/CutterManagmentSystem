@@ -13,7 +13,12 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Data access factory
         /// </summary>
-        private IDataAccessServiceFactory _dataFactory;
+        //private IDataAccessServiceFactory _dataFactory;
+
+        /// <summary>
+        /// Provides services to machine
+        /// </summary>
+        private readonly IMachineService _machineService;
 
         #endregion
 
@@ -153,12 +158,9 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MachineItemViewModel(IDataAccessServiceFactory? dataFactory)
+        public MachineItemViewModel(IMachineService machineService)
         {
-            if(dataFactory is not null)
-            {
-                _dataFactory = dataFactory;
-            }
+            _machineService = machineService;
 
             // Create commands
             OpenPopupCommand = new RelayCommand(OpenPopup);
@@ -180,15 +182,14 @@ namespace CutterManagement.UI.Desktop
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Machine status view model
-            var statusSettingVM = new MachineStatusSettingDialogViewModel(_dataFactory, new MachineStatusSettingService(_dataFactory))
-            {
-                Id = Id,
-                Owner = Owner,
-                Label = MachineNumber,
-                MachineNumber = MachineNumber,
-                MachineSetNumber = MachineSetNumber,
-                IsConfigured = IsConfigured,
-            };
+            var statusSettingVM = _machineService.GetDialogViewModel<MachineStatusSettingDialogViewModel>();
+
+            statusSettingVM.Id = Id;
+            statusSettingVM.Owner = Owner;
+            statusSettingVM.Label = MachineNumber;
+            statusSettingVM.MachineNumber = MachineNumber;
+            statusSettingVM.MachineSetNumber = MachineSetNumber;
+            statusSettingVM.IsConfigured = IsConfigured;
 
             // Make sure machine is configured
             if (IsConfigured is false)
@@ -216,12 +217,12 @@ namespace CutterManagement.UI.Desktop
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Machine configuration view model
-            var machineConfiguration = new MachineConfigurationDialogViewModel(new MachineConfigurationService(_dataFactory))
-            {
-                Id = Id,
-                Owner = Owner,
-                Label = MachineNumber,
-            };
+            var machineConfiguration = _machineService.GetDialogViewModel<MachineConfigurationDialogViewModel>();
+
+            machineConfiguration.Id = Id;
+            machineConfiguration.Owner = Owner;
+            machineConfiguration.Label = MachineNumber;
+            
 
             // Show dialog
             DialogService.InvokeDialog(machineConfiguration);
@@ -255,7 +256,8 @@ namespace CutterManagement.UI.Desktop
             if (FrequencyCheckResult == setupMode.ToString() && HasCutter is false)
             {
                 // Setup dialog view model
-                var setupDialog = new MachineSetupDialogViewModel(_dataFactory);
+                var setupDialog = _machineService.GetDialogViewModel<MachineSetupDialogViewModel>();
+
                 setupDialog.GetMachineItem(this);
 
                 // Make sure machine is configured
@@ -277,25 +279,23 @@ namespace CutterManagement.UI.Desktop
             else if (FrequencyCheckResult == setupMode.ToString() && HasCutter)
             {
                 // Show form to enter CMM data
-                var cmmCheck = new CMMCheckDialogViewModel(_dataFactory)
-                {
-                    Id = Id,
-                    CurrentCount = int.Parse(Count) == 0 ? "Count" : Count,
-                };
+                var cmmCheck = _machineService.GetDialogViewModel<CMMCheckDialogViewModel>();
+
+                cmmCheck.Id = Id;
+                cmmCheck.CurrentCount = int.Parse(Count) == 0 ? "Count" : Count;
 
                 DialogService.InvokeDialog(cmmCheck);
             }
             //Otherwise
             else
             {
-                var frequencyCheck = new FrequencyCheckDialogViewModel(_dataFactory)
-                {
-                    Id = Id,
-                    PartNumber = PartNumber ?? "Part number unknown",
-                    MachineNumber = MachineNumber,
-                    PreviousPartCount = string.Format("Count: {0}",Count),
-                    PreviousPartToothSize = PartPreviousToothSize.Equals("0") ? string.Format("Size: {0}", "n/a") : string.Format("Size: {0}",PartPreviousToothSize),
-                };
+                var frequencyCheck =  _machineService.GetDialogViewModel<FrequencyCheckDialogViewModel>();
+
+                frequencyCheck.Id = Id;
+                frequencyCheck.PartNumber = PartNumber ?? "Part number unknown";
+                frequencyCheck.MachineNumber = MachineNumber;
+                frequencyCheck.PreviousPartCount = string.Format("Count: {0}", Count);
+                frequencyCheck.PreviousPartToothSize = PartPreviousToothSize.Equals("0") ? string.Format("Size: {0}", "n/a") : string.Format("Size: {0}", PartPreviousToothSize);
 
                 // Invoke frequency check dialog
                 DialogService.InvokeDialog(frequencyCheck);
@@ -310,14 +310,13 @@ namespace CutterManagement.UI.Desktop
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
-            var cutterRemoval = new CutterRemovalDialogViewModel(_dataFactory)
-            {
-                Id = Id,
-                PartNumber = PartNumber ?? "Part number unknown",
-                CutterNumber = CutterNumber ?? "Cutter number unknown",
-                PreviousPartCount = string.Format("Count: {0}", Count),
-                MachineNumber = MachineNumber,
-            };
+            var cutterRemoval = _machineService.GetDialogViewModel<CutterRemovalDialogViewModel>();
+
+            cutterRemoval.Id = Id;
+            cutterRemoval.PartNumber = PartNumber ?? "Part number unknown";
+            cutterRemoval.CutterNumber = CutterNumber ?? "Cutter number unknown";
+            cutterRemoval.PreviousPartCount = string.Format("Count: {0}", Count);
+            cutterRemoval.MachineNumber = MachineNumber;
 
             // If machine doesn't currently have cutter..
             if(HasCutter is false)

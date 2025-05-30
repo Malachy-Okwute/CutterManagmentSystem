@@ -21,7 +21,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Data factory
         /// </summary>
-        private IDataAccessServiceFactory _dataFactory;
+        private IDataAccessServiceFactory _dataFactory => _machineService.DataBaseAccess;
 
         /// <summary>
         /// The current status of the item to configure
@@ -147,11 +147,10 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="machineService"></param>
         /// <param name="dataFactory"></param>
-        public MachineStatusSettingDialogViewModel(IDataAccessServiceFactory dataFactory, IMachineService machineService)
+        public MachineStatusSettingDialogViewModel(IMachineService machineService)
         {
             Title = "Set status";
             _machineService = machineService;
-            _dataFactory = dataFactory;
             CurrentStatus = MachineStatus.None;
             StatusCollection = new Dictionary<MachineStatus, string>();
             UsersCollection = new Dictionary<UserDataModel, string>();
@@ -252,7 +251,7 @@ namespace CutterManagement.UI.Desktop
             try
             {
                 // Try setting status and also grab result coming from the process
-                ValidationResult result = await ((MachineStatusSettingService)_machineService).SetStatus(data, _user.Id, (callbackData) =>
+                ValidationResult result = await _machineService.SetStatus(data, _user.Id, (callbackData) =>
                 {
                     machineDataModel = callbackData;
                 });

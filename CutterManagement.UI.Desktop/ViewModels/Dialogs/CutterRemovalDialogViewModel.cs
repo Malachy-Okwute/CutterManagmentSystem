@@ -21,7 +21,12 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Data factory
         /// </summary>
-        private IDataAccessServiceFactory _dataFactory;
+        //private IDataAccessServiceFactory _dataFactory;
+
+        /// <summary>
+        /// Provides service to machine
+        /// </summary>
+        private readonly IMachineService _machineService;
 
         /// <summary>
         /// Currently selected 
@@ -146,9 +151,9 @@ namespace CutterManagement.UI.Desktop
         /// Default constructor
         /// </summary>
         /// <param name="dataFactory">Data factory</param>
-        public CutterRemovalDialogViewModel(IDataAccessServiceFactory dataFactory)
+        public CutterRemovalDialogViewModel(IMachineService machineService)
         {
-            _dataFactory = dataFactory;
+            _machineService = machineService;
             CutterRemovalReasonCollection = new Dictionary<CutterRemovalReason, string>();
             UsersCollection = new Dictionary<UserDataModel, string>();
 
@@ -174,7 +179,7 @@ namespace CutterManagement.UI.Desktop
         private async Task GetUsers()
         {
             // Get user db table
-            IDataAccessService<UserDataModel> users = _dataFactory.GetDbTable<UserDataModel>();
+            IDataAccessService<UserDataModel> users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
             {
@@ -204,11 +209,11 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();
+            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
             // Get user table
-            IDataAccessService<UserDataModel> userTable = _dataFactory.GetDbTable<UserDataModel>();
+            IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
             // Get cutter table
-            IDataAccessService<CutterDataModel> cutterTable = _dataFactory.GetDbTable<CutterDataModel>();
+            IDataAccessService<CutterDataModel> cutterTable = _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
 
             // Listen for changes 
             machineTable.DataChanged += (s, e) =>

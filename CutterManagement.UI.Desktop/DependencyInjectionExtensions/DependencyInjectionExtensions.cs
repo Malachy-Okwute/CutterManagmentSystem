@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -19,7 +20,7 @@ namespace CutterManagement.UI.Desktop
             // Singletons
             services.AddSingleton<NavigationBarViewModel>();
             services.AddSingleton(provider => new HomePageViewModel(provider.GetRequiredService<MachineItemCollectionViewModel>()));
-            services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IDataAccessServiceFactory>()));
+            services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IMachineService>()));
 
             // Transients
             services.AddTransient<InfoPageViewModel>();
@@ -28,6 +29,15 @@ namespace CutterManagement.UI.Desktop
             services.AddTransient<SettingsPageViewModel>();
             services.AddTransient<ApplicationWindowViewModel>();
             services.AddTransient(provider => new UsersPageViewModel(provider.GetRequiredService<IDataAccessServiceFactory>()));
+
+            // Dialog view model
+            services.AddTransient(provider => new CMMCheckDialogViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddTransient(provider => new MachineSetupDialogViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddTransient(provider => new CutterRemovalDialogViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddTransient(provider => new FrequencyCheckDialogViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddTransient(provider => new MachineConfigurationDialogViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddTransient(provider => new MachineStatusSettingDialogViewModel(provider.GetRequiredService<IMachineService>()));
+
             
             // Return services
             return services;
@@ -69,6 +79,9 @@ namespace CutterManagement.UI.Desktop
 
             services.AddScoped<IDataAccessServiceFactory, DataAccessServiceFactory>();
             //services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
+            services.AddTransient<IDialogViewModelFactory, DialogViewModelFactory>(provider => new DialogViewModelFactory(provider.GetRequiredService<IServiceProvider>()));
+            services.AddTransient<IMachineService, MachineService>(provider
+                => new MachineService(provider.GetRequiredService<IDataAccessServiceFactory>(), provider.GetRequiredService<IDialogViewModelFactory>()));
 
             // Register dialog service
             DialogService.RegisterDialog<CMMCheckDialogViewModel, CMMCheckDialog>();

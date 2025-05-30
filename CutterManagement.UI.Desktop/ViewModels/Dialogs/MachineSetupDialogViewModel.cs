@@ -15,7 +15,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Data factory
         /// </summary>
-        private IDataAccessServiceFactory _dataFactory;
+        //private IDataAccessServiceFactory _dataFactory;
 
         /// <summary>
         /// Machine item that is being setup
@@ -26,6 +26,11 @@ namespace CutterManagement.UI.Desktop
         /// Get available cutters
         /// </summary>
         private readonly Task _fetchAvailableCutters;
+
+        /// <summary>
+        /// Provides services to machine
+        /// </summary>
+        private readonly IMachineService _machineService;
 
         /// <summary>
         /// Cutter number
@@ -56,17 +61,17 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Cutter database table
         /// </summary>
-        private IDataAccessService<CutterDataModel> _cutterTable => _dataFactory.GetDbTable<CutterDataModel>();
+        private IDataAccessService<CutterDataModel> _cutterTable => _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
 
         /// <summary>
         /// Machine database table
         /// </summary>
-        private IDataAccessService<MachineDataModel> _machineTable => _dataFactory.GetDbTable<MachineDataModel>();
+        private IDataAccessService<MachineDataModel> _machineTable => _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
 
         /// <summary>
         /// Part database table
         /// </summary>
-        private IDataAccessService<PartDataModel> _partTable => _dataFactory.GetDbTable<PartDataModel>();
+        private IDataAccessService<PartDataModel> _partTable => _machineService.DataBaseAccess.GetDbTable<PartDataModel>();
 
         #endregion
 
@@ -203,10 +208,10 @@ namespace CutterManagement.UI.Desktop
         /// Default constructor
         /// </summary>
         /// <param name="dataFactory">data factory</param>
-        public MachineSetupDialogViewModel(IDataAccessServiceFactory dataFactory)
+        public MachineSetupDialogViewModel(IMachineService machineService)
         {
             Title = "Setup";
-            _dataFactory = dataFactory;
+            _machineService = machineService;
             _cutters = new();
             _parts = new();
             _fetchAvailableCutters = GetCutters();
@@ -266,7 +271,7 @@ namespace CutterManagement.UI.Desktop
             CutterDataModel currentCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == CutterNumber);
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _dataFactory.GetDbTable<MachineDataModel>();    // Use this variable in order to fire off DataChanged event
+            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();    // Use this variable in order to fire off DataChanged event
 
             // Listen for when machine table data actually changed
             machineTable.DataChanged += (s, e) =>
@@ -287,7 +292,7 @@ namespace CutterManagement.UI.Desktop
                 machineData.PartNumber = PartNumberCollection[SelectedPart];
                 machineData.FrequencyCheckResult = FrequencyCheckResult.Setup;
                 machineData.Status = MachineStatus.Warning;
-                machineData.StatusMessage = "Machine setup";
+                machineData.StatusMessage = "Waiting for CMM check result";
                 machineData.DateTimeLastModified = DateTime.Now;
 
                 // Update machine information
