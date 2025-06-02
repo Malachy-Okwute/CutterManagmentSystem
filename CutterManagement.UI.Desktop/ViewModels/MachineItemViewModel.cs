@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -383,23 +384,36 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
+        /// Confirms that user intended to enter the new piece count
+        /// </summary>
+        public async Task<bool?> VerifyUserIntention()
+        {
+            // Dummy view model
+            var pieceCountAdjustmentVM = new PieceCountAdjustmentDialogViewModel(); // Dummy view model. Used to be able to show prompt
+
+            // Message
+            pieceCountAdjustmentVM.Message = $"Current count is {_currentCount}. Do you mean to enter {Count} ?";
+
+            // Prompt user
+            var result = await DialogService.InvokeFeedbackDialog(pieceCountAdjustmentVM, FeedbackDialogKind.Prompt);
+
+            // Return prompt result
+            return result;
+        }
+
+        /// <summary>
         /// Updates count on this machine
         /// </summary>
         private async Task UpdatePieceCount()
         {
+            // User's intention result
             bool? userIntentionResult = null;
 
             await _machineService.AdjustPieceCount(Id, int.Parse(Count), async () =>
             {
-                var pieceCountAdjustmentVM = new PieceCountAdjustmentDialogViewModel(); // Dummy view model. Used to be able to show prompt
+                userIntentionResult = await VerifyUserIntention();
 
-                pieceCountAdjustmentVM.Message = $"Current count is {_currentCount}. Do you mean to enter {Count} ?";
-
-                var result = await DialogService.InvokeFeedbackDialog(pieceCountAdjustmentVM, FeedbackDialogKind.Prompt);
-
-                userIntentionResult = result;
-
-                return result;
+                return userIntentionResult;
             })
             .ContinueWith(_ =>
             {
