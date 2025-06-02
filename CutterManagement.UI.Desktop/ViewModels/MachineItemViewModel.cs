@@ -11,14 +11,14 @@ namespace CutterManagement.UI.Desktop
         #region Private Fields
 
         /// <summary>
-        /// Data access factory
-        /// </summary>
-        //private IDataAccessServiceFactory _dataFactory;
-
-        /// <summary>
         /// Provides services to machine
         /// </summary>
         private readonly IMachineService _machineService;
+
+        /// <summary>
+        /// The current count on this machine item
+        /// </summary>
+        private int _currentCount;
 
         #endregion
 
@@ -93,6 +93,15 @@ namespace CutterManagement.UI.Desktop
         public bool IsPopupOpen { get; set; }
 
         /// <summary>
+        /// True if piece count can be edited
+        /// Otherwise false
+        /// <para>
+        /// DEV-NOTE: Controls Readonly property in UI
+        /// </para>
+        /// </summary>
+        public bool CanEditPieceCount { get; set; }
+
+        /// <summary>
         /// The owner of this machine
         /// </summary>
         public Department Owner { get; set; }
@@ -151,6 +160,21 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand OpenCutterRemovalDialogCommand { get; set; }
 
+        /// <summary>
+        /// Command to adjust piece count 
+        /// </summary>
+        public ICommand PieceCountAdjustmentCommand { get; set; }
+
+        /// <summary>
+        /// Command to save new entered piece count as current
+        /// </summary>
+        public ICommand UpdatePieceCountCommand { get; set; }
+
+        /// <summary>
+        /// Command to cancel piece count editing process
+        /// </summary>
+        public ICommand CancelPieceCountEditingCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -161,13 +185,21 @@ namespace CutterManagement.UI.Desktop
         public MachineItemViewModel(IMachineService machineService)
         {
             _machineService = machineService;
+            CanEditPieceCount = !CanEditPieceCount;
 
             // Create commands
             OpenPopupCommand = new RelayCommand(OpenPopup);
-            OpenStatusSettingDialogCommand = new RelayCommand(async () => await OpenStatusSettingDialog());
-            OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
+            PieceCountAdjustmentCommand = new RelayCommand(EditPieceCount);
+            UpdatePieceCountCommand = new RelayCommand(async () => await UpdatePieceCount());
             OpenMachineDialogCommand = new RelayCommand(async () => await OpenMachineDialog());
+            OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
+            OpenStatusSettingDialogCommand = new RelayCommand(async () => await OpenStatusSettingDialog());
             OpenCutterRemovalDialogCommand = new RelayCommand(async () => await OpenCutterRemovalDialog());
+            CancelPieceCountEditingCommand = new RelayCommand(() =>
+            {
+                Count = _currentCount.ToString();
+                CanEditPieceCount = !CanEditPieceCount;
+            });
         }
 
         #endregion
@@ -182,30 +214,30 @@ namespace CutterManagement.UI.Desktop
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             // Machine status view model
-            var statusSettingVM = _machineService.GetDialogViewModel<MachineStatusSettingDialogViewModel>();
+            var statusSettingDialog = _machineService.GetDialogViewModel<MachineStatusSettingDialogViewModel>();
 
-            statusSettingVM.Id = Id;
-            statusSettingVM.Owner = Owner;
-            statusSettingVM.Label = MachineNumber;
-            statusSettingVM.MachineNumber = MachineNumber;
-            statusSettingVM.MachineSetNumber = MachineSetNumber;
-            statusSettingVM.IsConfigured = IsConfigured;
+            statusSettingDialog.Id = Id;
+            statusSettingDialog.Owner = Owner;
+            statusSettingDialog.Label = MachineNumber;
+            statusSettingDialog.MachineNumber = MachineNumber;
+            statusSettingDialog.MachineSetNumber = MachineSetNumber;
+            statusSettingDialog.IsConfigured = IsConfigured;
 
             // Make sure machine is configured
             if (IsConfigured is false)
             {
                 // Define a message
-                statusSettingVM.Message = "Machine need to be configured for production";
+                statusSettingDialog.Message = "Machine need to be configured for production";
 
                 // Show feed back message
-                await DialogService.InvokeFeedbackDialog(statusSettingVM);
+                await DialogService.InvokeFeedbackDialog(statusSettingDialog);
 
                 // Do nothing else
                 return;
             }
 
             // Show dialog
-            DialogService.InvokeDialog(statusSettingVM);
+            DialogService.InvokeDialog(statusSettingDialog);
         }
 
         /// <summary>
@@ -279,12 +311,12 @@ namespace CutterManagement.UI.Desktop
             else if (FrequencyCheckResult == setupMode.ToString() && HasCutter)
             {
                 // Show form to enter CMM data
-                var cmmCheck = _machineService.GetDialogViewModel<CMMCheckDialogViewModel>();
+                var cmmCheckDialog = _machineService.GetDialogViewModel<CMMCheckDialogViewModel>();
 
-                cmmCheck.Id = Id;
-                cmmCheck.CurrentCount = int.Parse(Count) == 0 ? "Count" : Count;
+                cmmCheckDialog.Id = Id;
+                cmmCheckDialog.CurrentCount = int.Parse(Count) == 0 ? "Count" : Count;
 
-                DialogService.InvokeDialog(cmmCheck);
+                DialogService.InvokeDialog(cmmCheckDialog);
             }
             //Otherwise
             else
@@ -310,13 +342,13 @@ namespace CutterManagement.UI.Desktop
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
-            var cutterRemoval = _machineService.GetDialogViewModel<CutterRemovalDialogViewModel>();
+            var cutterRemovalDialog = _machineService.GetDialogViewModel<CutterRemovalDialogViewModel>();
 
-            cutterRemoval.Id = Id;
-            cutterRemoval.PartNumber = PartNumber ?? "Part number unknown";
-            cutterRemoval.CutterNumber = CutterNumber ?? "Cutter number unknown";
-            cutterRemoval.PreviousPartCount = string.Format("Count: {0}", Count);
-            cutterRemoval.MachineNumber = MachineNumber;
+            cutterRemovalDialog.Id = Id;
+            cutterRemovalDialog.PartNumber = PartNumber ?? "Part number unknown";
+            cutterRemovalDialog.CutterNumber = CutterNumber ?? "Cutter number unknown";
+            cutterRemovalDialog.PreviousPartCount = string.Format("Count: {0}", Count);
+            cutterRemovalDialog.MachineNumber = MachineNumber;
 
             // If machine doesn't currently have cutter..
             if(HasCutter is false)
@@ -324,16 +356,60 @@ namespace CutterManagement.UI.Desktop
                 //--- Cancel cutter removal process ---//
 
                 // Error message
-                cutterRemoval.Message = $"[{MachineNumber}]    does not currently have any cutter";
+                cutterRemovalDialog.Message = $"[{MachineNumber}]    does not currently have any cutter";
 
                 // Show dialog
-                await DialogService.InvokeFeedbackDialog(cutterRemoval);
+                await DialogService.InvokeFeedbackDialog(cutterRemovalDialog);
 
                 // Do nothing else
                 return;
             }
 
-            DialogService.InvokeDialog(cutterRemoval);
+            DialogService.InvokeDialog(cutterRemovalDialog);
+        }
+
+        private void EditPieceCount()
+        {
+            // Broadcast that this item was selected
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            if(HasCutter)
+            {
+                // Store current value
+                _currentCount = int.Parse(Count);
+                // Start piece count process
+                CanEditPieceCount = !CanEditPieceCount;
+            }
+        }
+
+        /// <summary>
+        /// Updates count on this machine
+        /// </summary>
+        private async Task UpdatePieceCount()
+        {
+            bool? userIntentionResult = null;
+
+            await _machineService.AdjustPieceCount(Id, int.Parse(Count), async () =>
+            {
+                var pieceCountAdjustmentVM = new PieceCountAdjustmentDialogViewModel(); // Dummy view model. Used to be able to show prompt
+
+                pieceCountAdjustmentVM.Message = $"Current count is {_currentCount}. Do you mean to enter {Count} ?";
+
+                var result = await DialogService.InvokeFeedbackDialog(pieceCountAdjustmentVM, FeedbackDialogKind.Prompt);
+
+                userIntentionResult = result;
+
+                return result;
+            })
+            .ContinueWith(_ =>
+            {
+                if(userIntentionResult is not true)
+                {
+                    Count = _currentCount.ToString();
+                }
+
+                CanEditPieceCount = !CanEditPieceCount;
+            });
         }
 
         #endregion

@@ -25,9 +25,20 @@ namespace CutterManagement.UI.Desktop
         {
             FrameworkElement control = (FrameworkElement)d;
 
-            if(control is null) return;
+            if (control is null) return;
 
-            control.Loaded += (s, e) => { control.Focus(); };
+            control.Loaded += (s, e) =>
+            {
+                control.Focus();
+            };
+
+            if (control.IsLoaded)
+            {
+                control.Focus();
+
+                if (control is TextBox) ((TextBox)control).SelectAll();
+
+            }
         }
     }
 }

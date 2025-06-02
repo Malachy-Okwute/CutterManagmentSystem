@@ -26,8 +26,8 @@
         </Grid.ColumnDefinitions>
 
         <!--  search bar  -->
-        <Border Grid.Column="0" Width="450"
-                Margin="40,10" Padding="0"
+        <Border Grid.Column="0" Width="600"
+                Margin="40,6" Padding="0"
                 HorizontalAlignment="Left">
             <Grid>
                 <TextBox HorizontalAlignment="Stretch" Tag="Search"

@@ -29,5 +29,14 @@ namespace CutterManagement.UI.Desktop
         /// Sets machine status
         /// </summary>
         Task<ValidationResult> SetStatus(MachineDataModel newData, int userId, Action<MachineDataModel> callback);
+
+        /// <summary>
+        /// Adjusts piece count on a machine
+        /// </summary>
+        /// <param name="Id">Id of the machine whose piece count is being adjusted</param>
+        /// <param name="count">The current piece count on the machine</param>
+        /// <param name="verifyUserIntention">Confirms user intention when new piece count is over a certain limit</param>
+        Task AdjustPieceCount(int Id, int count, Func<Task<bool?>> verifyUserIntention);
+
     }
 }

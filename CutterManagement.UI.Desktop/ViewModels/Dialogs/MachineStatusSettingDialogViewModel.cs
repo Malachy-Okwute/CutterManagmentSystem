@@ -19,11 +19,6 @@ namespace CutterManagement.UI.Desktop
         private IMachineService _machineService;
 
         /// <summary>
-        /// Data factory
-        /// </summary>
-        private IDataAccessServiceFactory _dataFactory => _machineService.DataBaseAccess;
-
-        /// <summary>
         /// The current status of the item to configure
         /// </summary>
         private MachineStatus _currentStatus;
@@ -296,7 +291,7 @@ namespace CutterManagement.UI.Desktop
         private async Task GetUsers()
         {
             // Get user db table
-            IDataAccessService<UserDataModel> users = _dataFactory.GetDbTable<UserDataModel>();
+            IDataAccessService<UserDataModel> users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
             {

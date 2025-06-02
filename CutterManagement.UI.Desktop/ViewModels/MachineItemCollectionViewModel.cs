@@ -241,21 +241,26 @@ namespace CutterManagement.UI.Desktop
         private void OnItemSelectionChanged(object? sender, EventArgs args)
         {
             // In both collections, find item that is previously selected
-            MachineItemViewModel? pinItem = _pinItems.FirstOrDefault(item => item.IsPopupOpen is true);
-            MachineItemViewModel? ringItem = _ringItems.FirstOrDefault(item => item.IsPopupOpen is true);
+            MachineItemViewModel? pinItem = _pinItems.FirstOrDefault(item => (item.IsPopupOpen is true) || (item.CanEditPieceCount is false));
+            MachineItemViewModel? ringItem = _ringItems.FirstOrDefault(item => item.IsPopupOpen is true || (item.CanEditPieceCount is false));
 
-            // Make sure item is not null
             if (pinItem is not null)
             {
                 // Reset it's selection 
                 pinItem.IsPopupOpen = false;
+
+                // Cancel piece count edit
+                pinItem.CanEditPieceCount = true;
             }
-            
+
             // Make sure item is not null
-            if(ringItem is not null)
+            if (ringItem is not null)
             {
                 // Reset it's selection 
                 ringItem.IsPopupOpen = false;
+
+                // Cancel piece count edit
+                ringItem.CanEditPieceCount = true;
             }
         }
 

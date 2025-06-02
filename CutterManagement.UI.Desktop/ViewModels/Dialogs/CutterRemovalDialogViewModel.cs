@@ -19,11 +19,6 @@ namespace CutterManagement.UI.Desktop
         #region Private Fields
 
         /// <summary>
-        /// Data factory
-        /// </summary>
-        //private IDataAccessServiceFactory _dataFactory;
-
-        /// <summary>
         /// Provides service to machine
         /// </summary>
         private readonly IMachineService _machineService;

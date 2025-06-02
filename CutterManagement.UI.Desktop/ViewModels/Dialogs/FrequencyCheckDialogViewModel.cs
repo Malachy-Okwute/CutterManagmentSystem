@@ -19,11 +19,6 @@ namespace CutterManagement.UI.Desktop
         private UserDataModel _user;
 
         /// <summary>
-        /// Data factory
-        /// </summary>
-        //private IDataAccessServiceFactory _dataFactory;
-
-        /// <summary>
         /// Loads user
         /// </summary>
         private Task _taskLoader;
@@ -227,7 +222,7 @@ namespace CutterManagement.UI.Desktop
                 // If count is greater than previous count by more than 100
                 if ((int.Parse(PartCount) - machine.Cutter.Count) > 100)
                 {
-                    Message = $"Previous count is {machine.Cutter.Count}. Do you mean to enter {PartCount} ?";
+                    Message = $"Current count is {machine.Cutter.Count}. Do you mean to enter {PartCount} ?";
 
                     // Verify piece count is reasonable
                     bool? response = await DialogService.InvokeFeedbackDialog(this, FeedbackDialogKind.Prompt);

@@ -171,5 +171,79 @@ namespace CutterManagement.UI.Desktop
             return result;
         }
 
+        /// <summary>
+        /// Get a difference between two values
+        /// </summary>
+        /// <param name="firstValue">The first value</param>
+        /// <param name="secondValue">The second value</param>
+        /// <returns>Difference between two values</returns>
+        private int GetValueDifference(int firstValue, int secondValue)
+        {
+            if(secondValue > firstValue)
+            {
+                return secondValue - firstValue;
+            }
+
+            return firstValue - secondValue;
+        }
+
+        /// <summary>
+        /// Adjusts piece count on a machine
+        /// </summary>
+        /// <param name="Id">Id of the machine whose piece count is being adjusted</param>
+        /// <param name="count">The current piece count on the machine</param>
+        /// <param name="verifyUserIntention">Confirms user intention when new piece count is over a certain limit</param>
+        public async Task AdjustPieceCount(int Id, int count, Func<Task<bool?>> verifyUserIntention)
+        {
+            // Data that will be changing
+            MachineDataModel? data = null;
+
+            // Get machines table
+            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+
+            // Listen for when data actually changed
+            machineTable.DataChanged += (s, e) =>
+            {
+                data = e as MachineDataModel;
+
+                // Send out message
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Machine data cannot be null"));
+            };
+
+            // Get machine
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
+
+            // Make sure machine is not null
+            if (machine is not null)
+            {
+                // Result of user intention prompt
+                bool? result = null;
+
+                // If the difference between current and new value is more than 100...
+                if (GetValueDifference(count, machine.Cutter.Count) > 100)
+                {
+                    // Prompt user
+                    result = await verifyUserIntention.Invoke();
+
+                    // If user did not mean to enter value, Cancel this process.
+                    if (result is not true) return;
+                }
+
+                // Set new value
+                machine.Cutter.Count = count;
+
+                // Set message
+                machine.StatusMessage = $"Piece count adjusted {DateTime.Now.ToString("D")}";
+
+                // Set date
+                machine.DateTimeLastModified = DateTime.Now;
+
+                // Update db with the new data
+                await machineTable.UpdateEntityAsync(machine ?? throw new ArgumentException($"Unable to update count"));
+            }
+
+            // Unhook event
+            machineTable.DataChanged -= delegate { };
+        }
     }
 }

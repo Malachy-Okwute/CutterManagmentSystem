@@ -13,11 +13,6 @@ namespace CutterManagement.UI.Desktop
         #region Private Fields
 
         /// <summary>
-        /// Data factory
-        /// </summary>
-        //private IDataAccessServiceFactory _dataFactory;
-
-        /// <summary>
         /// Machine item that is being setup
         /// </summary>
         private MachineItemViewModel _machineItemViewModel;

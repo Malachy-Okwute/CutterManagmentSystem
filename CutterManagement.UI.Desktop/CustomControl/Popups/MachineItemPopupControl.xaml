@@ -23,7 +23,7 @@
                 <Button Content="Adjust piece count"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
-                        Command="{Binding}" />
+                        Command="{Binding PieceCountAdjustmentCommand}" />
                 <Button Content="Relocate cutter"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"

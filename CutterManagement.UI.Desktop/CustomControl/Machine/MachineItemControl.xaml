@@ -76,11 +76,16 @@
         <!--  amount of part made by this machine  -->
         <Border x:Name="ProducedPartCount" Grid.Column="4"
                 MinWidth="60" HorizontalAlignment="Stretch">
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
-                       Text="{Binding Count}"
-                       FontFamily="{StaticResource RobotoFlexRegular}"
-                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+            <TextBox x:Name="CountTb" Margin="6"
+                     HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                     local:FocusAttachedProperty.SetFocus="{Binding ElementName=CountAdjustmentButtons, Path=IsVisible}"
+                     TextAlignment="Center" 
+                     Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}"
+                     IsReadOnly="{Binding CanEditPieceCount}"
+                     FontFamily="{StaticResource RobotoFlexRegular}"
+                     Foreground="{DynamicResource ForegroundColorBrush3}"
+                     Style="{StaticResource DataInputTextBoxStyle}"
+                     PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown" />
         </Border>
 
         <!--  result of the recently checked part  -->
@@ -124,6 +129,48 @@
                PopupAnimation="Fade" AllowsTransparency="True">
             <local:MachineItemPopupControl />
         </Popup>
+
+        <Grid x:Name="CountAdjustmentButtons" Grid.ColumnSpan="8"
+              Width="100" HorizontalAlignment="Right"
+              Visibility="{Binding CanEditPieceCount, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=InvertBoolean}"
+              Background="{DynamicResource BackgroundColorBrush1}">
+
+            <!--  dropshadow effect  -->
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="12" ShadowDepth="0"
+                                  Opacity="0.15" />
+            </Grid.Effect>
+
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Height="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualHeight}"
+                        HorizontalContentAlignment="Center" Focusable="False"
+                        Content="{StaticResource CheckMarkIcon}"
+                        Command="{Binding UpdatePieceCountCommand}"
+                        FontFamily="{StaticResource SolidIcon}" 
+                        Background="{DynamicResource BackgroundColorBrush1}"
+                        Foreground="{DynamicResource AccentColorBrush5}"
+                        Style="{DynamicResource MachineOptionsPopupStyle}" />
+
+                <Button Grid.Column="1"
+                        Height="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualHeight}"
+                        HorizontalContentAlignment="Center" Focusable="False" IsCancel="True"
+                        Content="{StaticResource WindowCloseIcon}"
+                        Command="{Binding CancelPieceCountEditingCommand}"
+                        FontFamily="{StaticResource SolidIcon}"
+                        Background="{DynamicResource BackgroundColorBrush1}"
+                        Foreground="{DynamicResource ErrorForegroundColorBrush}"
+                        Style="{DynamicResource MachineOptionsPopupStyle}" />
+
+
+            </Grid>
+        </Grid>
 
     </Grid>
 

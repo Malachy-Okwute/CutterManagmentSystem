@@ -41,6 +41,7 @@
                 <ItemsControl x:Name="Items" Grid.Column="0"
                               HorizontalContentAlignment="Stretch"
                               d:ItemsSource="{Binding RingItems}"
+                              Focusable="False"
                               ItemsSource="{Binding PinItems}">
 
                     <ItemsControl.ItemTemplate>
@@ -53,6 +54,7 @@
                 <!--  list of gear items  -->
                 <ItemsControl Grid.Column="1" HorizontalContentAlignment="Stretch"
                               d:ItemsSource="{Binding RingItems}"
+                              Focusable="False"
                               ItemsSource="{Binding RingItems}">
 
                     <ItemsControl.ItemTemplate>
