@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,5 +25,18 @@ namespace CutterManagement.UI.Desktop
         {
             InitializeComponent();
         }
+
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (sender is TextBox control)
+            {
+                bool isInputValid = Regex.IsMatch(e.Text, @"^[0-9]+$");
+
+                e.Handled = isInputValid is false;
+            }
+        }
+
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e) => e.Handled = e.Key.Equals(Key.Space) ? true : false;
+
     }
 }

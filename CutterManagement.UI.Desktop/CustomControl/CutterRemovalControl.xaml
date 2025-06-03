@@ -96,16 +96,17 @@
 
         <!--  count  -->
         <Border x:Name="ProducedPartCount" Grid.Column="3"
-                MinWidth="60" Margin="14,0"
+                MinWidth="70" Margin="8,0"
                 HorizontalAlignment="Stretch">
             <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center"
                      d:Text="0" local:FocusAttachedProperty.SetFocus="True"
-                     TextAlignment="Center"
+                     TextAlignment="Center" 
                      Text="{Binding PartCount, UpdateSourceTrigger=PropertyChanged}"
                      Tag="{Binding PreviousPartCount}"
                      FontFamily="{StaticResource RobotoFlexRegular}"
                      Foreground="{DynamicResource ForegroundColorBrush3}"
-                     Style="{StaticResource DataInputTextBoxStyle}" />
+                     Style="{StaticResource DataInputTextBoxStyle}"
+                     PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown" />
         </Border>
 
 

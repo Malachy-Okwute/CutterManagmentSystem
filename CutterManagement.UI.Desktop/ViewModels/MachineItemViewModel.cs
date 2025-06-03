@@ -357,7 +357,7 @@ namespace CutterManagement.UI.Desktop
                 //--- Cancel cutter removal process ---//
 
                 // Error message
-                cutterRemovalDialog.Message = $"[{MachineNumber}]    does not currently have any cutter";
+                cutterRemovalDialog.Message = $"[{MachineNumber}]    does not currently have any cutter to be removed";
 
                 // Show dialog
                 await DialogService.InvokeFeedbackDialog(cutterRemovalDialog);

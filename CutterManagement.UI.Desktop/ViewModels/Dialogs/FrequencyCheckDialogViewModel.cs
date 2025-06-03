@@ -219,6 +219,16 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
+                // Prompt users to indicate why part failed
+                if (FailedCheck is true && string.IsNullOrEmpty(Comment))
+                {
+                    Message = $"Please indicate why part failed in the comment section";
+
+                    await DialogService.InvokeFeedbackDialog(this);
+
+                    return;
+                }
+
                 // If count is greater than previous count by more than 100
                 if ((int.Parse(PartCount) - machine.Cutter.Count) > 100)
                 {
@@ -240,7 +250,7 @@ namespace CutterManagement.UI.Desktop
                 machine.PartToothSize = PartToothSize ?? machine.PartToothSize;
                 machine.FrequencyCheckResult = PassedCheck ? _passedCheck : _failedCheck;
                 machine.Status = (machine.FrequencyCheckResult == _failedCheck) ? MachineStatus.Warning : MachineStatus.IsRunning;
-                machine.StatusMessage = (machine.FrequencyCheckResult == _failedCheck) ? "Previous check failed" : (Comment ?? "In good condition");
+                machine.StatusMessage = (machine.FrequencyCheckResult == _failedCheck) ? (Comment!) : (Comment ?? "In good condition");
                 machine.DateTimeLastModified = DateTime.Now;
 
                 // Set the user performing this operation

@@ -28,5 +28,6 @@
     <system:String x:Key="NodeIcon">&#xf78a;</system:String>
     <system:String x:Key="ScaleIcon">&#xf515;</system:String>
     <system:String x:Key="CutterRemovalIcon">&#xe5e1;</system:String>
+    <system:String x:Key="CutterRelocationIcon">&#xf124;</system:String>
 
 </ResourceDictionary>
