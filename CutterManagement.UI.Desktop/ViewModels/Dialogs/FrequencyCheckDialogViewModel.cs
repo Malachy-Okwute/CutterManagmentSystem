@@ -219,10 +219,10 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
-                // Prompt users to indicate why part failed
+                // Prompt users to specify why part failed
                 if (FailedCheck is true && string.IsNullOrEmpty(Comment))
                 {
-                    Message = $"Please indicate why part failed in the comment section";
+                    Message = $"Please specify why part failed in the comment section";
 
                     await DialogService.InvokeFeedbackDialog(this);
 

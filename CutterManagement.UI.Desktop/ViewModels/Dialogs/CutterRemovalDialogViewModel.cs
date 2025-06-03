@@ -295,7 +295,7 @@ namespace CutterManagement.UI.Desktop
                 // Set new information
                 machine.FrequencyCheckResult = FrequencyCheckResult.Setup;
                 machine.Status =  MachineStatus.Warning;
-                machine.StatusMessage = Comment ?? $"Cutter was removed. {DateTime.Now.ToString("D")}";
+                machine.StatusMessage = Comment ?? $"Cutter was removed. {DateTime.Now.ToString("g")}";
                 machine.DateTimeLastModified = DateTime.Now;
                 machine.Cutter.CutterChangeInfo = CutterRemovalReason;
                 machine.Cutter.LastUsedDate = DateTime.Now;

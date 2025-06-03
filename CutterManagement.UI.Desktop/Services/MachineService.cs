@@ -230,10 +230,10 @@ namespace CutterManagement.UI.Desktop
                 }
 
                 // Set new value
-                machine.Cutter.Count = count;
+                machine.Cutter.Count = count; 
 
                 // Set message
-                machine.StatusMessage = $"Piece count adjusted {DateTime.Now.ToString("D")}";
+                machine.StatusMessage = $"Piece count adjusted. {DateTime.Now.ToString("g")}";
 
                 // Set date
                 machine.DateTimeLastModified = DateTime.Now;
