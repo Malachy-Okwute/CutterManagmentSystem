@@ -27,7 +27,7 @@
                 <Button Content="Relocate cutter"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"
-                        Command="{Binding}" />
+                        Command="{Binding OpenCutterRelocationDialogCommand}" />
                 <Button Content="Cutter swap"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         Focusable="False"

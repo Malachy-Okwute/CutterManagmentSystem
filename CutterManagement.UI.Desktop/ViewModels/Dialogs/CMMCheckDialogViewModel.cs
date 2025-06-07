@@ -324,7 +324,7 @@ namespace CutterManagement.UI.Desktop
             {
                 data = e as MachineDataModel;
                 // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Machine data cannot be null"));
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
             };
 
             // Attempt to get machine

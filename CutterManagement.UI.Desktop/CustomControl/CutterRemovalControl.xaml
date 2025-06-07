@@ -100,7 +100,7 @@
                 HorizontalAlignment="Stretch">
             <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center"
                      d:Text="0" local:FocusAttachedProperty.SetFocus="True"
-                     TextAlignment="Center" 
+                     TextAlignment="Center"
                      Text="{Binding PartCount, UpdateSourceTrigger=PropertyChanged}"
                      Tag="{Binding PreviousPartCount}"
                      FontFamily="{StaticResource RobotoFlexRegular}"
@@ -108,7 +108,6 @@
                      Style="{StaticResource DataInputTextBoxStyle}"
                      PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown" />
         </Border>
-
 
         <!--  Keep cutter  -->
         <RadioButton Grid.Column="4" d:Width="100"

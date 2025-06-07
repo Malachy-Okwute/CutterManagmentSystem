@@ -176,7 +176,7 @@ namespace CutterManagement.UI.Desktop
             if (IsConfigured is false)
             {
                 // Set message
-                Message = "Machine need to be configured first by admin";
+                Message = "SelectedMachine need to be configured first by admin";
 
                 // Show feed back message
                 await DialogService.InvokeFeedbackDialog(this);
@@ -252,7 +252,7 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Set message
-                Message = string.IsNullOrEmpty(result.ErrorMessage) ? "Machine status successfully set " : result.ErrorMessage;
+                Message = string.IsNullOrEmpty(result.ErrorMessage) ? "SelectedMachine status successfully set " : result.ErrorMessage;
 
                 // Set flag
                 IsSuccess = result.IsValid;

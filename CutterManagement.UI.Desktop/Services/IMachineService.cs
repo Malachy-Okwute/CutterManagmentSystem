@@ -38,5 +38,13 @@ namespace CutterManagement.UI.Desktop
         /// <param name="verifyUserIntention">Confirms user intention when new piece count is over a certain limit</param>
         Task AdjustPieceCount(int Id, int count, Func<Task<bool?>> verifyUserIntention);
 
+        /// <summary>
+        /// Relocates cutter from one machine to another machine
+        /// </summary>
+        /// <param name="machineSendingCutter">The machine currently with cutter</param>
+        /// <param name="machineReceivingCutterId">The id of machine receiving cutter</param>
+        /// <param name="userId">Id to user carrying out this process</param>
+        Task RelocateCutter(MachineDataModel machineSendingCutter, int machineReceivingCutterId, int userId);
+
     }
 }

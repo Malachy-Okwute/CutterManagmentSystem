@@ -83,11 +83,6 @@ namespace CutterManagement.UI.Desktop
         public string? Comment { get; set; }
 
         /// <summary>
-        /// True if part size can be entered by user
-        /// </summary>
-        //public bool CanEnterPartSize { get; set; }
-
-        /// <summary>
         /// True if frequency check passed
         /// </summary>
         public bool PassedCheck { get; set; }
@@ -177,7 +172,7 @@ namespace CutterManagement.UI.Desktop
                 // Set new data
                 data = e as MachineDataModel;
                 // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Machine data cannot be null"));
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
             };
 
             // Get machine

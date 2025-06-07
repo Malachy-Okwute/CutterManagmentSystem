@@ -35,6 +35,7 @@ namespace CutterManagement.UI.Desktop
             services.AddTransient(provider => new MachineSetupDialogViewModel(provider.GetRequiredService<IMachineService>()));
             services.AddTransient(provider => new CutterRemovalDialogViewModel(provider.GetRequiredService<IMachineService>()));
             services.AddTransient(provider => new FrequencyCheckDialogViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddTransient(provider => new CutterRelocationDialogViewModel(provider.GetRequiredService<IMachineService>()));
             services.AddTransient(provider => new MachineConfigurationDialogViewModel(provider.GetRequiredService<IMachineService>()));
             services.AddTransient(provider => new MachineStatusSettingDialogViewModel(provider.GetRequiredService<IMachineService>()));
 
@@ -91,6 +92,7 @@ namespace CutterManagement.UI.Desktop
             DialogService.RegisterDialog<MachineSetupDialogViewModel, MachineSetupDialog>();
             DialogService.RegisterDialog<CutterRemovalDialogViewModel, CutterRemovalDialog>();
             DialogService.RegisterDialog<FrequencyCheckDialogViewModel, FrequencyCheckDialog>();
+            DialogService.RegisterDialog<CutterRelocationDialogViewModel, CutterRelocationDialog>();
             DialogService.RegisterDialog<MachineStatusSettingDialogViewModel, StatusSettingDialog>();
             DialogService.RegisterDialog<MachineConfigurationDialogViewModel, MachineConfigurationDialog>();
 

@@ -78,7 +78,7 @@ namespace CutterManagement.UI.Desktop
             {
                 if(item.MachineNumber.Equals(newData.MachineNumber))
                 {
-                    result.ErrorMessage = "Machine number already exist";
+                    result.ErrorMessage = "SelectedMachine number already exist";
                     result.IsValid = false;
                 }
             }
@@ -207,7 +207,7 @@ namespace CutterManagement.UI.Desktop
                 data = e as MachineDataModel;
 
                 // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Machine data cannot be null"));
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
             };
 
             // Get machine
@@ -244,6 +244,87 @@ namespace CutterManagement.UI.Desktop
 
             // Unhook event
             machineTable.DataChanged -= delegate { };
+        }
+
+        /// <summary>
+        /// Relocates cutter from one machine to another machine
+        /// </summary>
+        /// <param name="machineSendingCutter">The machine currently with cutter</param>
+        /// <param name="machineReceivingCutterId">The id of machine receiving cutter</param>
+        /// <param name="userId">Id to user carrying out this process</param>
+        public async Task RelocateCutter(MachineDataModel machineSendingCutter, int machineReceivingCutterId, int userId)
+        {
+            // Data that will be changing
+            MachineDataModel? data = null;
+
+            // Get machine db table
+            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+
+            // Get cutter db table
+            IDataAccessService<CutterDataModel> cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
+
+            // Get user db table
+            IDataAccessService<UserDataModel> userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
+
+            // Listen for when data actually changed
+            machineTable.DataChanged += (s, e) =>
+            {
+                data = e as MachineDataModel;
+
+                // Send out message
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+            };
+
+            // Get machine that will be receiving cutter
+            MachineDataModel? receivingMachine = await machineTable.GetEntityByIdAsync(machineReceivingCutterId);
+
+            // Get cutter
+            CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(machineSendingCutter.Cutter.Id);
+
+            // Get user carrying out this operation
+            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
+
+            // Make sure both machines are not null
+            if (machineSendingCutter is not null && receivingMachine is not null)
+            {
+                // Transfer data
+                receivingMachine.Status = machineSendingCutter.Status;
+                receivingMachine.PartNumber = machineSendingCutter.PartNumber;
+                receivingMachine.CutterDataModelId = machineSendingCutter.CutterDataModelId;
+                receivingMachine.Cutter = cutter ?? throw new ArgumentNullException("Cutter cannot be null");
+                receivingMachine.StatusMessage = machineSendingCutter.StatusMessage ?? $"Received cutter relocated from {machineSendingCutter.MachineNumber} machine. {DateTime.Now.ToString("g")}";
+                receivingMachine.DateTimeLastModified = DateTime.Now;
+
+                // Set the user performing this operation including the machine involved
+                receivingMachine.MachineUserInteractions.Add(new MachineUserInteractions
+                {
+                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
+                    MachineDataModel = receivingMachine
+                });
+
+                // Clear data
+                machineSendingCutter.PartNumber = null!;
+                machineSendingCutter.CutterDataModelId = null;
+                machineSendingCutter.Cutter.MachineDataModelId = null;
+                machineSendingCutter.StatusMessage = $"Sent cutter to {receivingMachine.MachineNumber} machine. {DateTime.Now.ToString("g")}";
+                machineSendingCutter.Status = MachineStatus.Warning;
+                machineSendingCutter.DateTimeLastModified = DateTime.Now;
+
+                // Set the user performing this operation including the machine involved
+                machineSendingCutter.MachineUserInteractions.Add(new MachineUserInteractions
+                {
+                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
+                    MachineDataModel = machineSendingCutter
+                });
+
+                // Update db with the new data
+                await userTable.UpdateEntityAsync(user);
+                await machineTable.UpdateEntityAsync(receivingMachine);
+                await machineTable.UpdateEntityAsync(machineSendingCutter);
+
+                // Unhook event
+                machineTable.DataChanged -= delegate { };
+            }
         }
     }
 }
