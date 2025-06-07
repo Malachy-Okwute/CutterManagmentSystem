@@ -1,5 +1,4 @@
 ﻿using CutterManagement.Core;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -176,6 +175,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand CancelPieceCountEditingCommand { get; set; }
 
+        /// <summary>
+        /// Command to open cutter relocation dialog
+        /// </summary>
+        public ICommand OpenCutterRelocationDialogCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -196,6 +200,7 @@ namespace CutterManagement.UI.Desktop
             OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
             OpenStatusSettingDialogCommand = new RelayCommand(async () => await OpenStatusSettingDialog());
             OpenCutterRemovalDialogCommand = new RelayCommand(async () => await OpenCutterRemovalDialog());
+            OpenCutterRelocationDialogCommand = new RelayCommand(async () => await OpenCutterRelocationDialog());
             CancelPieceCountEditingCommand = new RelayCommand(() =>
             {
                 Count = _currentCount.ToString();
@@ -217,18 +222,11 @@ namespace CutterManagement.UI.Desktop
             // Machine status view model
             var statusSettingDialog = _machineService.GetDialogViewModel<MachineStatusSettingDialogViewModel>();
 
-            statusSettingDialog.Id = Id;
-            statusSettingDialog.Owner = Owner;
-            statusSettingDialog.Label = MachineNumber;
-            statusSettingDialog.MachineNumber = MachineNumber;
-            statusSettingDialog.MachineSetNumber = MachineSetNumber;
-            statusSettingDialog.IsConfigured = IsConfigured;
-
             // Make sure machine is configured
             if (IsConfigured is false)
             {
                 // Define a message
-                statusSettingDialog.Message = "Machine need to be configured for production";
+                statusSettingDialog.Message = "SelectedMachine need to be configured for production";
 
                 // Show feed back message
                 await DialogService.InvokeFeedbackDialog(statusSettingDialog);
@@ -236,6 +234,13 @@ namespace CutterManagement.UI.Desktop
                 // Do nothing else
                 return;
             }
+
+            statusSettingDialog.Id = Id;
+            statusSettingDialog.Owner = Owner;
+            statusSettingDialog.Label = MachineNumber;
+            statusSettingDialog.MachineNumber = MachineNumber;
+            statusSettingDialog.MachineSetNumber = MachineSetNumber;
+            statusSettingDialog.IsConfigured = IsConfigured;
 
             // Show dialog
             DialogService.InvokeDialog(statusSettingDialog);
@@ -256,7 +261,6 @@ namespace CutterManagement.UI.Desktop
             machineConfiguration.Owner = Owner;
             machineConfiguration.Label = MachineNumber;
             
-
             // Show dialog
             DialogService.InvokeDialog(machineConfiguration);
         }
@@ -297,7 +301,7 @@ namespace CutterManagement.UI.Desktop
                 if (IsConfigured is false)
                 {
                     // Define a message
-                    setupDialog.Message = "Machine need to be configured for production";
+                    setupDialog.Message = "SelectedMachine need to be configured for production";
 
                     // Show feed back message
                     await DialogService.InvokeFeedbackDialog(setupDialog);
@@ -345,14 +349,8 @@ namespace CutterManagement.UI.Desktop
 
             var cutterRemovalDialog = _machineService.GetDialogViewModel<CutterRemovalDialogViewModel>();
 
-            cutterRemovalDialog.Id = Id;
-            cutterRemovalDialog.PartNumber = PartNumber ?? "Part number unknown";
-            cutterRemovalDialog.CutterNumber = CutterNumber ?? "Cutter number unknown";
-            cutterRemovalDialog.PreviousPartCount = string.Format("Count: {0}", Count);
-            cutterRemovalDialog.MachineNumber = MachineNumber;
-
             // If machine doesn't currently have cutter..
-            if(HasCutter is false)
+            if (HasCutter is false)
             {
                 //--- Cancel cutter removal process ---//
 
@@ -366,14 +364,25 @@ namespace CutterManagement.UI.Desktop
                 return;
             }
 
+            cutterRemovalDialog.Id = Id;
+            cutterRemovalDialog.PartNumber = PartNumber ?? "Part number unknown";
+            cutterRemovalDialog.CutterNumber = CutterNumber ?? "Cutter number unknown";
+            cutterRemovalDialog.PreviousPartCount = string.Format("Count: {0}", Count);
+            cutterRemovalDialog.MachineNumber = MachineNumber;
+            
+            // Show dialog
             DialogService.InvokeDialog(cutterRemovalDialog);
         }
 
+        /// <summary>
+        /// Initiates piece count editing process
+        /// </summary>
         private void EditPieceCount()
         {
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
+            // Make sure this machine has cutter
             if(HasCutter)
             {
                 // Store current value
@@ -424,6 +433,49 @@ namespace CutterManagement.UI.Desktop
 
                 CanEditPieceCount = !CanEditPieceCount;
             });
+        }
+
+        /// <summary>
+        /// Relocates cutter and associated data to a different machine
+        /// </summary>
+        private async Task OpenCutterRelocationDialog()
+        {
+            // Broadcast that this item was selected
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            // Get cutter relocation view model
+            var cutterRelocationDialog = _machineService.GetDialogViewModel<CutterRelocationDialogViewModel>();
+
+            // If machine doesn't currently have cutter..
+            if (HasCutter is false)
+            {
+                //--- Cancel cutter relocation process ---//
+
+                // Error message
+                cutterRelocationDialog.Message = $"[{MachineNumber}]  does not currently have any cutter to be relocated";
+
+                // Show dialog
+                await DialogService.InvokeFeedbackDialog(cutterRelocationDialog);
+
+                // Do nothing else
+                return;
+            }
+
+            cutterRelocationDialog.Id = Id;
+            cutterRelocationDialog.Count = Count;
+            cutterRelocationDialog.MachineNumber = MachineNumber;
+            cutterRelocationDialog.PartNumber = PartNumber ?? "Part number unknown";
+            cutterRelocationDialog.CutterNumber = CutterNumber ?? "Cutter number unknown";
+            cutterRelocationDialog.Owner = Owner;
+            
+            // Load valid machines 
+            await cutterRelocationDialog.ReloadMachines();
+
+            // Load users
+            await cutterRelocationDialog.ReloadUsers();
+
+            // Show dialog
+            DialogService.InvokeDialog(cutterRelocationDialog);
         }
 
         #endregion

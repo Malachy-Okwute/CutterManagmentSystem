@@ -218,7 +218,7 @@ namespace CutterManagement.UI.Desktop
                 // Set new data
                 data = e as MachineDataModel;
                 // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Machine data cannot be null"));
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
             };
 
             // Get machine
@@ -321,10 +321,14 @@ namespace CutterManagement.UI.Desktop
                     // ToDo: Record this event in a history table
 
                     // Remove every associated cmm data from table
-                    foreach(CMMDataModel cmm in cutter.CMMData.ToList()) { await cmmTable.DeleteEntityAsync(cmm); }
-                    
+                    //foreach(CMMDataModel cmm in cutter.CMMData.ToList()) { await cmmTable.DeleteEntityAsync(cmm); } // Uncomment once history table is implemented and record of cutter being sent back to be rebuilt is taken
+
                     // Remove cutter from table
-                    await cutterTable.DeleteEntityAsync(cutter);
+                    //await cutterTable.DeleteEntityAsync(cutter); // Uncomment once history table is implemented and record of cutter being sent back to be rebuilt is taken
+
+                    // ToDo: Remove this code and uncomment the above code
+                    await cutterTable.UpdateEntityAsync(cutter);
+
                 }
                 else
                 {
