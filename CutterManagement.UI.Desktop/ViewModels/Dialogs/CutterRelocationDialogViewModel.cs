@@ -141,10 +141,17 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Reloads users
+        /// </summary>
         public async Task ReloadUsers() => await GetUsers();
 
+        /// <summary>
+        /// Reloads valid machines 
+        /// </summary>
         public async Task ReloadMachines() => await GetCorrespondingMachines();
-
 
         /// <summary>
         /// Relocates cutter setup to a different machine
@@ -152,7 +159,7 @@ namespace CutterManagement.UI.Desktop
         private async Task RelocateCutter()
         {
             // Make sure we have machine
-            if(SelectedMachine.Owner is Department.None)
+            if (SelectedMachine.Owner is Department.None)
             {
                 // Define message
                 Message = "Select a machine to continue this process";
@@ -171,7 +178,7 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
 
             // Make sure machine is not null
-            if(machine is not null)
+            if (machine is not null)
             {
                 // Wire comment
                 machine.StatusMessage = Comment;
@@ -199,7 +206,7 @@ namespace CutterManagement.UI.Desktop
             // Get machine db table
             IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
 
-            foreach(MachineDataModel machine in await machineTable.GetAllEntitiesAsync())
+            foreach (MachineDataModel machine in await machineTable.GetAllEntitiesAsync())
             {
                 // Add machines that are in the same department and also doesn't currently have cutter
                 if (machine.Owner == Owner && machine.Cutter is null)
@@ -246,5 +253,7 @@ namespace CutterManagement.UI.Desktop
             // Refresh UI
             CollectionViewSource.GetDefaultView(UserCollection).Refresh();
         }
+
+        #endregion
     }
 }

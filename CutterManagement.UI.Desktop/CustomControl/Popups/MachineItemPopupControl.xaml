@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
              Width="180" local:FocusAttachedProperty.SetFocus="True"
-             Focusable="True" mc:Ignorable="d">
+             Focusable="True" mc:Ignorable="d" >
     <Border Padding="8">
         <Border Background="{DynamicResource BackgroundColorBrush1}"
                 BorderBrush="{x:Null}"
@@ -15,29 +15,37 @@
             <StackPanel Orientation="Vertical">
                 <Button Content="Remove cutter"
                         Style="{StaticResource MachineOptionsPopupStyle}"
+                        IsEnabled="{Binding IsConfigured}"
                         Focusable="False"
                         Command="{Binding OpenCutterRemovalDialogCommand}" />
                 <Button Content="Change part number"
                         Style="{StaticResource MachineOptionsPopupStyle}"
-                        Focusable="False" />
+                        IsEnabled="{Binding IsConfigured}"
+                        Focusable="False"
+                        Command="{Binding ChangePartNumberCommand}" />
                 <Button Content="Adjust piece count"
                         Style="{StaticResource MachineOptionsPopupStyle}"
+                        IsEnabled="{Binding IsConfigured}"
                         Focusable="False"
                         Command="{Binding PieceCountAdjustmentCommand}" />
                 <Button Content="Relocate cutter"
                         Style="{StaticResource MachineOptionsPopupStyle}"
+                        IsEnabled="{Binding IsConfigured}"
                         Focusable="False"
                         Command="{Binding OpenCutterRelocationDialogCommand}" />
                 <Button Content="Cutter swap"
                         Style="{StaticResource MachineOptionsPopupStyle}"
+                        IsEnabled="{Binding IsConfigured}"
                         Focusable="False"
                         Command="{Binding}" />
                 <Button Content="Set machine status"
                         Style="{StaticResource MachineOptionsPopupStyle}"
+                        IsEnabled="{Binding IsConfigured}"
                         Focusable="False"
                         Command="{Binding OpenStatusSettingDialogCommand}" />
                 <Button Content="History"
                         Style="{StaticResource MachineOptionsPopupStyle}"
+                        IsEnabled="{Binding IsConfigured}"
                         Focusable="False" />
                 <Button Content="Configure" Focusable="False"
                         Style="{StaticResource MachineOptionsPopupStyle}"

@@ -51,6 +51,7 @@
             </Grid>
 
             <local:TextEntryControl Grid.Row="1" PlaceHolderText="Enter cutter #"
+                                    IsEnabled="{Binding IsChangePartNumber}"
                                     ControlContent="{Binding CutterNumber, Mode=TwoWay}" />
 
             <TextBox Grid.Row="2" Margin="4,10"

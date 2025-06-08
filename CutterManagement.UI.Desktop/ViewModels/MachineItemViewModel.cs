@@ -180,6 +180,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand OpenCutterRelocationDialogCommand { get; set; }
 
+        /// <summary>
+        /// Command to change the current part number
+        /// </summary>
+        public ICommand ChangePartNumberCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -198,6 +203,7 @@ namespace CutterManagement.UI.Desktop
             UpdatePieceCountCommand = new RelayCommand(async () => await UpdatePieceCount());
             OpenMachineDialogCommand = new RelayCommand(async () => await OpenMachineDialog());
             OpenMachineConfigurationDialogCommand = new RelayCommand(OpenMachineConfigurationDialog);
+            ChangePartNumberCommand = new RelayCommand(async () => await OpenPartNumberChangeDialog());
             OpenStatusSettingDialogCommand = new RelayCommand(async () => await OpenStatusSettingDialog());
             OpenCutterRemovalDialogCommand = new RelayCommand(async () => await OpenCutterRemovalDialog());
             OpenCutterRelocationDialogCommand = new RelayCommand(async () => await OpenCutterRelocationDialog());
@@ -295,13 +301,16 @@ namespace CutterManagement.UI.Desktop
                 // Setup dialog view model
                 var setupDialog = _machineService.GetDialogViewModel<MachineSetupDialogViewModel>();
 
+                // Get cutters ready
+                await setupDialog.ReloadCutters();
+
                 setupDialog.GetMachineItem(this);
 
                 // Make sure machine is configured
                 if (IsConfigured is false)
                 {
                     // Define a message
-                    setupDialog.Message = "SelectedMachine need to be configured for production";
+                    setupDialog.Message = "This machine need to be configured for production";
 
                     // Show feed back message
                     await DialogService.InvokeFeedbackDialog(setupDialog);
@@ -338,6 +347,52 @@ namespace CutterManagement.UI.Desktop
                 DialogService.InvokeDialog(frequencyCheck);
             }
         }
+
+        /// <summary>
+        /// Open a dialog to change part number for this machine item
+        /// </summary>
+        private async Task OpenPartNumberChangeDialog()
+        {
+            // Broadcast that this item was selected
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            // Setup dialog view model
+            var setupDialog = _machineService.GetDialogViewModel<MachineSetupDialogViewModel>();
+
+            // Get cutters ready
+            await setupDialog.ReloadCutters();
+
+            setupDialog.GetMachineItem(this);
+
+            setupDialog.Title = "Change part number";
+
+            setupDialog.IsChangePartNumber = false;
+
+            // Make sure machine is currently set up with cutter and part number
+            if (HasCutter is false)
+            {
+                // Define a message
+                setupDialog.Message = "Machine does not have part number currently set up";
+
+                // Show feed back message
+                await DialogService.InvokeFeedbackDialog(setupDialog);
+
+                // Do nothing else
+                return;
+            }
+
+            // If we have a cutter number
+            if (string.IsNullOrEmpty(CutterNumber) is false)
+            {
+                // Format cutter number 
+                string cutterNumber = CutterNumber.Substring(0, CutterNumber.IndexOf("-"));
+                // Set cutter number
+                setupDialog.CutterNumber = cutterNumber;
+                // Show dialog
+                DialogService.InvokeDialog(setupDialog);
+            }
+        }
+
 
         /// <summary>
         /// Opens cutter removal dialog

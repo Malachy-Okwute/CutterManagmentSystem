@@ -18,11 +18,6 @@ namespace CutterManagement.UI.Desktop
         private MachineItemViewModel _machineItemViewModel;
 
         /// <summary>
-        /// Get available cutters
-        /// </summary>
-        private readonly Task _fetchAvailableCutters;
-
-        /// <summary>
         /// Provides services to machine
         /// </summary>
         private readonly IMachineService _machineService;
@@ -172,6 +167,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public bool IsDoneButtonActive { get; set; }
 
+        /// <summary>
+        /// True if we are just changing part number
+        /// </summary>
+        public bool IsChangePartNumber { get; set; }
+
         #endregion
 
         #region Public Events
@@ -207,9 +207,9 @@ namespace CutterManagement.UI.Desktop
         {
             Title = "Setup";
             _machineService = machineService;
+            IsChangePartNumber = true;
             _cutters = new();
             _parts = new();
-            _fetchAvailableCutters = GetCutters();
             _partNumberCollection = new Dictionary<int, string>
             {
                 // Default KVP
@@ -305,27 +305,16 @@ namespace CutterManagement.UI.Desktop
         /// Fetch cutters 
         /// </summary>
         /// <returns><see cref="Task"/></returns>
-        private async Task GetCutters()
-        {
-            // Get cutter table
-            //IDataAccessService<CutterDataModel> cutterTable = _dataFactory.GetDbTable<CutterDataModel>();
-
-            // Add every cutter to cutter collection
-            (await _cutterTable.GetAllEntitiesAsync()).ToList().ForEach(_cutters.Add);
-        }
+        private async Task GetCutters() => (await _cutterTable.GetAllEntitiesAsync()).ToList().ForEach(_cutters.Add);
 
         /// <summary>
         /// Fetch parts
         /// </summary>
         /// <returns><see cref="Task"/></returns>
-        private async Task GetParts()
+        private async Task GetParts() => (await _partTable.GetAllEntitiesAsync()).ToList().ForEach((part) => 
         {
-            // Get part table
-            //IDataAccessService<PartDataModel> partTable = _dataFactory.GetDbTable<PartDataModel>();
-
-            // Add every cutter to part collection
-            (await _partTable.GetAllEntitiesAsync()).ToList().ForEach(_parts.Add);
-        }
+            if (part.PartNumber.Equals(_machineItemViewModel.PartNumber) is false) _parts.Add(part);
+        });
 
         /// <summary>
         /// Get part number for a specific cutter
@@ -355,7 +344,8 @@ namespace CutterManagement.UI.Desktop
                     if (!(item.Owner.Equals(cutter.Owner))) continue;
 
                     // If cutter number is found
-                    if(cutter.CutterNumber.Equals(item.Cutter?.CutterNumber))
+                    if(cutter.CutterNumber.Equals(item.Cutter?.CutterNumber) 
+                    && cutter.MachineDataModel.MachineNumber.Equals(item?.MachineNumber) is false)
                     {
                         // Define a message
                         Message = $"Cutter already in use";
@@ -389,7 +379,6 @@ namespace CutterManagement.UI.Desktop
                 // Refresh part number collection in view
                 DispatcherService.Invoke(() => CollectionViewSource.GetDefaultView(PartNumberCollection).Refresh());
             });
-
         }
 
         /// <summary>
@@ -409,6 +398,12 @@ namespace CutterManagement.UI.Desktop
             // Refresh part number collection in view
             DispatcherService.Invoke(() => CollectionViewSource.GetDefaultView(PartNumberCollection).Refresh());
         }
+
+        /// <summary>
+        /// Reload cutters
+        /// </summary>
+        /// <returns></returns>
+        public async Task ReloadCutters() => await GetCutters();
         
         #endregion    
     }
