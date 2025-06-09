@@ -292,6 +292,7 @@ namespace CutterManagement.UI.Desktop
                 receivingMachine.PartNumber = machineSendingCutter.PartNumber;
                 receivingMachine.CutterDataModelId = machineSendingCutter.CutterDataModelId;
                 receivingMachine.Cutter = cutter ?? throw new ArgumentNullException("Cutter cannot be null");
+                receivingMachine.FrequencyCheckResult = machineSendingCutter.FrequencyCheckResult;
                 receivingMachine.StatusMessage = machineSendingCutter.StatusMessage ?? $"Received cutter relocated from {machineSendingCutter.MachineNumber} machine. {DateTime.Now.ToString("g")}";
                 receivingMachine.DateTimeLastModified = DateTime.Now;
 
@@ -307,6 +308,7 @@ namespace CutterManagement.UI.Desktop
                 machineSendingCutter.CutterDataModelId = null;
                 machineSendingCutter.Cutter.MachineDataModelId = null;
                 machineSendingCutter.StatusMessage = $"Sent cutter to {receivingMachine.MachineNumber} machine. {DateTime.Now.ToString("g")}";
+                machineSendingCutter.FrequencyCheckResult = FrequencyCheckResult.Setup;
                 machineSendingCutter.Status = MachineStatus.Warning;
                 machineSendingCutter.DateTimeLastModified = DateTime.Now;
 
