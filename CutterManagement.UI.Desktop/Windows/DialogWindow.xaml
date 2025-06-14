@@ -6,6 +6,7 @@
         AllowsTransparency="True" ResizeMode="NoResize"
         Style="{StaticResource DialogWindowStyle}"
         mc:Ignorable="d">
+
     <Grid Background="Transparent">
         <ContentControl x:Name="ContentControl" HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center" />

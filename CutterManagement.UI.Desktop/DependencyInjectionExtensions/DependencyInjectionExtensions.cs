@@ -32,6 +32,7 @@ namespace CutterManagement.UI.Desktop
 
             // Dialog view model
             services.AddTransient(provider => new CMMCheckDialogViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddTransient(provider => new CutterSwapDialogViewModel(provider.GetRequiredService<IMachineService>()));
             services.AddTransient(provider => new MachineSetupDialogViewModel(provider.GetRequiredService<IMachineService>()));
             services.AddTransient(provider => new CutterRemovalDialogViewModel(provider.GetRequiredService<IMachineService>()));
             services.AddTransient(provider => new FrequencyCheckDialogViewModel(provider.GetRequiredService<IMachineService>()));
@@ -87,6 +88,7 @@ namespace CutterManagement.UI.Desktop
             // Register dialog service
             DialogService.RegisterDialog<CMMCheckDialogViewModel, CMMCheckDialog>();
             DialogService.RegisterDialog<AdminLoginDialogViewModel, AdminLoginDialog>();
+            DialogService.RegisterDialog<CutterSwapDialogViewModel, CutterSwapDialog>();
             DialogService.RegisterDialog<CreatePartDialogViewModel, CreatePartDialog>();
             DialogService.RegisterDialog<CreateUserDialogViewModel, CreateUserDialog>();
             DialogService.RegisterDialog<MachineSetupDialogViewModel, MachineSetupDialog>();

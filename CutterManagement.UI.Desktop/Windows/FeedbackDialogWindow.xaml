@@ -27,15 +27,24 @@
 
                 <Grid>
 
-                    <Label Margin="10,0" Padding="18,8"
-                           HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                           Content="{Binding Message}"
-                           FontFamily="{StaticResource RobotoFlexRegular}"
-                           FontSize="{StaticResource Small}"
-                           Foreground="{DynamicResource WarningForegroundColorBrush}" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                    <TextBlock Margin="10,0" Padding="20,8"
-                               HorizontalAlignment="Right" VerticalAlignment="Center"
+                    <TextBlock Grid.Column="0" Margin="10,0"
+                               Padding="18,8" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Text="{Binding Message}"
+                               TextWrapping="Wrap"
+                               FontFamily="{StaticResource RobotoFlexRegular}"
+                               FontSize="{StaticResource Small}"
+                               LineHeight="20"
+                               Foreground="{DynamicResource WarningForegroundColorBrush}" />
+
+                    <TextBlock Grid.Column="1" Margin="10,0"
+                               Padding="18,8" HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
                                Text="{StaticResource WarningIcon}"
                                FontFamily="{StaticResource RegularIcon}"
                                FontSize="{StaticResource XXXLarge}"

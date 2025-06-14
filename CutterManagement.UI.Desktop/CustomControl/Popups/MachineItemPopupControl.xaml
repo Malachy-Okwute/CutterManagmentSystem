@@ -37,7 +37,7 @@
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         IsEnabled="{Binding IsConfigured}"
                         Focusable="False"
-                        Command="{Binding}" />
+                        Command="{Binding OpenCutterSwapDialogCommand}" />
                 <Button Content="Set machine status"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         IsEnabled="{Binding IsConfigured}"

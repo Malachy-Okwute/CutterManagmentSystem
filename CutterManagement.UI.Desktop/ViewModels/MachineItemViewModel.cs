@@ -180,6 +180,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand OpenCutterRelocationDialogCommand { get; set; }
 
+
+        public ICommand OpenCutterSwapDialogCommand { get; set; }
+
         /// <summary>
         /// Command to change the current part number
         /// </summary>
@@ -206,6 +209,7 @@ namespace CutterManagement.UI.Desktop
             ChangePartNumberCommand = new RelayCommand(async () => await OpenPartNumberChangeDialog());
             OpenStatusSettingDialogCommand = new RelayCommand(async () => await OpenStatusSettingDialog());
             OpenCutterRemovalDialogCommand = new RelayCommand(async () => await OpenCutterRemovalDialog());
+            OpenCutterSwapDialogCommand = new RelayCommand(async () => await OpenCutterSwapDialog());
             OpenCutterRelocationDialogCommand = new RelayCommand(async () => await OpenCutterRelocationDialog());
             CancelPieceCountEditingCommand = new RelayCommand(() =>
             {
@@ -403,6 +407,8 @@ namespace CutterManagement.UI.Desktop
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
             var cutterRemovalDialog = _machineService.GetDialogViewModel<CutterRemovalDialogViewModel>();
+            // Get users
+            await cutterRemovalDialog.GetUsers();
 
             // If machine doesn't currently have cutter..
             if (HasCutter is false)
@@ -410,7 +416,7 @@ namespace CutterManagement.UI.Desktop
                 //--- Cancel cutter removal process ---//
 
                 // Error message
-                cutterRemovalDialog.Message = $"[{MachineNumber}]    does not currently have any cutter to be removed";
+                cutterRemovalDialog.Message = $"[ {MachineNumber} ]    does not currently have any cutter to be removed";
 
                 // Show dialog
                 await DialogService.InvokeFeedbackDialog(cutterRemovalDialog);
@@ -456,7 +462,7 @@ namespace CutterManagement.UI.Desktop
             var pieceCountAdjustmentVM = new PieceCountAdjustmentDialogViewModel(); // Dummy view model. Used to be able to show prompt
 
             // Message
-            pieceCountAdjustmentVM.Message = $"Current count is {_currentCount}. Do you mean to enter {Count} ?";
+            pieceCountAdjustmentVM.Message = $"Current count is [ {_currentCount} ]. Do you mean to enter {Count} ?";
 
             // Prompt user
             var result = await DialogService.InvokeFeedbackDialog(pieceCountAdjustmentVM, FeedbackDialogKind.Prompt);
@@ -507,7 +513,7 @@ namespace CutterManagement.UI.Desktop
                 //--- Cancel cutter relocation process ---//
 
                 // Error message
-                cutterRelocationDialog.Message = $"[{MachineNumber}]  does not currently have any cutter to be relocated";
+                cutterRelocationDialog.Message = $"[ {MachineNumber} ]  does not currently have any cutter to be relocated";
 
                 // Show dialog
                 await DialogService.InvokeFeedbackDialog(cutterRelocationDialog);
@@ -516,6 +522,7 @@ namespace CutterManagement.UI.Desktop
                 return;
             }
 
+            // Set properties
             cutterRelocationDialog.Id = Id;
             cutterRelocationDialog.Count = Count;
             cutterRelocationDialog.MachineNumber = MachineNumber;
@@ -531,6 +538,31 @@ namespace CutterManagement.UI.Desktop
 
             // Show dialog
             DialogService.InvokeDialog(cutterRelocationDialog);
+        }
+
+        /// <summary>
+        /// Open dialog window for cutter swapping
+        /// </summary>
+        private async Task OpenCutterSwapDialog()
+        {
+            // Broadcast that this item was selected
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            // Get view model
+            var cutterSwapViewModel = _machineService.GetDialogViewModel<CutterSwapDialogViewModel>();
+            
+            // Reference
+            cutterSwapViewModel.GetMachine(this);
+
+            // Initialize cutter swapping process
+            //cutterSwapViewModel.InitializeCutterSwapping(firstMachine, secondMachine);
+            var initializationResult = await cutterSwapViewModel.InitializeCutterSwapping();
+
+            if(initializationResult)
+            {
+                // Show dialog
+                DialogService.InvokeDialog(cutterSwapViewModel);
+            }
         }
 
         #endregion

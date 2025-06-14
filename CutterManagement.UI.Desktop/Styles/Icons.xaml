@@ -27,7 +27,8 @@
     <system:String x:Key="CubeIcon">&#xf6d1;</system:String>
     <system:String x:Key="NodeIcon">&#xf78a;</system:String>
     <system:String x:Key="ScaleIcon">&#xf515;</system:String>
-    <system:String x:Key="CutterSwapIcon">&#xe5e1;</system:String>
+    <system:String x:Key="CutterSwapIcon">&#xe609;</system:String>
+    <system:String x:Key="TwoWayArrowIcon">&#xe5e1;</system:String>
     <system:String x:Key="CutterRemovalIcon">&#xe65d;</system:String>
     <system:String x:Key="CutterRelocationIcon">&#xf124;</system:String>
     <system:String x:Key="ArrowIcon">&#xf30b;</system:String>

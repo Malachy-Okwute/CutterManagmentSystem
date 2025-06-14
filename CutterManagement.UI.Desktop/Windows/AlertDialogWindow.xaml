@@ -8,8 +8,7 @@
         WindowStartupLocation="CenterOwner" mc:Ignorable="d">
 
     <Border Width="400" Height="100"
-            Margin="14" Padding="0"
-            Background="{DynamicResource BackgroundColorBrush1}">
+            Margin="14" Padding="0">
 
         <Border.Effect>
             <DropShadowEffect BlurRadius="12" ShadowDepth="0"
@@ -25,11 +24,11 @@
                        Content="{Binding Message}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        FontSize="{StaticResource Small}"
-                       Foreground="{Binding IsMessageSuccess, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />
+                       Foreground="{Binding IsSuccess, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />
 
                 <TextBlock Padding="18,8" HorizontalAlignment="Right"
                            VerticalAlignment="Center"
-                           Text="{Binding IsSuccess, Converter={local:BooleanToIconConverter}}"
+                           Text="{Binding IsSuccess, Converter={local:BooleanToIconConverter}, UpdateSourceTrigger=PropertyChanged}"
                            FontFamily="{StaticResource RegularIcon}"
                            FontSize="{StaticResource Large}"
                            Foreground="{Binding IsSuccess, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToColorConverter}, ConverterParameter=Foreground}" />

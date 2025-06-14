@@ -33,11 +33,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private UserDataModel _user;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private Task _taskLoader;
-
         #endregion
 
         #region Public Properties
@@ -152,8 +147,6 @@ namespace CutterManagement.UI.Desktop
             CutterRemovalReasonCollection = new Dictionary<CutterRemovalReason, string>();
             UsersCollection = new Dictionary<UserDataModel, string>();
 
-            _taskLoader = GetUsers();
-
             foreach (CutterRemovalReason reason in Enum.GetValues<CutterRemovalReason>())
             {
                 // Add every reason
@@ -171,7 +164,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Load users
         /// </summary>
-        private async Task GetUsers()
+        public async Task GetUsers()
         {
             // Get user db table
             IDataAccessService<UserDataModel> users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
@@ -200,6 +193,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task RemoveCutter()
         {
+            //ToDo: Refactor code below
+
             // New data from database
             MachineDataModel? data = null;
 
@@ -306,7 +301,6 @@ namespace CutterManagement.UI.Desktop
                 machine.PartNumber = null!;
                 machine.PartToothSize = "0";
 
-
                 // Set the user performing this operation
                 machine.MachineUserInteractions.Add(new MachineUserInteractions
                 {
@@ -342,10 +336,18 @@ namespace CutterManagement.UI.Desktop
                 // Stop listening for changes
                 machineTable.DataChanged -= delegate { };
 
-                // Close dialog
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
-            }
+                // Set flag
+                IsSuccess = true;
 
+                // Define message
+                Message = "Cutter removed successfully";
+
+                // 
+                await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
+                {
+                    DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
+                });
+            }
         }
 
         #endregion

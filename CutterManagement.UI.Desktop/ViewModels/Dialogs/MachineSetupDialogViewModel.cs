@@ -344,8 +344,7 @@ namespace CutterManagement.UI.Desktop
                     if (!(item.Owner.Equals(cutter.Owner))) continue;
 
                     // If cutter number is found
-                    if(cutter.CutterNumber.Equals(item.Cutter?.CutterNumber) 
-                    && cutter.MachineDataModel.MachineNumber.Equals(item?.MachineNumber) is false)
+                    if(cutter.CutterNumber.Equals(item.Cutter?.CutterNumber) && MachineNumber.Equals(item?.MachineNumber) is false)
                     {
                         // Define a message
                         Message = $"Cutter already in use";

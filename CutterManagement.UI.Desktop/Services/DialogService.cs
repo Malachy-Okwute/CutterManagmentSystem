@@ -73,7 +73,7 @@ namespace CutterManagement.UI.Desktop
 
             dataContext.Message = viewModel.Message;
 
-            dataContext.IsMessageSuccess = viewModel.IsSuccess;
+            dataContext.IsSuccess = viewModel.IsSuccess;
 
             _alertDialogWindow.DataContext = dataContext;
 

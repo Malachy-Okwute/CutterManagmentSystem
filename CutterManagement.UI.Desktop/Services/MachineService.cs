@@ -321,6 +321,7 @@ namespace CutterManagement.UI.Desktop
 
                 // Update db with the new data
                 await userTable.UpdateEntityAsync(user);
+                await cutterTable.UpdateEntityAsync(cutter);
                 await machineTable.UpdateEntityAsync(receivingMachine);
                 await machineTable.UpdateEntityAsync(machineSendingCutter);
 
