@@ -304,80 +304,30 @@ namespace CutterManagement.UI.Desktop
                 return;
             }
 
+            // Capture and record CMM Data
+            await  _machineService.CaptureAndRecordCMMData(_user.Id, Id, Comment, new CMMDataModel
+            {
+                BeforeCorrections = BeforeCorrections,
+                AfterCorrections = AfterCorrections,
+                PressureAngleCoast = PressureAngleCoast,
+                PressureAngleDrive = PressureAngleDrive,
+                SpiralAngleCoast = SpiralAngleCoast,
+                SpiralAngleDrive = SpiralAngleDrive,
+                Fr = Fr,
+                Size = Size,
+                Count = Count,
+            });
+
             // Mark message as a success
             IsSuccess = true;
+            // Define message
+            Message = "CMM data recorded successfully";
 
-            // The data that changed
-            MachineDataModel? data = null;
-
-            // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
-
-            // Get user table
-            IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
-
-            // Get cutter table
-            IDataAccessService<CutterDataModel> cutterTable = _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
-
-            // Listen for when machine table data actually changed
-            machineTable.DataChanged += (s, e) =>
+            // Close dialog
+            await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
             {
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-            };
-
-            // Attempt to get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
-
-            // Attempt to get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
-
-            // Make sure we have machine
-            if(machine is not null)
-            {
-                // Attempt to get current cutter
-                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.Cutter.Id) ?? throw new ArgumentNullException("Cutter not found");
-
-                // Set cmm data
-                machine.Cutter.CMMData.Add(new CMMDataModel
-                {
-                    // Set cmm data
-                    BeforeCorrections = BeforeCorrections,
-                    AfterCorrections = AfterCorrections,
-                    PressureAngleCoast = PressureAngleCoast,
-                    PressureAngleDrive = PressureAngleDrive,
-                    SpiralAngleCoast = SpiralAngleCoast,
-                    SpiralAngleDrive = SpiralAngleDrive,
-                    Fr = Fr,
-                    Size = Size,
-                    Count = Count,
-                });
-
-                // Set other machine information
-                machine.Cutter.Count = int.Parse(Count);
-                machine.StatusMessage = Comment ?? "Passed CMM check";
-                machine.Status = MachineStatus.IsRunning;
-                machine.FrequencyCheckResult = FrequencyCheckResult.Passed;
-                machine.DateTimeLastModified = DateTime.Now;
-
-                // Set the user performing this operation
-                machine.MachineUserInteractions.Add(new MachineUserInteractions
-                {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
-                    MachineDataModel = machine
-                });
-
-                // Update information in database
-                await machineTable.UpdateEntityAsync(machine);
-                await cutterTable.UpdateEntityAsync(cutter);
-
-                // Unhook event
-                machineTable.DataChanged -= delegate { };
-
-                // Close dialog
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
-            }
+                DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
+            });
         }
 
         /// <summary>

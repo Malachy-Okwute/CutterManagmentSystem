@@ -44,7 +44,10 @@ namespace CutterManagement.UI.Desktop
         /// <param name="machineSendingCutter">The machine currently with cutter</param>
         /// <param name="machineReceivingCutterId">The id of machine receiving cutter</param>
         /// <param name="userId">Id to user carrying out this process</param>
-        Task RelocateCutter(MachineDataModel machineSendingCutter, int machineReceivingCutterId, int userId);
+        //Task RelocateCutter(MachineDataModel machineSendingCutter, int machineReceivingCutterId, int userId);
+        Task RelocateCutter(int machineSendingCutterId, int machineReceivingCutterId, int userId, string comment);
 
+
+        Task CaptureAndRecordCMMData(int userId, int machineId, string comment, CMMDataModel incomingCMMData);
     }
 }

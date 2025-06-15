@@ -95,8 +95,7 @@
                                    PopupAnimation="Slide">
                                 <Grid x:Name="DropDown"
                                       MinWidth="{TemplateBinding ActualWidth}"
-                                      MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                      SnapsToDevicePixels="True">
+                                      MaxHeight="150" SnapsToDevicePixels="True">
                                     <Border x:Name="DropDownBorder" BorderThickness="1"
                                             BorderBrush="{TemplateBinding BorderBrush}"
                                             Background="{DynamicResource BackgroundColorBrush3}">

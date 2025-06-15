@@ -154,7 +154,7 @@ namespace CutterManagement.UI.Desktop
         public async Task ReloadMachines() => await GetCorrespondingMachines();
 
         /// <summary>
-        /// Relocates cutter setup to a different machine
+        /// Relocates cutter and the associated part to a different machine
         /// </summary>
         private async Task RelocateCutter()
         {
@@ -171,25 +171,19 @@ namespace CutterManagement.UI.Desktop
                 return;
             }
 
-            // Get machine db table
-            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            // Relocate cutter
+            await _machineService.RelocateCutter(Id, SelectedMachine.Id, _user.Id, Comment);
 
-            // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
-
-            // Make sure machine is not null
-            if (machine is not null)
-            {
-                // Wire comment
-                machine.StatusMessage = Comment;
-
-                await _machineService.RelocateCutter(machine, SelectedMachine.Id, _user.Id);
-
-                IsSuccess = true;
-            }
+            // Set flag
+            IsSuccess = true;
+            // Define message
+            Message = "Cutter relocated successfully";
 
             // Close dialog
-            DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
+            await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
+            {
+                DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
+            });
         }
 
         /// <summary>
