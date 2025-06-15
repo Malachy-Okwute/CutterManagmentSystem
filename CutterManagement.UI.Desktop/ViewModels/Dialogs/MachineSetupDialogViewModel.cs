@@ -296,8 +296,21 @@ namespace CutterManagement.UI.Desktop
                 // Unhook event
                 machineTable.DataChanged -= delegate { };
 
-                // Close dialog
-                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
+                if(Title.Equals("Setup", StringComparison.OrdinalIgnoreCase) is false)
+                {
+                    Message = "Part number changed successfully";
+
+                    // Close dialog
+                    await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
+                    {
+                        DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
+                    });
+                } 
+                else
+                {
+                    // Close dialog
+                    DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
+                }
             }
         }
 

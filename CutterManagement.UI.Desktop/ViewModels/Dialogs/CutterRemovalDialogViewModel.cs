@@ -63,6 +63,11 @@ namespace CutterManagement.UI.Desktop
         public string PartCount { get; set; }
 
         /// <summary>
+        /// Current part count
+        /// </summary>
+        public string CurrentPartCount { get; set; }
+
+        /// <summary>
         /// Previous part count
         /// </summary>
         public string PreviousPartCount { get; set; }
@@ -195,159 +200,93 @@ namespace CutterManagement.UI.Desktop
         {
             //ToDo: Refactor code below
 
-            // New data from database
-            MachineDataModel? data = null;
-
-            // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
-            // Get user table
-            IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
-            // Get cutter table
-            IDataAccessService<CutterDataModel> cutterTable = _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
-            // Get cmm data table
-            IDataAccessService<CMMDataModel> cmmTable = _machineService.DataBaseAccess.GetDbTable<CMMDataModel>();
-
-            // Listen for changes 
-            machineTable.DataChanged += (s, e) =>
+            // Make sure piece count is entered
+            if (PartCount.IsNullOrEmpty())
             {
-                // Set new data
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-            };
+                Message = $"Enter part piece-count";
 
-            // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
+                await DialogService.InvokeFeedbackDialog(this);
 
-            // Get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
-
-            // If machine is not null...
-            if (machine is not null)
-            {
-                // Current cutter
-                CutterDataModel? cutter = await cutterTable.GetEntityByIdIncludingRelatedPropertiesAsync(machine.Cutter.Id, c => c.CMMData);
-
-                // CMM data associated with cutter
-                CMMDataModel? cmmData = await cmmTable.GetEntityByIdAsync(cutter.Id);
-
-                // Make sure piece count is entered
-                if (PartCount.IsNullOrEmpty())
-                {
-                    Message = $"Enter part piece-count";
-
-                    await DialogService.InvokeFeedbackDialog(this);
-
-                    return;
-                }
-
-                // Make sure new piece count is greater than current count
-                if (int.Parse(PartCount) < machine.Cutter.Count)
-                {
-                    Message = $"Piece-count must be greater or equal to previous-count";
-
-                    await DialogService.InvokeFeedbackDialog(this);
-
-                    return;
-                }
-
-                // Make sure either "Keep" or "Rebuild" is selected
-                if (KeepCutter is false && RebuildCutter is false)
-                {
-                    Message = $"Choose \" Keep \" or \" Rebuild \" for this check";
-
-                    await DialogService.InvokeFeedbackDialog(this);
-
-                    return;
-                }
-
-                // If count is greater than previous count by more than 100
-                if ((int.Parse(PartCount) - machine.Cutter.Count) > 100)
-                {
-                    Message = $"Previous count is {machine.Cutter.Count}. Do you mean to enter {PartCount} ?";
-
-                    // Verify piece count is reasonable
-                    bool? response = await DialogService.InvokeFeedbackDialog(this, FeedbackDialogKind.Prompt);
-
-                    // If user did not mean to enter the current part number
-                    if (response is false)
-                    {
-                        // Cancel this process
-                        return;
-                    }
-                }
-
-                // Make sure we have a reason for removing cutter
-                if(CutterRemovalReason == CutterRemovalReason.None)
-                {
-                    Message = $"Select reason for removing cutter";
-
-                    await DialogService.InvokeFeedbackDialog(this);
-
-                    return;
-                }
-
-                // Set new information
-                machine.FrequencyCheckResult = FrequencyCheckResult.Setup;
-                machine.Status =  MachineStatus.Warning;
-                machine.StatusMessage = Comment ?? $"Cutter was removed. {DateTime.Now.ToString("g")}";
-                machine.DateTimeLastModified = DateTime.Now;
-                machine.Cutter.CutterChangeInfo = CutterRemovalReason;
-                machine.Cutter.LastUsedDate = DateTime.Now;
-                machine.Cutter.Condition = CutterCondition.Used; 
-                machine.Cutter.Count = int.Parse(PartCount);
-                machine.Cutter.MachineDataModelId = null;
-                machine.CutterDataModelId = null;
-                machine.PartNumber = null!;
-                machine.PartToothSize = "0";
-
-                // Set the user performing this operation
-                machine.MachineUserInteractions.Add(new MachineUserInteractions
-                {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
-                    MachineDataModel = machine
-                });
-
-                // If cutter needs rebuilding...
-                if (KeepCutter is false && RebuildCutter is true)
-                {
-                    // NOTE: Never delete entry from database, move data that is not needed to history table or archive
-                    // ToDo: Record this event in a history table
-
-                    // Remove every associated cmm data from table
-                    //foreach(CMMDataModel cmm in cutter.CMMData.ToList()) { await cmmTable.DeleteEntityAsync(cmm); } // Uncomment once history table is implemented and record of cutter being sent back to be rebuilt is taken
-
-                    // Remove cutter from table
-                    //await cutterTable.DeleteEntityAsync(cutter); // Uncomment once history table is implemented and record of cutter being sent back to be rebuilt is taken
-
-                    // ToDo: Remove this code and uncomment the above code
-                    await cutterTable.UpdateEntityAsync(cutter);
-
-                }
-                else
-                {
-                    // Update cutter information 
-                    await cutterTable.UpdateEntityAsync(cutter);
-                }
-
-                // Update database
-                await machineTable.UpdateEntityAsync(machine);
-                
-                // Stop listening for changes
-                machineTable.DataChanged -= delegate { };
-
-                // Set flag
-                IsSuccess = true;
-
-                // Define message
-                Message = "Cutter removed successfully";
-
-                // 
-                await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
-                {
-                    DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
-                });
+                return;
             }
+
+            // Make sure new piece count is greater than current count
+            if (int.Parse(PartCount) < int.Parse(CurrentPartCount))
+            {
+                Message = $"Piece-count must be greater or equal to previous-count";
+
+                await DialogService.InvokeFeedbackDialog(this);
+
+                return;
+            }
+
+            // Make sure either "Keep" or "Rebuild" is selected
+            if (KeepCutter is false && RebuildCutter is false)
+            {
+                Message = $"Choose \" Keep \" or \" Rebuild \" for this check";
+
+                await DialogService.InvokeFeedbackDialog(this);
+
+                return;
+            }
+
+            // If count is greater than previous count by more than 100
+            if ((int.Parse(PartCount) - int.Parse(CurrentPartCount)) > 100)
+            {
+                Message = $"Previous count is {int.Parse(CurrentPartCount)}. Do you mean to enter {PartCount} ?";
+
+                // Verify piece count is reasonable
+                bool? response = await DialogService.InvokeFeedbackDialog(this, FeedbackDialogKind.Prompt);
+
+                // If user did not mean to enter the current part number
+                if (response is false)
+                {
+                    // Cancel this process
+                    return;
+                }
+            }
+
+            // Make sure we have a reason for removing cutter
+            if (CutterRemovalReason == CutterRemovalReason.None)
+            {
+                Message = $"Select reason for removing cutter";
+
+                await DialogService.InvokeFeedbackDialog(this);
+
+                return;
+            }
+
+            // Remove cutter
+            await _machineService.RemoveCutter(Id, _user.Id, KeepCutter, new MachineDataModel
+            {
+                FrequencyCheckResult = FrequencyCheckResult.Setup,
+                Status = MachineStatus.Warning,
+                StatusMessage = Comment ?? $"Cutter was removed. {DateTime.Now.ToString("g")}",
+                DateTimeLastModified = DateTime.Now,
+                Cutter = new CutterDataModel
+                {
+                    CutterChangeInfo = CutterRemovalReason,
+                    LastUsedDate = DateTime.Now,
+                    Condition = CutterCondition.Used,
+                    Count = int.Parse(PartCount),
+                    MachineDataModelId = null,
+                },
+                CutterDataModelId = null,
+                PartNumber = null!,
+                PartToothSize = "0",
+            });
+
+            // Set flag
+            IsSuccess = true;
+
+            // Define message
+            Message = "Cutter removed successfully";
+
+            // Close dialog
+            await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
+            {
+                DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
+            });
         }
 
         #endregion

@@ -1,6 +1,5 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -206,6 +205,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task SwapCutters()
         {
+            // ToDo: Refactor code below
+
+
             // Get user table
             var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
@@ -226,7 +228,6 @@ namespace CutterManagement.UI.Desktop
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
             };
 
-            // ToDo: Refactor code below
             if (_firstMachine is not null && _secondMachine is not null)
             {
                 dummyMachine.Status = _firstMachine.Status;

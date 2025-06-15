@@ -47,7 +47,19 @@ namespace CutterManagement.UI.Desktop
         //Task RelocateCutter(MachineDataModel machineSendingCutter, int machineReceivingCutterId, int userId);
         Task RelocateCutter(int machineSendingCutterId, int machineReceivingCutterId, int userId, string comment);
 
-
+        /// <summary>
+        /// Capture and records CMM data of a specific cutter
+        /// </summary>
         Task CaptureAndRecordCMMData(int userId, int machineId, string comment, CMMDataModel incomingCMMData);
+
+        /// <summary>
+        /// Remove cutter from a machine
+        /// </summary>
+        /// <param name="machineId">The machine to remove cutter from</param>
+        /// <param name="userId">The user removing the cutter</param>
+        /// <param name="keepCutter">True if cutter is to stay in department</param>
+        /// <param name="newData">Data changing on the machine that is having it's cutter removed</param>
+        Task RemoveCutter(int machineId, int userId, bool keepCutter, MachineDataModel newData);
+
     }
 }

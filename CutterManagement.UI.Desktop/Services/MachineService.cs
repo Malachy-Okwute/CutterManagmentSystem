@@ -333,6 +333,9 @@ namespace CutterManagement.UI.Desktop
             }
         }
 
+        /// <summary>
+        /// Capture and records CMM data of a specific cutter
+        /// </summary>
         public async Task CaptureAndRecordCMMData(int userId, int machineId, string comment, CMMDataModel incomingCMMData)
         {
             // The data that changed
@@ -401,6 +404,102 @@ namespace CutterManagement.UI.Desktop
                 await cutterTable.UpdateEntityAsync(cutter);
 
                 // Unhook event
+                machineTable.DataChanged -= delegate { };
+            }
+        }
+
+        /// <summary>
+        /// Remove cutter from a machine
+        /// </summary>
+        /// <param name="machineId">The machine to remove cutter from</param>
+        /// <param name="userId">The user removing the cutter</param>
+        /// <param name="keepCutter">True if cutter is to stay in department</param>
+        /// <param name="newData">Data changing on the machine that is having it's cutter removed</param>
+        public async Task RemoveCutter(int machineId, int userId, bool keepCutter, MachineDataModel newData)
+        {
+            // New data from database
+            MachineDataModel? data = null;
+
+            // Get machine table
+            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            // Get user table
+            IDataAccessService<UserDataModel> userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
+            // Get cutter table
+            IDataAccessService<CutterDataModel> cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
+            // Get cmm data table
+            IDataAccessService<CMMDataModel> cmmTable = _dataAccessServiceFactory.GetDbTable<CMMDataModel>();
+
+            // Listen for changes 
+            machineTable.DataChanged += (s, e) =>
+            {
+                // Set new data
+                data = e as MachineDataModel;
+                // Send out message
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+            };
+
+            // Get machine
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId);
+
+            // Get user
+            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
+
+            // If machine is not null...
+            if (machine is not null)
+            {
+                // Current cutter
+                CutterDataModel? cutter = await cutterTable.GetEntityByIdIncludingRelatedPropertiesAsync(machine.Cutter.Id, c => c.CMMData);
+
+                // CMM data associated with cutter
+                CMMDataModel? cmmData = await cmmTable.GetEntityByIdAsync(cutter.Id);
+
+                // Set new information
+                machine.FrequencyCheckResult = FrequencyCheckResult.Setup;
+                machine.Status = MachineStatus.Warning;
+                machine.StatusMessage = newData.StatusMessage ?? $"Cutter was removed. {DateTime.Now.ToString("g")}";
+                machine.DateTimeLastModified = DateTime.Now;
+                machine.Cutter.CutterChangeInfo = newData.Cutter.CutterChangeInfo;
+                machine.Cutter.LastUsedDate = DateTime.Now;
+                machine.Cutter.Condition = CutterCondition.Used;
+                machine.Cutter.Count = newData.Cutter.Count;
+                machine.Cutter.MachineDataModelId = null;
+                machine.CutterDataModelId = null;
+                machine.PartNumber = null!;
+                machine.PartToothSize = "0";
+
+                // Set the user performing this operation
+                machine.MachineUserInteractions.Add(new MachineUserInteractions
+                {
+                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
+                    MachineDataModel = machine
+                });
+
+                // If cutter needs rebuilding...
+                if (keepCutter is false)
+                {
+                    // NOTE: Never delete entry from database, move data that is not needed to history table or archive
+                    // ToDo: Record this event in a history table
+
+                    // Remove every associated cmm data from table
+                    //foreach(CMMDataModel cmm in cutter.CMMData.ToList()) { await cmmTable.DeleteEntityAsync(cmm); } // Uncomment once history table is implemented and record of cutter being sent back to be rebuilt is taken
+
+                    // Remove cutter from table
+                    //await cutterTable.DeleteEntityAsync(cutter); // Uncomment once history table is implemented and record of cutter being sent back to be rebuilt is taken
+
+                    // ToDo: Remove this code and uncomment the above code
+                    await cutterTable.UpdateEntityAsync(cutter);
+
+                }
+                else
+                {
+                    // Update cutter information 
+                    await cutterTable.UpdateEntityAsync(cutter);
+                }
+
+                // Update database
+                await machineTable.UpdateEntityAsync(machine);
+
+                // Stop listening for changes
                 machineTable.DataChanged -= delegate { };
             }
         }

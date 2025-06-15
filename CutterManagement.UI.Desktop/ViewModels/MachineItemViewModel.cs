@@ -397,7 +397,6 @@ namespace CutterManagement.UI.Desktop
             }
         }
 
-
         /// <summary>
         /// Opens cutter removal dialog
         /// </summary>
@@ -429,6 +428,7 @@ namespace CutterManagement.UI.Desktop
             cutterRemovalDialog.PartNumber = PartNumber ?? "Part number unknown";
             cutterRemovalDialog.CutterNumber = CutterNumber ?? "Cutter number unknown";
             cutterRemovalDialog.PreviousPartCount = string.Format("Count: {0}", Count);
+            cutterRemovalDialog.CurrentPartCount = Count.ToString();
             cutterRemovalDialog.MachineNumber = MachineNumber;
             
             // Show dialog
