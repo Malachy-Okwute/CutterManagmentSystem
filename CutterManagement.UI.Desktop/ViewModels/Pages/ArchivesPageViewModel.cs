@@ -53,6 +53,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand OpenCreatePartDialogCommand { get; set; }
 
+        /// <summary>
+        /// Command to delete a part
+        /// </summary>
+        public ICommand DeletePartCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -70,6 +75,7 @@ namespace CutterManagement.UI.Desktop
 
             // Create commands
             OpenCreatePartDialogCommand = new RelayCommand(OpenCreatePartDialog);
+            DeletePartCommand = new RelayCommand(async () => await DeletePart());
 
             // Register this object to receive messages from messenger
             Messenger.MessageSender.RegisterMessenger(this);
@@ -93,6 +99,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task LoadParts()
         {
+            // Clear part collection
+            _partCollection.Clear();
+
             // Get parts table
             IDataAccessService<PartDataModel> partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
 
@@ -117,12 +126,18 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
+        /// Reload part collection
+        /// </summary>
+        /// <returns></returns>
+        private async Task ReloadParts() => await LoadParts();
+
+        /// <summary>
         /// Add a part to part-collection
         /// </summary>
         /// <param name="part">The part to add to the collection</param>
         private void AddPartToPartCollection(PartDataModel part)
         {
-            _partCollection.Add(new PartItemViewModel
+            var partItem = new PartItemViewModel
             {
                 Id = part.Id,
                 Kind = part.Kind,
@@ -130,7 +145,11 @@ namespace CutterManagement.UI.Desktop
                 PartNumber = part.PartNumber,
                 ToothCount = part.PartToothCount,
                 SummaryNumber = part.SummaryNumber
-            });
+            };
+
+            partItem.PartItemSelectedEvent += (s, e) => _partCollection.ToList().ForEach(x => x.IsEditMode = false);
+
+            _partCollection.Add(partItem);
         }
 
         /// <summary>
@@ -152,6 +171,27 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
+        /// Deletes a part
+        /// </summary>
+        private async Task DeletePart()
+        {
+            PartItemViewModel? part = _partCollection.ToList().FirstOrDefault(x => x.IsEditMode == true);
+
+            var partTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+
+            var partToDelete = await partTable.GetEntityByIdAsync(part?.Id);
+
+            if(partToDelete is not null)
+            {
+                await partTable.DeleteEntityAsync(partToDelete);
+
+                await ReloadParts();
+            }
+        }
+
+        #endregion
+
+        /// <summary>
         /// Receive message from <see cref="Messenger"/>
         /// </summary>
         /// <param name="message">The message received</param>
@@ -162,7 +202,5 @@ namespace CutterManagement.UI.Desktop
                 UpdatePartCollection((PartDataModel)message);
             }
         }
-
-        #endregion
     }
 }

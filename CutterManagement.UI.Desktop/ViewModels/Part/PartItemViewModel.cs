@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -33,8 +34,46 @@ namespace CutterManagement.UI.Desktop
         public string ToothCount { get; set; }
 
         /// <summary>
+        /// True if part item is in edit mode
+        /// </summary>
+        public bool IsEditMode { get; set; }
+
+        /// <summary>
         /// The kind of part (Gear / Pinion)
         /// </summary>
         public PartKind Kind { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public event EventHandler PartItemSelectedEvent;
+
+        /// <summary>
+        /// Command to enter into part edit mode
+        /// </summary>
+        public ICommand EnterEditModeCommand { get; set; }
+
+        /// <summary>
+        /// Command to reset edit mode
+        /// </summary>
+        public ICommand ResetEditModeCommand { get; set; }
+
+        public PartItemViewModel()
+        {
+            EnterEditModeCommand = new RelayCommand(EnterEditMode);
+            ResetEditModeCommand = new RelayCommand(OnPartItemSelected);
+        }
+
+        private void EnterEditMode()
+        {
+            OnPartItemSelected();
+
+            IsEditMode = true;
+        }
+
+        private void OnPartItemSelected()
+        {
+            PartItemSelectedEvent?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

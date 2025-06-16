@@ -5,8 +5,6 @@ namespace CutterManagement.UI.Desktop
 {
     public class FocusAttachedProperty
     {
-
-
         public static bool GetSetFocus(DependencyObject obj)
         {
             return (bool)obj.GetValue(SetFocusProperty);

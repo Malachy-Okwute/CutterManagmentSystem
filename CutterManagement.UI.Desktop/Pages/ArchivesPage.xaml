@@ -14,7 +14,7 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Margin="6,10"
-                   Content="Part Records"
+                   Content="Parts Catalog"
                    Foreground="{DynamicResource ForegroundColorBrush3}"
                    FontFamily="{StaticResource RobotoFlexRegular}"
                    FontSize="{StaticResource XXLarge}"
@@ -35,7 +35,7 @@
                         Command="{Binding OpenCreatePartDialogCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
                 <Button Grid.Column="1" Width="100"
-                        Margin="10,0"
+                        Margin="10,0" Visibility="Collapsed"
                         Content="{StaticResource CubeIcon}"
                         Tag="Manage"
                         Command="{Binding ManageUserCommand}"

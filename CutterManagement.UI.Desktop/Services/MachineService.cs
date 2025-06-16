@@ -1,6 +1,4 @@
 ﻿using CutterManagement.Core;
-using CutterManagement.DataAccess;
-using System.Diagnostics;
 
 namespace CutterManagement.UI.Desktop
 {

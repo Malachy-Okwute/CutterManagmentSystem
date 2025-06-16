@@ -43,19 +43,20 @@
                 </StackPanel>
             </Grid>
 
-            <local:TextEntryControl Grid.Row="1" PlaceHolderText="Part number"
+            <local:TextEntryControl Grid.Row="1" local:NumbersOnlyAttachedProperty.AcceptNumberOnly="True"
+                                    PlaceHolderText="Part number"
                                     ControlContent="{Binding PartNumber, Mode=TwoWay}" />
 
-            <local:TextEntryControl Grid.Row="2" PlaceHolderText="Model number"
-                                    Focusable="False"
+            <local:TextEntryControl Grid.Row="2" local:NumbersOnlyAttachedProperty.AcceptNumberOnly="True"
+                                    PlaceHolderText="Model number" Focusable="False"
                                     ControlContent="{Binding ModelNumber, Mode=TwoWay}" />
 
-            <local:TextEntryControl Grid.Row="3" PlaceHolderText="Summary number"
-                                    Focusable="False"
+            <local:TextEntryControl Grid.Row="3" local:NumbersOnlyAttachedProperty.AcceptNumberOnly="True"
+                                    PlaceHolderText="Summary number" Focusable="False"
                                     ControlContent="{Binding SummaryNumber, Mode=TwoWay}" />
 
-            <local:TextEntryControl Grid.Row="4" PlaceHolderText="Number of teeth"
-                                    Focusable="False"
+            <local:TextEntryControl Grid.Row="4" local:NumbersOnlyAttachedProperty.AcceptNumberOnly="True"
+                                    PlaceHolderText="Number of teeth" Focusable="False"
                                     ControlContent="{Binding ToothCount, Mode=TwoWay}" />
 
             <ComboBox Grid.Row="5" Height="35"
