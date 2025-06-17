@@ -42,6 +42,10 @@ namespace CutterManagement.UI.Desktop
             set => _users = value;
         }
 
+        public Dictionary<UserShift, string> UserShiftCollection { get; set; }
+
+        public UserShift SelectedUserShift { get; set; }
+
         #endregion
 
         #region Public Commands
@@ -121,8 +125,20 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task LoadUsers()
         {
+            // Clear users
+            _users.Clear();
+
             // Get users table
             IDataAccessService<UserDataModel> userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+
+            UserShiftCollection = new Dictionary<UserShift, string>();
+
+            foreach (UserShift shift in Enum.GetValues<UserShift>())
+            {
+                if (shift is UserShift.None) continue;
+
+                UserShiftCollection.Add(shift, EnumHelpers.GetDescription(shift));
+            }
 
             foreach (UserDataModel user in await userTable.GetAllEntitiesAsync())
             {
@@ -147,14 +163,43 @@ namespace CutterManagement.UI.Desktop
         /// <param name="user">The user to add</param>
         private void AddUserToUserCollection(UserDataModel user)
         {
-            _users.Add(new UserItemViewModel
+            var userItem = new UserItemViewModel
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                UserShift = user.Shift,
+                UserShift = EnumHelpers.GetDescription(user.Shift),
                 UserFullName = string.Join("  ", user.FirstName, user.LastName),
                 UserInitials = string.Join("", user.FirstName[0], user.LastName[0]),
-            });
+            };
+
+            userItem.UserItemSelected += (sender, e) => 
+            {
+                _users.ToList().ForEach(x => x.IsEditMode = false);
+
+                if(sender is UserItemViewModel user && user is not null)
+                {
+                    SelectedUserShift = GetCurrentShift(user.UserShift);
+                }
+            };
+
+            _users.Add(userItem);
+        }
+
+        /// <summary>
+        /// Get user's current shift
+        /// </summary>
+        /// <param name="shift">user shift to get</param>
+        public UserShift GetCurrentShift(string shift)
+        {
+            UserShift shiftKey = UserShift.None;
+
+            foreach (var item in UserShiftCollection) 
+            {
+                if (item.Value == shift)
+                    shiftKey = item.Key;
+            }
+
+            return shiftKey;
         }
 
         /// <summary>

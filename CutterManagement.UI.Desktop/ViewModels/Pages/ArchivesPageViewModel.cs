@@ -147,7 +147,7 @@ namespace CutterManagement.UI.Desktop
                 SummaryNumber = part.SummaryNumber
             };
 
-            partItem.PartItemSelectedEvent += (s, e) => _partCollection.ToList().ForEach(x => x.IsEditMode = false);
+            partItem.PartItemSelected += (s, e) => _partCollection.ToList().ForEach(x => x.IsEditMode = false);
 
             _partCollection.Add(partItem);
         }
@@ -191,6 +191,8 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Messeges
+
         /// <summary>
         /// Receive message from <see cref="Messenger"/>
         /// </summary>
@@ -202,5 +204,7 @@ namespace CutterManagement.UI.Desktop
                 UpdatePartCollection((PartDataModel)message);
             }
         }
+
+        #endregion    
     }
 }

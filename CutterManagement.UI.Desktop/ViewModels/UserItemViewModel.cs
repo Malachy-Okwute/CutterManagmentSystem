@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using System.Globalization;
+using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -8,6 +9,8 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class UserItemViewModel : ViewModelBase
     {
+        #region Properties
+
         /// <summary>
         /// User id
         /// </summary>
@@ -34,8 +37,53 @@ namespace CutterManagement.UI.Desktop
         public string UserInitials { get; set; }
 
         /// <summary>
+        /// True if part item is in edit mode
+        /// </summary>
+        public bool IsEditMode { get; set; }
+
+        /// <summary>
         /// The current shift of user
         /// </summary>
-        public UserShift UserShift { get; set; }
+        public string UserShift { get; set; }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Event that is raised when this item is selected
+        /// </summary>
+        public event EventHandler UserItemSelected;
+
+        #endregion
+
+        /// <summary>
+        /// Command to enter into part edit mode
+        /// </summary>
+        public ICommand EnterEditModeCommand { get; set; }
+
+        /// <summary>
+        /// Command to reset edit mode
+        /// </summary>
+        public ICommand ResetEditModeCommand { get; set; }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public UserItemViewModel()
+        {
+            // Create commands
+            EnterEditModeCommand = new RelayCommand(EnterEditMode);
+            ResetEditModeCommand = new RelayCommand(OnPartItemSelected);
+        }
+
+        private void EnterEditMode()
+        {
+            OnPartItemSelected();
+
+            IsEditMode = true;
+        }
+
+        private void OnPartItemSelected() => UserItemSelected?.Invoke(this, EventArgs.Empty);
     }
 }

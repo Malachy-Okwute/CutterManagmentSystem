@@ -44,9 +44,9 @@ namespace CutterManagement.UI.Desktop
         public PartKind Kind { get; set; }
 
         /// <summary>
-        /// 
+        /// Event that is raised when this item is selected
         /// </summary>
-        public event EventHandler PartItemSelectedEvent;
+        public event EventHandler PartItemSelected;
 
         /// <summary>
         /// Command to enter into part edit mode
@@ -58,12 +58,19 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand ResetEditModeCommand { get; set; }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public PartItemViewModel()
         {
+            // Create commands
             EnterEditModeCommand = new RelayCommand(EnterEditMode);
             ResetEditModeCommand = new RelayCommand(OnPartItemSelected);
         }
 
+        /// <summary>
+        /// Puts this item into edit mode
+        /// </summary>
         private void EnterEditMode()
         {
             OnPartItemSelected();
@@ -71,9 +78,9 @@ namespace CutterManagement.UI.Desktop
             IsEditMode = true;
         }
 
-        private void OnPartItemSelected()
-        {
-            PartItemSelectedEvent?.Invoke(this, EventArgs.Empty);
-        }
+        /// <summary>
+        /// Raise PartItemSelected event
+        /// </summary>
+        private void OnPartItemSelected() => PartItemSelected?.Invoke(this, EventArgs.Empty);
     }
 }

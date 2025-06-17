@@ -29,9 +29,9 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Width="120"
+                <Button Grid.Column="0" Width="160"
                         Margin="10,0" Content="Plus"
-                        Tag="Add part #"
+                        Tag="Add part number"
                         Command="{Binding OpenCreatePartDialogCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
                 <Button Grid.Column="1" Width="100"
