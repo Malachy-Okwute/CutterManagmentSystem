@@ -119,13 +119,25 @@
                     Style="{StaticResource MachineItemEditButtonStyle}" />
         </Border>
 
-        <ComboBox Grid.Column="2" Height="35"
-                  HorizontalAlignment="Left" Panel.ZIndex="10"
-                  Background="Transparent"
-                  ItemsSource="{Binding DataContext.UserShiftCollection, RelativeSource={RelativeSource AncestorType=Page}}"
-                  SelectedValue="{Binding DataContext.SelectedUserShift, RelativeSource={RelativeSource AncestorType=Page}}"
-                  Visibility="{Binding IsEditMode, Converter={local:BooleanToVisibilityConverter}}"
-                  SelectedValuePath="Key" DisplayMemberPath="Value" />
+        <StackPanel Grid.Column="2" Panel.ZIndex="10"
+                    Visibility="{Binding IsEditMode, Converter={local:BooleanToVisibilityConverter}}"
+                    Background="Transparent" Orientation="Horizontal">
+
+            <ComboBox Height="35" HorizontalAlignment="Left"
+                      Background="Transparent"
+                      ItemsSource="{Binding DataContext.UserShiftCollection, RelativeSource={RelativeSource AncestorType=Page}}"
+                      SelectedValue="{Binding DataContext.SelectedUserShift, RelativeSource={RelativeSource AncestorType=Page}, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValuePath="Key" DisplayMemberPath="Value" />
+
+            <Button Width="120" Height="35"
+                    Margin="20,0" HorizontalAlignment="Left"
+                    Content="Save changes"
+                    BorderBrush="{DynamicResource BorderColorBrush6}"
+                    FontFamily="{StaticResource RobotoFlexRegular}"
+                    Command="{Binding DataContext.SaveUserShiftCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                    Style="{StaticResource MachineOptionsPopupStyle}" />
+
+        </StackPanel>
 
     </Grid>
 

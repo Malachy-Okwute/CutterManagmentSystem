@@ -1,5 +1,8 @@
 ﻿using CutterManagement.Core;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -17,6 +20,11 @@ namespace CutterManagement.UI.Desktop
         /// A collection of users
         /// </summary>
         private ObservableCollection<UserItemViewModel> _users;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public UserShift _selectedUserShift;
 
         /// <summary>
         /// Task loader
@@ -42,9 +50,19 @@ namespace CutterManagement.UI.Desktop
             set => _users = value;
         }
 
+        /// <summary>
+        /// Collection of users
+        /// </summary>
         public Dictionary<UserShift, string> UserShiftCollection { get; set; }
 
-        public UserShift SelectedUserShift { get; set; }
+        /// <summary>
+        /// Currently selected user
+        /// </summary>
+        public UserShift SelectedUserShift 
+        { 
+            get => _selectedUserShift;
+            set => _selectedUserShift = value;
+        }
 
         #endregion
 
@@ -65,6 +83,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand ManageUserCommand { get; set; }
 
+        /// <summary>
+        /// Command to save new user shift
+        /// </summary>
+        public ICommand SaveUserShiftCommand { get; set; }
+
         #endregion
 
         #region Construction 
@@ -81,8 +104,9 @@ namespace CutterManagement.UI.Desktop
             _loader = LoadUsers();
             
             // Create commands
-            AddUserCommand = new RelayCommand(OpenCreateUserDialog);
             ManageUserCommand = new RelayCommand(ManageUser);
+            AddUserCommand = new RelayCommand(OpenCreateUserDialog);
+            SaveUserShiftCommand = new RelayCommand(async () => await SaveUserShift());
             OpenAdminLoginDialogCommand = new RelayCommand(OpenAdminLoginDialog);
 
             // Register this object to receive messages from messenger
@@ -165,6 +189,7 @@ namespace CutterManagement.UI.Desktop
         {
             var userItem = new UserItemViewModel
             {
+                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserShift = EnumHelpers.GetDescription(user.Shift),
@@ -178,7 +203,9 @@ namespace CutterManagement.UI.Desktop
 
                 if(sender is UserItemViewModel user && user is not null)
                 {
-                    SelectedUserShift = GetCurrentShift(user.UserShift);
+                    _selectedUserShift = GetCurrentShift(user.UserShift);
+
+                    OnPropertyChanged(nameof(SelectedUserShift));
                 }
             };
 
@@ -245,6 +272,25 @@ namespace CutterManagement.UI.Desktop
             });
 
             OnPropertyChanged(nameof(IsUserCollectionEmpty));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private async Task SaveUserShift()
+        {
+            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+
+            UserDataModel? user = await usersTable.GetEntityByIdAsync(_users.First(x => x.IsEditMode == true).Id);
+
+            if (user is not null && user.Shift.Equals(SelectedUserShift) is false)
+            {
+                user.Shift = _selectedUserShift;
+
+                await usersTable.UpdateEntityAsync(user);
+
+                UpdateUsersCollection(user);
+            }
         }
 
         #endregion
