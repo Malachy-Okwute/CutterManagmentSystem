@@ -13,7 +13,7 @@
         /// <summary>
         /// Feedback message
         /// </summary>
-        public string Message { get; set; }
+        //public string Message { get; set; }
 
         /// <summary>
         /// True if operation is successful, Otherwise false

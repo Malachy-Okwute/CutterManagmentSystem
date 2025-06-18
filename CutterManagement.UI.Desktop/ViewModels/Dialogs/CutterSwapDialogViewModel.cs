@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System.IO;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -148,10 +149,10 @@ namespace CutterManagement.UI.Desktop
             if (_secondMachine is null)
             {
                 // Error message
-                Message = $"[ {_firstMachine?.MachineNumber} ] does not currently have a machine to swap cutter with.";
+                string errorMessage = $"[ {_firstMachine?.MachineNumber} ] does not currently have a machine to swap cutter with.";
 
                 // Show dialog
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, errorMessage);
 
                 // Do nothing else
                 return false;
@@ -161,10 +162,10 @@ namespace CutterManagement.UI.Desktop
             if (_secondMachine.Cutter is null)
             {
                 // Error message
-                Message = $"A cutter is required for [ {_secondMachine.MachineNumber} ] to exchange its cutter with [ {_firstMachine.MachineNumber} ].";
+                string errorMessage = $"A cutter is required for [ {_secondMachine.MachineNumber} ] to exchange its cutter with [ {_firstMachine.MachineNumber} ].";
 
                 // Show dialog
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, errorMessage);
 
                 // Do nothing else
                 return false;
@@ -285,11 +286,8 @@ namespace CutterManagement.UI.Desktop
             // Set flag
             IsSuccess = true;
 
-            // Define message
-            Message = "Cutters swapped successfully";
-
             // Notify user of the outcome
-            await DialogService.InvokeAlertDialog(this).ContinueWith(x =>
+            await DialogService.InvokeAlertDialog(this, "Cutters swapped successfully").ContinueWith(x =>
             {
                 DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));                
             });

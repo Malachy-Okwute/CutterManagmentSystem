@@ -99,10 +99,10 @@
 
             <Button Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"
                     Margin="4"
-                    Content="{StaticResource WindowCloseIcon}"
+                    Content="{StaticResource WindowMinimizeIcon}"
                     FontFamily="{StaticResource RegularIcon}"
-                    Foreground="{DynamicResource ForegroundColorBrush5}"
-                    Command="{Binding DataContext.DeletePartCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                    Command="{Binding DataContext.DeactivateUserCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                    CommandParameter="{Binding Id}"
                     Style="{StaticResource MachineOptionsPopupStyle}" />
         </Border>
 
@@ -134,7 +134,7 @@
                     Content="Save changes"
                     BorderBrush="{DynamicResource BorderColorBrush6}"
                     FontFamily="{StaticResource RobotoFlexRegular}"
-                    Command="{Binding DataContext.SaveUserShiftCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                    Command="{Binding DataContext.ChangeUserShiftCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                     Style="{StaticResource MachineOptionsPopupStyle}" />
 
         </StackPanel>

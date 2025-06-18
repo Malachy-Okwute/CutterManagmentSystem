@@ -79,14 +79,14 @@ namespace CutterManagement.UI.Desktop
         public ICommand AddUserCommand { get; set; }
 
         /// <summary>
-        /// Command to manage user
-        /// </summary>
-        public ICommand ManageUserCommand { get; set; }
-
-        /// <summary>
         /// Command to save new user shift
         /// </summary>
-        public ICommand SaveUserShiftCommand { get; set; }
+        public ICommand ChangeUserShiftCommand { get; set; }
+
+        /// <summary>
+        /// Command to deactivate user
+        /// </summary>
+        public ICommand DeactivateUserCommand { get; set; }
 
         #endregion
 
@@ -104,10 +104,10 @@ namespace CutterManagement.UI.Desktop
             _loader = LoadUsers();
             
             // Create commands
-            ManageUserCommand = new RelayCommand(ManageUser);
+            DeactivateUserCommand = new RelayCommand(async (userId) => await DeactivateUser(Convert.ToInt32(userId)));
             AddUserCommand = new RelayCommand(OpenCreateUserDialog);
-            SaveUserShiftCommand = new RelayCommand(async () => await SaveUserShift());
             OpenAdminLoginDialogCommand = new RelayCommand(OpenAdminLoginDialog);
+            ChangeUserShiftCommand = new RelayCommand(async () => await ChangeUserShift());
 
             // Register this object to receive messages from messenger
             Messenger.MessageSender.RegisterMessenger(this);
@@ -135,9 +135,38 @@ namespace CutterManagement.UI.Desktop
             DialogService.InvokeDialog(createUser);
         }
 
-        private void ManageUser()
+        /// <summary>
+        /// Changes user shift
+        /// </summary>
+        private async Task ChangeUserShift()
         {
+            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
+            UserDataModel? user = await usersTable.GetEntityByIdAsync(_users.First(x => x.IsEditMode == true).Id);
+
+            if (user is not null && user.Shift.Equals(SelectedUserShift) is false)
+            {
+                user.Shift = _selectedUserShift;
+
+                await usersTable.UpdateEntityAsync(user);
+
+                UpdateUsersCollection(user);
+            }
+        }
+        private async Task DeactivateUser(int userId)
+        {
+            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+
+            UserDataModel? user = await usersTable.GetEntityByIdAsync(userId);
+
+            if (user is null ) return;
+            {
+                user.IsActive = false;
+
+                await usersTable.UpdateEntityAsync(user);
+
+                await ReloadUserCollection();
+            }
         }
 
         #endregion
@@ -167,7 +196,7 @@ namespace CutterManagement.UI.Desktop
             foreach (UserDataModel user in await userTable.GetAllEntitiesAsync())
             {
                 // If user is admin user 
-                if (user.FirstName is "resource" && user.LastName is "admin")
+                if ((user.FirstName is "resource" && user.LastName is "admin") || user.IsActive is false)
                     // Do not add it
                     continue;
 
@@ -179,6 +208,11 @@ namespace CutterManagement.UI.Desktop
 
             //CollectionViewSource.GetDefaultView(Users).Refresh();
         }
+
+        /// <summary>
+        /// Reloads user's list
+        /// </summary>
+        public async Task ReloadUserCollection() => await LoadUsers();
 
         /// <summary>
         /// Adds a user into <see cref="ObservableCollection{T}"/>
@@ -274,25 +308,6 @@ namespace CutterManagement.UI.Desktop
             OnPropertyChanged(nameof(IsUserCollectionEmpty));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private async Task SaveUserShift()
-        {
-            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
-
-            UserDataModel? user = await usersTable.GetEntityByIdAsync(_users.First(x => x.IsEditMode == true).Id);
-
-            if (user is not null && user.Shift.Equals(SelectedUserShift) is false)
-            {
-                user.Shift = _selectedUserShift;
-
-                await usersTable.UpdateEntityAsync(user);
-
-                UpdateUsersCollection(user);
-            }
-        }
-
         #endregion
 
         #region Messages
@@ -311,4 +326,6 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
     }
+
+    public class DummyDialog : DialogViewModelBase { }
 }

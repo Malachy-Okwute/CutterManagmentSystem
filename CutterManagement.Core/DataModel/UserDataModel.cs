@@ -1,5 +1,5 @@
 ﻿namespace CutterManagement.Core
-{ 
+{
     /// <summary>
     /// A basic user data model
     /// </summary>
@@ -18,7 +18,12 @@
         /// <summary>
         /// User shift
         /// </summary>
-         public UserShift Shift { get; set; }
+        public UserShift Shift { get; set; }
+
+        /// <summary>
+        /// True if user is an active user
+        /// </summary>
+        public bool IsActive { get; set; } = true;
 
         /// <summary>
         /// Machine and users navigation property collection

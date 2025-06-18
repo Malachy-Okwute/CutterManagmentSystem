@@ -140,11 +140,11 @@ namespace CutterManagement.UI.Desktop
                 if ((await partsTable.GetAllEntitiesAsync()).Any(part => part.PartNumber.Equals(newPart.PartNumber)))
                 {
                     // Set message
-                    Message = "Part number already exists";
+                    string errorMessage = "Part number already exists";
                     // Set success flag
                     IsSuccess = false;
                     // Briefly show message
-                    await DialogService.InvokeFeedbackDialog(this);
+                    await DialogService.InvokeFeedbackDialog(this, errorMessage);
                     // Do nothing else
                     return;
                 }
@@ -158,16 +158,16 @@ namespace CutterManagement.UI.Desktop
             }
 
             // Set message
-            Message = result.IsValid ? "Part created successfully" : result.ErrorMessage;
+            string message = result.IsValid ? "Part created successfully" : result.ErrorMessage;
 
             if(result.IsValid)
             {
                 // Briefly show message
-                await DialogService.InvokeAlertDialog(this);
+                await DialogService.InvokeAlertDialog(this, message);
             }
             else
             {
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, message);
             }
 
             // If successful...

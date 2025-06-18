@@ -187,9 +187,7 @@ namespace CutterManagement.UI.Desktop
                 // Make sure piece count is entered
                 if(PartCount.IsNullOrEmpty())
                 {
-                    Message = $"Enter part piece-count";
-
-                    await DialogService.InvokeFeedbackDialog(this);
+                    await DialogService.InvokeFeedbackDialog(this, "Enter part piece-count");
 
                     return;
                 }
@@ -197,9 +195,7 @@ namespace CutterManagement.UI.Desktop
                 // Make sure new piece count is greater than current count
                 if(int.Parse(PartCount) <= machine.Cutter.Count)
                 {
-                    Message = $"Piece-count must be greater than previous-count";
-
-                    await DialogService.InvokeFeedbackDialog(this);
+                    await DialogService.InvokeFeedbackDialog(this, "Piece-count must be greater than previous-count");
 
                     return;
                 }
@@ -207,9 +203,7 @@ namespace CutterManagement.UI.Desktop
                 // Make sure either "Pass" or "Fail" is selected
                 if (PassedCheck is false && FailedCheck is false)
                 {
-                    Message = $"Choose \" Passed \" or \" Failed \" for this check";
-
-                    await DialogService.InvokeFeedbackDialog(this);
+                    await DialogService.InvokeFeedbackDialog(this, "Choose \" Passed \" or \" Failed \" for this check");
 
                     return;
                 }
@@ -217,9 +211,7 @@ namespace CutterManagement.UI.Desktop
                 // Prompt users to specify why part failed
                 if (FailedCheck is true && string.IsNullOrEmpty(Comment))
                 {
-                    Message = $"Please specify why part failed in the comment section";
-
-                    await DialogService.InvokeFeedbackDialog(this);
+                    await DialogService.InvokeFeedbackDialog(this, "Please specify why part failed in the comment section");
 
                     return;
                 }
@@ -227,10 +219,10 @@ namespace CutterManagement.UI.Desktop
                 // If count is greater than previous count by more than 100
                 if ((int.Parse(PartCount) - machine.Cutter.Count) > 100)
                 {
-                    Message = $"Current count is {machine.Cutter.Count}. Do you mean to enter {PartCount} ?";
+                    string errorMessage = $"Current count is {machine.Cutter.Count}. Do you mean to enter {PartCount} ?";
 
                     // Verify piece count is reasonable
-                    bool? response = await DialogService.InvokeFeedbackDialog(this, FeedbackDialogKind.Prompt);
+                    bool? response = await DialogService.InvokeFeedbackDialog(this, errorMessage, FeedbackDialogKind.Prompt);
 
                     // If user did not mean to enter the current part number
                     if(response is false)

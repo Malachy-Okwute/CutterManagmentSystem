@@ -244,11 +244,8 @@ namespace CutterManagement.UI.Desktop
             // If no part was selected
             if (SelectedPart == 0)
             {
-                // Define a message
-                Message = "Select a part number";
-
                 // Show feed back message
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, "Select a part number");
 
                 // Do nothing else
                 return;
@@ -298,10 +295,8 @@ namespace CutterManagement.UI.Desktop
 
                 if(Title.Equals("Setup", StringComparison.OrdinalIgnoreCase) is false)
                 {
-                    Message = "Part number changed successfully";
-
                     // Close dialog
-                    await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
+                    await DialogService.InvokeAlertDialog(this, "Part number changed successfully").ContinueWith(_ =>
                     {
                         DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
                     });
@@ -359,14 +354,11 @@ namespace CutterManagement.UI.Desktop
                     // If cutter number is found
                     if(cutter.CutterNumber.Equals(item.Cutter?.CutterNumber) && MachineNumber.Equals(item?.MachineNumber) is false)
                     {
-                        // Define a message
-                        Message = $"Cutter already in use";
-
                         // Run on UI thread
                         DispatcherService.Invoke(async () =>
                         {
                             // Show feed back message
-                            await DialogService.InvokeFeedbackDialog(this);
+                            await DialogService.InvokeFeedbackDialog(this, "Cutter already in use");
 
                         });
 

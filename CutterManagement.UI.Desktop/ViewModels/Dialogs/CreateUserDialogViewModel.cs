@@ -137,23 +137,37 @@ namespace CutterManagement.UI.Desktop
                 IDataAccessService<UserDataModel> userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
                 // Listen for when user is created
                 userTable.DataChanged += UserTable_DataChanged;
+
+                // See if user name exist
+                bool isConflicting = userTable.GetAllEntitiesAsync().Result.Any(x => (x.FirstName == newUser.FirstName && x.LastName == LastName));
+
+                // If user exist
+                if(isConflicting)
+                {
+                    // Alert user
+                    await DialogService.InvokeFeedbackDialog(this, $"Username already taken.");
+                    // Do nothing else
+                    return;
+                }
+
                 // commit the newly created user to the users table
                 await userTable.CreateNewEntityAsync(newUser);
+
                 // Unhook event
                 userTable.DataChanged -= UserTable_DataChanged;
             }
 
             // Set message
-            Message = result.IsValid ? "User created successfully" : result.ErrorMessage;
+            string message = result.IsValid ? "User created successfully" : result.ErrorMessage;
 
             if(result.IsValid)
             {
                 // Briefly show message
-                await DialogService.InvokeAlertDialog(this);
+                await DialogService.InvokeAlertDialog(this, message);
             }
             else
             {
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, message);
             }
 
             // If successful...

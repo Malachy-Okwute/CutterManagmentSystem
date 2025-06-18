@@ -235,11 +235,8 @@ namespace CutterManagement.UI.Desktop
             // Make sure machine is configured
             if (IsConfigured is false)
             {
-                // Define a message
-                statusSettingDialog.Message = "SelectedMachine need to be configured for production";
-
                 // Show feed back message
-                await DialogService.InvokeFeedbackDialog(statusSettingDialog);
+                await DialogService.InvokeFeedbackDialog(statusSettingDialog, "SelectedMachine need to be configured for production");
 
                 // Do nothing else
                 return;
@@ -313,11 +310,8 @@ namespace CutterManagement.UI.Desktop
                 // Make sure machine is configured
                 if (IsConfigured is false)
                 {
-                    // Define a message
-                    setupDialog.Message = "This machine need to be configured for production";
-
                     // Show feed back message
-                    await DialogService.InvokeFeedbackDialog(setupDialog);
+                    await DialogService.InvokeFeedbackDialog(setupDialog, "This machine need to be configured for production");
 
                     // Do nothing else
                     return;
@@ -375,11 +369,8 @@ namespace CutterManagement.UI.Desktop
             // Make sure machine is currently set up with cutter and part number
             if (HasCutter is false)
             {
-                // Define a message
-                setupDialog.Message = "Machine does not have part number currently set up";
-
                 // Show feed back message
-                await DialogService.InvokeFeedbackDialog(setupDialog);
+                await DialogService.InvokeFeedbackDialog(setupDialog, "Machine does not have part number currently set up");
 
                 // Do nothing else
                 return;
@@ -414,11 +405,8 @@ namespace CutterManagement.UI.Desktop
             {
                 //--- Cancel cutter removal process ---//
 
-                // Error message
-                cutterRemovalDialog.Message = $"[ {MachineNumber} ]    does not currently have any cutter to be removed";
-
                 // Show dialog
-                await DialogService.InvokeFeedbackDialog(cutterRemovalDialog);
+                await DialogService.InvokeFeedbackDialog(cutterRemovalDialog, $"[ {MachineNumber} ] does not currently have any cutter to be removed");
 
                 // Do nothing else
                 return;
@@ -461,11 +449,9 @@ namespace CutterManagement.UI.Desktop
             // Dummy view model
             var pieceCountAdjustmentVM = new PieceCountAdjustmentDialogViewModel(); // Dummy view model. Used to be able to show prompt
 
-            // Message
-            pieceCountAdjustmentVM.Message = $"Current count is [ {_currentCount} ]. Do you mean to enter {Count} ?";
-
             // Prompt user
-            var result = await DialogService.InvokeFeedbackDialog(pieceCountAdjustmentVM, FeedbackDialogKind.Prompt);
+            var result = await DialogService
+                        .InvokeFeedbackDialog(pieceCountAdjustmentVM, $"Current count is [ {_currentCount} ]. Do you mean to enter {Count} ?", FeedbackDialogKind.Prompt);
 
             // Return prompt result
             return result;
@@ -512,11 +498,8 @@ namespace CutterManagement.UI.Desktop
             {
                 //--- Cancel cutter relocation process ---//
 
-                // Error message
-                cutterRelocationDialog.Message = $"[ {MachineNumber} ]  does not currently have any cutter to be relocated";
-
                 // Show dialog
-                await DialogService.InvokeFeedbackDialog(cutterRelocationDialog);
+                await DialogService.InvokeFeedbackDialog(cutterRelocationDialog, $"[ {MachineNumber} ] does not currently have any cutter to be relocated");
 
                 // Do nothing else
                 return;

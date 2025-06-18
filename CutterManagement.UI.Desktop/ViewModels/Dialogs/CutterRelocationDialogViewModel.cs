@@ -162,10 +162,10 @@ namespace CutterManagement.UI.Desktop
             if (SelectedMachine.Owner is Department.None)
             {
                 // Define message
-                Message = "Select a machine to continue this process";
+                string errorMessage = "Select a machine to continue this process";
 
                 // Show dialog
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, errorMessage);
 
                 // Do nothing else
                 return;
@@ -177,10 +177,10 @@ namespace CutterManagement.UI.Desktop
             // Set flag
             IsSuccess = true;
             // Define message
-            Message = "Cutter relocated successfully";
+            string message = "Cutter relocated successfully";
 
             // Close dialog
-            await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
+            await DialogService.InvokeAlertDialog(this, message).ContinueWith(_ =>
             {
                 DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
             });

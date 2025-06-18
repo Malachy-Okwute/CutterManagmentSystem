@@ -37,10 +37,9 @@
                 <Button Grid.Column="1" Width="120"
                         Margin="10,0"
                         Content="{StaticResource CubeIcon}"
-                        Tag="Save changes"
+                        Tag="Manage"
                         Command="{Binding ManageUserCommand}"
-                        Style="{StaticResource TransparentButtonWithTextStyle}"
-                        Visibility="Collapsed" />
+                        Style="{StaticResource TransparentButtonWithTextStyle}" />
                 <Button Grid.Column="3" Width="100"
                         Margin="10,0"
                         Content="{StaticResource UsersIcon}"
@@ -65,7 +64,7 @@
 
                     <Grid x:Name="ItemsContainer" Margin="0,4">
 
-                        <ItemsControl x:Name="Items" ItemsSource="{Binding Users}">
+                        <ItemsControl x:Name="Items" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <local:UserItemControl Margin="4" />

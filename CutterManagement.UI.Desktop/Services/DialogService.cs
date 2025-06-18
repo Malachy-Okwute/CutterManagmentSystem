@@ -67,11 +67,11 @@ namespace CutterManagement.UI.Desktop
             _dialogWindow.ShowDialog();
         }
 
-        private async Task ProcessAndShowAlertDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase
+        private async Task ProcessAndShowAlertDialog<TViewModel>(TViewModel viewModel, string message) where TViewModel : DialogViewModelBase
         {
             AlertDialogWindowViewModel dataContext = new AlertDialogWindowViewModel();
 
-            dataContext.Message = viewModel.Message;
+            dataContext.Message = message;
 
             dataContext.IsSuccess = viewModel.IsSuccess;
 
@@ -87,7 +87,7 @@ namespace CutterManagement.UI.Desktop
             });
         }
 
-        private async Task<bool?> ProcessAndShowFeedbackDialog<TViewModel>(TViewModel viewModel, FeedbackDialogKind dialogKind) where TViewModel : DialogViewModelBase
+        private async Task<bool?> ProcessAndShowFeedbackDialog<TViewModel>(TViewModel viewModel, string message, FeedbackDialogKind dialogKind) where TViewModel : DialogViewModelBase
         {
             FeedbackDialogWindowViewModel dataContext = new FeedbackDialogWindowViewModel();
 
@@ -108,7 +108,7 @@ namespace CutterManagement.UI.Desktop
 
             dataContext.DialogWindowCloseRequest += dialogCallback;
 
-            dataContext.Message = viewModel.Message;
+            dataContext.Message = message;
 
             dataContext.IsSuccess = viewModel.IsSuccess;
 
@@ -135,8 +135,8 @@ namespace CutterManagement.UI.Desktop
             BlurHelper.RemoveBlurEffect(mainWindow.MainAppWindow);
         }
 
-        public static async Task InvokeAlertDialog<TViewModel>(TViewModel viewModel) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowAlertDialog(viewModel);
-        public static async Task<bool?> InvokeFeedbackDialog<TViewModel>(TViewModel viewModel, FeedbackDialogKind dialogKind = FeedbackDialogKind.Alert) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowFeedbackDialog(viewModel, dialogKind);
+        public static async Task InvokeAlertDialog<TViewModel>(TViewModel viewModel, string message) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowAlertDialog(viewModel, message);
+        public static async Task<bool?> InvokeFeedbackDialog<TViewModel>(TViewModel viewModel, string message, FeedbackDialogKind dialogKind = FeedbackDialogKind.Alert) where TViewModel : DialogViewModelBase => await DialogInstance.ProcessAndShowFeedbackDialog(viewModel, message, dialogKind);
         
     }
 }

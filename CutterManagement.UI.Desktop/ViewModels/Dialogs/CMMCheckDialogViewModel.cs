@@ -295,10 +295,10 @@ namespace CutterManagement.UI.Desktop
             if(int.TryParse(CurrentCount, out int result) is true && int.Parse(Count) <= int.Parse(CurrentCount))
             {
                 // Define message
-                Message = $"Piece-count must be greater than previous-count";
+                string errorMessage = $"Piece-count must be greater than previous-count";
 
                 // Show message
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, errorMessage);
 
                 // Do nothing else
                 return;
@@ -321,10 +321,10 @@ namespace CutterManagement.UI.Desktop
             // Mark message as a success
             IsSuccess = true;
             // Define message
-            Message = "CMM data recorded successfully";
+            string successMessage = "CMM data recorded successfully";
 
             // Close dialog
-            await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
+            await DialogService.InvokeAlertDialog(this, successMessage).ContinueWith(_ =>
             {
                 DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
             });

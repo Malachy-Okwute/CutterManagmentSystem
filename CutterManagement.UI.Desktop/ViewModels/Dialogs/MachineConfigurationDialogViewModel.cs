@@ -193,13 +193,13 @@ namespace CutterManagement.UI.Desktop
                 (ValidationResult, MachineDataModel?) result =  await _machineService.Configure(newData);
 
                 // Set message
-                Message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
+                string message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;
 
                 // Mark configuration as successful
                 IsSuccess = result.Item1.IsValid;
 
                 // Update UI with the current message
-                OnPropertyChanged(nameof(Message));
+                //OnPropertyChanged(nameof(Message));
 
                 // If process is successful...
                 if (result.Item1.IsValid && result.Item2 is not null)
@@ -208,11 +208,11 @@ namespace CutterManagement.UI.Desktop
                     Messenger.MessageSender.SendMessage(result.Item2);
 
                     // Display success message
-                    await DialogService.InvokeAlertDialog(this);
+                    await DialogService.InvokeAlertDialog(this, message);
                 }
                 else
                 {
-                    await DialogService.InvokeFeedbackDialog(this);
+                    await DialogService.InvokeFeedbackDialog(this, message);
                 }
 
                 // If success...

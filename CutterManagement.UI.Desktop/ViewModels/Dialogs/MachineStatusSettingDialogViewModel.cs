@@ -175,11 +175,8 @@ namespace CutterManagement.UI.Desktop
             // Make sure machine is configured
             if (IsConfigured is false)
             {
-                // Set message
-                Message = "SelectedMachine need to be configured first by admin";
-
                 // Show feed back message
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, "SelectedMachine need to be configured first by admin");
 
                 // Do nothing else
                 return;
@@ -188,11 +185,8 @@ namespace CutterManagement.UI.Desktop
             // Make sure we have a user
             if (_user is null)
             {
-                // Set message
-                Message = "Please add a user to continue";
-
                 // Show feed back message
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, "Please add a user to continue");
 
                 // Do nothing else
                 return;
@@ -252,13 +246,13 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Set message
-                Message = string.IsNullOrEmpty(result.ErrorMessage) ? "SelectedMachine status successfully set " : result.ErrorMessage;
+                string message = string.IsNullOrEmpty(result.ErrorMessage) ? "SelectedMachine status successfully set " : result.ErrorMessage;
 
                 // Set flag
                 IsSuccess = result.IsValid;
 
                 // Update UI message
-                OnPropertyChanged(nameof(Message));
+                //OnPropertyChanged(nameof(Message));
 
                 // If we succeed
                 if (result.IsValid)
@@ -267,11 +261,11 @@ namespace CutterManagement.UI.Desktop
                     Messenger.MessageSender.SendMessage(machineDataModel ?? throw new ArgumentNullException($"{machineDataModel} is null"));
 
                     // Show success message
-                    await DialogService.InvokeAlertDialog(this);
+                    await DialogService.InvokeAlertDialog(this, message);
                 }
                 else
                 {
-                    await DialogService.InvokeFeedbackDialog(this);
+                    await DialogService.InvokeFeedbackDialog(this, message);
                 }
 
 

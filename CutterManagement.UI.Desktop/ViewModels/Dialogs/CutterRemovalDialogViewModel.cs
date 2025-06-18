@@ -203,9 +203,7 @@ namespace CutterManagement.UI.Desktop
             // Make sure piece count is entered
             if (PartCount.IsNullOrEmpty())
             {
-                Message = $"Enter part piece-count";
-
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, "Enter part piece-count");
 
                 return;
             }
@@ -213,9 +211,7 @@ namespace CutterManagement.UI.Desktop
             // Make sure new piece count is greater than current count
             if (int.Parse(PartCount) < int.Parse(CurrentPartCount))
             {
-                Message = $"Piece-count must be greater or equal to previous-count";
-
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, $"Piece-count must be greater or equal to previous-count");
 
                 return;
             }
@@ -223,9 +219,7 @@ namespace CutterManagement.UI.Desktop
             // Make sure either "Keep" or "Rebuild" is selected
             if (KeepCutter is false && RebuildCutter is false)
             {
-                Message = $"Choose \" Keep \" or \" Rebuild \" for this check";
-
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, $"Choose \" Keep \" or \" Rebuild \" for this check");
 
                 return;
             }
@@ -233,10 +227,10 @@ namespace CutterManagement.UI.Desktop
             // If count is greater than previous count by more than 100
             if ((int.Parse(PartCount) - int.Parse(CurrentPartCount)) > 100)
             {
-                Message = $"Previous count is {int.Parse(CurrentPartCount)}. Do you mean to enter {PartCount} ?";
+                string warningMessage = $"Previous count is {int.Parse(CurrentPartCount)}. Do you mean to enter {PartCount} ?";
 
                 // Verify piece count is reasonable
-                bool? response = await DialogService.InvokeFeedbackDialog(this, FeedbackDialogKind.Prompt);
+                bool? response = await DialogService.InvokeFeedbackDialog(this, warningMessage, FeedbackDialogKind.Prompt);
 
                 // If user did not mean to enter the current part number
                 if (response is false)
@@ -249,9 +243,7 @@ namespace CutterManagement.UI.Desktop
             // Make sure we have a reason for removing cutter
             if (CutterRemovalReason == CutterRemovalReason.None)
             {
-                Message = $"Select reason for removing cutter";
-
-                await DialogService.InvokeFeedbackDialog(this);
+                await DialogService.InvokeFeedbackDialog(this, $"Select reason for removing cutter");
 
                 return;
             }
@@ -279,11 +271,8 @@ namespace CutterManagement.UI.Desktop
             // Set flag
             IsSuccess = true;
 
-            // Define message
-            Message = "Cutter removed successfully";
-
             // Close dialog
-            await DialogService.InvokeAlertDialog(this).ContinueWith(_ =>
+            await DialogService.InvokeAlertDialog(this, "Cutter removed successfully").ContinueWith(_ =>
             {
                 DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
             });
