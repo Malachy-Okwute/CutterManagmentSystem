@@ -46,6 +46,14 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public string UserShift { get; set; }
 
+        /// <summary>
+        /// User current shift
+        /// <para>
+        /// NOTE: Facilitates sorting users by shift.
+        /// </para>
+        /// </summary>
+        public UserShift Shift { get; set; }
+
         #endregion
 
         #region Events

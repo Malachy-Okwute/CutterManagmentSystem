@@ -153,13 +153,18 @@ namespace CutterManagement.UI.Desktop
                 UpdateUsersCollection(user);
             }
         }
+
+        /// <summary>
+        /// Deactivates a user 
+        /// </summary>
+        /// <param name="userId">Unique id of the user to deactivate</param>
         private async Task DeactivateUser(int userId)
         {
             IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
             UserDataModel? user = await usersTable.GetEntityByIdAsync(userId);
 
-            if (user is null ) return;
+            if (user is null) return;
             {
                 user.IsActive = false;
 
@@ -206,7 +211,6 @@ namespace CutterManagement.UI.Desktop
 
             OnPropertyChanged(nameof(IsUserCollectionEmpty));
 
-            //CollectionViewSource.GetDefaultView(Users).Refresh();
         }
 
         /// <summary>
@@ -226,6 +230,7 @@ namespace CutterManagement.UI.Desktop
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Shift = user.Shift,
                 UserShift = EnumHelpers.GetDescription(user.Shift),
                 UserFullName = string.Join("  ", user.FirstName, user.LastName),
                 UserInitials = string.Join("", user.FirstName[0], user.LastName[0]),
@@ -237,31 +242,34 @@ namespace CutterManagement.UI.Desktop
 
                 if(sender is UserItemViewModel user && user is not null)
                 {
-                    _selectedUserShift = GetCurrentShift(user.UserShift);
+                    //_selectedUserShift = GetCurrentShift(user.UserShift);
+                    _selectedUserShift = user.Shift;
 
                     OnPropertyChanged(nameof(SelectedUserShift));
                 }
             };
 
             _users.Add(userItem);
+
+            CollectionViewSource.GetDefaultView(Users).SortDescriptions.Add(new SortDescription(nameof(UserItemViewModel.Shift), ListSortDirection.Ascending));
         }
 
         /// <summary>
         /// Get user's current shift
         /// </summary>
         /// <param name="shift">user shift to get</param>
-        public UserShift GetCurrentShift(string shift)
-        {
-            UserShift shiftKey = UserShift.None;
+        //public UserShift GetCurrentShift(string shift)
+        //{
+        //    UserShift shiftKey = UserShift.None;
 
-            foreach (var item in UserShiftCollection) 
-            {
-                if (item.Value == shift)
-                    shiftKey = item.Key;
-            }
+        //    foreach (var item in UserShiftCollection) 
+        //    {
+        //        if (item.Value == shift)
+        //            shiftKey = item.Key;
+        //    }
 
-            return shiftKey;
-        }
+        //    return shiftKey;
+        //}
 
         /// <summary>
         /// Update users list with the latest information from database
@@ -326,6 +334,4 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
     }
-
-    public class DummyDialog : DialogViewModelBase { }
 }
