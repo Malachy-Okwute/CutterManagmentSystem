@@ -139,7 +139,11 @@ namespace CutterManagement.UI.Desktop
                 userTable.DataChanged += UserTable_DataChanged;
 
                 // See if user name exist
-                bool isConflicting = userTable.GetAllEntitiesAsync().Result.Any(x => (x.FirstName == newUser.FirstName && x.LastName == LastName));
+                bool isConflicting = (await userTable.GetAllEntitiesAsync()).Any(x => 
+                { 
+                    return (string.Equals(x.FirstName, newUser.FirstName, StringComparison.OrdinalIgnoreCase) && 
+                            string.Equals(x.LastName, newUser.LastName, StringComparison.OrdinalIgnoreCase)); 
+                });
 
                 // If user exist
                 if(isConflicting)

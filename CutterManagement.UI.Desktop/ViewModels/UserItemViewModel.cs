@@ -65,6 +65,8 @@ namespace CutterManagement.UI.Desktop
 
         #endregion
 
+        #region Commands
+
         /// <summary>
         /// Command to enter into part edit mode
         /// </summary>
@@ -74,6 +76,10 @@ namespace CutterManagement.UI.Desktop
         /// Command to reset edit mode
         /// </summary>
         public ICommand ResetEditModeCommand { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Default constructor
@@ -85,13 +91,22 @@ namespace CutterManagement.UI.Desktop
             ResetEditModeCommand = new RelayCommand(OnPartItemSelected);
         }
 
+        #endregion
+
+        /// <summary>
+        /// Activates edit mode
+        /// </summary>
         private void EnterEditMode()
         {
+            // Raise on-selected event
             OnPartItemSelected();
-
+            // Set flag
             IsEditMode = true;
         }
 
+        /// <summary>
+        /// Raises item selected event whenever this item is selected
+        /// </summary>
         private void OnPartItemSelected() => UserItemSelected?.Invoke(this, EventArgs.Empty);
     }
 }
