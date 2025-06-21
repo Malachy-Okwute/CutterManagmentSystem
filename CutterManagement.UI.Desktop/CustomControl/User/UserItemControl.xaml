@@ -99,7 +99,8 @@
 
             <Button Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"
                     Margin="4"
-                    Content="{StaticResource WindowMinimizeIcon}"
+                    Content="{StaticResource TrashIcon}"
+                    Foreground="{DynamicResource ForegroundColorBrush5}"
                     FontFamily="{StaticResource RegularIcon}"
                     Command="{Binding DataContext.DeactivateUserCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                     CommandParameter="{Binding Id}"
@@ -125,7 +126,7 @@
 
             <ComboBox Height="35" HorizontalAlignment="Left"
                       Background="Transparent"
-                      ItemsSource="{Binding DataContext.UserShiftCollection, RelativeSource={RelativeSource AncestorType=Page}}"
+                      ItemsSource="{Binding DataContext.UserShiftCollection, RelativeSource={RelativeSource AncestorType=Page}, UpdateSourceTrigger=PropertyChanged}"
                       SelectedValue="{Binding DataContext.SelectedUserShift, RelativeSource={RelativeSource AncestorType=Page}, UpdateSourceTrigger=PropertyChanged}"
                       SelectedValuePath="Key" DisplayMemberPath="Value" />
 

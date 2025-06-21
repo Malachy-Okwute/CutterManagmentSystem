@@ -26,6 +26,11 @@
         public bool IsActive { get; set; } = true;
 
         /// <summary>
+        /// True if this user is no longer accessible
+        /// </summary>
+        public bool IsArchived { get; set; }
+
+        /// <summary>
         /// Machine and users navigation property collection
         /// </summary>
         public ICollection<MachineUserInteractions> MachineUserInteractions { get; set; } = new List<MachineUserInteractions>();

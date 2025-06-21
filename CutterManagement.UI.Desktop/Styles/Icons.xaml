@@ -33,5 +33,6 @@
     <system:String x:Key="CutterRelocationIcon">&#xf124;</system:String>
     <system:String x:Key="ArrowIcon">&#xf30b;</system:String>
     <system:String x:Key="EditIcon">&#xf044;</system:String>
+    <system:String x:Key="TrashIcon">&#xf2ed;</system:String>
 
 </ResourceDictionary>

@@ -149,7 +149,7 @@ namespace CutterManagement.UI.Desktop
                 if(isConflicting)
                 {
                     // Alert user
-                    await DialogService.InvokeFeedbackDialog(this, $"Username already taken.");
+                    await DialogService.InvokeFeedbackDialog(this, $"Username is not available.");
                     // Do nothing else
                     return;
                 }

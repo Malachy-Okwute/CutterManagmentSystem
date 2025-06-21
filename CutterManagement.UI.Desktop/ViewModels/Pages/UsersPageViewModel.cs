@@ -22,7 +22,13 @@ namespace CutterManagement.UI.Desktop
         private ObservableCollection<UserItemViewModel> _users;
 
         /// <summary>
-        /// 
+        /// Collection of users shift
+        /// </summary>
+        private Dictionary<UserShift, string> _userShiftCollection;
+
+
+        /// <summary>
+        /// Selected user current shift
         /// </summary>
         public UserShift _selectedUserShift;
 
@@ -51,12 +57,16 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
-        /// Collection of users
+        /// Collection of users shift
         /// </summary>
-        public Dictionary<UserShift, string> UserShiftCollection { get; set; }
+        public Dictionary<UserShift, string> UserShiftCollection 
+        {
+            get => _userShiftCollection; 
+            set => _userShiftCollection = value; 
+        }
 
         /// <summary>
-        /// Currently selected user
+        /// Selected user current shift
         /// </summary>
         public UserShift SelectedUserShift 
         { 
@@ -88,6 +98,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand DeactivateUserCommand { get; set; }
 
+        /// <summary>
+        /// Command to open user manager dialog
+        /// </summary>
+        public ICommand OpenUserManagerDialogCommand { get; set; }
+
         #endregion
 
         #region Construction 
@@ -104,10 +119,11 @@ namespace CutterManagement.UI.Desktop
             _loader = LoadUsers();
             
             // Create commands
-            DeactivateUserCommand = new RelayCommand(async (userId) => await DeactivateUser(Convert.ToInt32(userId)));
             AddUserCommand = new RelayCommand(OpenCreateUserDialog);
             OpenAdminLoginDialogCommand = new RelayCommand(OpenAdminLoginDialog);
+            OpenUserManagerDialogCommand = new RelayCommand(async () => await OpenUserManagerDialog());
             ChangeUserShiftCommand = new RelayCommand(async () => await ChangeUserShift());
+            DeactivateUserCommand = new RelayCommand(async (userId) => await DeactivateUser(Convert.ToInt32(userId)));
 
             // Register this object to receive messages from messenger
             Messenger.MessageSender.RegisterMessenger(this);
@@ -174,6 +190,17 @@ namespace CutterManagement.UI.Desktop
             }
         }
 
+        private async Task OpenUserManagerDialog()
+        {
+            UserManagerDialogViewModel userManager = new UserManagerDialogViewModel(_dataServiceFactory);
+
+            await userManager.GetDeactivatedUsers();
+
+            DialogService.InvokeDialog(userManager);
+
+            await ReloadUserCollection();
+        }
+
         #endregion
 
         #region Methods
@@ -189,19 +216,19 @@ namespace CutterManagement.UI.Desktop
             // Get users table
             IDataAccessService<UserDataModel> userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
-            UserShiftCollection = new Dictionary<UserShift, string>();
+            _userShiftCollection = new Dictionary<UserShift, string>();
 
             foreach (UserShift shift in Enum.GetValues<UserShift>())
             {
                 if (shift is UserShift.None) continue;
 
-                UserShiftCollection.Add(shift, EnumHelpers.GetDescription(shift));
+                _userShiftCollection.Add(shift, EnumHelpers.GetDescription(shift));
             }
 
             foreach (UserDataModel user in await userTable.GetAllEntitiesAsync())
             {
                 // If user is admin user 
-                if ((user.FirstName is "resource" && user.LastName is "admin") || user.IsActive is false)
+                if ((user.FirstName is "resource" && user.LastName is "admin") || user.IsActive is false || user.IsArchived)
                     // Do not add it
                     continue;
 
@@ -210,7 +237,7 @@ namespace CutterManagement.UI.Desktop
             }
 
             OnPropertyChanged(nameof(IsUserCollectionEmpty));
-
+            OnPropertyChanged(nameof(UserShiftCollection));
         }
 
         /// <summary>
@@ -242,7 +269,6 @@ namespace CutterManagement.UI.Desktop
 
                 if(sender is UserItemViewModel user && user is not null)
                 {
-                    //_selectedUserShift = GetCurrentShift(user.UserShift);
                     _selectedUserShift = user.Shift;
 
                     OnPropertyChanged(nameof(SelectedUserShift));

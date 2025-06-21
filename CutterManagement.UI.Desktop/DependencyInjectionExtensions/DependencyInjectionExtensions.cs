@@ -91,6 +91,7 @@ namespace CutterManagement.UI.Desktop
             DialogService.RegisterDialog<CutterSwapDialogViewModel, CutterSwapDialog>();
             DialogService.RegisterDialog<CreatePartDialogViewModel, CreatePartDialog>();
             DialogService.RegisterDialog<CreateUserDialogViewModel, CreateUserDialog>();
+            DialogService.RegisterDialog<UserManagerDialogViewModel, UserManagerDialog>();
             DialogService.RegisterDialog<MachineSetupDialogViewModel, MachineSetupDialog>();
             DialogService.RegisterDialog<CutterRemovalDialogViewModel, CutterRemovalDialog>();
             DialogService.RegisterDialog<FrequencyCheckDialogViewModel, FrequencyCheckDialog>();

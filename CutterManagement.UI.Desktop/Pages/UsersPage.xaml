@@ -38,7 +38,7 @@
                         Margin="10,0"
                         Content="{StaticResource CubeIcon}"
                         Tag="Manage"
-                        Command="{Binding ManageUserCommand}"
+                        Command="{Binding OpenUserManagerDialogCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
                 <Button Grid.Column="3" Width="100"
                         Margin="10,0"
