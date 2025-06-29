@@ -32,16 +32,11 @@
 
                 <Grid Grid.Row="0" Margin="10">
 
-                    <TextBlock Text="1"
-                               FontFamily="{StaticResource RobotoFlexRegular}"
-                               FontSize="{StaticResource XXXLarge}"
-                               Foreground="{DynamicResource ForegroundColorBrush3}" />
-                    <TextBlock Margin="18,2,0,0" Text="st shift"
-                               FontSize="{StaticResource Large}"
-                               Foreground="{DynamicResource ForegroundColorBrush3}" />
-                    <TextBlock Margin="18,23,0,0" Text="Gear Developer"
-                               FontSize="10"
-                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+                    <Label HorizontalContentAlignment="Left" Content="Dept-048"
+                           FontWeight="Black" BorderBrush="{DynamicResource BorderColorBrush5}" BorderThickness="1"
+                           FontFamily="{StaticResource RobotoFlexRegular}"
+                           FontSize="{StaticResource XSmall}"
+                           Foreground="{DynamicResource ForegroundColorBrush3}" />
 
                     <Label HorizontalContentAlignment="Right" d:Content="Wednesday, June 25, 2025"
                            Content="{Binding Date}"
