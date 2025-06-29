@@ -85,7 +85,22 @@
                                VerticalAlignment="Top" Text="No user available"
                                FontFamily="{StaticResource RobotoFlexRegular}"
                                FontSize="{StaticResource XLarge}"
-                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+                               Foreground="{DynamicResource ForegroundColorBrush3}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsLoading}" Value="False" />
+                                            <Condition Binding="{Binding Users.Count}" Value="0" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Border>
 
             </Grid>

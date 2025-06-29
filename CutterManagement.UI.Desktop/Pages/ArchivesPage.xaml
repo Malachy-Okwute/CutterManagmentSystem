@@ -40,6 +40,7 @@
                         Tag="Manage"
                         Command="{Binding ManageUserCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
+
             </Grid>
 
             <Grid Grid.Row="2" Margin="0,15,0,0">
@@ -80,7 +81,23 @@
                                VerticalAlignment="Top" Text="No part available"
                                FontFamily="{StaticResource RobotoFlexRegular}"
                                FontSize="{StaticResource XLarge}"
-                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+                               Foreground="{DynamicResource ForegroundColorBrush3}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsLoading}" Value="False" />
+                                            <Condition Binding="{Binding PartCollection.Count}" Value="0" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+
+                    </TextBlock>
                 </Border>
 
             </Grid>

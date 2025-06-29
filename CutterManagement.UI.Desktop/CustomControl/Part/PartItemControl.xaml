@@ -120,11 +120,13 @@
                         Margin="4" IsEnabled="False"
                         Content="{StaticResource EditIcon}"
                         FontFamily="{StaticResource RegularIcon}"
+                        FontSize="{StaticResource Small}"
                         Style="{StaticResource MachineOptionsPopupStyle}" />
                 <Button Width="{Binding RelativeSource={RelativeSource Self}, Path=Height}"
                         Margin="4"
-                        Content="{StaticResource WindowCloseIcon}"
+                        Content="{StaticResource TrashIcon}"
                         FontFamily="{StaticResource RegularIcon}"
+                        FontSize="{StaticResource Small}"
                         Foreground="{DynamicResource ForegroundColorBrush5}"
                         Command="{Binding DataContext.DeletePartCommand, RelativeSource={RelativeSource AncestorType=Page}}"
                         Style="{StaticResource MachineOptionsPopupStyle}" />

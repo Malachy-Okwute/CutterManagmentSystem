@@ -6,7 +6,7 @@
                          local:WindowAttachedProperty.AnimateWindow="True" WindowStartupLocation="CenterScreen"
                          WindowStyle="None" WindowState="Normal"
                          AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
-                         mc:Ignorable="d">
+                         mc:Ignorable="d" MouseDown="ApplicationWindow_MouseDown">
 
     <Grid x:Name="MainAppWindow">
 

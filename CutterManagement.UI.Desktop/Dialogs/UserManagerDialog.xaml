@@ -38,16 +38,25 @@
                     Padding="0,2,0,0"
                     BorderBrush="{DynamicResource BorderColorBrush6}"
                     BorderThickness="1">
+                <Grid>
 
-                <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-                    <ItemsControl ItemsSource="{Binding DeactivatedUser, UpdateSourceTrigger=PropertyChanged}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <local:DeactivatedUserItem />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
+                    <Label Margin="0,10" HorizontalAlignment="Center"
+                           VerticalAlignment="Top" Content="Deactivated users will appear here"
+                           Foreground="{DynamicResource ForegroundColorBrush3}"
+                           FontSize="{StaticResource Small}"
+                           FontFamily="{StaticResource RobotoFlexRegular}"
+                           Visibility="{Binding IsDeactivatedUserCollectionEmpty, Converter={local:BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl x:Name="Items" ItemsSource="{Binding DeactivatedUser, UpdateSourceTrigger=PropertyChanged}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:DeactivatedUserItem x:Name="test" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
             </Border>
 
             <Grid Grid.Row="2" Margin="5">
@@ -70,6 +79,7 @@
                         Height="34" Margin="8,0"
                         HorizontalAlignment="Left" Content="Delete"
                         IsCancel="True"
+                        IsEnabled="{Binding IsButtonActive}"
                         FontFamily="{StaticResource RobotoFlexRegular}"
                         FontSize="{StaticResource XSmall}"
                         Style="{StaticResource TransparentButtonStyle}"
@@ -80,6 +90,7 @@
                         Height="34" Margin="8,0,0,0"
                         HorizontalAlignment="Right" Content="Activate"
                         IsDefault="True"
+                        IsEnabled="{Binding IsButtonActive}"
                         BorderBrush="{DynamicResource BorderColorBrush3}"
                         FontFamily="{StaticResource RobotoFlexRegular}"
                         FontSize="{StaticResource XSmall}"

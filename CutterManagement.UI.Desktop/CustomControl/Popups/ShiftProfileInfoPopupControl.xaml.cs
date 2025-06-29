@@ -17,13 +17,21 @@ using System.Windows.Shapes;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Interaction logic for UserProfileControl.xaml
+    /// Interaction logic for ShiftProfileInfoPopupControl.xaml
     /// </summary>
-    public partial class UserProfileControl : UserControl
+    public partial class ShiftProfileInfoPopupControl : UserControl
     {
-        public UserProfileControl()
+        public ShiftProfileInfoPopupControl()
         {
             InitializeComponent();
+
+            LostFocus += (ss, e) =>
+            {
+                if(IsFocused is false)
+                {
+                    ((ShiftProfileViewModel)((Popup)Parent).DataContext).ShowShiftInfo = false;
+                }
+            };
         }
     }
 }

@@ -95,8 +95,7 @@
         <!--  user profile  -->
         <Border Grid.Column="3" Margin="10,0"
                 Padding="0,4">
-            <local:UserProfileControl />
+            <local:UserProfileControl DataContext="{Binding ShiftProfileViewModel}" />
         </Border>
-
     </Grid>
 </UserControl>

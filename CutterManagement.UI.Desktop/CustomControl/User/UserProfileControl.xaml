@@ -28,20 +28,36 @@
 
             <Border Padding="0,2,0,0" CornerRadius="25">
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"
-                           Text="1st Shift"
+                           d:Text="1st Shift"
+                           Text="{Binding CurrentShift}"
                            FontFamily="{StaticResource RobotoFlexRegular}"
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontSize="{StaticResource Small}" />
 
             </Border>
 
-            <Button Width="24" Height="24"
-                    Margin="8,0" HorizontalAlignment="Right"
+            <Button x:Name="ArrowButton" Width="24"
+                    Height="24" Margin="8,0"
+                    HorizontalAlignment="Right"
                     Style="{StaticResource TransparentButtonStyle}"
                     Content="{StaticResource AngleDownIcon}"
-                    FontSize="{StaticResource Small}" />
+                    FontSize="{StaticResource Small}"
+                    Command="{Binding ShowHideShiftInfoCommand}" />
 
         </StackPanel>
+
+        <!--  popup  -->
+        <Popup x:Name="PopupControl"
+               IsOpen="{Binding ShowShiftInfo}"
+               Placement="Bottom" AllowsTransparency="True"
+               StaysOpen="True"
+               PlacementTarget="{Binding ElementName=ArrowButton}"
+               PopupAnimation="Slide" VerticalOffset="10"
+               HorizontalOffset="10">
+
+            <local:ShiftProfileInfoPopupControl local:FocusAttachedProperty.SetFocus="True" />
+
+        </Popup>
 
     </Grid>
 </UserControl>

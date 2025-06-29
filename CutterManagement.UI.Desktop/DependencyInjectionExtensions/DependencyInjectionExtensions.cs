@@ -18,27 +18,28 @@ namespace CutterManagement.UI.Desktop
             // Add view models
 
             // Singletons
+            services.AddSingleton<HomePageViewModel>();
             services.AddSingleton<NavigationBarViewModel>();
-            services.AddSingleton(provider => new HomePageViewModel(provider.GetRequiredService<MachineItemCollectionViewModel>()));
-            services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddSingleton<MachineItemCollectionViewModel>();
 
             // Transients
             services.AddTransient<InfoPageViewModel>();
+            services.AddTransient<UsersPageViewModel>();
             services.AddTransient<UpdatesPageViewModel>();
             services.AddTransient<ArchivesPageViewModel>();
             services.AddTransient<SettingsPageViewModel>();
+            services.AddTransient<ShiftProfileViewModel>();
             services.AddTransient<ApplicationWindowViewModel>();
-            services.AddTransient(provider => new UsersPageViewModel(provider.GetRequiredService<IDataAccessServiceFactory>()));
 
             // Dialog view model
-            services.AddTransient(provider => new CMMCheckDialogViewModel(provider.GetRequiredService<IMachineService>()));
-            services.AddTransient(provider => new CutterSwapDialogViewModel(provider.GetRequiredService<IMachineService>()));
-            services.AddTransient(provider => new MachineSetupDialogViewModel(provider.GetRequiredService<IMachineService>()));
-            services.AddTransient(provider => new CutterRemovalDialogViewModel(provider.GetRequiredService<IMachineService>()));
-            services.AddTransient(provider => new FrequencyCheckDialogViewModel(provider.GetRequiredService<IMachineService>()));
-            services.AddTransient(provider => new CutterRelocationDialogViewModel(provider.GetRequiredService<IMachineService>()));
-            services.AddTransient(provider => new MachineConfigurationDialogViewModel(provider.GetRequiredService<IMachineService>()));
-            services.AddTransient(provider => new MachineStatusSettingDialogViewModel(provider.GetRequiredService<IMachineService>()));
+            services.AddTransient<CMMCheckDialogViewModel>();
+            services.AddTransient<CutterSwapDialogViewModel>();
+            services.AddTransient<MachineSetupDialogViewModel>();
+            services.AddTransient<CutterRemovalDialogViewModel>();
+            services.AddTransient<FrequencyCheckDialogViewModel>();
+            services.AddTransient<CutterRelocationDialogViewModel>();
+            services.AddTransient<MachineConfigurationDialogViewModel>();
+            services.AddTransient<MachineStatusSettingDialogViewModel>();
 
             
             // Return services
@@ -66,7 +67,7 @@ namespace CutterManagement.UI.Desktop
                         return serviceProvider.GetRequiredService<ArchivesPageViewModel>();
 
                     case AppPage.UserPage:
-                        return serviceProvider.GetRequiredService<UsersPageViewModel>();
+                            return serviceProvider.GetRequiredService<UsersPageViewModel>();
 
                     case AppPage.SettingsPage:
                         return serviceProvider.GetRequiredService<SettingsPageViewModel>();
@@ -79,11 +80,10 @@ namespace CutterManagement.UI.Desktop
                 }
             });
 
+            services.AddTransient<IMachineService, MachineService>();
+            services.AddTransient<IDialogViewModelFactory, DialogViewModelFactory>();
             services.AddScoped<IDataAccessServiceFactory, DataAccessServiceFactory>();
             //services.AddScoped(typeof(IDataAccessService<>), typeof(DataAccessService<>));
-            services.AddTransient<IDialogViewModelFactory, DialogViewModelFactory>(provider => new DialogViewModelFactory(provider.GetRequiredService<IServiceProvider>()));
-            services.AddTransient<IMachineService, MachineService>(provider
-                => new MachineService(provider.GetRequiredService<IDataAccessServiceFactory>(), provider.GetRequiredService<IDialogViewModelFactory>()));
 
             // Register dialog service
             DialogService.RegisterDialog<CMMCheckDialogViewModel, CMMCheckDialog>();

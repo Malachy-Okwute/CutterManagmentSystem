@@ -9,6 +9,20 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public partial class MainWindow : ApplicationWindow
     {
+        #region Private Fields
+        
+        /// <summary>
+        /// <see cref="ApplicationWindowViewModel"/>
+        /// </summary>
+        private ApplicationWindowViewModel _viewModel;
+
+        /// <summary>
+        /// <see cref="MachineItemCollectionViewModel"/>
+        /// </summary>
+        private MachineItemCollectionViewModel _machineCollection;
+
+        #endregion
+        
         #region Private Snap Layout Constants
 
         /// <summary>
@@ -33,9 +47,12 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MainWindow(ApplicationWindowViewModel viewModel) : base(viewModel)
+        public MainWindow(ApplicationWindowViewModel viewModel, MachineItemCollectionViewModel machineCollection) : base(viewModel)
         {
             InitializeComponent();
+
+            _viewModel = viewModel;
+            _machineCollection = machineCollection;
         }
 
         #endregion
@@ -139,5 +156,13 @@ namespace CutterManagement.UI.Desktop
         }
 
         #endregion
+
+        private void ApplicationWindow_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Close any popup control that is open
+            _viewModel.Navigation.ShiftProfileViewModel.ShowShiftInfo = false;
+            _machineCollection.PinItems.ToList().ForEach(x => x.IsPopupOpen = false);
+            _machineCollection.RingItems.ToList().ForEach(x => x.IsPopupOpen = false);
+        }
     }
 }

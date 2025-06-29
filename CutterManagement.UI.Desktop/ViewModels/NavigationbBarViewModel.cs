@@ -21,7 +21,12 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Page that is currently showing in the view
         /// </summary>
-        public ViewModelBase? CurrentPage { get; private set; }
+        public ViewModelBase CurrentPage { get; private set; }
+
+        /// <summary>
+        /// View model for <see cref="UserProfileControl"/>
+        /// </summary>
+        public ShiftProfileViewModel ShiftProfileViewModel { get; set; }
 
         #endregion
 
@@ -66,10 +71,11 @@ namespace CutterManagement.UI.Desktop
         /// Default constructor
         /// </summary>
         /// <param name="pageFactory">Page factory</param>
-        public NavigationBarViewModel(PageFactory pageFactory)
+        public NavigationBarViewModel(PageFactory pageFactory, ShiftProfileViewModel shiftProfileViewModel)
         {
             // Set page factory
             _pageFactory = pageFactory;
+            ShiftProfileViewModel = shiftProfileViewModel;
 
             // Create commands
             NavigateToHomePageCommand = new RelayCommand(GotoHomePage);
@@ -89,6 +95,5 @@ namespace CutterManagement.UI.Desktop
         /// Navigates to the home page of this application 
         /// </summary>
         private void GotoHomePage() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.HomePage);
-        
     }
 }

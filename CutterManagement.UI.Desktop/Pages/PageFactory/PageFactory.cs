@@ -24,7 +24,6 @@
         /// </summary>
         /// <param name="page">The type of page to get</param>
         /// <returns><see cref="ViewModelBase"/> object type</returns>
-        public ViewModelBase GetPageViewModel(AppPage page) => 
-            _pageFactory.Invoke(page);
+        public ViewModelBase GetPageViewModel(AppPage page) => _pageFactory.Invoke(page);
     }
 }

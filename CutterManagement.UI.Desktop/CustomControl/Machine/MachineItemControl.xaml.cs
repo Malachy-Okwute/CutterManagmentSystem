@@ -27,6 +27,5 @@ namespace CutterManagement.UI.Desktop
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e) => e.Handled = e.Key.Equals(Key.Space) ? true : false;
-
     }
 }

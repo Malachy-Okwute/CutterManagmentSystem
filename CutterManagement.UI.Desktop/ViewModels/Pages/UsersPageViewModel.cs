@@ -32,11 +32,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public UserShift _selectedUserShift;
 
-        /// <summary>
-        /// Task loader
-        /// </summary>
-        private Task _loader;
-
         #endregion
 
         #region Public Properties
@@ -46,6 +41,11 @@ namespace CutterManagement.UI.Desktop
         /// otherwise, false
         /// </summary>
         public bool IsUserCollectionEmpty => _users.Any();
+
+        /// <summary>
+        /// True if still loading users
+        /// </summary>
+        public bool IsLoading { get; set; }
 
         /// <summary>
         /// A collection of users
@@ -116,8 +116,8 @@ namespace CutterManagement.UI.Desktop
             _dataServiceFactory = dataServiceFactory;
             _users = new ObservableCollection<UserItemViewModel>();
            
-            _loader = LoadUsers();
-            
+            _ = LoadUsers();
+
             // Create commands
             AddUserCommand = new RelayCommand(OpenCreateUserDialog);
             OpenAdminLoginDialogCommand = new RelayCommand(OpenAdminLoginDialog);
@@ -210,6 +210,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task LoadUsers()
         {
+            IsLoading = true;
+
             // Clear users
             _users.Clear();
 
@@ -235,6 +237,8 @@ namespace CutterManagement.UI.Desktop
                 // Add users
                 AddUserToUserCollection(user);
             }
+
+            IsLoading = false;
 
             OnPropertyChanged(nameof(IsUserCollectionEmpty));
             OnPropertyChanged(nameof(UserShiftCollection));

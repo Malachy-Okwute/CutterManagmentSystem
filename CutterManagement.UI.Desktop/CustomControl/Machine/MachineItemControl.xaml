@@ -123,9 +123,9 @@
         </Border>
 
         <Popup x:Name="Popup"
-               IsOpen="{Binding IsPopupOpen}"
+               IsOpen="{Binding IsPopupOpen, UpdateSourceTrigger=PropertyChanged}"
                PlacementTarget="{Binding ElementName=PopupTarget}"
-               Placement="MousePoint" StaysOpen="True"
+               Placement="MousePoint" StaysOpen="True" 
                PopupAnimation="Fade" AllowsTransparency="True">
             <local:MachineItemPopupControl />
         </Popup>

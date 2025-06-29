@@ -21,11 +21,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private IDataAccessServiceFactory _dataServiceFactory;
 
-        /// <summary>
-        /// Task loader
-        /// </summary>
-        private Task _loader;
-
         #endregion
 
         #region Properties
@@ -43,6 +38,11 @@ namespace CutterManagement.UI.Desktop
         /// True if part collection has no part, Otherwise false
         /// </summary>
         public bool IsPartCollectionEmpty => _partCollection.Any();
+
+        /// <summary>
+        /// True if still loading parts
+        /// </summary>
+        public bool IsLoading { get; set; }
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace CutterManagement.UI.Desktop
             _dataServiceFactory = dataServiceFactory;
             _partCollection = new ObservableCollection<PartItemViewModel>();
 
-            _loader = LoadParts();
+            _ = LoadParts();
 
             // Create commands
             OpenCreatePartDialogCommand = new RelayCommand(OpenCreatePartDialog);
@@ -99,6 +99,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task LoadParts()
         {
+            IsLoading = true;
+
             // Clear part collection
             _partCollection.Clear();
 
@@ -118,6 +120,8 @@ namespace CutterManagement.UI.Desktop
                 // Add users
                 AddPartToPartCollection(part);
             }
+
+            IsLoading = false;
 
             // Update UI
             OnPropertyChanged(nameof(IsPartCollectionEmpty));

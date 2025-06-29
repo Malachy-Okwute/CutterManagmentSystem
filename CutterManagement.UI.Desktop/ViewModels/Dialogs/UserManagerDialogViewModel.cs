@@ -1,12 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -16,6 +10,8 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class UserManagerDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest
     {
+        #region Private Fields
+
         /// <summary>
         /// Collection of deactivated users
         /// </summary>
@@ -26,6 +22,10 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private readonly IDataAccessServiceFactory _dataFactory;
 
+        #endregion
+
+        #region Public Properties
+
         /// <summary>
         /// Collection of deactivated users
         /// </summary>
@@ -34,6 +34,20 @@ namespace CutterManagement.UI.Desktop
             get => _deactivatedUser;
             set => _deactivatedUser = value;
         }
+
+        /// <summary>
+        /// True if deactivated user list is empty
+        /// </summary>
+        public bool IsDeactivatedUserCollectionEmpty { get; set; }
+
+        /// <summary>
+        /// True if Delete and Activate buttons are enabled
+        /// </summary>
+        public bool IsButtonActive { get; set; }
+
+        #endregion
+
+        #region Commands
 
         /// <summary>
         /// Command to activate users
@@ -50,10 +64,18 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand CancelCommand { get; set; }
 
+        #endregion
+
+        #region Events
+
         /// <summary>
         /// Event that gets fired when dialog needs to close
         /// </summary>
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Default constructor
@@ -67,6 +89,10 @@ namespace CutterManagement.UI.Desktop
             DeleteUserCommand = new RelayCommand(async () => await DeleteUser());
             CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Archives selected users from collection of deactivated users
@@ -91,6 +117,10 @@ namespace CutterManagement.UI.Desktop
                     }
                 }
             }
+
+            IsDeactivatedUserCollectionEmpty = _deactivatedUser.Any() is false;
+
+            IsButtonActive = !IsDeactivatedUserCollectionEmpty;
 
             // Close dialog
             DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
@@ -119,6 +149,9 @@ namespace CutterManagement.UI.Desktop
                 }
             }
 
+            IsDeactivatedUserCollectionEmpty = _deactivatedUser.Any() is false;
+            IsButtonActive = !IsDeactivatedUserCollectionEmpty;
+
             // Close dialog
             DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
         }
@@ -139,6 +172,12 @@ namespace CutterManagement.UI.Desktop
                     });
                 }
             });
+
+            IsDeactivatedUserCollectionEmpty = _deactivatedUser.Any() is false;
+            IsButtonActive = !IsDeactivatedUserCollectionEmpty;
+
         }
+
+        #endregion
     }
 }

@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="CutterManagement.UI.Desktop.ShiftProfileInfoPopupControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+             Focusable="True" mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="BorderHoverStyle" TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="Transparent" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource BackgroundColorBrush4}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Width="300" Height="240"
+            Padding="8">
+        <Border Background="{DynamicResource BackgroundColorBrush1}"
+                BorderBrush="{x:Null}"
+                BorderThickness="0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="12" ShadowDepth="0"
+                                  Opacity="0.25" />
+            </Border.Effect>
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="10">
+
+                    <TextBlock Text="1"
+                               FontFamily="{StaticResource RobotoFlexRegular}"
+                               FontSize="{StaticResource XXXLarge}"
+                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+                    <TextBlock Margin="18,2,0,0" Text="st shift"
+                               FontSize="{StaticResource Large}"
+                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+                    <TextBlock Margin="18,23,0,0" Text="Gear Developer"
+                               FontSize="10"
+                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+
+                    <Label HorizontalContentAlignment="Right" d:Content="Wednesday, June 25, 2025"
+                           Content="{Binding Date}"
+                           FontFamily="{StaticResource RobotoFlexRegular}"
+                           FontSize="{StaticResource XSmall}"
+                           Foreground="{DynamicResource ForegroundColorBrush3}" />
+                    <Label Margin="0,20" HorizontalContentAlignment="Right"
+                           d:Content="09:55 AM"
+                           Content="{Binding Time}"
+                           FontFamily="{StaticResource RobotoFlexRegular}"
+                           FontSize="{StaticResource XSmall}"
+                           Foreground="{DynamicResource ForegroundColorBrush3}" />
+
+                </Grid>
+
+                <StackPanel Grid.Row="1">
+                    <Border Padding="10" BorderThickness="0,1"
+                            BorderBrush="{DynamicResource BorderColorBrush6}"
+                            Style="{StaticResource BorderHoverStyle}">
+
+                        <TextBlock d:Text="Current shift: 1st Shift"
+                                   Text="{Binding CurrentShift, StringFormat=Current shift: {0}}"
+                                   FontFamily="{StaticResource RobotoFlexRegular}"
+                                   FontSize="{StaticResource Small}"
+                                   Foreground="{DynamicResource ForegroundColorBrush3}" />
+                    </Border>
+
+                    <Border Padding="10" BorderThickness="0,0,0,1"
+                            BorderBrush="{DynamicResource BorderColorBrush6}"
+                            Style="{StaticResource BorderHoverStyle}">
+
+
+                        <TextBlock d:Text="GQ Personnel: 5"
+                                   Text="{Binding NumberOfUsers, StringFormat=GQ Personnel: {0}}"
+                                   FontFamily="{StaticResource RobotoFlexRegular}"
+                                   FontSize="{StaticResource Small}"
+                                   Foreground="{DynamicResource ForegroundColorBrush3}" />
+                    </Border>
+
+                </StackPanel>
+
+            </Grid>
+        </Border>
+    </Border>
+</UserControl>
