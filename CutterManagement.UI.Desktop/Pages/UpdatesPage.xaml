@@ -1,11 +1,66 @@
-﻿<Page x:Class="CutterManagement.UI.Desktop.UpdatesPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
-      mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
-      Title="UpdatesPage">
+﻿<Page x:Class="CutterManagement.UI.Desktop.UpdatesPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
+      Title="UpdatesPage" d:DesignHeight="450"
+      d:DesignWidth="800" mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock Text="{Binding Test}"
-                   FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    <Border Padding="12" Background="{DynamicResource BackgroundColorBrush1}">
 
-    </Grid>
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Margin="6,10"
+                   Foreground="{DynamicResource ForegroundColorBrush3}"
+                   FontFamily="{StaticResource RobotoFlexRegular}"
+                   FontSize="{StaticResource XXLarge}"
+                   FontWeight="Black">
+                <TextBlock>
+                    <![CDATA[News & Updates]]>
+                </TextBlock>
+            </Label>
+
+            <Grid Grid.Row="1" Height="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Width="200"
+                        Margin="10,0" Content="Plus"
+                        Tag="Add new information"
+                        Command="{Binding OpenNewInfoUpdateCommand}"
+                        Style="{StaticResource TransparentButtonWithTextStyle}" />
+
+
+            </Grid>
+
+            <!--  items  -->
+            <ScrollViewer Grid.Row="2" Margin="0,30,0,10"
+                          Padding="10" VerticalScrollBarVisibility="Hidden"
+                          HorizontalScrollBarVisibility="Disabled">
+
+                <Grid>
+
+                    <ItemsControl x:Name="Items" ItemsSource="{Binding InfoUpdates}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <VirtualizingStackPanel Orientation="Vertical">
+                                    <local:InfoUpdatesItemControl Width="1000" Margin="20" />
+                                </VirtualizingStackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+
+            </ScrollViewer>
+
+        </Grid>
+    </Border>
 </Page>

@@ -42,7 +42,7 @@
                               HorizontalContentAlignment="Stretch"
                               d:ItemsSource="{Binding RingItems}"
                               Focusable="False"
-                              ItemsSource="{Binding PinItems}">
+                              ItemsSource="{Binding PinItems, UpdateSourceTrigger=PropertyChanged}">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -55,7 +55,7 @@
                 <ItemsControl Grid.Column="1" HorizontalContentAlignment="Stretch"
                               d:ItemsSource="{Binding RingItems}"
                               Focusable="False"
-                              ItemsSource="{Binding RingItems}">
+                              ItemsSource="{Binding RingItems, UpdateSourceTrigger=PropertyChanged}">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>

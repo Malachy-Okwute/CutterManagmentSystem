@@ -36,6 +36,11 @@ namespace CutterManagement.DataAccess
         /// </summary>
         public DbSet<CMMDataModel> CMMData => Set<CMMDataModel>();
 
+        /// <summary>
+        /// Information updates
+        /// </summary>
+        public DbSet<InfoUpdateDataModel> InfoUpdates => Set<InfoUpdateDataModel>();
+
         #endregion
 
         #region Constructor
@@ -125,6 +130,18 @@ namespace CutterManagement.DataAccess
 
             #endregion
 
+            #region Info Updates Model Configuration
+
+            modelBuilder.Entity<InfoUpdateDataModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.Author).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.Title).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.Information).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.LastUpdatedDate).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.DateCreated).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.PublishDate).IsRequired().HasMaxLength(100);
+
+            #endregion
+
             #region Relationship Configurations
 
             // Parts and machines
@@ -134,6 +151,10 @@ namespace CutterManagement.DataAccess
             // Users and machines
             modelBuilder.Entity<MachineUserInteractions>().HasOne(u => u.UserDataModel).WithMany(mui => mui.MachineUserInteractions).HasForeignKey(fk => fk.UserDataModelId);
             modelBuilder.Entity<MachineUserInteractions>().HasOne(m => m.MachineDataModel).WithMany(mui => mui.MachineUserInteractions).HasForeignKey(fk => fk.MachineDataModelId);
+
+            // Users and information updates
+            modelBuilder.Entity<InfoUpdateUserRelations>().HasOne(u => u.UserDataModel).WithMany(mui => mui.InfoUpdateUserRelations).HasForeignKey(fk => fk.UserDataModelId);
+            modelBuilder.Entity<InfoUpdateUserRelations>().HasOne(i => i.InfoUpdateDataModel).WithMany(mui => mui.InfoUpdateUserRelations).HasForeignKey(fk => fk.InfoUpdatesDataModelId);
 
             // Cutter and machine
             modelBuilder.Entity<MachineDataModel>().HasOne(m => m.Cutter).WithOne(c => c.MachineDataModel).HasForeignKey<CutterDataModel>(c => c.MachineDataModelId);

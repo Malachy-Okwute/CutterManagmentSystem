@@ -1,7 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -18,9 +17,17 @@ namespace CutterManagement.UI.Desktop
             // Add view models
 
             // Singletons
-            services.AddSingleton<HomePageViewModel>();
-            services.AddSingleton<NavigationBarViewModel>();
-            services.AddSingleton<MachineItemCollectionViewModel>();
+            // NOTE: Does not allow migration
+            //services.AddSingleton<HomePageViewModel>();
+            //services.AddSingleton<NavigationBarViewModel>();
+            //services.AddSingleton<MachineItemCollectionViewModel>();
+
+            // Singletons 
+            // NOTE: Allows migration
+            services.AddSingleton(provider => 
+            new NavigationBarViewModel(provider.GetRequiredService<PageFactory>(), provider.GetRequiredService<ShiftProfileViewModel>()));
+            services.AddSingleton(provider => new HomePageViewModel(provider.GetRequiredService<MachineItemCollectionViewModel>()));
+            services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IMachineService>()));
 
             // Transients
             services.AddTransient<InfoPageViewModel>();
@@ -40,7 +47,6 @@ namespace CutterManagement.UI.Desktop
             services.AddTransient<CutterRelocationDialogViewModel>();
             services.AddTransient<MachineConfigurationDialogViewModel>();
             services.AddTransient<MachineStatusSettingDialogViewModel>();
-
             
             // Return services
             return services;
@@ -94,6 +100,7 @@ namespace CutterManagement.UI.Desktop
             DialogService.RegisterDialog<UserManagerDialogViewModel, UserManagerDialog>();
             DialogService.RegisterDialog<MachineSetupDialogViewModel, MachineSetupDialog>();
             DialogService.RegisterDialog<CutterRemovalDialogViewModel, CutterRemovalDialog>();
+            DialogService.RegisterDialog<NewInfoUpdateDialogViewModel, NewInfoUpdateDialog>();
             DialogService.RegisterDialog<FrequencyCheckDialogViewModel, FrequencyCheckDialog>();
             DialogService.RegisterDialog<CutterRelocationDialogViewModel, CutterRelocationDialog>();
             DialogService.RegisterDialog<MachineStatusSettingDialogViewModel, StatusSettingDialog>();

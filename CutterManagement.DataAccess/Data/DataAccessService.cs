@@ -11,6 +11,11 @@ namespace CutterManagement.DataAccess
     public class DataAccessService<T> : IDataAccessService<T> where T : class
     {
         /// <summary>
+        /// Locker
+        /// </summary>
+        private readonly object _locker = new object();
+
+        /// <summary>
         /// The application database client
         /// </summary>
         protected ApplicationDbContext _applicationDbContext;
@@ -73,7 +78,19 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="Task"/> of <see cref="IReadOnlyList{T}"/></returns>
         public async Task<IReadOnlyList<T>> GetAllEntitiesAsync()
         {
-            return await _dbTable.ToListAsync();
+            //return await _dbTable.ToListAsync();
+
+            IReadOnlyList<T> entities;
+
+            // prevent multiple access to a table at once
+            lock (_locker)
+            {
+                // Get entities
+                entities = _dbTable.ToList(); 
+            }
+
+            // Return result 
+            return await Task.FromResult(entities); 
         }
 
         /// <summary>

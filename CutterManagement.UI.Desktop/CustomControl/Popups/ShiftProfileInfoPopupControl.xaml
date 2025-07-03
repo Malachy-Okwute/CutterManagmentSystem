@@ -33,9 +33,11 @@
                 <Grid Grid.Row="0" Margin="10">
 
                     <Label HorizontalContentAlignment="Left" Content="Dept-048"
-                           FontWeight="Black" BorderBrush="{DynamicResource BorderColorBrush5}" BorderThickness="1"
+                           FontWeight="Black"
+                           BorderBrush="{DynamicResource BorderColorBrush5}"
+                           BorderThickness="2"
                            FontFamily="{StaticResource RobotoFlexRegular}"
-                           FontSize="{StaticResource XSmall}"
+                           FontSize="{StaticResource Small}"
                            Foreground="{DynamicResource ForegroundColorBrush3}" />
 
                     <Label HorizontalContentAlignment="Right" d:Content="Wednesday, June 25, 2025"

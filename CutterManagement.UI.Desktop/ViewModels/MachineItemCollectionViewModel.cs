@@ -1,6 +1,8 @@
 ﻿using CutterManagement.Core;
 using PropertyChanged;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows.Data;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -20,16 +22,6 @@ namespace CutterManagement.UI.Desktop
         /// Collection of <see cref="MachineItemControl"/> representing pins
         /// </summary>
         private ObservableCollection<MachineItemViewModel> _pinItems;
-
-        /// <summary>
-        /// Data service factory
-        /// </summary>
-        //private IDataAccessServiceFactory _machineService.DataAccess => _machineService.DataAccess;
-
-        /// <summary>
-        /// Load data asynchronously 
-        /// </summary>
-        private readonly Task _dataLoader;
 
         /// <summary>
         /// Provides services to machine
@@ -74,7 +66,7 @@ namespace CutterManagement.UI.Desktop
             _pinItems = new ObservableCollection<MachineItemViewModel>();
 
             // Load data
-            _dataLoader = LoadMachineData();
+            _ = LoadMachineData();
 
             // Register this object to receive messages from messenger
             Messenger.MessageSender.RegisterMessenger(this);
@@ -91,86 +83,96 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task"/></returns>
         private async Task LoadMachineData()
         {
-            // Makes sure we have service
-            if (_machineService.DataBaseAccess is null) return;
-
-            // Get tables needed
-            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
-            IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
-
-            // Ensure pin and ring collections are empty
-            _pinItems.Clear();
-            _ringItems.Clear();
-
-            // if we don't have any data in the database
-            if ((await machineTable.GetAllEntitiesAsync()).Count < 1)
+            try
             {
-                // Generate default ring and pins machine
-                var defaultPinionMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Pinion, 15);
-                var defaultRingMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Ring, 15);
+                // Makes sure we have service
+                if (_machineService.DataBaseAccess is null) return;
 
-                // Get admin user
-                UserDataModel admin = (await userTable.GetAllEntitiesAsync()).ToList().First(user => user.LastName is "admin");
+                // Get tables needed
+                IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+                IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
-                foreach (MachineDataModel data in defaultPinionMachineData)
+                // Ensure pin and ring collections are empty
+                _pinItems.Clear();
+                _ringItems.Clear();
+
+                // if we don't have any data in the database
+                if ((await machineTable.GetAllEntitiesAsync()).Count < 1)
                 {
-                    // NOTE: Default machine is generated using admin as default user 
+                    // Generate default ring and pins machine
+                    var defaultPinionMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Pinion, 15);
+                    var defaultRingMachineData = MachinesDataGenerator.GenerateDefaultMachineItems(Department.Ring, 15);
 
-                    // Set admin as the default user for the generated machines
-                    data.MachineUserInteractions.Add(new MachineUserInteractions
+                    // Get admin user
+                    UserDataModel admin = (await userTable.GetAllEntitiesAsync()).ToList().First(user => user.LastName is "admin");
+
+                    foreach (MachineDataModel data in defaultPinionMachineData)
                     {
-                        UserDataModel = admin,
-                        MachineDataModel = data
-                    });
+                        // NOTE: Default machine is generated using admin as default user 
 
-                    // Create machine db entity
-                    await machineTable.CreateNewEntityAsync(data);
-                  
-                    // Populate item list
-                    _pinItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged));
+                        // Set admin as the default user for the generated machines
+                        data.MachineUserInteractions.Add(new MachineUserInteractions
+                        {
+                            UserDataModel = admin,
+                            MachineDataModel = data
+                        });
+
+                        // Create machine db entity
+                        await machineTable.CreateNewEntityAsync(data);
+
+                        // Populate item list
+                        _pinItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged));
+                    }
+
+                    foreach (MachineDataModel data in defaultRingMachineData)
+                    {
+                        // NOTE: Default machine is generated using admin as default user 
+
+                        // Set admin as the default user for the generated machines
+                        data.MachineUserInteractions.Add(new MachineUserInteractions
+                        {
+                            UserDataModel = admin,
+                            MachineDataModel = data
+                        });
+
+                        // Create machine db entity
+                        await machineTable.CreateNewEntityAsync(data);
+
+                        // Populate item list
+                        _ringItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged));
+                    }
+
+                    // Do nothing else
+                    return;
                 }
 
-                foreach (MachineDataModel data in defaultRingMachineData)
+                // Go through each data from database
+                foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
                 {
-                    // NOTE: Default machine is generated using admin as default user 
+                    // Resolve data
+                    MachineItemViewModel machineItem = await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged);
 
-                    // Set admin as the default user for the generated machines
-                    data.MachineUserInteractions.Add(new MachineUserInteractions
+                    // If machine data is owned by pinion
+                    if (machineItem.Owner is Department.Pinion)
                     {
-                        UserDataModel = admin,
-                        MachineDataModel = data
-                    });
-
-                    // Create machine db entity
-                    await machineTable.CreateNewEntityAsync(data);
-
-                    // Populate item list
-                    _ringItems.Add(await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged));
+                        // Populate pin item list with data
+                        _pinItems.Add(machineItem);
+                    }
+                    // Otherwise
+                    else
+                    {
+                        // Populate ring item list with data
+                        _ringItems.Add(machineItem);
+                    }
                 }
 
-                // Do nothing else
-                return;
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                Debugger.Break();
             }
 
-            // Go through each data from database
-            foreach (MachineDataModel data in await machineTable.GetAllEntitiesAsync())
-            {
-                // Resolve data
-                MachineItemViewModel machineItem = await DataResolver.ResolveToMachineItemViewModel(data, _machineService, OnItemSelectionChanged);
-
-                // If machine data is owned by pinion
-                if (machineItem.Owner is Department.Pinion)
-                {
-                    // Populate pin item list with data
-                    _pinItems.Add(machineItem);
-                }
-                // Otherwise
-                else
-                {
-                    // Populate ring item list with data
-                    _ringItems.Add(machineItem);
-                }
-            }
         }
 
         /// <summary>
