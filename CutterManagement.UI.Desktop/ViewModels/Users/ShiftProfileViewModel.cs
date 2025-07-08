@@ -119,10 +119,10 @@ namespace CutterManagement.UI.Desktop
         {
             _timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(1)
+                Interval = TimeSpan.FromSeconds(1)
             };
 
-            _timer.Tick += (s, e) =>
+            _timer.Tick += async (s, e) =>
             {
                 // Update date 
                 Date = DateTime.Now.ToString("D");
@@ -132,7 +132,7 @@ namespace CutterManagement.UI.Desktop
                 GetCurrentShift();
 
                 // Get number of user in the current shift
-                _ = GetNumberOfUsersInCurrentShift();
+                await GetNumberOfUsersInCurrentShift(); 
             };
 
             _timer.Start();
@@ -147,7 +147,7 @@ namespace CutterManagement.UI.Desktop
             var usersTable = _dataFactory.GetDbTable<UserDataModel>();
 
             NumberOfUsers = (await usersTable.GetAllEntitiesAsync())
-                            .Count(user => EnumHelpers.GetDescription(user.Shift) == CurrentShift && user.IsArchived is false)
+                            .Count(user => EnumHelpers.GetDescription(user.Shift) == CurrentShift && user.IsArchived is false && user.FirstName != "resource")
                             .ToString();
         }
 

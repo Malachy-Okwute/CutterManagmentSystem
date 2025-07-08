@@ -1,10 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
-using System.Threading.Tasks;
-using System.Windows.Automation.Peers;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace CutterManagement.UI.Desktop
 {

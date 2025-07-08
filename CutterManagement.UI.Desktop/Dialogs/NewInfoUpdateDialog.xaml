@@ -44,16 +44,17 @@
                 </Grid.RowDefinitions>
 
                 <TextBox Grid.Row="0" Margin="5"
-                         VerticalContentAlignment="Center" Tag="Title" TextWrapping="NoWrap"
-                         AcceptsReturn="False"
+                         local:FocusAttachedProperty.SetFocus="True"
+                         VerticalContentAlignment="Center" Tag="Title"
+                         TextWrapping="NoWrap" AcceptsReturn="False"
                          Style="{StaticResource RegularTextBoxStyle}"
-                         Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
 
                 <TextBox Grid.Row="1" Margin="5"
                          VerticalContentAlignment="Top" Tag="News &amp; update to broadcast"
                          AcceptsReturn="True"
                          Style="{StaticResource RegularTextBoxStyle}"
-                         Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding Information, UpdateSourceTrigger=PropertyChanged}" />
 
                 <ComboBox Grid.Row="2" Height="35"
                           Margin="5"
@@ -85,7 +86,7 @@
                             FontSize="{StaticResource XSmall}"
                             BorderThickness="2"
                             Style="{StaticResource TransparentButtonStyle}"
-                            Command="{Binding UpdateCommand}" />
+                            Command="{Binding BroadcastCommand}" />
                 </Grid>
 
             </Grid>

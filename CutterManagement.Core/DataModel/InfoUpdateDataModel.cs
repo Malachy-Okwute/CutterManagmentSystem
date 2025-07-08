@@ -9,17 +9,12 @@ namespace CutterManagement.Core
     /// <summary>
     /// Data model for information updates
     /// </summary>
-    public class InfoUpdateDataModel : DataModelBase
+    public class InfoUpdateDataModel : DataModelBase, IMessage
     {
         /// <summary>
         /// Title of this information update
         /// </summary>
         public string Title { get; set; }
-
-        /// <summary>
-        /// Author of this information update
-        /// </summary>
-        public string Author { get; set; }
 
         /// <summary>
         /// Date this information was published

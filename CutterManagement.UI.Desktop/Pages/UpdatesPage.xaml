@@ -41,12 +41,26 @@
 
             </Grid>
 
-            <!--  items  -->
-            <ScrollViewer Grid.Row="2" Margin="0,30,0,10"
-                          Padding="10" VerticalScrollBarVisibility="Hidden"
-                          HorizontalScrollBarVisibility="Disabled">
+            <Border Grid.Row="2" Height="4" BorderThickness="0 1.8 0 0" Opacity="0.4"
+                    Margin="0,20,0,0" VerticalAlignment="Top">
+                <Border.BorderBrush>
+                    <LinearGradientBrush StartPoint="0 0" EndPoint=" 1 0">
+                        <GradientStop Offset="0" Color="{DynamicResource BackgroundColor1}" />
+                        <GradientStop Offset="0.5" Color="{DynamicResource BackgroundColor7}" />
+                        <GradientStop Offset="1" Color="{DynamicResource BackgroundColor1}"/>
+                    </LinearGradientBrush>
+                </Border.BorderBrush>
 
-                <Grid>
+            </Border>
+
+            <!--  items  -->
+            <Border Grid.Row="2" Margin="0,20,0,0"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource BorderColorBrush6}">
+
+                <ScrollViewer Padding="10" VerticalScrollBarVisibility="Hidden"
+                              HorizontalScrollBarVisibility="Disabled">
+
 
                     <ItemsControl x:Name="Items" ItemsSource="{Binding InfoUpdates}">
                         <ItemsControl.ItemTemplate>
@@ -57,10 +71,10 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </Grid>
 
-            </ScrollViewer>
+                </ScrollViewer>
 
+            </Border>
         </Grid>
     </Border>
 </Page>

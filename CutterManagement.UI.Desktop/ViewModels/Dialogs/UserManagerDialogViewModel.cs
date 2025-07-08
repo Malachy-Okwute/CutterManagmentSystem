@@ -83,7 +83,7 @@ namespace CutterManagement.UI.Desktop
         public UserManagerDialogViewModel(IDataAccessServiceFactory dataFactory)
         {
             _dataFactory = dataFactory;
-            _deactivatedUser = new();
+            _deactivatedUser = new ObservableCollection<DeactivatedUserViewModel>();
 
             ActivateUserCommand = new RelayCommand(async () => await ActivateUser());
             DeleteUserCommand = new RelayCommand(async () => await DeleteUser());

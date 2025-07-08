@@ -78,19 +78,14 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="Task"/> of <see cref="IReadOnlyList{T}"/></returns>
         public async Task<IReadOnlyList<T>> GetAllEntitiesAsync()
         {
-            //return await _dbTable.ToListAsync();
-
             IReadOnlyList<T> entities;
-
-            // prevent multiple access to a table at once
-            lock (_locker)
+            
+            lock(_locker)
             {
-                // Get entities
-                entities = _dbTable.ToList(); 
+                entities = _dbTable.ToList();
             }
 
-            // Return result 
-            return await Task.FromResult(entities); 
+            return await Task.FromResult(entities);
         }
 
         /// <summary>

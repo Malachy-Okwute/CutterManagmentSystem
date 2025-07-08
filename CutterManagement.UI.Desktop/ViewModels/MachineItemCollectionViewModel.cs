@@ -2,7 +2,6 @@
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Windows.Data;
 
 namespace CutterManagement.UI.Desktop
 {

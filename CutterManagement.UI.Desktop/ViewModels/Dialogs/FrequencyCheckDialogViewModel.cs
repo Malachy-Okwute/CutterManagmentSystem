@@ -19,11 +19,6 @@ namespace CutterManagement.UI.Desktop
         private UserDataModel _user;
 
         /// <summary>
-        /// Loads user
-        /// </summary>
-        private Task _taskLoader;
-
-        /// <summary>
         /// Passed check
         /// </summary>
         private FrequencyCheckResult _passedCheck = FrequencyCheckResult.Passed;
@@ -141,7 +136,7 @@ namespace CutterManagement.UI.Desktop
             UsersCollection = new Dictionary<UserDataModel, string>();
             _machineService = machineService;
 
-            _taskLoader = GetUsers();
+            _ = GetUsers();
 
             // Create commands
             CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));

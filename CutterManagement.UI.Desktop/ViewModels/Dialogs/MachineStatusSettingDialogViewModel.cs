@@ -33,11 +33,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private UserDataModel _user;
 
-        /// <summary>
-        /// Task loader
-        /// </summary>
-        private Task _taskLoader;
-
         #endregion
 
         #region Properties
@@ -150,7 +145,7 @@ namespace CutterManagement.UI.Desktop
             StatusCollection = new Dictionary<MachineStatus, string>();
             UsersCollection = new Dictionary<UserDataModel, string>();
 
-            _taskLoader = GetUsers();
+            _ = GetUsers();
 
             foreach (MachineStatus status in Enum.GetValues<MachineStatus>())
             {
@@ -246,7 +241,7 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Set message
-                string message = string.IsNullOrEmpty(result.ErrorMessage) ? "SelectedMachine status successfully set " : result.ErrorMessage;
+                string message = string.IsNullOrEmpty(result.ErrorMessage) ? $"{data.MachineNumber} status successfully set " : result.ErrorMessage;
 
                 // Set flag
                 IsSuccess = result.IsValid;

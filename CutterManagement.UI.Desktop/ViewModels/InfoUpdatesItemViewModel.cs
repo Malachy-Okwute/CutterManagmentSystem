@@ -6,6 +6,11 @@
     public class InfoUpdatesItemViewModel : ViewModelBase
     {
         /// <summary>
+        /// Unique id of this information
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Title of this information update
         /// </summary>
         public string Title { get; set; }

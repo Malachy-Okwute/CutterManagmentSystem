@@ -1,11 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 

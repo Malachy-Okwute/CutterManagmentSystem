@@ -133,12 +133,11 @@ namespace CutterManagement.DataAccess
             #region Info Updates Model Configuration
 
             modelBuilder.Entity<InfoUpdateDataModel>().HasKey(x => x.Id);
-            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.Author).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.Information).IsRequired();
             modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.Title).IsRequired().HasMaxLength(100);
-            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.Information).IsRequired().HasMaxLength(100);
-            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.LastUpdatedDate).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.DateCreated).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.PublishDate).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.LastUpdatedDate).IsRequired().HasMaxLength(100);
 
             #endregion
 

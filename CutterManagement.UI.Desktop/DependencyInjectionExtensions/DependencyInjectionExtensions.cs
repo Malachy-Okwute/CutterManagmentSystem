@@ -42,6 +42,7 @@ namespace CutterManagement.UI.Desktop
             services.AddTransient<CMMCheckDialogViewModel>();
             services.AddTransient<CutterSwapDialogViewModel>();
             services.AddTransient<MachineSetupDialogViewModel>();
+            services.AddTransient<NewInfoUpdateDialogViewModel>();
             services.AddTransient<CutterRemovalDialogViewModel>();
             services.AddTransient<FrequencyCheckDialogViewModel>();
             services.AddTransient<CutterRelocationDialogViewModel>();
