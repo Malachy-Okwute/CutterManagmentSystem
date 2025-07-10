@@ -36,6 +36,11 @@ namespace CutterManagement.UI.Desktop
         public string Information { get; set; }
 
         /// <summary>
+        /// Flag indicating that users are currently being fetched
+        /// </summary>
+        private bool _isFetchingUsers;
+
+        /// <summary>
         /// Collection of users
         /// </summary>
         public Dictionary<UserDataModel, string> UsersCollection { get; set; }
@@ -138,16 +143,28 @@ namespace CutterManagement.UI.Desktop
             // Get user db table
             IDataAccessService<UserDataModel> users = _dataFactory.GetDbTable<UserDataModel>();
 
-            // Collection of users
-            IReadOnlyList<UserDataModel> collectionOfUsers = await users.GetAllEntitiesAsync();
-
-            foreach (UserDataModel userData in collectionOfUsers)
+            if (_isFetchingUsers) return;
             {
-                // Do not load admin user
-                if (userData.LastName is "admin")
-                    continue;
+                _isFetchingUsers = true;
 
-                UsersCollection.Add(userData, userData.FirstName.PadRight(10) + userData.LastName);
+                try
+                {
+                    // Collection of users
+                    IReadOnlyList<UserDataModel> collectionOfUsers = await users.GetAllEntitiesAsync();
+
+                    foreach (UserDataModel userData in collectionOfUsers)
+                    {
+                        // Do not load admin user
+                        if (userData.LastName is "admin")
+                            continue;
+
+                        UsersCollection.Add(userData, userData.FirstName.PadRight(10) + userData.LastName);
+                    }
+                }
+                finally
+                {
+                    _isFetchingUsers = false;
+                }
             }
 
             // Set current user

@@ -21,6 +21,11 @@ namespace CutterManagement.UI.Desktop
         private DispatcherTimer _timer;
 
         /// <summary>
+        /// Flag indicating that users are currently being fetched
+        /// </summary>
+        private bool _isFetchingUsers;
+
+        /// <summary>
         /// Current date of the day
         /// </summary>
         public string Date { get; set; }
@@ -129,10 +134,16 @@ namespace CutterManagement.UI.Desktop
                 // And time
                 Time = DateTime.Now.ToString("t");
 
+                string previousShift = CurrentShift;
+
                 GetCurrentShift();
 
-                // Get number of user in the current shift
-                await GetNumberOfUsersInCurrentShift(); 
+                // If shift changed...
+                if(previousShift.Equals(CurrentShift, StringComparison.OrdinalIgnoreCase) is false)
+                {
+                    // Get number of user in the current shift
+                    await GetNumberOfUsersInCurrentShift(); 
+                }
             };
 
             _timer.Start();
@@ -144,11 +155,22 @@ namespace CutterManagement.UI.Desktop
         /// <returns></returns>
         private async Task GetNumberOfUsersInCurrentShift()
         {
-            var usersTable = _dataFactory.GetDbTable<UserDataModel>();
+            if (_isFetchingUsers) return;
+            {
+                _isFetchingUsers = true;
 
-            NumberOfUsers = (await usersTable.GetAllEntitiesAsync())
-                            .Count(user => EnumHelpers.GetDescription(user.Shift) == CurrentShift && user.IsArchived is false && user.FirstName != "resource")
-                            .ToString();
+                try
+                {
+                    var usersTable = _dataFactory.GetDbTable<UserDataModel>();
+                    NumberOfUsers = (await usersTable.GetAllEntitiesAsync())
+                        .Count(user => EnumHelpers.GetDescription(user.Shift) == CurrentShift && user.IsArchived is false && user.FirstName != "resource")
+                        .ToString();
+                }
+                finally
+                {
+                        _isFetchingUsers = false;
+                }
+            }
         }
 
         /// <summary>

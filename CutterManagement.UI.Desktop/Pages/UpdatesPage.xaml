@@ -38,16 +38,16 @@
                         Command="{Binding OpenNewInfoUpdateCommand}"
                         Style="{StaticResource TransparentButtonWithTextStyle}" />
 
-
             </Grid>
 
-            <Border Grid.Row="2" Height="4" BorderThickness="0 1.8 0 0" Opacity="0.4"
-                    Margin="0,20,0,0" VerticalAlignment="Top">
+            <Border Grid.Row="2" Height="4"
+                    Margin="0,20,0,0" VerticalAlignment="Top"
+                    BorderThickness="0,1.8,0,0" Opacity="0.4">
                 <Border.BorderBrush>
                     <LinearGradientBrush StartPoint="0 0" EndPoint=" 1 0">
                         <GradientStop Offset="0" Color="{DynamicResource BackgroundColor1}" />
                         <GradientStop Offset="0.5" Color="{DynamicResource BackgroundColor7}" />
-                        <GradientStop Offset="1" Color="{DynamicResource BackgroundColor1}"/>
+                        <GradientStop Offset="1" Color="{DynamicResource BackgroundColor1}" />
                     </LinearGradientBrush>
                 </Border.BorderBrush>
 

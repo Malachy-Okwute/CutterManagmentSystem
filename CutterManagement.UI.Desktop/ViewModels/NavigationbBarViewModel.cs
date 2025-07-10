@@ -21,7 +21,7 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Page that is currently showing in the view
         /// </summary>
-        public ViewModelBase CurrentPage { get; private set; }
+        public ViewModelBase CurrentPage { get; private set;}
 
         /// <summary>
         /// View model for <see cref="UserProfileControl"/>
@@ -79,11 +79,51 @@ namespace CutterManagement.UI.Desktop
 
             // Create commands
             NavigateToHomePageCommand = new RelayCommand(GotoHomePage);
-            NavigateToUpdatesPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.UpdatePage));
-            NavigateToArchivesPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.ArchivePage));
-            NavigateToUsersPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.UserPage));
-            NavigateToSettingsPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.SettingsPage));
-            NavigateToInfoPageCommand = new RelayCommand(() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.InformationPage));
+            NavigateToUpdatesPageCommand = new RelayCommand(() => 
+            {
+                var page = _pageFactory.GetPageViewModel(AppPage.UpdatePage);
+
+                if (page.GetType() != CurrentPage?.GetType())
+                {
+                    CurrentPage = page;
+                }
+            });
+            NavigateToArchivesPageCommand = new RelayCommand(() =>
+            {
+                var page = _pageFactory.GetPageViewModel(AppPage.ArchivePage);
+
+                if (page.GetType() != CurrentPage?.GetType())
+                {
+                    CurrentPage = page;
+                }
+            });
+            NavigateToUsersPageCommand = new RelayCommand(() =>
+            {
+                var page = _pageFactory.GetPageViewModel(AppPage.UserPage);
+
+                if (page.GetType() != CurrentPage?.GetType())
+                {
+                    CurrentPage = page;
+                }
+            });
+            NavigateToSettingsPageCommand = new RelayCommand(() => 
+            {
+                var page = _pageFactory.GetPageViewModel(AppPage.SettingsPage);
+
+                if (page.GetType() != CurrentPage?.GetType())
+                {
+                    CurrentPage = page;
+                }
+            });
+            NavigateToInfoPageCommand = new RelayCommand(() =>
+            {
+                var page = _pageFactory.GetPageViewModel(AppPage.InformationPage);
+
+                if (page.GetType() != CurrentPage?.GetType())
+                {
+                    CurrentPage = page;
+                }
+            });
 
             // Goto home page on start up
             GotoHomePage();
@@ -94,6 +134,14 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Navigates to the home page of this application 
         /// </summary>
-        private void GotoHomePage() => CurrentPage = _pageFactory.GetPageViewModel(AppPage.HomePage);
+        private void GotoHomePage()
+        {
+            var page = _pageFactory.GetPageViewModel(AppPage.HomePage);
+
+            if (CurrentPage is null || page.GetType() != CurrentPage.GetType())
+            {
+                CurrentPage = page;
+            }
+        }
     }
 }

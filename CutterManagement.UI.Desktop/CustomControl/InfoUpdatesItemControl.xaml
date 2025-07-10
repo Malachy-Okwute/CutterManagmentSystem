@@ -60,7 +60,7 @@
         </Border>
 
         <Border Grid.Row="1" Padding="6"
-                BorderThickness="0,1"
+                BorderThickness="0,1" MinHeight="100"
                 BorderBrush="{DynamicResource BorderColorBrush6}">
             <TextBlock Margin="10,0" d:Text="   Lorem ipsum dolor sit amet. Id quisquam iure nam exercitationem provident eos quae molestiae et molestiae aperiam. In accusantium ratione aut ipsum ratione ut ullam dolorem qui repellat accusamus ut alias molestiae.  In possimus culpa et illum expedita in eaque consequuntur ut voluptas odit. Ut blanditiis quos eum voluptatem placeat est dolorem omnis eos temporibus facere qui assumenda impedit non error sequi ab incidunt dolorem. Id mollitia dolorem ab ipsam quia a temporibus rerum ut enim dolores.  Aut veritatis voluptates et repellendus totam aut voluptatum natus et vitae minima sed inventore assumenda sed expedita reprehenderit. In ullam distinctio est delectus facere cum omnis praesentium eum suscipit ullam sed quia labore sed Quis tempora ut voluptas placeat. "
                        Text="{Binding Information, UpdateSourceTrigger=PropertyChanged}"
