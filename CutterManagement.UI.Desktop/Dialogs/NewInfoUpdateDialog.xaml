@@ -44,9 +44,9 @@
                 </Grid.RowDefinitions>
 
                 <TextBox Grid.Row="0" Margin="5"
-                         local:FocusAttachedProperty.SetFocus="True"
-                         VerticalContentAlignment="Center" Tag="Title"
-                         TextWrapping="NoWrap" AcceptsReturn="False"
+                         VerticalContentAlignment="Center" local:FocusAttachedProperty.SetFocus="True"
+                         Tag="Title" TextWrapping="NoWrap"
+                         AcceptsReturn="False"
                          Style="{StaticResource RegularTextBoxStyle}"
                          Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -79,7 +79,8 @@
                             BorderBrush="{DynamicResource BorderColorBrush6}"
                             Command="{Binding CancelCommand}" />
                     <Button Width="130" Height="34"
-                            HorizontalAlignment="Right" Content="Broadcast"
+                            HorizontalAlignment="Right" d:Content="Broadcast"
+                            Content="{Binding ButtonContent, UpdateSourceTrigger=PropertyChanged}"
                             IsDefault="True"
                             BorderBrush="{DynamicResource BorderColorBrush3}"
                             FontFamily="{StaticResource RobotoFlexRegular}"

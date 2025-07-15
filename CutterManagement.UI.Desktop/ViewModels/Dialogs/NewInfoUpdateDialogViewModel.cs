@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -10,6 +11,8 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class NewInfoUpdateDialogViewModel : DialogViewModelBase, IDialogWindowCloseRequest
     {
+        #region Private Fields
+
         /// <summary>
         /// Data access
         /// </summary>
@@ -19,6 +22,33 @@ namespace CutterManagement.UI.Desktop
         /// The author of this information
         /// </summary>
         private UserDataModel _user;
+
+        /// <summary>
+        /// Flag indicating that users are currently being fetched
+        /// </summary>
+        private bool _isFetchingUsers;
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Unique associate with this information
+        /// <para>
+        /// NOTE: Used when editing this information
+        /// </para>
+        /// </summary>
+        public int Id { get; internal set; }
+
+        /// <summary>
+        /// True if information is being edited
+        /// </summary>
+        public bool IsEditMode { get; set; }
+
+        /// <summary>
+        /// Button content
+        /// </summary>
+        public string ButtonContent => IsEditMode ? "Update" : "Broadcast";
 
         /// <summary>
         /// Title of this information update
@@ -36,11 +66,6 @@ namespace CutterManagement.UI.Desktop
         public string Information { get; set; }
 
         /// <summary>
-        /// Flag indicating that users are currently being fetched
-        /// </summary>
-        private bool _isFetchingUsers;
-
-        /// <summary>
         /// Collection of users
         /// </summary>
         public Dictionary<UserDataModel, string> UsersCollection { get; set; }
@@ -54,10 +79,18 @@ namespace CutterManagement.UI.Desktop
             set => _user = value;
         }
 
+        #endregion
+
+        #region Events
+
         /// <summary>
         /// Event that is called to close dialog window
         /// </summary>
         public event EventHandler<DialogWindowCloseRequestedEventArgs> DialogWindowCloseRequest;
+
+        #endregion
+
+        #region Commands
 
         /// <summary>
         /// Command to cancel this operation
@@ -69,6 +102,10 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand BroadcastCommand { get; set; }
 
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -79,9 +116,17 @@ namespace CutterManagement.UI.Desktop
 
             _ = GetUsers();
 
-            CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
+            CancelCommand = new RelayCommand(() =>
+            {
+                DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
+                ClearDataResidue();
+            });
             BroadcastCommand = new RelayCommand(async () => await BroadcastInformation());
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Broadcast new information   
@@ -90,12 +135,14 @@ namespace CutterManagement.UI.Desktop
         {
             InfoUpdateDataModel? data = null;
 
+            // Get info table
             var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            // Get users table
             var userTable = _dataFactory.GetDbTable<UserDataModel>();
 
             // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
-
+            // Listen for when data changed in the database
             infoUpdateTable.DataChanged += (ss, e) =>
             {
                 data = e as InfoUpdateDataModel;
@@ -105,7 +152,9 @@ namespace CutterManagement.UI.Desktop
                     Messenger.MessageSender.SendMessage(data);
                 }
             };
-
+            // Get info from db (Used when editing information).
+            InfoUpdateDataModel? existingInfo = await infoUpdateTable.GetEntityByIdAsync(Id);
+            // Create new information
             InfoUpdateDataModel newInfo = new InfoUpdateDataModel
             {
                 Title = Title,
@@ -115,6 +164,7 @@ namespace CutterManagement.UI.Desktop
                 LastUpdatedDate = DateTime.Now.ToString("MM-dd-yyyy ~ hh:mm tt"),
             };
 
+            // If user is not null
             if(user is not null)
             {
                 // Set the user performing this operation
@@ -124,7 +174,59 @@ namespace CutterManagement.UI.Desktop
                     InfoUpdateDataModel = newInfo
                 });
 
-                await infoUpdateTable.CreateNewEntityAsync(newInfo);
+                // If we are not in editing mode...
+                if (IsEditMode is false)
+                {
+                    // Validate data
+                    ValidationResult result = new ValidationResult();
+                    result = DataValidationService.Validate(newInfo);
+
+                    // If validation failed...
+                    if (result.IsValid is false)
+                    {
+                        // Notify user with error message
+                        await DialogService.InvokeFeedbackDialog(this, result.ErrorMessage);
+                        // Do nothing else
+                        return;
+                    }
+
+                    // Create new information entry in database
+                    await infoUpdateTable.CreateNewEntityAsync(newInfo);
+                }
+                // Otherwise...
+                else if (IsEditMode && existingInfo is not null)
+                {
+                    // Validate data
+                    ValidationResult result = new ValidationResult();
+                    result = DataValidationService.Validate(existingInfo);
+
+                    if(result.IsValid is false)
+                    {
+                        // Notify user with error message
+                        await DialogService.InvokeFeedbackDialog(this, result.ErrorMessage);
+                        // Do nothing else
+                        return;
+                    }
+
+                    // Reset edit mode
+                    IsEditMode = false;
+
+                    // Set latest info to the existing info
+                    existingInfo.Title = Title;
+                    existingInfo.Information = Information;
+                    existingInfo.LastUpdatedDate = DateTime.Now.ToString("MM-dd-yyyy ~ hh:mm tt");
+                    existingInfo.InfoUpdateUserRelations.Add(new InfoUpdateUserRelations
+                    {
+                        UserDataModel = user,
+                        InfoUpdateDataModel = existingInfo
+                    });
+
+                    // Update existing info
+                    await infoUpdateTable.UpdateEntityAsync(existingInfo);
+                }
+
+                // Stop listening for data changing
+                infoUpdateTable.DataChanged -= delegate { };
             }
 
             // Mark process as successful
@@ -180,8 +282,13 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Clears any data residue
         /// </summary>
-        private void ClearDataResidue() => Title = Author = Information = string.Empty;
-        
+        private void ClearDataResidue()
+        {
+            Title = Author = Information = string.Empty;
+            // Set current user
+            _user = UsersCollection.FirstOrDefault().Key;
+        }
 
+        #endregion
     }
 }

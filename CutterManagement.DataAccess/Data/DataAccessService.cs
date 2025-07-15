@@ -99,7 +99,7 @@ namespace CutterManagement.DataAccess
         }
 
         /// <summary>
-        /// Gets an entity including it's list many navigation properties
+        /// Gets an entity including it's navigation properties
         /// </summary>
         /// <typeparam name="TProperty">The navigation property</typeparam>
         /// <param name="entityId">The main entity id to get</param>

@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -38,6 +39,16 @@ namespace CutterManagement.UI.Desktop
         public ICommand OpenNewInfoUpdateCommand { get; set; }
 
         /// <summary>
+        /// Command to edit information update
+        /// </summary>
+        public ICommand EditInfoUpdateCommand { get; set; }
+
+        /// <summary>
+        /// Command to delete an information update
+        /// </summary>
+        public ICommand DeleteInfoUpdateCommand { get; set; }
+
+        /// <summary>
         /// Collection of news and updates
         /// </summary>
         public ObservableCollection<InfoUpdatesItemViewModel> InfoUpdates
@@ -62,7 +73,37 @@ namespace CutterManagement.UI.Desktop
             // Register this object to receive messages from messenger
             Messenger.MessageSender.RegisterMessenger(this);
 
+            // Create commands
             OpenNewInfoUpdateCommand = new RelayCommand(OpenNewInfoUpdateDialog);
+            EditInfoUpdateCommand = new RelayCommand(async (itemId) => await EditInfoUpdate(Convert.ToInt32(itemId)));
+            DeleteInfoUpdateCommand = new RelayCommand((itemId) => DeleteInfoUpdate(Convert.ToInt32(itemId)));
+        }
+
+        private async Task EditInfoUpdate(int itemId)
+        {
+            var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            var infoRelationsTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+
+            InfoUpdateDataModel? info = await infoTable.GetEntityByIdAsync(itemId);
+            UserDataModel? user = (await infoRelationsTable.GetEntityByIdIncludingRelatedPropertiesAsync(itemId, i => i.InfoUpdateUserRelations))?
+                                 .InfoUpdateUserRelations
+                                 .FirstOrDefault()?
+                                 .UserDataModel;
+
+            if(info is not null && user is not null)
+            {
+                _newInfoUpdateDialog.IsEditMode = true;
+                _newInfoUpdateDialog.Id = info.Id;
+                _newInfoUpdateDialog.Title = info.Title;
+                _newInfoUpdateDialog.Information = info.Information;
+                _newInfoUpdateDialog.User = user;
+
+                DialogService.InvokeDialog(_newInfoUpdateDialog);
+            }
+        }
+
+        private void DeleteInfoUpdate(int itemId)
+        {
         }
 
         /// <summary>
@@ -91,7 +132,7 @@ namespace CutterManagement.UI.Desktop
                     var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
 
                     foreach (var info in (await infoUpdateTable.GetAllEntitiesAsync())) await AddInfoUpdate(info);
-                    
+
 
                     // Sort in a descending order
                     CollectionViewSource.GetDefaultView(InfoUpdates).SortDescriptions.Add(new SortDescription(nameof(InfoUpdatesItemViewModel.PublishDate), ListSortDirection.Descending));
@@ -110,27 +151,30 @@ namespace CutterManagement.UI.Desktop
         /// <param name="infoUpdate">The item to add to the list</param>
         private async Task AddInfoUpdate(InfoUpdateDataModel infoUpdate)
         {
-            // Make sure item doesn't already exist
-            if (_infoUpdates.Any(i => i.Id != infoUpdate.Id) || _infoUpdates.IsNullOrEmpty())
+            // If item already exist...
+            if(_infoUpdates.ToList().Exists(i => i.Id == infoUpdate.Id))
             {
-                var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
-
-                UserDataModel? user = (await infoUpdateTable.GetEntityByIdIncludingRelatedPropertiesAsync(infoUpdate.Id, i => i.InfoUpdateUserRelations))?
-                      .InfoUpdateUserRelations
-                      .FirstOrDefault()?
-                      .UserDataModel;
-
-
-                _infoUpdates.Add(new InfoUpdatesItemViewModel
-                {
-                    Id = infoUpdate.Id,
-                    Author = $"{user?.FirstName} {user?.LastName}",
-                    Title = infoUpdate.Title,
-                    PublishDate = infoUpdate.PublishDate,
-                    LastUpdatedDate = infoUpdate.LastUpdatedDate,
-                    Information = infoUpdate.Information,
-                });
+                // Remove it to add an updated data
+                _infoUpdates.RemoveAt(_infoUpdates.IndexOf(_infoUpdates.Single(i => i.Id == infoUpdate.Id)));
             }
+
+            var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+
+            UserDataModel? user = (await infoUpdateTable.GetEntityByIdIncludingRelatedPropertiesAsync(infoUpdate.Id, i => i.InfoUpdateUserRelations))?
+                                    .InfoUpdateUserRelations
+                                    .FirstOrDefault()?
+                                    .UserDataModel;
+
+            // Add item to collection
+            _infoUpdates.Add(new InfoUpdatesItemViewModel
+            {
+                Id = infoUpdate.Id,
+                Author = $"{user?.FirstName} {user?.LastName}",
+                Title = infoUpdate.Title,
+                PublishDate = infoUpdate.PublishDate,
+                LastUpdatedDate = infoUpdate.LastUpdatedDate,
+                Information = infoUpdate.Information,
+            });
 
             // Update property
             OnPropertyChanged(nameof(InfoUpdates));

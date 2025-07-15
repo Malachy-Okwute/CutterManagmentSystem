@@ -111,6 +111,7 @@ namespace CutterManagement.UI.Desktop
             DataValidationService.RegisterValidationPolicy(new UserValidationPolicy());
             DataValidationService.RegisterValidationPolicy(new PartValidationPolicy());
             DataValidationService.RegisterValidationPolicy(new MachineValidationPolicy());
+            DataValidationService.RegisterValidationPolicy(new InfoUpdatesValidationPolicy());
 
             // Return services
             return services;

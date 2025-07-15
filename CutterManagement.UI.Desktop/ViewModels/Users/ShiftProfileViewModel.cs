@@ -127,7 +127,7 @@ namespace CutterManagement.UI.Desktop
                 Interval = TimeSpan.FromSeconds(1)
             };
 
-            _timer.Tick += async (s, e) =>
+            _timer.Tick +=  (s, e) =>
             {
                 // Update date 
                 Date = DateTime.Now.ToString("D");
@@ -142,7 +142,7 @@ namespace CutterManagement.UI.Desktop
                 if(previousShift.Equals(CurrentShift, StringComparison.OrdinalIgnoreCase) is false)
                 {
                     // Get number of user in the current shift
-                    await GetNumberOfUsersInCurrentShift(); 
+                    _ = GetNumberOfUsersInCurrentShift(); 
                 }
             };
 

@@ -52,7 +52,7 @@ namespace CutterManagement.UI.Desktop
             {
                 if(item.MachineNumber.Equals(newData.MachineNumber))
                 {
-                    result.ErrorMessage = "SelectedMachine number already exist";
+                    result.ErrorMessage = $"{newData.MachineNumber} number already exist";
                     result.IsValid = false;
                 }
             }
