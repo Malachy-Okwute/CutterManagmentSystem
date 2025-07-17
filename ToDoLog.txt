@@ -1,0 +1,8 @@
+
+
+
+            // ToDo: 
+
+
+            // In the settings have an option of how long a data has to be in the database before getting archived. e.g. archive data after 3, 4, 6 months
+

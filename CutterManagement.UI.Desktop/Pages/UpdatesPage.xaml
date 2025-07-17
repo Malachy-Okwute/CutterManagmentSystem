@@ -61,16 +61,48 @@
                 <ScrollViewer Padding="10" VerticalScrollBarVisibility="Hidden"
                               HorizontalScrollBarVisibility="Disabled">
 
+                    <Grid>
 
-                    <ItemsControl x:Name="Items" ItemsSource="{Binding InfoUpdates}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <VirtualizingStackPanel Orientation="Vertical">
-                                    <local:InfoUpdatesItemControl Width="1000" Margin="20" />
-                                </VirtualizingStackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        <ItemsControl x:Name="Items" ItemsSource="{Binding InfoUpdates}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <VirtualizingStackPanel Orientation="Vertical">
+                                        <local:InfoUpdatesItemControl Width="1000" Margin="20" />
+                                    </VirtualizingStackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Border Grid.Row="1" Padding="20"
+                                BorderThickness="1"
+                                BorderBrush="{DynamicResource BorderColorBrush1}"
+                                Visibility="{Binding IsInfoUpdateEmpty, UpdateSourceTrigger=PropertyChanged, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=Invert}">
+
+                            <TextBlock Padding="20" HorizontalAlignment="Center"
+                                       VerticalAlignment="Top" Text="No current News or Updates to show"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource XLarge}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsBusy}" Value="False" />
+                                                    <Condition Binding="{Binding InfoUpdates.Count}" Value="0" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+
+                            </TextBlock>
+                        </Border>
+
+
+                    </Grid>
 
                 </ScrollViewer>
 

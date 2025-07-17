@@ -12,6 +12,11 @@ namespace CutterManagement.Core
     public class InfoUpdateDataModel : DataModelBase, IMessage
     {
         /// <summary>
+        /// True if this it is currently archived
+        /// </summary>
+        public bool IsArchived { get; set; }
+
+        /// <summary>
         /// Title of this information update
         /// </summary>
         public string Title { get; set; }

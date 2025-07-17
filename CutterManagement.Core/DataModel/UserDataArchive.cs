@@ -1,9 +1,9 @@
 ﻿namespace CutterManagement.Core
 {
     /// <summary>
-    /// A basic user data model
+    /// User data model archive
     /// </summary>
-    public class UserDataModel : DataModelBase, IMessage
+    public class UserDataArchive : DataModelBase
     {
         /// <summary>
         /// User first name 
@@ -23,7 +23,7 @@
         /// <summary>
         /// True if user is an active user
         /// </summary>
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; } 
 
         /// <summary>
         /// True if this user is no longer accessible / currently archived

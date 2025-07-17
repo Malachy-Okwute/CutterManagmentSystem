@@ -22,6 +22,11 @@ namespace CutterManagement.DataAccess
         public DbSet<UserDataModel> Users => Set<UserDataModel>();
 
         /// <summary>
+        /// User archive table
+        /// </summary>
+        public DbSet<UserDataArchive> UsersArchive => Set<UserDataArchive>();
+
+        /// <summary>
         /// Parts table
         /// </summary>
         public DbSet<PartDataModel> Parts => Set<PartDataModel>();
@@ -40,6 +45,16 @@ namespace CutterManagement.DataAccess
         /// Information updates
         /// </summary>
         public DbSet<InfoUpdateDataModel> InfoUpdates => Set<InfoUpdateDataModel>();
+
+        /// <summary>
+        /// Production part log / history
+        /// </summary>
+        public DbSet<ProductionPartsLogDataModel> ProductionPartsLog => Set<ProductionPartsLogDataModel>();
+
+        /// <summary>
+        /// Production part-log data archive
+        /// </summary>
+        public DbSet<ProductionPartsLogDataArchive> ProductionPartsLogDataArchive => Set<ProductionPartsLogDataArchive>();
 
         #endregion
 
@@ -88,6 +103,15 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<UserDataModel>().Property(x => x.FirstName).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<UserDataModel>().Property(x => x.LastName).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<UserDataModel>().Property(x => x.Shift).HasConversion<string>().IsRequired().HasMaxLength(100);
+
+            #endregion
+
+            #region User Data Archive Configuration
+
+            modelBuilder.Entity<UserDataArchive>().HasKey(x => x.Id);
+            modelBuilder.Entity<UserDataArchive>().Property(x => x.FirstName).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<UserDataArchive>().Property(x => x.LastName).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<UserDataArchive>().Property(x => x.Shift).HasConversion<string>().IsRequired().HasMaxLength(100);
 
             #endregion
 
@@ -141,11 +165,47 @@ namespace CutterManagement.DataAccess
 
             #endregion
 
-            #region Relationship Configurations
+            #region Production Parts Log Data Model Configuration
 
-            // Parts and machines
-            //modelBuilder.Entity<PartDataModel>().HasMany(p => p.MachineDataModel).WithMany(m => m.Parts);
-            //modelBuilder.Entity<MachineDataModel>().HasMany(p => p.Parts).WithMany(m => m.MachineDataModel);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().HasKey(x => x.Id);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.IsArchived);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.MachineNumber).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.PartNumber).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.Model).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.ToothCount).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.PieceCount).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.ToothSize).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.UserFullName).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.Comment).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.FrequencyCheckResult).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.CurrentShift).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.DateTimeOfCheck).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.DateCreated).IsRequired().HasMaxLength(100);
+
+            #endregion
+
+            #region Production Parts Log Data Archive Model Configuration
+
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().HasKey(x => x.Id);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.IsArchived);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.MachineNumber).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.PartNumber).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.Model).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.ToothCount).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.PieceCount).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.ToothSize).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.UserFullName).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.Comment).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.FrequencyCheckResult).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.CurrentShift).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.DateTimeOfCheck).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.DateCreated).IsRequired().HasMaxLength(100);
+
+            #endregion
+
+            #region Relationship Configurations
 
             // Users and machines
             modelBuilder.Entity<MachineUserInteractions>().HasOne(u => u.UserDataModel).WithMany(mui => mui.MachineUserInteractions).HasForeignKey(fk => fk.UserDataModelId);
@@ -174,7 +234,8 @@ namespace CutterManagement.DataAccess
             try
             {
                 // Run migration
-                await Database.MigrateAsync();
+                //await Database.MigrateAsync();
+                await Database.EnsureCreatedAsync();
             }
             catch (Exception ex)
             {

@@ -31,7 +31,21 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Is busy flag
         /// </summary>
-        private bool _isBusy;
+        public bool IsBusy { get; set; }
+
+        /// <summary>
+        /// Collection of news and updates
+        /// </summary>
+        public ObservableCollection<InfoUpdatesItemViewModel> InfoUpdates
+        {
+            get => _infoUpdates;
+            set => _infoUpdates = value;
+        }
+
+        /// <summary>
+        /// True if information update is empty, Otherwise false
+        /// </summary>
+        public bool IsInfoUpdateEmpty => _infoUpdates.Any();
 
         /// <summary>
         /// Command to open new info dialog command
@@ -47,15 +61,6 @@ namespace CutterManagement.UI.Desktop
         /// Command to delete an information update
         /// </summary>
         public ICommand DeleteInfoUpdateCommand { get; set; }
-
-        /// <summary>
-        /// Collection of news and updates
-        /// </summary>
-        public ObservableCollection<InfoUpdatesItemViewModel> InfoUpdates
-        {
-            get => _infoUpdates;
-            set => _infoUpdates = value;
-        }
 
         /// <summary>
         /// Default constructor
@@ -76,9 +81,13 @@ namespace CutterManagement.UI.Desktop
             // Create commands
             OpenNewInfoUpdateCommand = new RelayCommand(OpenNewInfoUpdateDialog);
             EditInfoUpdateCommand = new RelayCommand(async (itemId) => await EditInfoUpdate(Convert.ToInt32(itemId)));
-            DeleteInfoUpdateCommand = new RelayCommand((itemId) => DeleteInfoUpdate(Convert.ToInt32(itemId)));
+            DeleteInfoUpdateCommand = new RelayCommand(async (itemId) => await DeleteInfoUpdate(Convert.ToInt32(itemId)));
         }
 
+        /// <summary>
+        /// Edits information update
+        /// </summary>
+        /// <param name="itemId">The id of information to edit</param>
         private async Task EditInfoUpdate(int itemId)
         {
             var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
@@ -102,8 +111,34 @@ namespace CutterManagement.UI.Desktop
             }
         }
 
-        private void DeleteInfoUpdate(int itemId)
+        /// <summary>
+        /// Deletes information update
+        /// </summary>
+        /// <param name="itemId">The id of information to edit</param>
+        private async Task DeleteInfoUpdate(int itemId)
         {
+            var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+
+            InfoUpdateDataModel? info = await infoTable.GetEntityByIdAsync(itemId);
+
+            infoTable.DataChanged += (s, e) =>
+            {
+                InfoUpdatesItemViewModel? itemToRemove = _infoUpdates.FirstOrDefault(i => i.Id == itemId);
+
+                if (itemToRemove is not null)
+                {
+                    _infoUpdates.Remove(itemToRemove);
+                }
+
+                OnPropertyChanged(nameof(InfoUpdates));
+            };
+
+            if (info is not null)
+            {
+                await infoTable.DeleteEntityAsync(info);
+
+                OnPropertyChanged(nameof(IsInfoUpdateEmpty));
+            }
         }
 
         /// <summary>
@@ -119,11 +154,11 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task LoadUpdates()
         {
-            if (_isBusy) return;
+            if (IsBusy) return;
             {
                 try
                 {
-                    _isBusy = true;
+                    IsBusy = true;
 
                     // Make sure we have empty collection to start with
                     _infoUpdates.Clear();
@@ -140,7 +175,7 @@ namespace CutterManagement.UI.Desktop
                 }
                 finally
                 {
-                    _isBusy = false;
+                    IsBusy = false;
                 }
             }
         }
@@ -178,6 +213,7 @@ namespace CutterManagement.UI.Desktop
 
             // Update property
             OnPropertyChanged(nameof(InfoUpdates));
+            OnPropertyChanged(nameof(IsInfoUpdateEmpty));
         }
 
         /// <summary>
