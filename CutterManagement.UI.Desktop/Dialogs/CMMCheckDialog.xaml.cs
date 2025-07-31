@@ -14,16 +14,6 @@ namespace CutterManagement.UI.Desktop
             InitializeComponent();
         }
 
-        private void DecimalTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if(sender is TextBox control)
-            {
-                control.Text = ValidateInput(control.Text);
-
-                control.CaretIndex = control.Text.Length;
-            }
-        }
-
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (sender is TextBox control)
@@ -36,62 +26,76 @@ namespace CutterManagement.UI.Desktop
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e) => e.Handled = e.Key.Equals(Key.Space) ? true : false;
 
-        public string ValidateInput(string input)
-        {
-            input = input.Trim();
+        #region Old Code
 
-            if (string.IsNullOrEmpty(input))
-            {
-                return input = string.Empty;
-            }
+        //private void DecimalTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    if(sender is TextBox control)
+        //    {
+        //        control.Text = ValidateInput(control.Text);
 
-            char inputChar = input[input.Length - 1];
+        //        control.CaretIndex = control.Text.Length;
+        //    }
+        //}
 
-            if(char.IsDigit(inputChar) is false && (inputChar != '-' && inputChar != '.'))
-            {
-                return input = input.Remove(input.Length - 1);
-            }
+        //public string ValidateInput(string input)
+        //{
+        //    input = input.Trim();
 
-            if (input == "00" && input.Length > 1 && input[0] == '0')
-            {
-                return input = input.Remove(input.Length - 1);
-            }
+        //    if (string.IsNullOrEmpty(input))
+        //    {
+        //        return input = string.Empty;
+        //    }
 
-            if (char.IsLetter(input[input.Length - 1]))
-            {
-                return input = input.Remove(input.Length - 1);
-            }
+        //    char inputChar = input[input.Length - 1];
 
-            if (char.IsDigit(inputChar) is false && (inputChar == '-' || inputChar == '.'))
-            {
-                if (inputChar == '-' && input.Length > 1)
-                {
-                    input = input.Remove(input.Length - 1);
-                }
+        //    if(char.IsDigit(inputChar) is false && (inputChar != '-' && inputChar != '.'))
+        //    {
+        //        return input = input.Remove(input.Length - 1);
+        //    }
 
-                if (inputChar == '.' && input.Count(i => i == inputChar) > 1)
-                {
-                    input = input.Remove(input.Length - 1);
-                }
-            }
+        //    if (input == "00" && input.Length > 1 && input[0] == '0')
+        //    {
+        //        return input = input.Remove(input.Length - 1);
+        //    }
 
-            if (input.Contains("."))
-            {
-                string decimalPortion = input.Substring(input.IndexOf('.'));
+        //    if (char.IsLetter(input[input.Length - 1]))
+        //    {
+        //        return input = input.Remove(input.Length - 1);
+        //    }
 
-                if(input.IndexOf('.') == 0)
-                {
-                    input = input.Insert(0, "0");
-                }
-                else if((input.IndexOf('-') == 0 && input.IndexOf('.') == 1))
-                {
-                    input = input.Insert(1, "0");
-                }
+        //    if (char.IsDigit(inputChar) is false && (inputChar == '-' || inputChar == '.'))
+        //    {
+        //        if (inputChar == '-' && input.Length > 1)
+        //        {
+        //            input = input.Remove(input.Length - 1);
+        //        }
 
-                //input = decimalPortion.Length > 3 ? input.Remove(input.Length - 1) : input;
-            }
+        //        if (inputChar == '.' && input.Count(i => i == inputChar) > 1)
+        //        {
+        //            input = input.Remove(input.Length - 1);
+        //        }
+        //    }
 
-            return input;
-        }
+        //    if (input.Contains("."))
+        //    {
+        //        string decimalPortion = input.Substring(input.IndexOf('.'));
+
+        //        if(input.IndexOf('.') == 0)
+        //        {
+        //            input = input.Insert(0, "0");
+        //        }
+        //        else if((input.IndexOf('-') == 0 && input.IndexOf('.') == 1))
+        //        {
+        //            input = input.Insert(1, "0");
+        //        }
+
+        //        //input = decimalPortion.Length > 3 ? input.Remove(input.Length - 1) : input;
+        //    }
+
+        //    return input;
+        //}
+
+        #endregion
     }
 }

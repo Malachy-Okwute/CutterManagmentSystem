@@ -60,14 +60,180 @@
         </Border>
 
         <Border Grid.Row="1" MinHeight="100"
-                Padding="6" BorderThickness="0,1"
+                Padding="10,6" BorderThickness="0,1"
                 BorderBrush="{DynamicResource BorderColorBrush6}">
-            <TextBlock Margin="10,0" d:Text="   Lorem ipsum dolor sit amet. Id quisquam iure nam exercitationem provident eos quae molestiae et molestiae aperiam. In accusantium ratione aut ipsum ratione ut ullam dolorem qui repellat accusamus ut alias molestiae.  In possimus culpa et illum expedita in eaque consequuntur ut voluptas odit. Ut blanditiis quos eum voluptatem placeat est dolorem omnis eos temporibus facere qui assumenda impedit non error sequi ab incidunt dolorem. Id mollitia dolorem ab ipsam quia a temporibus rerum ut enim dolores.  Aut veritatis voluptates et repellendus totam aut voluptatum natus et vitae minima sed inventore assumenda sed expedita reprehenderit. In ullam distinctio est delectus facere cum omnis praesentium eum suscipit ullam sed quia labore sed Quis tempora ut voluptas placeat. "
-                       Text="{Binding Information, UpdateSourceTrigger=PropertyChanged}"
-                       TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
-                       FontFamily="{StaticResource RobotoFlexRegular}"
-                       FontSize="{StaticResource Small}"
-                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!--  information  -->
+                <Border Grid.Column="0" Margin="0,0,6,0"
+                        HorizontalAlignment="Stretch">
+
+                    <TextBlock d:Text="   Lorem ipsum dolor sit amet. Id quisquam iure nam exercitationem provident eos quae molestiae et molestiae aperiam. In accusantium ratione aut ipsum ratione ut ullam dolorem qui repellat accusamus ut alias molestiae.  In possimus culpa et illum expedita in eaque consequuntur ut voluptas odit. Ut blanditiis quos eum voluptatem placeat est dolorem omnis eos temporibus facere qui assumenda impedit non error sequi ab incidunt dolorem. Id mollitia dolorem ab ipsam quia a temporibus rerum ut enim dolores.  Aut veritatis voluptates et repellendus totam aut voluptatum natus et vitae minima sed inventore assumenda sed expedita reprehenderit. In ullam distinctio est delectus facere cum omnis praesentium eum suscipit ullam sed quia labore sed Quis tempora ut voluptas placeat. "
+                               Text="{Binding Information, UpdateSourceTrigger=PropertyChanged}"
+                               TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                               FontFamily="{StaticResource RobotoFlexRegular}"
+                               FontSize="{StaticResource Small}"
+                               Foreground="{DynamicResource ForegroundColorBrush3}" />
+                </Border>
+
+                <!--  new moves applied  -->
+                <Border Grid.Column="1" Width="350"
+                        Padding="12,4" VerticalAlignment="Top"
+                        d:Visibility="Collapsed"
+                        Visibility="{Binding HasAttachedMoves, Converter={local:BooleanToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  part type and number  -->
+                        <Border Grid.Row="0" Grid.Column="0"
+                                Grid.ColumnSpan="3" HorizontalAlignment="Stretch"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+
+                            <Grid>
+
+                                <TextBlock Margin="25,10" HorizontalAlignment="Left"
+                                           d:Text="Part Type: Ring"
+                                           Text="{Binding Kind, StringFormat=Part Type: {0}}"
+                                           FontFamily="{StaticResource RobotoFlexRegular}"
+                                           FontSize="{StaticResource Small}"
+                                           Foreground="{DynamicResource ForegroundColorBrush3}" />
+                                <TextBlock Margin="25,10" HorizontalAlignment="Right"
+                                           d:Text="Part Number: 10002000"
+                                           Text="{Binding PartNumber, StringFormat=Part Number: {0}}"
+                                           FontFamily="{StaticResource RobotoFlexRegular}"
+                                           FontSize="{StaticResource Small}"
+                                           Foreground="{DynamicResource ForegroundColorBrush3}" />
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="0"
+                                Background="{DynamicResource BackgroundColorBrush7}" />
+
+                        <!--#region applied moves-->
+
+                        <Border Grid.Row="1" Grid.Column="1"
+                                Padding="10,0"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+
+                            <TextBlock VerticalAlignment="Center" Text="Coast"
+                                       TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource Small}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="2"
+                                Padding="10,0"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+
+                            <TextBlock VerticalAlignment="Center" Text="Drive"
+                                       TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource Small}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                        </Border>
+
+                        <Border Grid.Row="2" Grid.Column="0"
+                                Padding="0"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Text="Pressure angle" TextTrimming="CharacterEllipsis"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource Small}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+
+                        </Border>
+
+                        <Border Grid.Row="3" Grid.Column="0"
+                                Padding="8,0"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+                            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"
+                                       Text="Spiral angle" TextTrimming="CharacterEllipsis"
+                                       TextWrapping="Wrap"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource Small}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                        </Border>
+
+                        <Border Grid.Row="2" Grid.Column="1"
+                                Padding="10,0"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="{Binding PressureAngleCoast}"
+                                       TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource Small}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                        </Border>
+
+                        <Border Grid.Row="2" Grid.Column="2"
+                                Padding="10,0"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="{Binding PressureAngleDrive}"
+                                       TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource Small}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                        </Border>
+
+                        <Border Grid.Row="3" Grid.Column="1"
+                                Padding="10,0"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="{Binding SpiralAngleCoast}"
+                                       TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource Small}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                        </Border>
+
+                        <Border Grid.Row="3" Grid.Column="2"
+                                Padding="10,0"
+                                BorderBrush="{DynamicResource BorderColorBrush5}"
+                                BorderThickness="1">
+
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="{Binding SpiralAngleDrive}"
+                                       TextTrimming="CharacterEllipsis" TextWrapping="Wrap"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       FontSize="{StaticResource Small}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                        </Border>
+
+                        <!--#endregion-->
+
+                    </Grid>
+                </Border>
+
+            </Grid>
         </Border>
 
         <Grid Grid.Row="2" Margin="10,4">

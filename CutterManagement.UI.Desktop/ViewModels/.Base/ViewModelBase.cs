@@ -25,5 +25,11 @@ namespace CutterManagement.UI.Desktop
             // Invoke the property changed event
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        /// <summary>
+        /// View model initialization
+        /// </summary>
+        protected virtual void Initialize() { }
+
     }
 }

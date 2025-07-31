@@ -34,5 +34,41 @@
         /// The actual information
         /// </summary>
         public string Information { get; set; }
+
+        /// <summary>
+        /// True if move is attached
+        /// </summary>
+        public bool HasAttachedMoves => string.IsNullOrEmpty(PartNumber) is false;
+
+        /// <summary>
+        /// Part type if a move is attached 
+        /// </summary>
+        public string? Kind { get; set; }
+
+        /// <summary>
+        /// Part number if a move is attached 
+        /// </summary>
+        public string? PartNumber { get; set; }
+
+        /// <summary>
+        /// Pressure angle value on coast
+        /// </summary>
+        public string? PressureAngleCoast { get; set; }
+
+        /// <summary>
+        /// Pressure angle value on drive
+        /// </summary>
+        public string? PressureAngleDrive { get; set; }
+
+        /// <summary>
+        /// Spiral angle value on coast
+        /// </summary>
+        public string? SpiralAngleCoast { get; set; }
+
+        /// <summary>
+        /// Spiral angle value on drive
+        /// </summary>
+        public string? SpiralAngleDrive { get; set; }
+
     }
 }

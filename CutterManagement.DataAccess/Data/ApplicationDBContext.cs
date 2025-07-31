@@ -162,6 +162,13 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.DateCreated).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.PublishDate).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.LastUpdatedDate).IsRequired().HasMaxLength(100);
+            // Attached moves
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.PressureAngleCoast).HasMaxLength(100).IsRequired(false);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.PressureAngleDrive).HasMaxLength(100).IsRequired(false);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.SpiralAngleCoast).HasMaxLength(100).IsRequired(false);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.SpiralAngleDrive).HasMaxLength(100).IsRequired(false);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.PartNumberWithMove).HasMaxLength(100).IsRequired(false);
+            modelBuilder.Entity<InfoUpdateDataModel>().Property(x => x.Kind).HasConversion<string>().HasMaxLength(100);
 
             #endregion
 
@@ -235,7 +242,8 @@ namespace CutterManagement.DataAccess
             {
                 // Run migration
                 //await Database.MigrateAsync();
-                await Database.EnsureCreatedAsync();
+
+                await Database.EnsureCreatedAsync(); // For development
             }
             catch (Exception ex)
             {

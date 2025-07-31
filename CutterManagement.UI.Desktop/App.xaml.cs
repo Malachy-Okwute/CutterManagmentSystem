@@ -282,7 +282,7 @@ namespace CutterManagement.UI.Desktop
                                                                     // https://learn.microsoft.com/en-us/answers/questions/1113995/changing-location-of-database-mdf-file-from-defaul
                                                                     // Create the *.mfd file in the bin folder instead of the user folder
                                                                     .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));                        
-                     });
+                     }, ServiceLifetime.Scoped);
 
                      services.AddViewModels();
                      services.AddServices();

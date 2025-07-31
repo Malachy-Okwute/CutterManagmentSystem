@@ -209,6 +209,14 @@ namespace CutterManagement.UI.Desktop
                 PublishDate = infoUpdate.PublishDate,
                 LastUpdatedDate = infoUpdate.LastUpdatedDate,
                 Information = infoUpdate.Information,
+
+                // Attached move
+                Kind = infoUpdate.Kind.ToString(),
+                PartNumber = infoUpdate.PartNumberWithMove,
+                PressureAngleCoast = infoUpdate.PressureAngleCoast,
+                PressureAngleDrive = infoUpdate.PressureAngleDrive,
+                SpiralAngleCoast = infoUpdate.SpiralAngleCoast,
+                SpiralAngleDrive = infoUpdate.SpiralAngleDrive,
             });
 
             // Update property

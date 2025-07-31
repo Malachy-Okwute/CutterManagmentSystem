@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
              d:DesignHeight="450" d:DesignWidth="800"
              mc:Ignorable="d">
+
     <Border Width="600" Height="380"
             Padding="10" HorizontalAlignment="Center"
             VerticalAlignment="Stretch"
@@ -78,19 +79,50 @@
                             BorderThickness="1"
                             BorderBrush="{DynamicResource BorderColorBrush6}"
                             Command="{Binding CancelCommand}" />
-                    <Button Width="130" Height="34"
-                            HorizontalAlignment="Right" d:Content="Broadcast"
-                            Content="{Binding ButtonContent, UpdateSourceTrigger=PropertyChanged}"
-                            IsDefault="True"
-                            BorderBrush="{DynamicResource BorderColorBrush3}"
-                            FontFamily="{StaticResource RobotoFlexRegular}"
-                            FontSize="{StaticResource XSmall}"
-                            BorderThickness="2"
-                            Style="{StaticResource TransparentButtonStyle}"
-                            Command="{Binding BroadcastCommand}" />
+
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+
+                        <Button Width="130" Height="34"
+                                Margin="0,0,10,0" Content="Attach moves"
+                                FontFamily="{StaticResource RobotoFlexRegular}"
+                                FontSize="{StaticResource XSmall}"
+                                BorderThickness="1"
+                                BorderBrush="{DynamicResource BorderColorBrush6}"
+                                Style="{StaticResource TransparentButtonStyle}"
+                                Command="{Binding OpenNewAdjustmentControlCommand}" />
+                        <Button Width="130" Height="34"
+                                d:Content="Broadcast"
+                                Content="{Binding ButtonContent, UpdateSourceTrigger=PropertyChanged}"
+                                IsDefault="True"
+                                BorderBrush="{DynamicResource BorderColorBrush3}"
+                                FontFamily="{StaticResource RobotoFlexRegular}"
+                                FontSize="{StaticResource XSmall}"
+                                BorderThickness="2"
+                                Style="{StaticResource TransparentButtonStyle}"
+                                Command="{Binding BroadcastCommand}" />
+                    </StackPanel>
+
                 </Grid>
 
             </Grid>
+
+            <Border Grid.RowSpan="2" Padding="10"
+                    d:Visibility="Collapsed"
+                    Visibility="{Binding IsNewAdjustmentControlOpen, Converter={local:BooleanToVisibilityConverter}}">
+                <!--<Border.InputBindings>
+                    <MouseBinding Command="{Binding CloseNewAdjustmentControlCommand}" MouseAction="LeftClick" />
+                </Border.InputBindings>-->
+
+                <Grid>
+                    <Border Margin="-18,-18,-18,-24"
+                            Background="{DynamicResource BackgroundColorBrush7}"
+                            Opacity="0.6" />
+
+                    <local:NewAdjustmentMoveControl MinWidth="350" Padding="10"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
         </Grid>
     </Border>
 </UserControl>

@@ -92,13 +92,7 @@ namespace CutterManagement.UI.Desktop
         public CreatePartDialogViewModel(IDataAccessServiceFactory dataServiceFactory)
         {
             _dataServiceFactory = dataServiceFactory;
-            PartKindCollection = new Dictionary<PartKind, string>();
-            Kind = PartKind.None;
-
-            foreach (PartKind part in Enum.GetValues<PartKind>())
-            {
-                PartKindCollection.Add(part, EnumHelpers.GetDescription(part));
-            }
+            Initialize();
 
             CreatePartCommand = new RelayCommand(async () => await CreatePart());
             CancelPartCreationCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
@@ -107,6 +101,20 @@ namespace CutterManagement.UI.Desktop
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// View model initialization
+        /// </summary>
+        protected override void Initialize()
+        {
+            PartKindCollection = new Dictionary<PartKind, string>();
+            Kind = PartKind.None;
+
+            foreach (PartKind part in Enum.GetValues<PartKind>())
+            {
+                PartKindCollection.Add(part, EnumHelpers.GetDescription(part));
+            }
+        }
 
         /// <summary>
         /// Create a new part

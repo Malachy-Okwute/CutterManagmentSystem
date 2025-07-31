@@ -1,6 +1,9 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO.Packaging;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -27,6 +30,11 @@ namespace CutterManagement.UI.Desktop
         /// Flag indicating that users are currently being fetched
         /// </summary>
         private bool _isFetchingUsers;
+
+        /// <summary>
+        /// The kind of part (Gear / Pinion)
+        /// </summary>
+        private PartKind _kind;
 
         #endregion
 
@@ -79,6 +87,64 @@ namespace CutterManagement.UI.Desktop
             set => _user = value;
         }
 
+        /// <summary>
+        /// True if new adjustment control open
+        /// </summary>
+        public bool IsNewAdjustmentControlOpen { get; set; }
+
+        /// <summary>
+        /// The kind of part (Gear / Pinion)
+        /// </summary>
+        public PartKind Kind
+        {
+            get => _kind;
+            set 
+            {
+                _kind = value;
+
+                _ = GetPartNumbers(_kind);
+            }
+
+        }
+
+        /// <summary>
+        /// Available type of parts
+        /// <para>
+        /// Used when attaching move adjustment
+        /// </para>
+        /// </summary>
+        public Dictionary<PartKind, string> PartKindCollection { get; set; }
+
+        /// <summary>
+        /// Collection of part number
+        /// </summary>
+        public Dictionary<PartDataModel, string> PartNumberCollection { get; set; }
+
+        /// <summary>
+        /// The selected part number 
+        /// </summary>
+        public PartDataModel? SelectedPartNumber { get; set; }
+
+        /// <summary>
+        /// Pressure angle value on coast
+        /// </summary>
+        public string PressureAngleCoast { get; set; }
+
+        /// <summary>
+        /// Pressure angle value on drive
+        /// </summary>
+        public string PressureAngleDrive { get; set; }
+
+        /// <summary>
+        /// Spiral angle value on coast
+        /// </summary>
+        public string SpiralAngleCoast { get; set; }
+
+        /// <summary>
+        /// Spiral angle value on drive
+        /// </summary>
+        public string SpiralAngleDrive { get; set; }
+
         #endregion
 
         #region Events
@@ -102,6 +168,16 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand BroadcastCommand { get; set; }
 
+        /// <summary>
+        /// Command to show adjustment control
+        /// </summary>
+        public ICommand OpenNewAdjustmentControlCommand { get; set; }
+
+        /// <summary>
+        /// Command to hide adjustment control
+        /// </summary>
+        public ICommand CloseNewAdjustmentControlCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -112,9 +188,7 @@ namespace CutterManagement.UI.Desktop
         public NewInfoUpdateDialogViewModel(IDataAccessServiceFactory dataFactory)
         {
             _dataFactory = dataFactory;
-            UsersCollection = new Dictionary<UserDataModel, string>();
-
-            _ = GetUsers();
+            Initialize();
 
             CancelCommand = new RelayCommand(() =>
             {
@@ -122,11 +196,34 @@ namespace CutterManagement.UI.Desktop
                 ClearDataResidue();
             });
             BroadcastCommand = new RelayCommand(async () => await BroadcastInformation());
+            OpenNewAdjustmentControlCommand = new RelayCommand(() => IsNewAdjustmentControlOpen = true);
+            CloseNewAdjustmentControlCommand = new RelayCommand(() => IsNewAdjustmentControlOpen = false);
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// View model initialization
+        /// </summary>
+        protected override void Initialize()
+        {
+            // Initialize properties
+            UsersCollection = new Dictionary<UserDataModel, string>();
+            PartKindCollection = new Dictionary<PartKind, string>();
+            PartNumberCollection = new Dictionary<PartDataModel, string>();
+            _kind = PartKind.None;
+
+            // Get users
+            _ = GetUsers();
+
+            // Get part kinds
+            foreach (PartKind part in Enum.GetValues<PartKind>())
+            {
+                PartKindCollection.Add(part, EnumHelpers.GetDescription(part));
+            }
+        }
 
         /// <summary>
         /// Broadcast new information   
@@ -162,7 +259,16 @@ namespace CutterManagement.UI.Desktop
                 DateCreated = DateTime.Now,
                 PublishDate = DateTime.Now.ToString("MM-dd-yyyy ~ hh:mm tt"),
                 LastUpdatedDate = DateTime.Now.ToString("MM-dd-yyyy ~ hh:mm tt"),
+
+                // Attached moves
+                PartNumberWithMove = SelectedPartNumber?.PartNumber ?? string.Empty,
+                Kind = Kind,
+                PressureAngleCoast = PressureAngleCoast,
+                PressureAngleDrive = PressureAngleDrive,
+                SpiralAngleCoast = SpiralAngleCoast,
+                SpiralAngleDrive = SpiralAngleDrive,
             };
+
 
             // If user is not null
             if(user is not null)
@@ -277,6 +383,23 @@ namespace CutterManagement.UI.Desktop
 
             // Refresh UI
             CollectionViewSource.GetDefaultView(UsersCollection).Refresh();
+        }
+
+        /// <summary>
+        /// Gets part numbers of a specified kind from database
+        /// </summary>
+        /// <param name="partKind">The kind of parts to get</param>
+        private async Task GetPartNumbers(PartKind partKind)
+        {
+            PartNumberCollection.Clear();
+
+            var partTable = _dataFactory.GetDbTable<PartDataModel>();
+
+            IEnumerable<PartDataModel> parts = (await partTable.GetAllEntitiesAsync()).Where(p => p.Kind == partKind);
+
+            parts.ToList().ForEach(part => PartNumberCollection.Add(part, part.PartNumber));
+
+            CollectionViewSource.GetDefaultView(PartNumberCollection).Refresh();
         }
 
         /// <summary>

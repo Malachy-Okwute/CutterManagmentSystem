@@ -4,6 +4,7 @@ using CutterManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250721210921_AddNewPartAdjustmentProperties")]
+    partial class AddNewPartAdjustmentProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,10 +172,8 @@ namespace CutterManagement.DataAccess.Migrations
                     b.Property<bool>("IsArchived")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Kind")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("Kind")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastUpdatedDate")
                         .IsRequired()
@@ -180,16 +181,16 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PartNumberWithMove")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PressureAngleCoast")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PressureAngleDrive")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PublishDate")
                         .IsRequired()
@@ -197,12 +198,12 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("SpiralAngleCoast")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SpiralAngleDrive")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()

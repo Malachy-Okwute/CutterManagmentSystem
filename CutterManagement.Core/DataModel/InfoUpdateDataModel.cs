@@ -37,6 +37,36 @@ namespace CutterManagement.Core
         public string Information { get; set; }
 
         /// <summary>
+        /// The kind of part (Gear / Pinion)
+        /// </summary>
+        public PartKind Kind { get; set; }
+
+        /// <summary>
+        /// The selected part number 
+        /// </summary>
+        public string PartNumberWithMove { get; set; }
+
+        /// <summary>
+        /// Pressure angle value on coast
+        /// </summary>
+        public string PressureAngleCoast { get; set; }
+
+        /// <summary>
+        /// Pressure angle value on drive
+        /// </summary>
+        public string PressureAngleDrive { get; set; }
+
+        /// <summary>
+        /// Spiral angle value on coast
+        /// </summary>
+        public string SpiralAngleCoast { get; set; }
+
+        /// <summary>
+        /// Spiral angle value on drive
+        /// </summary>
+        public string SpiralAngleDrive { get; set; }
+
+        /// <summary>
         /// Information updates and user navigation property
         /// </summary>
         public ICollection<InfoUpdateUserRelations> InfoUpdateUserRelations { get; set; } = new List<InfoUpdateUserRelations>();
