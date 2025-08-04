@@ -93,7 +93,7 @@
                         <Button Width="130" Height="34"
                                 d:Content="Broadcast"
                                 Content="{Binding ButtonContent, UpdateSourceTrigger=PropertyChanged}"
-                                IsDefault="True"
+                                IsDefault="{Binding IsNewAdjustmentControlOpen, Converter={local:BooleanInversionConverter}}"
                                 BorderBrush="{DynamicResource BorderColorBrush3}"
                                 FontFamily="{StaticResource RobotoFlexRegular}"
                                 FontSize="{StaticResource XSmall}"

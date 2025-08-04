@@ -24,23 +24,27 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="0" Margin="5" Height="30"
+                <ComboBox Grid.Column="0" Height="30"
+                          Margin="5"
                           ItemsSource="{Binding PartKindCollection}"
                           SelectedValue="{Binding Kind, Mode=TwoWay}"
                           SelectedValuePath="Key" DisplayMemberPath="Value" />
 
                 <!--  desgin-time-only  -->
-                <d:ComboBox Grid.Column="0" Margin="5" Height="30">
+                <d:ComboBox Grid.Column="0" Height="30"
+                            Margin="5">
                     <ComboBoxItem Content="Ring" IsSelected="True" />
                 </d:ComboBox>
 
-                <ComboBox Grid.Column="1" Margin="5" Height="30"
+                <ComboBox Grid.Column="1" Height="30"
+                          Margin="5"
                           ItemsSource="{Binding PartNumberCollection, UpdateSourceTrigger=PropertyChanged}"
                           SelectedValue="{Binding SelectedPartNumber, UpdateSourceTrigger=PropertyChanged}"
                           SelectedValuePath="Key" DisplayMemberPath="Value" />
 
                 <!--  desgin-time-only  -->
-                <d:ComboBox Grid.Column="1" Margin="5" Height="30">
+                <d:ComboBox Grid.Column="1" Height="30"
+                            Margin="5">
                     <ComboBoxItem Content="10002000" IsSelected="True" />
                 </d:ComboBox>
 
@@ -59,19 +63,18 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="0" HorizontalAlignment="Stretch"  Height="30"
-                         VerticalAlignment="Center" TextAlignment="Center"
-                         local:TextInputAttachedProperty.AllowNumericalValues="True"
+                <TextBox Grid.Column="0" Height="30"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                         local:TextInputAttachedProperty.AllowNumericalValues="True" TextAlignment="Center"
                          Text="{Binding PressureAngleCoast, UpdateSourceTrigger=PropertyChanged}"
                          Tag="pa cv" MaxLength="5"
                          FontFamily="{StaticResource RobotoFlexRegular}"
                          Foreground="{DynamicResource ForegroundColorBrush3}"
                          Style="{StaticResource DataInputTextBoxStyle}" />
 
-                <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Height="30"
-                         local:TextInputAttachedProperty.AllowNumericalValues="True"
-                      
-                         VerticalAlignment="Center" TextAlignment="Center"
+                <TextBox Grid.Column="1" Height="30"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                         local:TextInputAttachedProperty.AllowNumericalValues="True" TextAlignment="Center"
                          Text="{Binding PressureAngleDrive, UpdateSourceTrigger=PropertyChanged}"
                          Tag="pa cx" MaxLength="5"
                          FontFamily="{StaticResource RobotoFlexRegular}"
@@ -92,18 +95,18 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="0" HorizontalAlignment="Stretch" Height="30"
-                         VerticalAlignment="Center" TextAlignment="Center"
-                         local:TextInputAttachedProperty.AllowNumericalValues="True"
+                <TextBox Grid.Column="0" Height="30"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                         local:TextInputAttachedProperty.AllowNumericalValues="True" TextAlignment="Center"
                          Text="{Binding SpiralAngleCoast, UpdateSourceTrigger=PropertyChanged}"
                          Tag="sa cv" MaxLength="5"
                          FontFamily="{StaticResource RobotoFlexRegular}"
                          Foreground="{DynamicResource ForegroundColorBrush3}"
                          Style="{StaticResource DataInputTextBoxStyle}" />
 
-                <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Height="30"
-                         VerticalAlignment="Center" TextAlignment="Center"
-                         local:TextInputAttachedProperty.AllowNumericalValues="True"
+                <TextBox Grid.Column="1" Height="30"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                         local:TextInputAttachedProperty.AllowNumericalValues="True" TextAlignment="Center"
                          Text="{Binding SpiralAngleDrive, UpdateSourceTrigger=PropertyChanged}"
                          Tag="sa cx" MaxLength="5"
                          FontFamily="{StaticResource RobotoFlexRegular}"
@@ -114,8 +117,8 @@
 
 
         <Button Grid.Row="3" Width="100"
-                Height="30" Margin="0 10 0 0"
-                Content="Done" IsDefault="True"
+                Height="30" Margin="0,10,0,0"
+                Content="Done"
                 BorderBrush="{DynamicResource BorderColorBrush3}"
                 FontFamily="{StaticResource RobotoFlexRegular}"
                 FontSize="{StaticResource XSmall}"

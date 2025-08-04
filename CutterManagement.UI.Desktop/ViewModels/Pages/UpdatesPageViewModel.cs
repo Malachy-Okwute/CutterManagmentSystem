@@ -92,6 +92,7 @@ namespace CutterManagement.UI.Desktop
         {
             var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
             var infoRelationsTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            var partsTable = _dataFactory.GetDbTable<PartDataModel>();
 
             InfoUpdateDataModel? info = await infoTable.GetEntityByIdAsync(itemId);
             UserDataModel? user = (await infoRelationsTable.GetEntityByIdIncludingRelatedPropertiesAsync(itemId, i => i.InfoUpdateUserRelations))?
@@ -106,6 +107,16 @@ namespace CutterManagement.UI.Desktop
                 _newInfoUpdateDialog.Title = info.Title;
                 _newInfoUpdateDialog.Information = info.Information;
                 _newInfoUpdateDialog.User = user;
+
+                if(info.HasAttachedMoves)
+                {
+                    _newInfoUpdateDialog.Kind = info.Kind;
+                    _newInfoUpdateDialog.SelectedPartNumber = (await partsTable.GetAllEntitiesAsync()).FirstOrDefault(part => part.PartNumber == info.PartNumberWithMove);
+                    _newInfoUpdateDialog.PressureAngleCoast = info.PressureAngleCoast;
+                    _newInfoUpdateDialog.PressureAngleDrive = info.PressureAngleDrive;
+                    _newInfoUpdateDialog.SpiralAngleCoast = info.SpiralAngleCoast;
+                    _newInfoUpdateDialog.SpiralAngleDrive = info.SpiralAngleDrive;
+                }
 
                 DialogService.InvokeDialog(_newInfoUpdateDialog);
             }

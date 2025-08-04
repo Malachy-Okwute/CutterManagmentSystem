@@ -261,12 +261,12 @@ namespace CutterManagement.UI.Desktop
                 LastUpdatedDate = DateTime.Now.ToString("MM-dd-yyyy ~ hh:mm tt"),
 
                 // Attached moves
-                PartNumberWithMove = SelectedPartNumber?.PartNumber ?? string.Empty,
                 Kind = Kind,
-                PressureAngleCoast = PressureAngleCoast,
-                PressureAngleDrive = PressureAngleDrive,
-                SpiralAngleCoast = SpiralAngleCoast,
-                SpiralAngleDrive = SpiralAngleDrive,
+                PartNumberWithMove = SelectedPartNumber?.PartNumber ?? string.Empty,
+                PressureAngleCoast = string.IsNullOrEmpty(PressureAngleCoast) ? "0" : PressureAngleCoast,
+                PressureAngleDrive = string.IsNullOrEmpty(PressureAngleDrive) ? "0" : PressureAngleDrive,
+                SpiralAngleCoast = string.IsNullOrEmpty(SpiralAngleCoast) ? "0" : SpiralAngleCoast,
+                SpiralAngleDrive = string.IsNullOrEmpty(SpiralAngleDrive) ? "0" : SpiralAngleDrive, 
             };
 
 
@@ -326,6 +326,14 @@ namespace CutterManagement.UI.Desktop
                         UserDataModel = user,
                         InfoUpdateDataModel = existingInfo
                     });
+
+                    // Attached moves if available
+                    existingInfo.Kind = Kind;
+                    existingInfo.PartNumberWithMove = SelectedPartNumber?.PartNumber ?? string.Empty;
+                    existingInfo.PressureAngleCoast = string.IsNullOrEmpty(PressureAngleCoast) ? "0" : PressureAngleCoast;
+                    existingInfo.PressureAngleDrive = string.IsNullOrEmpty(PressureAngleDrive) ? "0" : PressureAngleDrive;
+                    existingInfo.SpiralAngleCoast = string.IsNullOrEmpty(SpiralAngleCoast) ? "0" : SpiralAngleCoast;
+                    existingInfo.SpiralAngleDrive = string.IsNullOrEmpty(SpiralAngleDrive) ? "0" : SpiralAngleDrive; 
 
                     // Update existing info
                     await infoUpdateTable.UpdateEntityAsync(existingInfo);
@@ -408,6 +416,13 @@ namespace CutterManagement.UI.Desktop
         private void ClearDataResidue()
         {
             Title = Author = Information = string.Empty;
+            PressureAngleCoast = string.Empty;
+            PressureAngleDrive = string.Empty;
+            SpiralAngleCoast = string.Empty;
+            SpiralAngleDrive = string.Empty;
+            SelectedPartNumber = null;
+            _kind = PartKind.None;
+
             // Set current user
             _user = UsersCollection.FirstOrDefault().Key;
         }

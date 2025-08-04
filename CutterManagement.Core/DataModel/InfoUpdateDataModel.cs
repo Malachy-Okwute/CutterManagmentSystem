@@ -17,6 +17,11 @@ namespace CutterManagement.Core
         public bool IsArchived { get; set; }
 
         /// <summary>
+        /// True if move is attached to this data point
+        /// </summary>
+        public bool HasAttachedMoves => string.IsNullOrEmpty(PartNumberWithMove) is false;
+
+        /// <summary>
         /// Title of this information update
         /// </summary>
         public string Title { get; set; }
@@ -44,7 +49,7 @@ namespace CutterManagement.Core
         /// <summary>
         /// The selected part number 
         /// </summary>
-        public string PartNumberWithMove { get; set; }
+        public string PartNumberWithMove { get; set; } 
 
         /// <summary>
         /// Pressure angle value on coast
