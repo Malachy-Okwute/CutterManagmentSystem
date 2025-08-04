@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -139,7 +140,7 @@ namespace CutterManagement.UI.Desktop
                 GetCurrentShift();
 
                 // If shift changed...
-                if(previousShift.Equals(CurrentShift, StringComparison.OrdinalIgnoreCase) is false)
+                if(previousShift.Equals(CurrentShift, StringComparison.OrdinalIgnoreCase) is false || string.IsNullOrEmpty(NumberOfUsers) )
                 {
                     // Get number of user in the current shift
                     _ = GetNumberOfUsersInCurrentShift(); 

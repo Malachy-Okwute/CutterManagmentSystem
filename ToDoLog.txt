@@ -3,9 +3,5 @@
 
             // ToDo: 
 
-            // When attaching moves, any field that is left blank should default to zero 
-            // Show existing move data when editing news and update item
-            // Clear previous move data when editing news and update item
-
             // In the settings have an option of how long a data has to be in the database before getting archived. e.g. archive data after 3, 4, 6 months
 
