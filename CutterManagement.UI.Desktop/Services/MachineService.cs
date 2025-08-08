@@ -63,8 +63,20 @@ namespace CutterManagement.UI.Desktop
             // Get machine table
             IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
 
-            // Listen for when data actually changed
-            machineTable.DataChanged += (s, e) => { data = e as MachineDataModel; };
+            // Use an event handler to listen for data changes
+            EventHandler<object>? handler = null;
+
+            // Set up the event handler
+            handler = (s, e) => 
+            {
+                // Unhook the event handler to prevent memory leaks
+                machineTable.DataChanged -= handler;
+                // Cast the event data to MachineDataModel
+                data = e as MachineDataModel; 
+            };
+
+            // Subscribe to the DataChanged event
+            machineTable.DataChanged += handler;
 
             // Get the specific item from db
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
@@ -96,9 +108,6 @@ namespace CutterManagement.UI.Desktop
                 // Save new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
 
-                // Unhook event
-                machineTable.DataChanged -= delegate { };
-
                 // Return result
                 return (result, data);
             }
@@ -128,12 +137,22 @@ namespace CutterManagement.UI.Desktop
             /// Get users table
             IDataAccessService<UserDataModel> userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
 
-            // Listen for when data actually changed
-            machineTable.DataChanged += (s, e) =>
+            // Use an event handler to listen for data changes
+            EventHandler<object>? handler = null;
+
+            // Set up the event handler
+            handler += (s, e) =>
             {
+                // Unhook the event handler to prevent memory leaks
+                machineTable.DataChanged -= handler;
+                // Cast the event data to MachineDataModel
                 data = e as MachineDataModel;
+                // Send out message
                 callback?.Invoke(data ?? throw new ArgumentNullException("Cannot find machine item that changed"));
             };
+
+            // Subscribe to the DataChanged event
+            machineTable.DataChanged += handler;
 
             // Get machine
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
@@ -161,9 +180,6 @@ namespace CutterManagement.UI.Desktop
 
                 // Update db with the new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
-
-                // Unhook event
-                machineTable.DataChanged -= delegate { };
             }
 
             // Return result
@@ -199,15 +215,29 @@ namespace CutterManagement.UI.Desktop
 
             // Get machines table
             IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            // Get production part log table
+            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
-            // Listen for when data actually changed
-            machineTable.DataChanged += (s, e) =>
+            // Use an event handler to listen for data changes
+            EventHandler<object>? handler = null;
+
+            // Set up the event handler
+            handler += (s, e) =>
             {
+                // Unhook the event handler to prevent memory leaks
+                machineTable.DataChanged -= handler;
+                // Cast the event data to MachineDataModel
                 data = e as MachineDataModel;
 
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+
+                // update log with latest piece count
+                ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
             };
+
+            // Subscribe to the DataChanged event
+            machineTable.DataChanged += handler;
 
             // Get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
@@ -240,9 +270,6 @@ namespace CutterManagement.UI.Desktop
                 // Update db with the new data
                 await machineTable.UpdateEntityAsync(machine ?? throw new ArgumentException($"Unable to update count"));
             }
-
-            // Unhook event
-            machineTable.DataChanged -= delegate { };
         }
 
         /// <summary>
@@ -256,8 +283,9 @@ namespace CutterManagement.UI.Desktop
             // Data that will be changing
             MachineDataModel? data = null;
 
-            // Get machine db table
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            // Get machine db tables
+            IDataAccessService<MachineDataModel> sendingMachineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            IDataAccessService<MachineDataModel> receivingMachineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
 
             // Get cutter db table
             IDataAccessService<CutterDataModel> cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
@@ -265,22 +293,45 @@ namespace CutterManagement.UI.Desktop
             // Get user db table
             IDataAccessService<UserDataModel> userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
 
-            // Listen for when data actually changed
-            machineTable.DataChanged += (s, e) =>
+            // Get production part log table
+            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
+
+            // Get machine that will be receiving cutter
+            MachineDataModel? receivingMachine = await receivingMachineTable.GetEntityByIdAsync(machineReceivingCutterId);
+            MachineDataModel? sendingMachine = await sendingMachineTable.GetEntityByIdAsync(machineSendingCutterId);
+
+            // Get user carrying out this operation
+            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
+
+            // Use an event handler to listen for data changes
+            EventHandler<object>? handler = null;
+
+            // Set up the event handler
+            handler += (s, e) =>
             {
+                // Unhook the event handler to prevent memory leaks
+                if(s == sendingMachineTable)
+                {
+                    sendingMachineTable.DataChanged -= handler;
+                }
+                else
+                {
+                    receivingMachineTable.DataChanged -= handler;
+                }
+
+                // Cast the event data to MachineDataModel
                 data = e as MachineDataModel;
 
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+
+                // log cutter relocation
+                ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
             };
 
-            // Get machine that will be receiving cutter
-            MachineDataModel? receivingMachine = await machineTable.GetEntityByIdAsync(machineReceivingCutterId);
-            MachineDataModel? sendingMachine = await machineTable.GetEntityByIdAsync(machineSendingCutterId);
-
-
-            // Get user carrying out this operation
-            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
+            // Subscribe to the DataChanged event
+            sendingMachineTable.DataChanged += handler;
+            receivingMachineTable.DataChanged += handler;
 
             // Make sure both machines are not null
             if (sendingMachine is not null && receivingMachine is not null)
@@ -321,13 +372,10 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Update db with the new data
+                await receivingMachineTable.UpdateEntityAsync(receivingMachine);
                 await userTable.UpdateEntityAsync(user);
                 await cutterTable.UpdateEntityAsync(cutter);
-                await machineTable.UpdateEntityAsync(receivingMachine);
-                await machineTable.UpdateEntityAsync(sendingMachine);
-
-                // Unhook event
-                machineTable.DataChanged -= delegate { };
+                await sendingMachineTable.UpdateEntityAsync(sendingMachine);
             }
         }
 
@@ -348,19 +396,34 @@ namespace CutterManagement.UI.Desktop
             // Get cutter table
             IDataAccessService<CutterDataModel> cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
 
-            // Listen for when machine table data actually changed
-            machineTable.DataChanged += (s, e) =>
-            {
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-            };
+            // Get production part log table
+            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Attempt to get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId);
 
             // Attempt to get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
+
+            // Use an event handler to listen for data changes
+            EventHandler<object>? handler = null;
+
+            // Set up the event handler
+            handler += (s, e) =>
+            {
+                // Unhook the event handler to prevent memory leaks
+                machineTable.DataChanged -= handler;
+                // Cast the event data to MachineDataModel
+                data = e as MachineDataModel;
+                // Send out message
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+
+                // Log cmm data
+                ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
+            };
+
+            // Subscribe to the DataChanged event
+            machineTable.DataChanged += handler;
 
             // Make sure we have machine
             if (machine is not null)
@@ -400,9 +463,6 @@ namespace CutterManagement.UI.Desktop
                 // Update information in database
                 await machineTable.UpdateEntityAsync(machine);
                 await cutterTable.UpdateEntityAsync(cutter);
-
-                // Unhook event
-                machineTable.DataChanged -= delegate { };
             }
         }
 
@@ -426,21 +486,34 @@ namespace CutterManagement.UI.Desktop
             IDataAccessService<CutterDataModel> cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
             // Get cmm data table
             IDataAccessService<CMMDataModel> cmmTable = _dataAccessServiceFactory.GetDbTable<CMMDataModel>();
-
-            // Listen for changes 
-            machineTable.DataChanged += (s, e) =>
-            {
-                // Set new data
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-            };
+            // Get production part log table
+            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId);
 
             // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
+
+            // Use an event handler to listen for data changes
+            EventHandler<object>? handler = null;
+
+            // Set up the event handler
+            handler += (s, e) =>
+            {
+                // Unhook the event handler to prevent memory leaks
+                machineTable.DataChanged -= handler;
+                // Set new data
+                data = e as MachineDataModel;
+                // Send out message
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+
+                // log that cutter was removed
+                ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
+            };
+
+            // Subscribe to the DataChanged event
+            machineTable.DataChanged += handler;
 
             // If machine is not null...
             if (machine is not null)
@@ -458,8 +531,8 @@ namespace CutterManagement.UI.Desktop
                 machine.DateTimeLastModified = DateTime.Now;
                 machine.Cutter.CutterChangeInfo = newData.Cutter.CutterChangeInfo;
                 machine.Cutter.LastUsedDate = DateTime.Now;
-                machine.Cutter.Condition = CutterCondition.Used;
                 machine.Cutter.Count = newData.Cutter.Count;
+                machine.Cutter.Condition = newData.Cutter.Count > 0 ? CutterCondition.Used : CutterCondition.New;
                 machine.Cutter.MachineDataModelId = null;
                 machine.CutterDataModelId = null;
                 machine.PartNumber = null!;
@@ -496,9 +569,6 @@ namespace CutterManagement.UI.Desktop
 
                 // Update database
                 await machineTable.UpdateEntityAsync(machine);
-
-                // Stop listening for changes
-                machineTable.DataChanged -= delegate { };
             }
         }
     }

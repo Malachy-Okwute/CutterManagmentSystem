@@ -4,6 +4,7 @@ using CutterManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250805222459_AddCMMDATAFieldINProductionPartsLog")]
+    partial class AddCMMDATAFieldINProductionPartsLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -413,9 +416,6 @@ namespace CutterManagement.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CMMDataId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -423,10 +423,6 @@ namespace CutterManagement.DataAccess.Migrations
 
                     b.Property<string>("CurrentShift")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("CutterChangeInfo")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -488,8 +484,6 @@ namespace CutterManagement.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CMMDataId");
-
                     b.ToTable("ProductionPartsLogDataArchive");
                 });
 
@@ -501,7 +495,7 @@ namespace CutterManagement.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CMMDataId")
+                    b.Property<int>("CMMDataId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comment")
@@ -515,8 +509,7 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CutterChangeInfo")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CutterNumber")
                         .IsRequired()
@@ -570,6 +563,7 @@ namespace CutterManagement.DataAccess.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserFullName")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -711,20 +705,13 @@ namespace CutterManagement.DataAccess.Migrations
                     b.Navigation("UserDataModel");
                 });
 
-            modelBuilder.Entity("CutterManagement.Core.ProductionPartsLogDataArchive", b =>
-                {
-                    b.HasOne("CutterManagement.Core.CMMDataModel", "CMMData")
-                        .WithMany()
-                        .HasForeignKey("CMMDataId");
-
-                    b.Navigation("CMMData");
-                });
-
             modelBuilder.Entity("CutterManagement.Core.ProductionPartsLogDataModel", b =>
                 {
                     b.HasOne("CutterManagement.Core.CMMDataModel", "CMMData")
                         .WithMany()
-                        .HasForeignKey("CMMDataId");
+                        .HasForeignKey("CMMDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CMMData");
                 });

@@ -133,9 +133,9 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Kind).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Owner).HasConversion<string>().IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterChangeInfo).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).IsRequired().HasMaxLength(100);
             //modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).HasConversion<string>().IsRequired().HasMaxLength(100);
-            modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterChangeInfo).HasConversion<string>().IsRequired().HasMaxLength(100);
 
             #endregion
 
@@ -183,8 +183,9 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.ToothCount).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.PieceCount).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.ToothSize).IsRequired().HasMaxLength(100);
-            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.UserFullName).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.UserFullName).IsRequired(false).HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.Comment).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.CutterChangeInfo).IsRequired(false).HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.FrequencyCheckResult).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.CurrentShift).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.DateTimeOfCheck).IsRequired().HasMaxLength(100);
@@ -207,6 +208,8 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.Comment).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.FrequencyCheckResult).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.CurrentShift).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.CutterChangeInfo).IsRequired(false).HasMaxLength(100);
+            //modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.CMMData).IsRequired(false).HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.DateTimeOfCheck).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.DateCreated).IsRequired().HasMaxLength(100);
 

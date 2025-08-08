@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using CutterManagement.DataAccess;
 using System.IO;
 using System.Windows.Input;
 
@@ -212,6 +213,10 @@ namespace CutterManagement.UI.Desktop
             // Get user table
             var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
+            // Get production part log table
+            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
+
+
             UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
 
             // New data from database
@@ -226,7 +231,10 @@ namespace CutterManagement.UI.Desktop
                 // Set new data
                 data = e as MachineDataModel;
                 // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected Machine data cannot be null"));
+
+                // Log cmm data
+                ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
             };
 
             if (_firstMachine is not null && _secondMachine is not null)
@@ -250,6 +258,7 @@ namespace CutterManagement.UI.Desktop
                 await _machineTable.UpdateEntityAsync(_firstMachine);
 
                 _firstMachine.Status = _secondMachine.Status;
+                _firstMachine.StatusMessage = $"Swapped cutter with {_secondMachine.MachineNumber}";
                 _firstMachine.PartNumber = _secondMachine.PartNumber;
                 _firstMachine.Cutter = _secondMachine.Cutter;
                 _firstMachine.CutterDataModelId = _secondMachine.CutterDataModelId;
@@ -258,6 +267,7 @@ namespace CutterManagement.UI.Desktop
                 _firstMachine.DateTimeLastModified = DateTime.Now;
 
                 _secondMachine.Status = dummyMachine.Status;
+                _secondMachine.StatusMessage = $"Swapped cutter with {_firstMachine.MachineNumber}";
                 _secondMachine.PartNumber = dummyMachine.PartNumber;
                 _secondMachine.Cutter = dummyMachine.Cutter;
                 _secondMachine.CutterDataModelId = dummyMachine.CutterDataModelId;

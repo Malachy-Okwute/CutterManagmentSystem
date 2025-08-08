@@ -376,7 +376,7 @@ namespace CutterManagement.UI.Desktop
                 return;
             }
 
-            // If we have a cutter number
+            // If we don't have a cutter number
             if (string.IsNullOrEmpty(CutterNumber) is false)
             {
                 // Format cutter number 
@@ -447,7 +447,7 @@ namespace CutterManagement.UI.Desktop
         public async Task<bool?> VerifyUserIntention()
         {
             // Dummy view model
-            var pieceCountAdjustmentVM = new PieceCountAdjustmentDialogViewModel(); // Dummy view model. Used to be able to show prompt
+            var pieceCountAdjustmentVM = new PieceCountAdjustmentDialogViewModel(); // Dummy view model. Used to gain ability to display prompt
 
             // Prompt user
             var result = await DialogService

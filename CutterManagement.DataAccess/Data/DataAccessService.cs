@@ -122,6 +122,7 @@ namespace CutterManagement.DataAccess
             try
             {
                 _dbTable.Update(entity);
+
                 int result = await _applicationDbContext.SaveChangesAsync();
 
                 if (result > 0)

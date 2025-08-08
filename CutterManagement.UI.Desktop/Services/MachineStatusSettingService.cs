@@ -43,12 +43,22 @@ namespace CutterManagement.UI.Desktop
             /// Get users table
             IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
 
+            // Event handler to listen for when data changes
+            EventHandler<object>? handler = null;
+
             // Listen for when data actually changed
-            machineTable.DataChanged += (s, e) =>
+            handler += (s, e) =>
             {
+                // Unsubscribe from the event to avoid memory leaks
+                machineTable.DataChanged -= handler;
+                // Cast the event data to MachineDataModel
                 data = e as MachineDataModel;
+                // Invoke callback 
                 callback?.Invoke(data ?? throw new ArgumentNullException("Cannot find machine item that changed"));
             };
+
+            // Subscribe to data changed event
+            machineTable.DataChanged += handler;
 
             // Get machine
             MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
@@ -76,9 +86,6 @@ namespace CutterManagement.UI.Desktop
 
                 // Update db with the new data
                 await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
-
-                // Unhook event
-                machineTable.DataChanged -= delegate { };
             }
 
             // Return result

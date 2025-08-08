@@ -17,13 +17,13 @@ namespace CutterManagement.UI.Desktop
             // Add view models
 
             // Singletons
-            // NOTE: Does not allow migration
+            // NOTE: Does not support EF core migration
             //services.AddSingleton<HomePageViewModel>();
             //services.AddSingleton<NavigationBarViewModel>();
             //services.AddSingleton<MachineItemCollectionViewModel>();
 
             // Singletons 
-            // NOTE: Allows migration
+            // NOTE: Supports EF core migration
             services.AddSingleton(provider => 
             new NavigationBarViewModel(provider.GetRequiredService<PageFactory>(), provider.GetRequiredService<ShiftProfileViewModel>()));
             services.AddSingleton(provider => new HomePageViewModel(provider.GetRequiredService<MachineItemCollectionViewModel>()));

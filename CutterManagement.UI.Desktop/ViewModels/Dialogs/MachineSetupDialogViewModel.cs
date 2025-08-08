@@ -264,14 +264,28 @@ namespace CutterManagement.UI.Desktop
 
             // Get machine table
             IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();    // Use this variable in order to fire off DataChanged event
+            // Get production part log table
+            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
+
+            
+            EventHandler<object>? handler = null;
 
             // Listen for when machine table data actually changed
-            machineTable.DataChanged += (s, e) =>
+            handler += (s, e) =>
             {
+                // Unsubscribe from the event
+                machineTable.DataChanged -= handler;
+                // Cast data to MachineDataModel
                 data = e as MachineDataModel;
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+
+                // Log initial part setup
+                ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
             };
+
+            // Subscribe to data changed event
+            machineTable.DataChanged += handler;
 
             // Find the actual machine
             MachineDataModel? machineData = await _machineTable.GetEntityByIdAsync(_machineItemViewModel.Id);
@@ -290,13 +304,11 @@ namespace CutterManagement.UI.Desktop
                 // Update machine information
                 await machineTable.UpdateEntityAsync(machineData);
 
-                // Unhook event
-                machineTable.DataChanged -= delegate { };
-
-                if(Title.Equals("Setup", StringComparison.OrdinalIgnoreCase) is false)
+                //if(Title.Equals("Setup", StringComparison.OrdinalIgnoreCase) is false)
+                if(machineData.FrequencyCheckResult == FrequencyCheckResult.Setup)
                 {
                     // Close dialog
-                    await DialogService.InvokeAlertDialog(this, "Part number changed successfully").ContinueWith(_ =>
+                    await DialogService.InvokeAlertDialog(this, "Part number entry is successful").ContinueWith(_ =>
                     {
                         DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
                     });

@@ -66,6 +66,21 @@
         public string CurrentShift { get; set; }
 
         /// <summary>
+        /// Reason for removing cutter
+        /// </summary>
+        public string? CutterChangeInfo { get; set; }
+
+        /// <summary>
+        /// Unique identifier for CMM data associated with this log
+        /// </summary>
+        public int? CMMDataId { get; set; }
+
+        /// <summary>
+        /// CMM data associated with this log if available
+        /// </summary>
+        public CMMDataModel? CMMData { get; set; }
+
+        /// <summary>
         /// Date and time of last frequency check
         /// </summary>
         public DateTime DateTimeOfCheck { get; set; } = DateTime.Now;

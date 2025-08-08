@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection.PortableExecutable;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -160,15 +161,30 @@ namespace CutterManagement.UI.Desktop
             IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
             // Get user table
             IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            // Get part log table
+            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
+
+            EventHandler<object>? handler = null;
 
             // Listen for changes 
-            machineTable.DataChanged += (s, e) =>
+            handler += (s, e) =>
             {
+                // Unsubscribe from event to prevent memory leak
+                machineTable.DataChanged -= handler;
                 // Set new data
                 data = e as MachineDataModel;
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+
+                // User associated with cmm data entry
+                UserDataModel? user = (data.MachineUserInteractions.Single(user => user.Id == _user.Id).UserDataModel);
+
+                // Log cmm data
+                ProductionPartsLogHelper.LogProductionProgress(_user, data, productionLogTable);
             };
+
+            // Subscribe to data changed event
+            machineTable.DataChanged += handler;
 
             // Get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
@@ -244,9 +260,6 @@ namespace CutterManagement.UI.Desktop
 
                 // Update machine on database
                 await machineTable.UpdateEntityAsync(machine);
-
-                // Stop listening for changes
-                machineTable.DataChanged -= delegate { };
 
                 // Close dialog
                 DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));

@@ -304,8 +304,8 @@ namespace CutterManagement.UI.Desktop
                 return;
             }
 
-            // Capture and record CMM Data
-            await  _machineService.CaptureAndRecordCMMData(_user.Id, Id, Comment, new CMMDataModel
+            // Data to capture
+            CMMDataModel cmmData = new CMMDataModel
             {
                 BeforeCorrections = BeforeCorrections,
                 AfterCorrections = AfterCorrections,
@@ -316,10 +316,14 @@ namespace CutterManagement.UI.Desktop
                 Fr = Fr,
                 Size = Size,
                 Count = Count,
-            });
+            };
+
+            // Capture and record CMM Data
+            await  _machineService.CaptureAndRecordCMMData(_user.Id, Id, Comment, cmmData);
 
             // Mark message as a success
             IsSuccess = true;
+
             // Define message
             string successMessage = "CMM data recorded successfully";
 
