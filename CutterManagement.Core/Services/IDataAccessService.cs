@@ -5,7 +5,7 @@ namespace CutterManagement.Core
     /// <summary>
     /// Provides access to the application database
     /// </summary>
-    public interface IDataAccessService<T>
+    public interface IDataAccessService<T> : IDisposable
     {
         /// <summary>
         /// Event to run whenever data changes in the database

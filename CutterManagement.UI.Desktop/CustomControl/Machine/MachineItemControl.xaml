@@ -78,8 +78,8 @@
                 MinWidth="60" HorizontalAlignment="Stretch">
             <TextBox x:Name="CountTb" Margin="6"
                      HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                     local:FocusAttachedProperty.SetFocus="{Binding ElementName=CountAdjustmentButtons, Path=IsVisible}"
-                     TextAlignment="Center"
+                     local:FocusAttachedProperty.SetFocus="{Binding ElementName=CountAdjustmentButtons, Path=IsVisible, UpdateSourceTrigger=PropertyChanged}"
+                     Focusable="True" TextAlignment="Center"
                      Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}"
                      IsReadOnly="{Binding CanEditPieceCount}"
                      FontFamily="{StaticResource RobotoFlexRegular}"
@@ -94,7 +94,7 @@
                 Background="{Binding ElementName=FrequencyCheck, Path=Text, Converter={local:FrequencyCheckToColorConverter}}">
             <TextBlock x:Name="FrequencyCheck" HorizontalAlignment="Stretch"
                        VerticalAlignment="Center" d:Text="Setup"
-                       TextAlignment="Center"
+                       TextAlignment="Center" Focusable="False"
                        Text="{Binding FrequencyCheckResult}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush7}" />
@@ -105,7 +105,7 @@
                 MinWidth="160" HorizontalAlignment="Stretch"
                 d:Padding="8,0">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                       TextAlignment="Center"
+                       TextAlignment="Center" Focusable="False"
                        Text="{Binding DateTimeLastModified}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
                        Foreground="{DynamicResource ForegroundColorBrush3}" />
@@ -115,7 +115,7 @@
         <Border x:Name="PopupTarget" Grid.Column="7"
                 Width="30" HorizontalAlignment="Stretch">
             <Button Width="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
-                    HorizontalContentAlignment="Center"
+                    HorizontalContentAlignment="Center" Focusable="False"
                     Content="{StaticResource VerticalEllipsisIcon}"
                     Command="{Binding OpenPopupCommand}"
                     FontFamily="{StaticResource SolidIcon}"
@@ -125,13 +125,14 @@
         <Popup x:Name="Popup"
                IsOpen="{Binding IsPopupOpen, UpdateSourceTrigger=PropertyChanged}"
                PlacementTarget="{Binding ElementName=PopupTarget}"
-               Placement="MousePoint" StaysOpen="True" 
+               Placement="MousePoint" StaysOpen="True"
                PopupAnimation="Fade" AllowsTransparency="True">
             <local:MachineItemPopupControl />
         </Popup>
 
         <Grid x:Name="CountAdjustmentButtons" Grid.ColumnSpan="8"
               Width="100" HorizontalAlignment="Right"
+              Focusable="False"
               Visibility="{Binding CanEditPieceCount, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=InvertBoolean}"
               Background="{DynamicResource BackgroundColorBrush1}">
 

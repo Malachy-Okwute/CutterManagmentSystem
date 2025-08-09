@@ -38,10 +38,10 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machines table
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
+            using var machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
 
             /// Get users table
-            IDataAccessService<UserDataModel> userTable = _dataAccessService.GetDbTable<UserDataModel>();
+            using var userTable = _dataAccessService.GetDbTable<UserDataModel>();
 
             // Event handler to listen for when data changes
             EventHandler<object>? handler = null;

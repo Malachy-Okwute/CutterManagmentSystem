@@ -158,11 +158,11 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
             // Get user table
-            IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
             // Get part log table
-            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
+            using var productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
 
             EventHandler<object>? handler = null;
 
@@ -180,7 +180,7 @@ namespace CutterManagement.UI.Desktop
                 UserDataModel? user = (data.MachineUserInteractions.Single(user => user.Id == _user.Id).UserDataModel);
 
                 // Log cmm data
-                ProductionPartsLogHelper.LogProductionProgress(_user, data, productionLogTable);
+                //ProductionPartsLogHelper.LogProductionProgress(_user, data, productionLogTable);
             };
 
             // Subscribe to data changed event
@@ -273,7 +273,7 @@ namespace CutterManagement.UI.Desktop
         private async Task GetUsers()
         {
             // Get user db table
-            IDataAccessService<UserDataModel> users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            using var users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
             {

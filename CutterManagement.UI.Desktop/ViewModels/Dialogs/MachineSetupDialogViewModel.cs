@@ -48,21 +48,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private bool _isCutterNumberValid => _cutterNumber.Count() >= 6;
 
-        /// <summary>
-        /// Cutter database table
-        /// </summary>
-        private IDataAccessService<CutterDataModel> _cutterTable => _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
-
-        /// <summary>
-        /// Machine database table
-        /// </summary>
-        private IDataAccessService<MachineDataModel> _machineTable => _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
-
-        /// <summary>
-        /// Part database table
-        /// </summary>
-        private IDataAccessService<PartDataModel> _partTable => _machineService.DataBaseAccess.GetDbTable<PartDataModel>();
-
         #endregion
 
         #region Public Properties
@@ -263,7 +248,7 @@ namespace CutterManagement.UI.Desktop
             CutterDataModel currentCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == CutterNumber);
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();    // Use this variable in order to fire off DataChanged event
+            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();   
             // Get production part log table
             IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
 
@@ -278,7 +263,7 @@ namespace CutterManagement.UI.Desktop
                 // Cast data to MachineDataModel
                 data = e as MachineDataModel;
                 // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected machine cannot be null"));
 
                 // Log initial part setup
                 ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
@@ -288,7 +273,7 @@ namespace CutterManagement.UI.Desktop
             machineTable.DataChanged += handler;
 
             // Find the actual machine
-            MachineDataModel? machineData = await _machineTable.GetEntityByIdAsync(_machineItemViewModel.Id);
+            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(_machineItemViewModel.Id);
 
             if (machineData is not null)
             {
@@ -308,7 +293,7 @@ namespace CutterManagement.UI.Desktop
                 if(machineData.FrequencyCheckResult == FrequencyCheckResult.Setup)
                 {
                     // Close dialog
-                    await DialogService.InvokeAlertDialog(this, "Part number entry is successful").ContinueWith(_ =>
+                    await DialogService.InvokeAlertDialog(this, "Machine setup is successful").ContinueWith(_ =>
                     {
                         DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
                     });
@@ -325,16 +310,35 @@ namespace CutterManagement.UI.Desktop
         /// Fetch cutters 
         /// </summary>
         /// <returns><see cref="Task"/></returns>
-        private async Task GetCutters() => (await _cutterTable.GetAllEntitiesAsync()).ToList().ForEach(_cutters.Add);
+        private async Task GetCutters()
+        {
+            // Clear the current collection
+            _cutters.Clear();
+
+            // Get all cutters from the database
+            using var cutterTable = _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
+
+            // Add all cutters to the collection
+            (await cutterTable.GetAllEntitiesAsync()).ToList().ForEach(_cutters.Add);
+        }
 
         /// <summary>
         /// Fetch parts
         /// </summary>
         /// <returns><see cref="Task"/></returns>
-        private async Task GetParts() => (await _partTable.GetAllEntitiesAsync()).ToList().ForEach((part) => 
+        private async Task GetParts() 
         {
-            if (part.PartNumber.Equals(_machineItemViewModel.PartNumber) is false) _parts.Add(part);
-        });
+            // Clear the current collection
+            _parts.Clear();
+
+            // Get all parts from the database
+            using var partTable = _machineService.DataBaseAccess.GetDbTable<PartDataModel>();
+
+            (await partTable.GetAllEntitiesAsync()).ToList().ForEach((part) =>
+            {
+                if (part.PartNumber.Equals(_machineItemViewModel.PartNumber) is false) _parts.Add(part);
+            });
+        }
 
         /// <summary>
         /// Get part number for a specific cutter
@@ -357,8 +361,11 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
+                // Get machine table
+                using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+
                 // Make sure cutter is not already being used by another machine
-                foreach(var item in await _machineTable.GetAllEntitiesAsync())
+                foreach (var item in await machineTable.GetAllEntitiesAsync())
                 {
                     // Filter a specific kind of cutter
                     if (!(item.Owner.Equals(cutter.Owner))) continue;

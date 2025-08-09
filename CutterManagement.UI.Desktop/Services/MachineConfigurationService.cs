@@ -36,7 +36,7 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
+            using var machineTable = _dataAccessService.GetDbTable<MachineDataModel>();
 
             EventHandler<object>? handler = null;
 

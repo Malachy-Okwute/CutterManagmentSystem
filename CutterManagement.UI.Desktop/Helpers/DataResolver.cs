@@ -27,7 +27,7 @@ namespace CutterManagement.UI.Desktop
 
             if(machineData.CutterDataModelId is not null)
             {
-                IDataAccessService<CutterDataModel> cutterTable = machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
+                using var cutterTable = machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
                 CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(machineData.CutterDataModelId);
 
                 if(cutter is not null)

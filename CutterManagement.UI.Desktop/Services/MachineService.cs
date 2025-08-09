@@ -61,7 +61,7 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
 
             // Use an event handler to listen for data changes
             EventHandler<object>? handler = null;
@@ -132,10 +132,10 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machines table
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
 
             /// Get users table
-            IDataAccessService<UserDataModel> userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
+            using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
 
             // Use an event handler to listen for data changes
             EventHandler<object>? handler = null;
@@ -214,9 +214,11 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machines table
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            // Get cutter table
+            using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
             // Get production part log table
-            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
+            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Use an event handler to listen for data changes
             EventHandler<object>? handler = null;
@@ -248,8 +250,10 @@ namespace CutterManagement.UI.Desktop
                 // Result of user intention prompt
                 bool? result = null;
 
+                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.CutterDataModelId) ?? throw new NullReferenceException("Cutter not found");
+
                 // If the difference between current and new value is more than 100...
-                if (GetValueDifference(count, machine.Cutter.Count) > 100)
+                if (GetValueDifference(count, cutter.Count) > 100)
                 {
                     // Prompt user
                     result = await verifyUserIntention.Invoke();
@@ -259,7 +263,7 @@ namespace CutterManagement.UI.Desktop
                 }
 
                 // Set new value
-                machine.Cutter.Count = count;
+                cutter.Count = count;
 
                 // Set message
                 machine.StatusMessage = $"Piece count adjusted. {DateTime.Now.ToString("g")}";
@@ -268,7 +272,8 @@ namespace CutterManagement.UI.Desktop
                 machine.DateTimeLastModified = DateTime.Now;
 
                 // Update db with the new data
-                await machineTable.UpdateEntityAsync(machine ?? throw new ArgumentException($"Unable to update count"));
+                await cutterTable.UpdateEntityAsync(cutter);
+                await machineTable.UpdateEntityAsync(machine);
             }
         }
 
@@ -284,17 +289,17 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine db tables
-            IDataAccessService<MachineDataModel> sendingMachineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
-            IDataAccessService<MachineDataModel> receivingMachineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            using var sendingMachineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            using var receivingMachineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
 
             // Get cutter db table
-            IDataAccessService<CutterDataModel> cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
+            using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
 
             // Get user db table
-            IDataAccessService<UserDataModel> userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
+            using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
 
             // Get production part log table
-            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
+            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Get machine that will be receiving cutter
             MachineDataModel? receivingMachine = await receivingMachineTable.GetEntityByIdAsync(machineReceivingCutterId);
@@ -337,7 +342,7 @@ namespace CutterManagement.UI.Desktop
             if (sendingMachine is not null && receivingMachine is not null)
             {
                 // Get cutter
-                CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(sendingMachine.Cutter.Id);
+                CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(sendingMachine.CutterDataModelId);
 
                 // Transfer data
                 receivingMachine.Status = sendingMachine.Status;
@@ -372,9 +377,9 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Update db with the new data
-                await receivingMachineTable.UpdateEntityAsync(receivingMachine);
-                await userTable.UpdateEntityAsync(user);
                 await cutterTable.UpdateEntityAsync(cutter);
+                await userTable.UpdateEntityAsync(user);
+                await receivingMachineTable.UpdateEntityAsync(receivingMachine);
                 await sendingMachineTable.UpdateEntityAsync(sendingMachine);
             }
         }
@@ -388,16 +393,16 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
 
             // Get user table
-            IDataAccessService<UserDataModel> userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
+            using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
 
             // Get cutter table
-            IDataAccessService<CutterDataModel> cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
+            using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
 
             // Get production part log table
-            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
+            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Attempt to get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId);
@@ -429,10 +434,10 @@ namespace CutterManagement.UI.Desktop
             if (machine is not null)
             {
                 // Attempt to get current cutter
-                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.Cutter.Id) ?? throw new ArgumentNullException("Cutter not found");
+                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.CutterDataModelId) ?? throw new NullReferenceException("Cutter not found");
 
                 // Set cmm data
-                machine.Cutter.CMMData.Add(new CMMDataModel
+                cutter.CMMData.Add(new CMMDataModel
                 {
                     // Set cmm data
                     BeforeCorrections = incomingCMMData.BeforeCorrections,
@@ -447,7 +452,8 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Set other machine information
-                machine.Cutter.Count = int.Parse(incomingCMMData.Count);
+                cutter.Count = int.Parse(incomingCMMData.Count);
+                //machine.Count = int.Parse(incomingCMMData.Count);
                 machine.StatusMessage = comment ?? "Passed CMM check";
                 machine.Status = MachineStatus.IsRunning;
                 machine.FrequencyCheckResult = FrequencyCheckResult.Passed;
@@ -461,8 +467,8 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Update information in database
-                await machineTable.UpdateEntityAsync(machine);
                 await cutterTable.UpdateEntityAsync(cutter);
+                await machineTable.UpdateEntityAsync(machine);
             }
         }
 
@@ -479,15 +485,15 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine table
-            IDataAccessService<MachineDataModel> machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
             // Get user table
-            IDataAccessService<UserDataModel> userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
+            using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
             // Get cutter table
-            IDataAccessService<CutterDataModel> cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
+            using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
             // Get cmm data table
-            IDataAccessService<CMMDataModel> cmmTable = _dataAccessServiceFactory.GetDbTable<CMMDataModel>();
+            using var cmmTable = _dataAccessServiceFactory.GetDbTable<CMMDataModel>();
             // Get production part log table
-            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
+            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId);
@@ -519,7 +525,7 @@ namespace CutterManagement.UI.Desktop
             if (machine is not null)
             {
                 // Current cutter
-                CutterDataModel? cutter = await cutterTable.GetEntityByIdIncludingRelatedPropertiesAsync(machine.Cutter.Id, c => c.CMMData);
+                CutterDataModel? cutter = await cutterTable.GetEntityByIdIncludingRelatedPropertiesAsync((int)machine.CutterDataModelId!, c => c.CMMData);
 
                 // CMM data associated with cutter
                 CMMDataModel? cmmData = await cmmTable.GetEntityByIdAsync(cutter.Id);
@@ -529,11 +535,11 @@ namespace CutterManagement.UI.Desktop
                 machine.Status = MachineStatus.Warning;
                 machine.StatusMessage = newData.StatusMessage ?? $"Cutter was removed. {DateTime.Now.ToString("g")}";
                 machine.DateTimeLastModified = DateTime.Now;
-                machine.Cutter.CutterChangeInfo = newData.Cutter.CutterChangeInfo;
-                machine.Cutter.LastUsedDate = DateTime.Now;
-                machine.Cutter.Count = newData.Cutter.Count;
-                machine.Cutter.Condition = newData.Cutter.Count > 0 ? CutterCondition.Used : CutterCondition.New;
-                machine.Cutter.MachineDataModelId = null;
+                cutter.CutterChangeInfo = newData.Cutter.CutterChangeInfo;
+                cutter.LastUsedDate = DateTime.Now;
+                cutter.Count = newData.Cutter.Count;
+                cutter.Condition = newData.Cutter.Count > 0 ? CutterCondition.Used : CutterCondition.New;
+                cutter.MachineDataModelId = null;
                 machine.CutterDataModelId = null;
                 machine.PartNumber = null!;
                 machine.PartToothSize = "0";

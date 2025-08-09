@@ -156,7 +156,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task ChangeUserShift()
         {
-            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+            using var usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
             UserDataModel? user = await usersTable.GetEntityByIdAsync(_users.First(x => x.IsEditMode == true).Id);
 
@@ -176,7 +176,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="userId">Unique id of the user to deactivate</param>
         private async Task DeactivateUser(int userId)
         {
-            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+            using var usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
             UserDataModel? user = await usersTable.GetEntityByIdAsync(userId);
 
@@ -216,7 +216,7 @@ namespace CutterManagement.UI.Desktop
             _users.Clear();
 
             // Get users table
-            IDataAccessService<UserDataModel> userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+            using var userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
             _userShiftCollection = new Dictionary<UserShift, string>();
 
@@ -311,7 +311,7 @@ namespace CutterManagement.UI.Desktop
             UserItemViewModel? existingLocalData = _users.FirstOrDefault(x => x.Id == data.Id);
 
             // Get users db table
-            IDataAccessService<UserDataModel> usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+            using var usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
             // Jump onto UI thread
             DispatcherService.Invoke(async () =>

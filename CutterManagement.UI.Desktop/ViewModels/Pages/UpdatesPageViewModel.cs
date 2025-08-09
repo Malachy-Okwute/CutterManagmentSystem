@@ -90,9 +90,9 @@ namespace CutterManagement.UI.Desktop
         /// <param name="itemId">The id of information to edit</param>
         private async Task EditInfoUpdate(int itemId)
         {
-            var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
-            var infoRelationsTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
-            var partsTable = _dataFactory.GetDbTable<PartDataModel>();
+            using var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            using var infoRelationsTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            using var partsTable = _dataFactory.GetDbTable<PartDataModel>();
 
             InfoUpdateDataModel? info = await infoTable.GetEntityByIdAsync(itemId);
             UserDataModel? user = (await infoRelationsTable.GetEntityByIdIncludingRelatedPropertiesAsync(itemId, i => i.InfoUpdateUserRelations))?
@@ -128,7 +128,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="itemId">The id of information to edit</param>
         private async Task DeleteInfoUpdate(int itemId)
         {
-            var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            using var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
 
             InfoUpdateDataModel? info = await infoTable.GetEntityByIdAsync(itemId);
 
@@ -175,7 +175,7 @@ namespace CutterManagement.UI.Desktop
                     _infoUpdates.Clear();
 
                     // Get info update table
-                    var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+                    using var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
 
                     foreach (var info in (await infoUpdateTable.GetAllEntitiesAsync())) await AddInfoUpdate(info);
 
@@ -204,7 +204,7 @@ namespace CutterManagement.UI.Desktop
                 _infoUpdates.RemoveAt(_infoUpdates.IndexOf(_infoUpdates.Single(i => i.Id == infoUpdate.Id)));
             }
 
-            var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            using var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
 
             UserDataModel? user = (await infoUpdateTable.GetEntityByIdIncludingRelatedPropertiesAsync(infoUpdate.Id, i => i.InfoUpdateUserRelations))?
                                     .InfoUpdateUserRelations

@@ -105,7 +105,7 @@ namespace CutterManagement.UI.Desktop
             _partCollection.Clear();
 
             // Get parts table
-            IDataAccessService<PartDataModel> partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+            using var partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
 
             // Check if there is any part in the database
             if ((await partsTable.GetAllEntitiesAsync()).Any() is false)
@@ -181,7 +181,7 @@ namespace CutterManagement.UI.Desktop
         {
             PartItemViewModel? part = _partCollection.ToList().FirstOrDefault(x => x.IsEditMode == true);
 
-            var partTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+            using var partTable = _dataServiceFactory.GetDbTable<PartDataModel>();
 
             var partToDelete = await partTable.GetEntityByIdAsync(part?.Id);
 

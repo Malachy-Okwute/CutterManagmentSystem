@@ -123,7 +123,7 @@ namespace CutterManagement.UI.Desktop
         private async Task CreatePart()
         {
             // Get parts table
-            IDataAccessService<PartDataModel> partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+            using var partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
 
             // Create new part
             PartDataModel newPart = new PartDataModel

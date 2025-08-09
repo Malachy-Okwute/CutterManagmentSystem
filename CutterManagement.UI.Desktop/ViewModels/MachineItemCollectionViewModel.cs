@@ -88,8 +88,8 @@ namespace CutterManagement.UI.Desktop
                 if (_machineService.DataBaseAccess is null) return;
 
                 // Get tables needed
-                IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
-                IDataAccessService<UserDataModel> userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+                using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+                using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
                 // Ensure pin and ring collections are empty
                 _pinItems.Clear();

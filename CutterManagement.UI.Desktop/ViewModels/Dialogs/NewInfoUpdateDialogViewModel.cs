@@ -233,9 +233,9 @@ namespace CutterManagement.UI.Desktop
             InfoUpdateDataModel? data = null;
 
             // Get info table
-            var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            using var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
             // Get users table
-            var userTable = _dataFactory.GetDbTable<UserDataModel>();
+            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
 
             // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
@@ -357,7 +357,7 @@ namespace CutterManagement.UI.Desktop
         private async Task GetUsers()
         {
             // Get user db table
-            IDataAccessService<UserDataModel> users = _dataFactory.GetDbTable<UserDataModel>();
+            using var users = _dataFactory.GetDbTable<UserDataModel>();
 
             if (_isFetchingUsers) return;
             {
@@ -401,7 +401,7 @@ namespace CutterManagement.UI.Desktop
         {
             PartNumberCollection.Clear();
 
-            var partTable = _dataFactory.GetDbTable<PartDataModel>();
+            using var partTable = _dataFactory.GetDbTable<PartDataModel>();
 
             IEnumerable<PartDataModel> parts = (await partTable.GetAllEntitiesAsync()).Where(p => p.Kind == partKind);
 

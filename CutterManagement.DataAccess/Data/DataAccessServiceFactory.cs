@@ -1,4 +1,6 @@
 ﻿using CutterManagement.Core;
+using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 
 namespace CutterManagement.DataAccess
 {
@@ -10,7 +12,7 @@ namespace CutterManagement.DataAccess
         /// <summary>
         /// Database context
         /// </summary>
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IServiceProvider _serviceProvider;
 
         /// <summary>
         /// Default constructor
@@ -23,10 +25,10 @@ namespace CutterManagement.DataAccess
         /// <summary>
         /// Constructor 
         /// </summary>
-        /// <param name="dbContext">Database context</param>
-        public DataAccessServiceFactory(ApplicationDbContext dbContext)
+        /// <param name="serviceProvider">Database context</param>
+        public DataAccessServiceFactory(IServiceProvider serviceProvider)
         {
-            _dbContext = dbContext;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -36,7 +38,9 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="IDataAccessService{T}"/></returns>
         public IDataAccessService<T> GetDbTable<T>() where T : class
         {
-            return new DataAccessService<T>(_dbContext);
+            var scopedContext = _serviceProvider.CreateScope();
+            var context = scopedContext.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            return new DataAccessService<T>(context ?? throw new ArgumentNullException("Context is null"));
         }        
     }
 }

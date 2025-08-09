@@ -358,7 +358,7 @@ namespace CutterManagement.UI.Desktop
         private async Task GetUsers()
         {
             // Get user db table
-            IDataAccessService<UserDataModel> users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            using var users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
             {

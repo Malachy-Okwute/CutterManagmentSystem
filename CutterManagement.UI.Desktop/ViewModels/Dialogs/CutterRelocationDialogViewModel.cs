@@ -195,7 +195,7 @@ namespace CutterManagement.UI.Desktop
             MachineCollection.Add(new MachineDataModel(), "Select machine");
 
             // Get machine db table
-            IDataAccessService<MachineDataModel> machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
 
             foreach (MachineDataModel machine in await machineTable.GetAllEntitiesAsync())
             {
@@ -224,7 +224,7 @@ namespace CutterManagement.UI.Desktop
             UserCollection.Clear();
 
             // Get user db table
-            IDataAccessService<UserDataModel> users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            using var users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
             {

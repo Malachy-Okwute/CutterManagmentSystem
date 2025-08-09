@@ -134,7 +134,7 @@ namespace CutterManagement.UI.Desktop
             if (result.IsValid)
             {
                 // Get users table
-                IDataAccessService<UserDataModel> userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+                using var userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
                 // Listen for when user is created
                 userTable.DataChanged += UserTable_DataChanged;
 

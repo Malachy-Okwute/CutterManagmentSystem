@@ -99,7 +99,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task DeleteUser()
         {
-            var userTable = _dataFactory.GetDbTable<UserDataModel>();
+            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
 
             // Archive only users that are selected
             foreach (var user in _deactivatedUser)
@@ -132,7 +132,7 @@ namespace CutterManagement.UI.Desktop
         private async Task ActivateUser()
         {
             // Get user table
-            var userTable = _dataFactory.GetDbTable<UserDataModel>();
+            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
 
             // Activate only users that are selected
             foreach (var user in _deactivatedUser)
@@ -161,7 +161,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public async Task GetDeactivatedUsers()
         {
-            (await _dataFactory.GetDbTable<UserDataModel>().GetAllEntitiesAsync()).ToList().ForEach(user =>
+            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
+
+            (await userTable.GetAllEntitiesAsync()).ToList().ForEach(user =>
             {
                 if(user.IsActive is false && user.IsArchived is false)
                 {

@@ -27,13 +27,25 @@ namespace CutterManagement.UI.Desktop
 
             control.Loaded += (s, e) =>
             {
-                control.Focus();
-
-                if (control is TextBox)
-                {
-                    ((TextBox)control).SelectAll();
-                }
+                FocusOnControl(control);
             };
+
+            if (control.IsLoaded)
+            {
+                FocusOnControl(control);
+            }
+        }
+
+        public static void FocusOnControl(FrameworkElement control)
+        {
+            if (control is null) return;
+
+            control.Focus();
+            
+            if (control is TextBox textBox)
+            {
+                textBox.SelectAll();
+            }
         }
     }
 }

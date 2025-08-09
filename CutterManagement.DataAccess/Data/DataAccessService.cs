@@ -8,7 +8,7 @@ namespace CutterManagement.DataAccess
     /// <summary>
     /// Provides access to the application database
     /// </summary>
-    public class DataAccessService<T> : IDataAccessService<T> where T : class
+    public class DataAccessService<T> : IDataAccessService<T>, IDisposable where T : class
     {
         /// <summary>
         /// Locker
@@ -162,6 +162,11 @@ namespace CutterManagement.DataAccess
                 Debug.WriteLine(msg.Message);
                 Debugger.Break();
             }
+        }
+
+        public void Dispose()
+        {
+            _applicationDbContext.Dispose();
         }
     }
 }

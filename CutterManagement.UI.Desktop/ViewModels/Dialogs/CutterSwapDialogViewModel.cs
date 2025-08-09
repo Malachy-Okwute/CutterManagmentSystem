@@ -28,10 +28,6 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private MachineDataModel? _secondMachine;
 
-        private IDataAccessService<MachineDataModel> _machineTable;
-
-        private IDataAccessService<UserDataModel> _userTable;
-
         /// <summary>
         /// Machine initiating cutter swap operation
         /// </summary>
@@ -131,16 +127,16 @@ namespace CutterManagement.UI.Desktop
         public async Task<bool> InitializeCutterSwapping()
         {
             // Get machine table
-            _machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
 
             // Get users
-            _userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             // Get first machine
-            _firstMachine = await _machineTable.GetEntityByIdAsync(_machineItem.Id);
+            _firstMachine = await machineTable.GetEntityByIdAsync(_machineItem.Id);
 
             // Find second machine
-             _secondMachine = (await _machineTable.GetAllEntitiesAsync())
+             _secondMachine = (await machineTable.GetAllEntitiesAsync())
                 .FirstOrDefault(x => x.MachineSetId == _firstMachine?.MachineSetId && x.MachineNumber != _firstMachine.MachineNumber && x.Owner == _firstMachine.Owner);
 
             // Make sure we have cutter to swap
@@ -182,7 +178,7 @@ namespace CutterManagement.UI.Desktop
                     $"{_secondMachine.Cutter.CutterNumber}-{_secondMachine.Cutter.Model}", _secondMachine.PartNumber, _secondMachine.Cutter.Count.ToString());
 
                 // Get users
-                foreach (UserDataModel userData in await _userTable.GetAllEntitiesAsync())
+                foreach (UserDataModel userData in await userTable.GetAllEntitiesAsync())
                 {
                     // Do not load admin user
                     if (userData.LastName is "admin")
@@ -209,13 +205,14 @@ namespace CutterManagement.UI.Desktop
         {
             // ToDo: Refactor code below
 
+            // Get machine table
+            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
 
             // Get user table
-            var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
 
             // Get production part log table
             IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
-
 
             UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
 
@@ -226,7 +223,7 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel dummyMachine = new MachineDataModel();
 
             // Listen for changes 
-            _machineTable.DataChanged += (s, e) =>
+            machineTable.DataChanged += (s, e) =>
             {
                 // Set new data
                 data = e as MachineDataModel;
@@ -255,7 +252,7 @@ namespace CutterManagement.UI.Desktop
                 _firstMachine.Cutter = null!;
                 _firstMachine.FrequencyCheckResult = FrequencyCheckResult.Setup;
 
-                await _machineTable.UpdateEntityAsync(_firstMachine);
+                await machineTable.UpdateEntityAsync(_firstMachine);
 
                 _firstMachine.Status = _secondMachine.Status;
                 _firstMachine.StatusMessage = $"Swapped cutter with {_secondMachine.MachineNumber}";
@@ -289,8 +286,8 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Save new info to database
-                await _machineTable.UpdateEntityAsync(_firstMachine);
-                await _machineTable.UpdateEntityAsync(_secondMachine);
+                await machineTable.UpdateEntityAsync(_firstMachine);
+                await machineTable.UpdateEntityAsync(_secondMachine);
             }
 
             // Set flag

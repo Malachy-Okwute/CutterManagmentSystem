@@ -162,7 +162,7 @@ namespace CutterManagement.UI.Desktop
 
                 try
                 {
-                    var usersTable = _dataFactory.GetDbTable<UserDataModel>();
+                    using var usersTable = _dataFactory.GetDbTable<UserDataModel>();
                     NumberOfUsers = (await usersTable.GetAllEntitiesAsync())
                         .Count(user => EnumHelpers.GetDescription(user.Shift) == CurrentShift && user.IsArchived is false && user.FirstName != "resource")
                         .ToString();
