@@ -19,14 +19,9 @@ namespace CutterManagement.UI.Desktop
         private readonly IMachineService _machineService;
 
         /// <summary>
-        /// First machine
+        /// Second machine unique id
         /// </summary>
-        //private MachineDataModel? _firstMachine;
-
-        /// <summary>
-        /// Second machine
-        /// </summary>
-        //private MachineDataModel? _secondMachine;
+        private int? _secondMachine;
 
         /// <summary>
         /// Machine initiating cutter swap operation
@@ -108,7 +103,7 @@ namespace CutterManagement.UI.Desktop
             UserCollection = new Dictionary<UserDataModel, string>();
 
             // Create commands
-            SwapCuttersCommand = new RelayCommand(async () => await SwapCutters(_machineItem?.Id));
+            SwapCuttersCommand = new RelayCommand(async () => await SwapCutters(_machineItem?.Id, _secondMachine));
             CancelCommand = new RelayCommand(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
         }
 
@@ -136,12 +131,12 @@ namespace CutterManagement.UI.Desktop
             var firstMachine = await machineTable.GetEntityByIdAsync(_machineItem.Id, x => x.Cutter);
 
             // Filter and find second machine id
-             var secondMachineId = (await machineTable.GetAllEntitiesAsync()).FirstOrDefault(x => x.MachineSetId == firstMachine?.MachineSetId && 
+             _secondMachine = (await machineTable.GetAllEntitiesAsync()).FirstOrDefault(x => x.MachineSetId == firstMachine?.MachineSetId && 
                                       x.MachineNumber != firstMachine.MachineNumber &&
                                       x.Owner == firstMachine.Owner)?.Id;
 
             // Get second machine
-            var secondMachine = await machineTable.GetEntityByIdAsync(secondMachineId, x => x.Cutter);
+            var secondMachine = await machineTable.GetEntityByIdAsync(_secondMachine, x => x.Cutter);
 
             // Make sure we have cutter to swap
             if (firstMachine?.Cutter is null) return false;
@@ -163,7 +158,7 @@ namespace CutterManagement.UI.Desktop
             if (secondMachine.Cutter is null)
             {
                 // Error message
-                string errorMessage = $"A cutter is required for [ {secondMachine.MachineNumber} ] to exchange its cutter with [ {firstMachine.MachineNumber} ].";
+                string errorMessage = $"[ {secondMachine.MachineNumber} ] must be setup with a cutter to complete this operation.";
 
                 // Show dialog
                 await DialogService.InvokeFeedbackDialog(this, errorMessage);
@@ -203,9 +198,11 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
-        /// Swaps cutters between 2 machines in a set
+        /// Swaps cutters between two machines in a set
         /// </summary>
-        private async Task SwapCutters(int? initialMachineId)
+        /// <param name="initialMachineId">Unique id of the first machine</param>
+        /// <param name="secondMachineId">Unique id of the second machine</param>
+        private async Task SwapCutters(int? initialMachineId, int? secondMachineId)
         {
             // ToDo: Refactor code below
 
@@ -218,14 +215,12 @@ namespace CutterManagement.UI.Desktop
             // Get production part log table
             IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
 
+            // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
 
+            // Get first machine
             MachineDataModel? firstMachine = await machineTable.GetEntityByIdAsync(initialMachineId, cutter => cutter.Cutter);
-
-            var secondMachineId = (await machineTable.GetAllEntitiesAsync()).FirstOrDefault(x => x.MachineSetId == firstMachine?.MachineSetId &&
-                         x.MachineNumber != firstMachine.MachineNumber &&
-                         x.Owner == firstMachine.Owner)?.Id;
-
+            // Get second machine
             MachineDataModel? secondMachine = await machineTable.GetEntityByIdAsync(secondMachineId, cutter => cutter.Cutter);
 
             // New data from database
@@ -246,8 +241,10 @@ namespace CutterManagement.UI.Desktop
                 //ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
             };
 
+            // If both machines are available
             if (firstMachine is not null && secondMachine is not null)
             {
+                // Create a dummy machine to hold first machine's data
                 dummyMachine.Status = firstMachine.Status;
                 dummyMachine.StatusMessage = firstMachine.StatusMessage;
                 dummyMachine.PartNumber = firstMachine.PartNumber;
@@ -255,6 +252,7 @@ namespace CutterManagement.UI.Desktop
                 dummyMachine.FrequencyCheckResult = firstMachine.FrequencyCheckResult;
                 dummyMachine.DateTimeLastModified = DateTime.Now;
 
+                // Pass second machine's data to first machine
                 firstMachine.Status = secondMachine.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.Warning : secondMachine.Status;
                 firstMachine.StatusMessage = $"Swapped cutter with {secondMachine.MachineNumber}";
                 firstMachine.PartNumber = secondMachine.PartNumber;
@@ -270,6 +268,7 @@ namespace CutterManagement.UI.Desktop
                     MachineDataModel = firstMachine
                 });
 
+                // Pass dummy machine's data to second machine
                 secondMachine.Status = dummyMachine.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.Warning : dummyMachine.Status;
                 secondMachine.StatusMessage = $"Swapped cutter with {firstMachine.MachineNumber}";
                 secondMachine.PartNumber = dummyMachine.PartNumber;
