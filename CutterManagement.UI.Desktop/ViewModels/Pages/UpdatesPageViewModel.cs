@@ -95,7 +95,7 @@ namespace CutterManagement.UI.Desktop
             using var partsTable = _dataFactory.GetDbTable<PartDataModel>();
 
             InfoUpdateDataModel? info = await infoTable.GetEntityByIdAsync(itemId);
-            UserDataModel? user = (await infoRelationsTable.GetEntityByIdIncludingRelatedPropertiesAsync(itemId, i => i.InfoUpdateUserRelations))?
+            UserDataModel? user = (await infoRelationsTable.GetEntityWithCollectionsByIdAsync(itemId, i => i.InfoUpdateUserRelations))?
                                  .InfoUpdateUserRelations
                                  .FirstOrDefault()?
                                  .UserDataModel;
@@ -206,7 +206,7 @@ namespace CutterManagement.UI.Desktop
 
             using var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
 
-            UserDataModel? user = (await infoUpdateTable.GetEntityByIdIncludingRelatedPropertiesAsync(infoUpdate.Id, i => i.InfoUpdateUserRelations))?
+            UserDataModel? user = (await infoUpdateTable.GetEntityWithCollectionsByIdAsync(infoUpdate.Id, i => i.InfoUpdateUserRelations))?
                                     .InfoUpdateUserRelations
                                     .FirstOrDefault()?
                                     .UserDataModel;

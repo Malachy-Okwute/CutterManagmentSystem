@@ -538,7 +538,6 @@ namespace CutterManagement.UI.Desktop
             cutterSwapViewModel.GetMachine(this);
 
             // Initialize cutter swapping process
-            //cutterSwapViewModel.InitializeCutterSwapping(firstMachine, secondMachine);
             var initializationResult = await cutterSwapViewModel.InitializeCutterSwapping();
 
             if(initializationResult)

@@ -106,7 +106,7 @@ namespace CutterManagement.UI.Desktop
                 machineData.IsConfigured = newData.IsConfigured;
 
                 // Save new data
-                await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
+                await machineTable.SaveEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
 
                 // Return result
                 return (result, data);
@@ -179,7 +179,7 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Update db with the new data
-                await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
+                await machineTable.SaveEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
             }
 
             // Return result
@@ -235,14 +235,14 @@ namespace CutterManagement.UI.Desktop
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
 
                 // update log with latest piece count
-                ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
+                //ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
             };
 
             // Subscribe to the DataChanged event
             machineTable.DataChanged += handler;
 
             // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id, cutter => cutter.Cutter);
 
             // Make sure machine is not null
             if (machine is not null)
@@ -250,7 +250,7 @@ namespace CutterManagement.UI.Desktop
                 // Result of user intention prompt
                 bool? result = null;
 
-                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.CutterDataModelId) ?? throw new NullReferenceException("Cutter not found");
+                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.Cutter.Id) ?? throw new NullReferenceException("Cutter not found");
 
                 // If the difference between current and new value is more than 100...
                 if (GetValueDifference(count, cutter.Count) > 100)
@@ -272,8 +272,8 @@ namespace CutterManagement.UI.Desktop
                 machine.DateTimeLastModified = DateTime.Now;
 
                 // Update db with the new data
-                await cutterTable.UpdateEntityAsync(cutter);
-                await machineTable.UpdateEntityAsync(machine);
+                await cutterTable.SaveEntityAsync(cutter);
+                await machineTable.SaveEntityAsync(machine);
             }
         }
 
@@ -303,7 +303,7 @@ namespace CutterManagement.UI.Desktop
 
             // Get machine that will be receiving cutter
             MachineDataModel? receivingMachine = await receivingMachineTable.GetEntityByIdAsync(machineReceivingCutterId);
-            MachineDataModel? sendingMachine = await sendingMachineTable.GetEntityByIdAsync(machineSendingCutterId);
+            MachineDataModel? sendingMachine = await sendingMachineTable.GetEntityByIdAsync(machineSendingCutterId, cutter => cutter.Cutter);
 
             // Get user carrying out this operation
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
@@ -331,7 +331,7 @@ namespace CutterManagement.UI.Desktop
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
 
                 // log cutter relocation
-                ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
+                //ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
             };
 
             // Subscribe to the DataChanged event
@@ -342,10 +342,10 @@ namespace CutterManagement.UI.Desktop
             if (sendingMachine is not null && receivingMachine is not null)
             {
                 // Get cutter
-                CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(sendingMachine.CutterDataModelId);
+                CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(sendingMachine.Cutter.Id);
 
                 // Transfer data
-                receivingMachine.Status = sendingMachine.Status;
+                receivingMachine.Status = sendingMachine.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.Warning : sendingMachine.Status;
                 receivingMachine.PartNumber = sendingMachine.PartNumber;
                 receivingMachine.CutterDataModelId = sendingMachine.CutterDataModelId;
                 receivingMachine.Cutter = cutter ?? throw new ArgumentNullException("Cutter cannot be null");
@@ -366,7 +366,7 @@ namespace CutterManagement.UI.Desktop
                 sendingMachine.Cutter.MachineDataModelId = null;
                 sendingMachine.StatusMessage = $"Sent cutter to {receivingMachine.MachineNumber} machine. {DateTime.Now.ToString("g")}";
                 sendingMachine.FrequencyCheckResult = FrequencyCheckResult.Setup;
-                sendingMachine.Status = MachineStatus.Warning;
+                sendingMachine.Status = sendingMachine.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.IsDownForMaintenance : MachineStatus.Warning;
                 sendingMachine.DateTimeLastModified = DateTime.Now;
 
                 // Set the user performing this operation including the machine involved
@@ -377,10 +377,10 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Update db with the new data
-                await cutterTable.UpdateEntityAsync(cutter);
-                await userTable.UpdateEntityAsync(user);
-                await receivingMachineTable.UpdateEntityAsync(receivingMachine);
-                await sendingMachineTable.UpdateEntityAsync(sendingMachine);
+                await cutterTable.SaveEntityAsync(cutter);
+                await userTable.SaveEntityAsync(user);
+                await sendingMachineTable.SaveEntityAsync(sendingMachine);
+                await receivingMachineTable.SaveEntityAsync(receivingMachine);
             }
         }
 
@@ -405,7 +405,7 @@ namespace CutterManagement.UI.Desktop
             using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Attempt to get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId);
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId, cutter => cutter.Cutter);
 
             // Attempt to get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
@@ -424,7 +424,7 @@ namespace CutterManagement.UI.Desktop
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
 
                 // Log cmm data
-                ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
+                //ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
             };
 
             // Subscribe to the DataChanged event
@@ -434,10 +434,9 @@ namespace CutterManagement.UI.Desktop
             if (machine is not null)
             {
                 // Attempt to get current cutter
-                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.CutterDataModelId) ?? throw new NullReferenceException("Cutter not found");
+                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.Cutter.Id) ?? throw new NullReferenceException("Cutter not found");
 
-                // Set cmm data
-                cutter.CMMData.Add(new CMMDataModel
+                CMMDataModel cmmData = new CMMDataModel
                 {
                     // Set cmm data
                     BeforeCorrections = incomingCMMData.BeforeCorrections,
@@ -449,12 +448,15 @@ namespace CutterManagement.UI.Desktop
                     Fr = incomingCMMData.Fr,
                     Size = incomingCMMData.Size,
                     Count = incomingCMMData.Count,
-                });
+                    CutterDataModel = cutter,
+                };
+
+                // Set cmm data
+                machine.Cutter.CMMData.Add(cmmData);
 
                 // Set other machine information
-                cutter.Count = int.Parse(incomingCMMData.Count);
-                //machine.Count = int.Parse(incomingCMMData.Count);
-                machine.StatusMessage = comment ?? "Passed CMM check";
+                machine.Cutter.Count = int.Parse(incomingCMMData.Count);
+                machine.StatusMessage = string.IsNullOrEmpty(comment) ? "Passed CMM check" : comment;
                 machine.Status = MachineStatus.IsRunning;
                 machine.FrequencyCheckResult = FrequencyCheckResult.Passed;
                 machine.DateTimeLastModified = DateTime.Now;
@@ -467,8 +469,8 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Update information in database
-                await cutterTable.UpdateEntityAsync(cutter);
-                await machineTable.UpdateEntityAsync(machine);
+                await cutterTable.SaveEntityAsync(cutter);
+                await machineTable.SaveEntityAsync(machine);
             }
         }
 
@@ -496,7 +498,7 @@ namespace CutterManagement.UI.Desktop
             using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId);
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId, x => x.Cutter);
 
             // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
@@ -512,7 +514,7 @@ namespace CutterManagement.UI.Desktop
                 // Set new data
                 data = e as MachineDataModel;
                 // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
+                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected machine data cannot be null"));
 
                 // log that cutter was removed
                 ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
@@ -524,25 +526,27 @@ namespace CutterManagement.UI.Desktop
             // If machine is not null...
             if (machine is not null)
             {
-                // Current cutter
-                CutterDataModel? cutter = await cutterTable.GetEntityByIdIncludingRelatedPropertiesAsync((int)machine.CutterDataModelId!, c => c.CMMData);
+                // Get current cutter with the associated CMM data
+                CutterDataModel? cutter = await cutterTable.GetEntityWithCollectionsByIdAsync(machine.Cutter.Id, cmm => cmm.CMMData);
 
-                // CMM data associated with cutter
-                CMMDataModel? cmmData = await cmmTable.GetEntityByIdAsync(cutter.Id);
-
+                // Set cutter information
+                cutter.CutterChangeInfo = newData.Cutter.CutterChangeInfo;
+                cutter.LastUsedDate = DateTime.Now;
+                cutter.Count = newData.Cutter.Count;
+                cutter.CMMData.ToList().AddRange(cutter.CMMData);
+                cutter.Condition = newData.Cutter.Condition;
+                cutter.MachineDataModel = null!;
+                cutter.MachineDataModelId = null;
+                
                 // Set new information
                 machine.FrequencyCheckResult = FrequencyCheckResult.Setup;
                 machine.Status = MachineStatus.Warning;
                 machine.StatusMessage = newData.StatusMessage ?? $"Cutter was removed. {DateTime.Now.ToString("g")}";
                 machine.DateTimeLastModified = DateTime.Now;
-                cutter.CutterChangeInfo = newData.Cutter.CutterChangeInfo;
-                cutter.LastUsedDate = DateTime.Now;
-                cutter.Count = newData.Cutter.Count;
-                cutter.Condition = newData.Cutter.Count > 0 ? CutterCondition.Used : CutterCondition.New;
-                cutter.MachineDataModelId = null;
-                machine.CutterDataModelId = null;
-                machine.PartNumber = null!;
+                machine.PartNumber = newData.PartNumber;
                 machine.PartToothSize = "0";
+                machine.Cutter = null!;
+                machine.CutterDataModelId = null;
 
                 // Set the user performing this operation
                 machine.MachineUserInteractions.Add(new MachineUserInteractions
@@ -557,24 +561,16 @@ namespace CutterManagement.UI.Desktop
                     // NOTE: Never delete entry from database, move data that is not needed to history table or archive
                     // ToDo: Record this event in a history table
 
-                    // Remove every associated cmm data from table
-                    //foreach(CMMDataModel cmm in cutter.CMMData.ToList()) { await cmmTable.DeleteEntityAsync(cmm); } // Uncomment once history table is implemented and record of cutter being sent back to be rebuilt is taken
-
-                    // Remove cutter from table
-                    //await cutterTable.DeleteEntityAsync(cutter); // Uncomment once history table is implemented and record of cutter being sent back to be rebuilt is taken
-
-                    // ToDo: Remove this code and uncomment the above code
-                    await cutterTable.UpdateEntityAsync(cutter);
-
+                    await cutterTable.SaveEntityAsync(cutter);
                 }
                 else
                 {
                     // Update cutter information 
-                    await cutterTable.UpdateEntityAsync(cutter);
+                    await cutterTable.SaveEntityAsync(cutter);
                 }
 
                 // Update database
-                await machineTable.UpdateEntityAsync(machine);
+                await machineTable.SaveEntityAsync(machine);
             }
         }
     }

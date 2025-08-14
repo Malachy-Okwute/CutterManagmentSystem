@@ -113,7 +113,7 @@ namespace CutterManagement.UI.Desktop
                         actualUser.IsArchived = true;
                         actualUser.FirstName = $"{actualUser.FirstName}_Archived";
                         actualUser.LastName = $"{actualUser.LastName}_Archived";
-                        await userTable.UpdateEntityAsync(actualUser);
+                        await userTable.SaveEntityAsync(actualUser);
                     }
                 }
             }
@@ -144,7 +144,7 @@ namespace CutterManagement.UI.Desktop
                     if (actualUser is not null)
                     {
                         actualUser.IsActive = true;
-                        await userTable.UpdateEntityAsync(actualUser);
+                        await userTable.SaveEntityAsync(actualUser);
                     }
                 }
             }

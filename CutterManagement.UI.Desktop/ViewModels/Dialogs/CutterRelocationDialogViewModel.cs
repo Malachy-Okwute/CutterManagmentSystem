@@ -200,7 +200,7 @@ namespace CutterManagement.UI.Desktop
             foreach (MachineDataModel machine in await machineTable.GetAllEntitiesAsync())
             {
                 // Add machines that are in the same department and also doesn't currently have cutter
-                if (machine.Owner == Owner && machine.Cutter is null)
+                if (machine.Owner == Owner && machine.CutterDataModelId is null)
                     MachineCollection.Add(machine, machine.MachineNumber);
             }
 

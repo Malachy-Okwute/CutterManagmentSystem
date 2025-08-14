@@ -336,7 +336,7 @@ namespace CutterManagement.UI.Desktop
                     existingInfo.SpiralAngleDrive = string.IsNullOrEmpty(SpiralAngleDrive) ? "0" : SpiralAngleDrive; 
 
                     // Update existing info
-                    await infoUpdateTable.UpdateEntityAsync(existingInfo);
+                    await infoUpdateTable.SaveEntityAsync(existingInfo);
                 }
 
                 // Stop listening for data changing

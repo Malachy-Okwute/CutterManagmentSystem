@@ -83,7 +83,8 @@ namespace CutterManagement.UI.Desktop
             get => _cutterNumber;
             set
             {
-                if(!(value.StartsWith("P", true, null) || value.StartsWith("R", true, null)))
+                // ToDo: refactor this code to use be more readable
+                if (!(value.StartsWith("P", true, null) || value.StartsWith("R", true, null)))
                 {
                     _cutterNumber = string.Empty;
                     IsDoneButtonActive = false;
@@ -226,6 +227,21 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task SetupMachine()
         {
+            // Get the desired cutter 
+            CutterDataModel desiredCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == _cutterNumber);
+
+            // If no part was selected
+            if (desiredCutter.MachineDataModelId is not null && desiredCutter.MachineDataModelId.Equals(_machineItemViewModel.Id) is false)
+            {
+                // ToDo: Notify user that cutter is already in use as soon as cutter number is entered
+
+                // Show feed back message
+                await DialogService.InvokeFeedbackDialog(this, "Cutter already in use on another machine");
+
+                // Do nothing else
+                return;
+            }
+
             // If no part was selected
             if (SelectedPart == 0)
             {
@@ -244,15 +260,15 @@ namespace CutterManagement.UI.Desktop
             // Data that will be changing
             MachineDataModel? data = null;
 
-            // Get the current cutter 
-            CutterDataModel currentCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == CutterNumber);
+            // Get the desired cutter 
+            //CutterDataModel desiredCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == _cutterNumber);
 
             // Get machine table
             using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();   
             // Get production part log table
-            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
+            using var productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
 
-            
+            // Create event handler
             EventHandler<object>? handler = null;
 
             // Listen for when machine table data actually changed
@@ -266,7 +282,7 @@ namespace CutterManagement.UI.Desktop
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected machine cannot be null"));
 
                 // Log initial part setup
-                ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
+                //ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
             };
 
             // Subscribe to data changed event
@@ -278,8 +294,8 @@ namespace CutterManagement.UI.Desktop
             if (machineData is not null)
             {
                 // Update machine information
-                machineData.Cutter = currentCutter;
-                machineData.CutterDataModelId = currentCutter.Id;
+                machineData.Cutter = desiredCutter;
+                machineData.CutterDataModelId = desiredCutter.Id;
                 machineData.PartNumber = PartNumberCollection[SelectedPart];
                 machineData.FrequencyCheckResult = FrequencyCheckResult.Setup;
                 machineData.Status = MachineStatus.Warning;
@@ -287,7 +303,7 @@ namespace CutterManagement.UI.Desktop
                 machineData.DateTimeLastModified = DateTime.Now;
 
                 // Update machine information
-                await machineTable.UpdateEntityAsync(machineData);
+                await machineTable.SaveEntityAsync(machineData);
 
                 //if(Title.Equals("Setup", StringComparison.OrdinalIgnoreCase) is false)
                 if(machineData.FrequencyCheckResult == FrequencyCheckResult.Setup)
@@ -349,7 +365,7 @@ namespace CutterManagement.UI.Desktop
             Task.Run(GetParts).ContinueWith(async _ =>
             {
                 // Get cutter
-                CutterDataModel? cutter = _cutters.FirstOrDefault(c => c.CutterNumber == CutterNumber);
+                CutterDataModel? cutter = _cutters.FirstOrDefault(c => c.CutterNumber == _cutterNumber);
 
                 // If owners do not match or we can't find cutter...
                 if (cutter is null || !(_machineItemViewModel.Owner.Equals(cutter?.Owner)))

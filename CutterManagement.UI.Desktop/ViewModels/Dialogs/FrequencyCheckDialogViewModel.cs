@@ -176,9 +176,6 @@ namespace CutterManagement.UI.Desktop
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
 
-                // User associated with cmm data entry
-                UserDataModel? user = (data.MachineUserInteractions.Single(user => user.Id == _user.Id).UserDataModel);
-
                 // Log cmm data
                 //ProductionPartsLogHelper.LogProductionProgress(_user, data, productionLogTable);
             };
@@ -187,7 +184,7 @@ namespace CutterManagement.UI.Desktop
             machineTable.DataChanged += handler;
 
             // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id);
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id, cutter => cutter.Cutter);
 
             // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
@@ -219,10 +216,11 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
-                // Prompt users to specify why part failed
+                // ToDo: Prompt user if the want remove or keep cutter 
+                // Prompt users enter why part failed
                 if (FailedCheck is true && string.IsNullOrEmpty(Comment))
                 {
-                    await DialogService.InvokeFeedbackDialog(this, "Please specify why part failed in the comment section");
+                    await DialogService.InvokeFeedbackDialog(this, "Please specify the issue with part in the comment section");
 
                     return;
                 }
@@ -259,7 +257,7 @@ namespace CutterManagement.UI.Desktop
                 });
 
                 // Update machine on database
-                await machineTable.UpdateEntityAsync(machine);
+                await machineTable.SaveEntityAsync(machine);
 
                 // Close dialog
                 DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));

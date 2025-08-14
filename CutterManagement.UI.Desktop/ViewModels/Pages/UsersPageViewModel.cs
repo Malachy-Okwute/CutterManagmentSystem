@@ -164,7 +164,7 @@ namespace CutterManagement.UI.Desktop
             {
                 user.Shift = _selectedUserShift;
 
-                await usersTable.UpdateEntityAsync(user);
+                await usersTable.SaveEntityAsync(user);
 
                 UpdateUsersCollection(user);
             }
@@ -184,7 +184,7 @@ namespace CutterManagement.UI.Desktop
             {
                 user.IsActive = false;
 
-                await usersTable.UpdateEntityAsync(user);
+                await usersTable.SaveEntityAsync(user);
 
                 await ReloadUserCollection();
             }

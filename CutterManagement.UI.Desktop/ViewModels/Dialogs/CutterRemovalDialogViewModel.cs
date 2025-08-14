@@ -243,18 +243,19 @@ namespace CutterManagement.UI.Desktop
                 return;
             }
 
+            // ToDo: Re-implement this
             // Remove cutter
             await _machineService.RemoveCutter(Id, _user.Id, KeepCutter, new MachineDataModel
             {
                 FrequencyCheckResult = FrequencyCheckResult.Setup,
                 Status = MachineStatus.Warning,
-                StatusMessage = Comment ?? $"Cutter was removed. {DateTime.Now.ToString("g")}",
+                StatusMessage = Comment ?? string.Empty,
                 DateTimeLastModified = DateTime.Now,
                 Cutter = new CutterDataModel
                 {
                     CutterChangeInfo = CutterRemovalReason,
                     LastUsedDate = DateTime.Now,
-                    Condition = CutterCondition.Used,
+                    Condition = int.Parse(PartCount) > 0 ? CutterCondition.Used : CutterCondition.New,
                     Count = int.Parse(PartCount),
                     MachineDataModelId = null,
                 },

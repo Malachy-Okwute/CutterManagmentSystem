@@ -60,7 +60,7 @@ namespace CutterManagement.DataAccess
                         DataChanged?.Invoke(this, entity);
                     }
                 }
-                catch (Exception msg) // Use custom exception here
+                catch (Exception msg) 
                 {
                     Debug.WriteLine(msg.Message);
                     Debugger.Break();
@@ -92,10 +92,23 @@ namespace CutterManagement.DataAccess
         /// Get an entity by id
         /// </summary>
         /// <param name="entityId">The id of the entity to get</param>
+        /// <param name="navProperty">Expression used to get the navigation properties</param>
         /// <returns><see cref="Task{T}"/> of <see cref="T"/></returns>
-        public async Task<T?> GetEntityByIdAsync(int? entityId)
+        public async Task<T?> GetEntityByIdAsync(int? entityId, Expression<Func<T, DataModelBase>>? navProperty = null) 
         {
-           return await _dbTable.FindAsync(entityId);
+            // Check if the entityId is null
+            if (entityId is null)
+            {
+                return null;
+            }
+            // Check if the navigation property is requested    
+            if (navProperty is not null)
+            {
+                return await _dbTable.Include(navProperty).FirstOrDefaultAsync(entity => EF.Property<int>(entity, "Id") == entityId);
+            }
+
+            // Return the entity by id without navigation properties
+            return await _dbTable.FindAsync(entityId);
         }
 
         /// <summary>
@@ -105,11 +118,9 @@ namespace CutterManagement.DataAccess
         /// <param name="entityId">The main entity id to get</param>
         /// <param name="includeExpression">Expression used to get the navigation properties</param>
         /// <returns><see cref="Task{T}"/> of <see cref="T"/></returns>
-        public async Task<T> GetEntityByIdIncludingRelatedPropertiesAsync<TProperty>(int entityId, Expression<Func<T, ICollection<TProperty>>> includeExpression) where TProperty : class
+        public async Task<T> GetEntityWithCollectionsByIdAsync<TProperty>(int entityId, Expression<Func<T, ICollection<TProperty>>> includeExpression) where TProperty : class
         {
-            return await _dbTable.Include(includeExpression)
-                           .FirstAsync(entity => EF.Property<int>(entity, "Id") == entityId);
-
+            return await _dbTable.Include(includeExpression).FirstAsync(entity => EF.Property<int>(entity, "Id") == entityId);
         }
 
         /// <summary>
@@ -117,26 +128,33 @@ namespace CutterManagement.DataAccess
         /// </summary>
         /// <param name="entity">The entity to update</param>
         /// <returns><see cref="Task"/></returns>
-        public async Task UpdateEntityAsync(T entity)
+        public async Task SaveEntityAsync(T entity)
         {
+            int result = 0;
+            using var transaction = await _applicationDbContext.Database.BeginTransactionAsync();
+
             try
             {
                 _dbTable.Update(entity);
 
-                int result = await _applicationDbContext.SaveChangesAsync();
+                result = await _applicationDbContext.SaveChangesAsync();
+
+                _applicationDbContext.Database.CommitTransaction();
 
                 if (result > 0)
                 {
                     DataChanged?.Invoke(this, entity);
                 }
             }
-            catch (Exception msg) // TODO: Use custom exception here
+            catch (Exception msg) // TODO: Undo changes if db transaction failed
             {
+                if (result == 0)
+                {
+                    await transaction.RollbackAsync();
+                }
+
                 Debug.WriteLine(msg.Message);
                 Debugger.Break();
-            }
-            finally
-            {
             }
         }
 
@@ -147,18 +165,28 @@ namespace CutterManagement.DataAccess
         /// <returns><see cref="Task"/></returns>
         public async Task DeleteEntityAsync(T entity)
         {
+            int result = 0;
+            using var transaction = await _applicationDbContext.Database.BeginTransactionAsync();
+
             try
             {
                 _dbTable.Remove(entity);
-                int result = await _applicationDbContext.SaveChangesAsync();
+                result = await _applicationDbContext.SaveChangesAsync();
+                _applicationDbContext.Database.CommitTransaction();
+
 
                 if (result > 0)
                 {
                     DataChanged?.Invoke(this, entity);
                 }
             }
-            catch (Exception msg) // Use custom exception here
+            catch (Exception msg) 
             {
+                if (result == 0)
+                {
+                    await transaction.RollbackAsync();
+                }
+
                 Debug.WriteLine(msg.Message);
                 Debugger.Break();
             }

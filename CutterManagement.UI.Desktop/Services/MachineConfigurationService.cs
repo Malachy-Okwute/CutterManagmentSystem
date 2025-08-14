@@ -80,7 +80,7 @@ namespace CutterManagement.UI.Desktop
                 machineData.IsConfigured = newData.IsConfigured;
 
                 // Save new data
-                await machineTable.UpdateEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
+                await machineTable.SaveEntityAsync(machineData ?? throw new ArgumentException($"Could not configure entity: {machineData}"));
 
                 // Return result
                 return (result, data);
