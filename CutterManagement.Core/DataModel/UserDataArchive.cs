@@ -34,10 +34,5 @@
         /// Machine and users navigation property collection
         /// </summary>
         public ICollection<MachineUserInteractions> MachineUserInteractions { get; set; } = new List<MachineUserInteractions>();
-
-        /// <summary>
-        /// Information updates and user navigation property
-        /// </summary>
-        public ICollection<InfoUpdateUserRelations> InfoUpdateUserRelations { get; set; } = new List<InfoUpdateUserRelations>();
     }
 }

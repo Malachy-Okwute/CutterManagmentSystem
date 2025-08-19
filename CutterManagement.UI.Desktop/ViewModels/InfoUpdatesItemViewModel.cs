@@ -38,7 +38,7 @@
         /// <summary>
         /// True if move is attached
         /// </summary>
-        public bool HasAttachedMoves => string.IsNullOrEmpty(PartNumber) is false;
+        public bool HasAttachedMoves => int.TryParse(PartNumber, out var result) is true;
 
         /// <summary>
         /// Part type if a move is attached 

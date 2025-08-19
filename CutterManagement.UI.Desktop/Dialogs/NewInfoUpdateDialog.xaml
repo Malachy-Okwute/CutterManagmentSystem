@@ -65,7 +65,7 @@
 
                 <!--  desgin-time-only  -->
                 <d:ComboBox Grid.Row="2" Height="35"
-                            Margin="5">
+                            Margin="5" SelectionChanged="ComboBox_SelectionChanged">
                     <d:ComboBoxItem Content="Select a user" IsSelected="True" />
                 </d:ComboBox>
 

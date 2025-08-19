@@ -19,7 +19,7 @@ namespace CutterManagement.Core
         /// <summary>
         /// True if move is attached to this data point
         /// </summary>
-        public bool HasAttachedMoves => string.IsNullOrEmpty(PartNumberWithMove) is false;
+        public bool HasAttachedMoves => int.TryParse(PartNumberWithMove, out var result) is true;
 
         /// <summary>
         /// Title of this information update
@@ -72,9 +72,15 @@ namespace CutterManagement.Core
         public string SpiralAngleDrive { get; set; }
 
         /// <summary>
-        /// Information updates and user navigation property
+        /// Unique user foreign key
         /// </summary>
-        public ICollection<InfoUpdateUserRelations> InfoUpdateUserRelations { get; set; } = new List<InfoUpdateUserRelations>();
+        public int UserDataModelId { get; set; }
+
+        /// <summary>
+        /// The actual user / author of this update
+        /// </summary>
+        /// <remarks>Navigation property</remarks>
+        public UserDataModel UserDataModel { get; set; }
 
     }
 }

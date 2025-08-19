@@ -36,8 +36,8 @@
         public ICollection<MachineUserInteractions> MachineUserInteractions { get; set; } = new List<MachineUserInteractions>();
 
         /// <summary>
-        /// Information updates and user navigation property
+        /// Information updates associated with this user
         /// </summary>
-        public ICollection<InfoUpdateUserRelations> InfoUpdateUserRelations { get; set; } = new List<InfoUpdateUserRelations>();
+        public ICollection<InfoUpdateDataModel> InfoUpdateDataModel { get; set; } = new List<InfoUpdateDataModel>();
     }
 }

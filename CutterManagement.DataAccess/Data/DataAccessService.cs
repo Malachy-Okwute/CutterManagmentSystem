@@ -1,7 +1,10 @@
 ﻿using CutterManagement.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Transactions;
 
 namespace CutterManagement.DataAccess
 {
@@ -62,8 +65,7 @@ namespace CutterManagement.DataAccess
                 }
                 catch (Exception msg) 
                 {
-                    Debug.WriteLine(msg.Message);
-                    Debugger.Break();
+                    throw new InvalidOperationException("Unable to create / insert new data", msg);
                 }
                 finally
                 {
@@ -192,6 +194,14 @@ namespace CutterManagement.DataAccess
             }
         }
 
+        /// <summary>
+        /// Releases all resources used by the current instance of the class.
+        /// </summary>
+        /// <remarks>
+        /// This method disposes of the underlying <see cref="DbContext"/> instance to free up
+        /// resources.  Ensure that no further operations are performed on the instance after calling this
+        /// method.
+        /// </remarks>
         public void Dispose()
         {
             _applicationDbContext.Dispose();

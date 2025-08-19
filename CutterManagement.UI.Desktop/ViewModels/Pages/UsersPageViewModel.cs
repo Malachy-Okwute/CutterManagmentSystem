@@ -311,7 +311,7 @@ namespace CutterManagement.UI.Desktop
             UserItemViewModel? existingLocalData = _users.FirstOrDefault(x => x.Id == data.Id);
 
             // Get users db table
-            using var usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+            var usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
 
             // Jump onto UI thread
             DispatcherService.Invoke(async () =>
@@ -341,6 +341,9 @@ namespace CutterManagement.UI.Desktop
                     // Remove user from local collection
                     _users.RemoveAt(data.Id);
                 }
+
+                // Close and dispose db connection
+                usersTable.Dispose();
             });
 
             OnPropertyChanged(nameof(IsUserCollectionEmpty));

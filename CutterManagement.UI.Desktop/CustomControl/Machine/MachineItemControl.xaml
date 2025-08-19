@@ -50,7 +50,7 @@
         <Border x:Name="MachineStatus" Grid.Column="1"
                 MinWidth="60" HorizontalAlignment="Stretch">
             <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center"
-                            Content="{Binding Status, Converter={local:MachineStatusConverter}}" />
+                            Content="{Binding Status, Converter={local:MachineStatusConverter}, UpdateSourceTrigger=PropertyChanged}" />
         </Border>
 
         <!--  cutter number  -->

@@ -229,17 +229,31 @@ namespace CutterManagement.UI.Desktop
             // Dummy
             MachineDataModel dummyMachine = new MachineDataModel();
 
+            // Create event handler
+            EventHandler<object>? handler = null;
+
             // Listen for changes 
-            machineTable.DataChanged += (s, e) =>
+            handler += (s, e) =>
             {
+                //machineTable.DataChanged -= handler;
+
                 // Set new data
                 data = e as MachineDataModel;
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected Machine data cannot be null"));
 
+                if (data.MachineNumber.Equals(firstMachine?.MachineNumber))
+                {
+                    // Unsubscribe from event
+                    machineTable.DataChanged -= handler;
+                }
+
                 // Log cmm data
                 //ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
             };
+
+            // Subscribe to data changed event
+            machineTable.DataChanged += handler;
 
             // If both machines are available
             if (firstMachine is not null && secondMachine is not null)
@@ -260,7 +274,7 @@ namespace CutterManagement.UI.Desktop
                 firstMachine.Cutter.MachineDataModelId = firstMachine.Id;
                 firstMachine.FrequencyCheckResult = secondMachine.FrequencyCheckResult;
                 firstMachine.DateTimeLastModified = DateTime.Now;
-                    
+
                 // Set the user conducting this operation
                 firstMachine.MachineUserInteractions.Add(new MachineUserInteractions
                 {

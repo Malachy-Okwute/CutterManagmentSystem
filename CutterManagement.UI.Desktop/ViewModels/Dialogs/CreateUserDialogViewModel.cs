@@ -135,8 +135,22 @@ namespace CutterManagement.UI.Desktop
             {
                 // Get users table
                 using var userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+
+                // Create event handle
+                EventHandler<object>? handler = null;
+
+                // Define event
+                handler += (s, e) =>
+                {
+                    // Unhook event
+                    userTable.DataChanged -= handler;
+
+                    // Update user list with latest data from database
+                    Messenger.MessageSender.SendMessage((UserDataModel)e);
+                };
+
                 // Listen for when user is created
-                userTable.DataChanged += UserTable_DataChanged;
+                userTable.DataChanged += handler;
 
                 // See if user name exist
                 bool isConflicting = (await userTable.GetAllEntitiesAsync()).Any(x => 
@@ -149,16 +163,13 @@ namespace CutterManagement.UI.Desktop
                 if(isConflicting)
                 {
                     // Alert user
-                    await DialogService.InvokeFeedbackDialog(this, $"Username is not available.");
+                    await DialogService.InvokeFeedbackDialog(this, $"Username is already taken.");
                     // Do nothing else
                     return;
                 }
 
                 // commit the newly created user to the users table
                 await userTable.CreateNewEntityAsync(newUser);
-
-                // Unhook event
-                userTable.DataChanged -= UserTable_DataChanged;
             }
 
             // Set message
@@ -213,18 +224,6 @@ namespace CutterManagement.UI.Desktop
             }
             return char.ToUpper(name[0]) + name.Substring(1);
         }
-
-        #endregion
-
-        #region Event Methods
-
-        /// <summary>
-        /// Update users list with with latest data from database
-        /// </summary>
-        /// <param name="sender">Origin of this event</param>
-        /// <param name="e">The actual data that changed</param>
-        private void UserTable_DataChanged(object? sender, object e) => Messenger.MessageSender.SendMessage((UserDataModel)e);
-        
 
         #endregion
     }

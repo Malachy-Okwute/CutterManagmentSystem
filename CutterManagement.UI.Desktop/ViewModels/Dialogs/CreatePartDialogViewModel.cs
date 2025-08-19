@@ -157,12 +157,24 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
+                // Create event handler
+                EventHandler<object>? handler = null;
+
+                // Define event
+                handler += (s, e) =>
+                {
+                    // Unhook event
+                    partsTable.DataChanged -= handler;
+
+                    // Update parts list with latest data from database
+                    Messenger.MessageSender.SendMessage((PartDataModel)e);
+                };
+
                 // Listen for when parts is created
-                partsTable.DataChanged += PartsTable_DataChanged;
+                partsTable.DataChanged += handler;
+
                 // commit the newly created part to the parts table
                 await partsTable.CreateNewEntityAsync(newPart);
-                // Unhook event
-                partsTable.DataChanged -= PartsTable_DataChanged;
             }
 
             // Set message
@@ -185,17 +197,6 @@ namespace CutterManagement.UI.Desktop
                 DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }
         }
-
-        #endregion
-
-        #region Event Methods
-
-        /// <summary>
-        /// Update parts list with latest data from database
-        /// </summary>
-        /// <param name="sender">Origin of this event</param>
-        /// <param name="e">The actual data that changed</param>
-        private void PartsTable_DataChanged(object? sender, object e) => Messenger.MessageSender.SendMessage((PartDataModel)e);
 
         #endregion
     }

@@ -239,9 +239,16 @@ namespace CutterManagement.UI.Desktop
 
             // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
+
+            // Create event handler
+            EventHandler<object>? handler = null;
+
             // Listen for when data changed in the database
-            infoUpdateTable.DataChanged += (ss, e) =>
+            handler += (ss, e) =>
             {
+                // Unsubscribe from current event
+                infoUpdateTable.DataChanged -= handler;
+
                 data = e as InfoUpdateDataModel;
 
                 if(data is not null)
@@ -249,6 +256,10 @@ namespace CutterManagement.UI.Desktop
                     Messenger.MessageSender.SendMessage(data);
                 }
             };
+
+            // Subscribe to data changed event
+            infoUpdateTable.DataChanged += handler;
+
             // Get info from db (Used when editing information).
             InfoUpdateDataModel? existingInfo = await infoUpdateTable.GetEntityByIdAsync(Id);
             // Create new information
@@ -262,23 +273,18 @@ namespace CutterManagement.UI.Desktop
 
                 // Attached moves
                 Kind = Kind,
-                PartNumberWithMove = SelectedPartNumber?.PartNumber ?? string.Empty,
-                PressureAngleCoast = string.IsNullOrEmpty(PressureAngleCoast) ? "0" : PressureAngleCoast,
-                PressureAngleDrive = string.IsNullOrEmpty(PressureAngleDrive) ? "0" : PressureAngleDrive,
-                SpiralAngleCoast = string.IsNullOrEmpty(SpiralAngleCoast) ? "0" : SpiralAngleCoast,
-                SpiralAngleDrive = string.IsNullOrEmpty(SpiralAngleDrive) ? "0" : SpiralAngleDrive, 
+                PartNumberWithMove = Kind == PartKind.None ? "---" : SelectedPartNumber?.PartNumber ?? "---",
+                PressureAngleCoast = string.IsNullOrEmpty(PressureAngleCoast) || Kind == PartKind.None ? "0" : PressureAngleCoast,
+                PressureAngleDrive = string.IsNullOrEmpty(PressureAngleDrive) || Kind == PartKind.None ? "0" : PressureAngleDrive,
+                SpiralAngleCoast = string.IsNullOrEmpty(SpiralAngleCoast) || Kind == PartKind.None ? "0" : SpiralAngleCoast,
+                SpiralAngleDrive = string.IsNullOrEmpty(SpiralAngleDrive) || Kind == PartKind.None ? "0" : SpiralAngleDrive,
             };
-
 
             // If user is not null
             if(user is not null)
             {
                 // Set the user performing this operation
-                newInfo.InfoUpdateUserRelations.Add(new InfoUpdateUserRelations
-                {
-                    UserDataModel = user,
-                    InfoUpdateDataModel = newInfo
-                });
+                newInfo.UserDataModelId = user.Id;
 
                 // If we are not in editing mode...
                 if (IsEditMode is false)
@@ -296,8 +302,14 @@ namespace CutterManagement.UI.Desktop
                         return;
                     }
 
-                    // Create new information entry in database
-                    await infoUpdateTable.CreateNewEntityAsync(newInfo);
+                    try
+                    {
+                        await infoUpdateTable.CreateNewEntityAsync(newInfo);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        await DialogService.InvokeFeedbackDialog(this, $"{ex.Message} {Environment.NewLine} {ex.GetBaseException().Message}");
+                    }
                 }
                 // Otherwise...
                 else if (IsEditMode && existingInfo is not null)
@@ -321,26 +333,20 @@ namespace CutterManagement.UI.Desktop
                     existingInfo.Title = Title;
                     existingInfo.Information = Information;
                     existingInfo.LastUpdatedDate = DateTime.Now.ToString("MM-dd-yyyy ~ hh:mm tt");
-                    existingInfo.InfoUpdateUserRelations.Add(new InfoUpdateUserRelations
-                    {
-                        UserDataModel = user,
-                        InfoUpdateDataModel = existingInfo
-                    });
+                    existingInfo.UserDataModel = user;
 
                     // Attached moves if available
                     existingInfo.Kind = Kind;
-                    existingInfo.PartNumberWithMove = SelectedPartNumber?.PartNumber ?? string.Empty;
-                    existingInfo.PressureAngleCoast = string.IsNullOrEmpty(PressureAngleCoast) ? "0" : PressureAngleCoast;
-                    existingInfo.PressureAngleDrive = string.IsNullOrEmpty(PressureAngleDrive) ? "0" : PressureAngleDrive;
-                    existingInfo.SpiralAngleCoast = string.IsNullOrEmpty(SpiralAngleCoast) ? "0" : SpiralAngleCoast;
-                    existingInfo.SpiralAngleDrive = string.IsNullOrEmpty(SpiralAngleDrive) ? "0" : SpiralAngleDrive; 
+                    existingInfo.PartNumberWithMove = Kind == PartKind.None ? "---" : SelectedPartNumber?.PartNumber ?? "---";
+                    existingInfo.PressureAngleCoast = string.IsNullOrEmpty(PressureAngleCoast) || Kind == PartKind.None ? "0" : PressureAngleCoast;
+                    existingInfo.PressureAngleDrive = string.IsNullOrEmpty(PressureAngleDrive) || Kind == PartKind.None ? "0" : PressureAngleDrive;
+                    existingInfo.SpiralAngleCoast = string.IsNullOrEmpty(SpiralAngleCoast) || Kind == PartKind.None ? "0" : SpiralAngleCoast;
+                    existingInfo.SpiralAngleDrive = string.IsNullOrEmpty(SpiralAngleDrive) || Kind == PartKind.None ? "0" : SpiralAngleDrive; 
 
                     // Update existing info
                     await infoUpdateTable.SaveEntityAsync(existingInfo);
                 }
 
-                // Stop listening for data changing
-                infoUpdateTable.DataChanged -= delegate { };
             }
 
             // Mark process as successful

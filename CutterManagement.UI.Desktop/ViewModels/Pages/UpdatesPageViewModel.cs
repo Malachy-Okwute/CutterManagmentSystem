@@ -94,21 +94,17 @@ namespace CutterManagement.UI.Desktop
             using var infoRelationsTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
             using var partsTable = _dataFactory.GetDbTable<PartDataModel>();
 
-            InfoUpdateDataModel? info = await infoTable.GetEntityByIdAsync(itemId);
-            UserDataModel? user = (await infoRelationsTable.GetEntityWithCollectionsByIdAsync(itemId, i => i.InfoUpdateUserRelations))?
-                                 .InfoUpdateUserRelations
-                                 .FirstOrDefault()?
-                                 .UserDataModel;
+            InfoUpdateDataModel? info = await infoRelationsTable.GetEntityByIdAsync(itemId, i => i.UserDataModel);
 
-            if(info is not null && user is not null)
+            if(info is not null && info.UserDataModel is not null)
             {
                 _newInfoUpdateDialog.IsEditMode = true;
                 _newInfoUpdateDialog.Id = info.Id;
                 _newInfoUpdateDialog.Title = info.Title;
                 _newInfoUpdateDialog.Information = info.Information;
-                _newInfoUpdateDialog.User = user;
+                _newInfoUpdateDialog.User = _newInfoUpdateDialog.UsersCollection.Single(u => u.Key.Id == info.UserDataModel.Id).Key;
 
-                if(info.HasAttachedMoves)
+                if (info.HasAttachedMoves)
                 {
                     _newInfoUpdateDialog.Kind = info.Kind;
                     _newInfoUpdateDialog.SelectedPartNumber = (await partsTable.GetAllEntitiesAsync()).FirstOrDefault(part => part.PartNumber == info.PartNumberWithMove);
@@ -178,8 +174,7 @@ namespace CutterManagement.UI.Desktop
                     using var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
 
                     foreach (var info in (await infoUpdateTable.GetAllEntitiesAsync())) await AddInfoUpdate(info);
-
-
+                    
                     // Sort in a descending order
                     CollectionViewSource.GetDefaultView(InfoUpdates).SortDescriptions.Add(new SortDescription(nameof(InfoUpdatesItemViewModel.PublishDate), ListSortDirection.Descending));
 
@@ -197,19 +192,16 @@ namespace CutterManagement.UI.Desktop
         /// <param name="infoUpdate">The item to add to the list</param>
         private async Task AddInfoUpdate(InfoUpdateDataModel infoUpdate)
         {
+            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
+
+            UserDataModel? user = await userTable.GetEntityByIdAsync(infoUpdate.UserDataModelId);
+
             // If item already exist...
-            if(_infoUpdates.ToList().Exists(i => i.Id == infoUpdate.Id))
+            if (_infoUpdates.ToList().Exists(i => i.Id == infoUpdate.Id))
             {
                 // Remove it to add an updated data
                 _infoUpdates.RemoveAt(_infoUpdates.IndexOf(_infoUpdates.Single(i => i.Id == infoUpdate.Id)));
             }
-
-            using var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
-
-            UserDataModel? user = (await infoUpdateTable.GetEntityWithCollectionsByIdAsync(infoUpdate.Id, i => i.InfoUpdateUserRelations))?
-                                    .InfoUpdateUserRelations
-                                    .FirstOrDefault()?
-                                    .UserDataModel;
 
             // Add item to collection
             _infoUpdates.Add(new InfoUpdatesItemViewModel
@@ -243,7 +235,7 @@ namespace CutterManagement.UI.Desktop
         {
             if (message.GetType() == typeof(InfoUpdateDataModel))
             {
-                _ = AddInfoUpdate((InfoUpdateDataModel)message);
+               _ = AddInfoUpdate((InfoUpdateDataModel)message);
             }
         }
     }

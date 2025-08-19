@@ -222,9 +222,7 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<MachineUserInteractions>().HasOne(m => m.MachineDataModel).WithMany(mui => mui.MachineUserInteractions).HasForeignKey(fk => fk.MachineDataModelId);
 
             // Users and information updates
-            modelBuilder.Entity<InfoUpdateUserRelations>().HasOne(u => u.UserDataModel).WithMany(mui => mui.InfoUpdateUserRelations).HasForeignKey(fk => fk.UserDataModelId);
-            modelBuilder.Entity<InfoUpdateUserRelations>().HasOne(i => i.InfoUpdateDataModel).WithMany(mui => mui.InfoUpdateUserRelations).HasForeignKey(fk => fk.InfoUpdatesDataModelId)
-                                                          .OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder.Entity<UserDataModel>().HasMany(iu => iu.InfoUpdateDataModel).WithOne(u => u.UserDataModel).HasForeignKey(iu => iu.UserDataModelId);
 
             // Cutter and machine
             modelBuilder.Entity<MachineDataModel>().HasOne(m => m.Cutter).WithOne(c => c.MachineDataModel).HasForeignKey<CutterDataModel>(c => c.MachineDataModelId);
@@ -245,9 +243,9 @@ namespace CutterManagement.DataAccess
             try
             {
                 // Run migration
-                //await Database.MigrateAsync();
+                await Database.MigrateAsync();
 
-                await Database.EnsureCreatedAsync(); // For development
+                //await Database.EnsureCreatedAsync(); // For development
             }
             catch (Exception ex)
             {

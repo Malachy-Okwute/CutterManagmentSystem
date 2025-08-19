@@ -32,15 +32,18 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Margin="10,0"
-                               Padding="18,8" HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               Text="{Binding Message}"
-                               TextWrapping="Wrap"
-                               FontFamily="{StaticResource RobotoFlexRegular}"
-                               FontSize="{StaticResource Small}"
-                               LineHeight="20"
-                               Foreground="{DynamicResource WarningForegroundColorBrush}" />
+                    <ScrollViewer Grid.Column="0" Margin="10,0" Padding="20"
+                                  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+
+                        <TextBlock  HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding Message}"
+                                   TextWrapping="Wrap"
+                                   FontFamily="{StaticResource RobotoFlexRegular}"
+                                   FontSize="{StaticResource Small}"
+                                   LineHeight="20"
+                                   Foreground="{DynamicResource WarningForegroundColorBrush}" />
+                    </ScrollViewer>
 
                     <TextBlock Grid.Column="1" Margin="10,0"
                                Padding="18,8" HorizontalAlignment="Right"
