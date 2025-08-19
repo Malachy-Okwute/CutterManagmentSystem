@@ -275,8 +275,11 @@ namespace CutterManagement.UI.Desktop
 
             foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
             {
-                // Do not load admin user
-                if (userData.LastName is "admin")
+                // ToDo: Consider users that might be staying late or coming in early
+
+                // If user is not admin, is active, not archived and is in current shift
+                if (userData.LastName is "admin" || userData.IsActive is false || userData.IsArchived ||
+                    EnumHelpers.GetDescription(userData.Shift) != ShiftHelper.GetCurrentShift())
                     continue;
 
                 UsersCollection.Add(userData, userData.FirstName.PadRight(10) + userData.LastName);
