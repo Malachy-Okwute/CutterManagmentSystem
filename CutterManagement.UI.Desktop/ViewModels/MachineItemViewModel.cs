@@ -465,7 +465,7 @@ namespace CutterManagement.UI.Desktop
             // User's intention result
             bool? userIntentionResult = null;
 
-            await _machineService.AdjustPieceCount(Id, int.Parse(Count), async () =>
+            await _machineService.AdjustPieceCountAsync(Id, int.Parse(Count), async () =>
             {
                 userIntentionResult = await VerifyUserIntention();
 

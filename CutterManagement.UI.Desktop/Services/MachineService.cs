@@ -55,7 +55,7 @@ namespace CutterManagement.UI.Desktop
         /// <exception cref="ArgumentException">
         /// Throws an exception if item could not be configured
         /// </exception>
-        public async Task<(ValidationResult, MachineDataModel?)> Configure(MachineDataModel newData)
+        public async Task<(ValidationResult, MachineDataModel?)> ConfigureAsync(MachineDataModel newData)
         {
             // Data that will be changing
             MachineDataModel? data = null;
@@ -89,7 +89,7 @@ namespace CutterManagement.UI.Desktop
             {
                 if (item.MachineNumber.Equals(newData.MachineNumber))
                 {
-                    result.ErrorMessage = "SelectedMachine number already exist";
+                    result.ErrorMessage = "Machine number already exist";
                     result.IsValid = false;
                 }
             }
@@ -126,7 +126,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="userId">The user executing this status set procedure</param>
         /// <param name="callback">Status set callback</param>
         /// <returns><see cref="Task{T}"/></returns>
-        public async Task<ValidationResult> SetStatus(MachineDataModel newData, int userId, Action<MachineDataModel> callback)
+        public async Task<ValidationResult> SetStatusAsync(MachineDataModel newData, int userId, Action<MachineDataModel> callback)
         {
             // Data that will be changing
             MachineDataModel? data = null;
@@ -136,6 +136,12 @@ namespace CutterManagement.UI.Desktop
 
             /// Get users table
             using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
+
+            // Get machine
+            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
+
+            // Get user
+            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
 
             // Use an event handler to listen for data changes
             EventHandler<object>? handler = null;
@@ -154,12 +160,6 @@ namespace CutterManagement.UI.Desktop
             // Subscribe to the DataChanged event
             machineTable.DataChanged += handler;
 
-            // Get machine
-            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
-
-            // Get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
-
             // Validate incoming data
             ValidationResult result = DataValidationService.Validate(newData);
 
@@ -168,8 +168,8 @@ namespace CutterManagement.UI.Desktop
             {
                 // Wire new machine data 
                 machineData.Status = newData.Status;
-                machineData.StatusMessage = newData.StatusMessage;
                 machineData.DateTimeLastModified = DateTime.Now;
+                machineData.StatusMessage = newData.StatusMessage ?? $"Machine status updated. {DateTime.Now.ToString("g")}";
 
                 // Set the user performing this operation including the machine involved
                 machineData.MachineUserInteractions.Add(new MachineUserInteractions
@@ -208,7 +208,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="Id">Id of the machine whose piece count is being adjusted</param>
         /// <param name="count">The current piece count on the machine</param>
         /// <param name="verifyUserIntention">Confirms user intention when new piece count is over a certain limit</param>
-        public async Task AdjustPieceCount(int Id, int count, Func<Task<bool?>> verifyUserIntention)
+        public async Task AdjustPieceCountAsync(int Id, int count, Func<Task<bool?>> verifyUserIntention)
         {
             // Data that will be changing
             MachineDataModel? data = null;
@@ -217,8 +217,6 @@ namespace CutterManagement.UI.Desktop
             using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
             // Get cutter table
             using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
-            // Get production part log table
-            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Use an event handler to listen for data changes
             EventHandler<object>? handler = null;
@@ -233,9 +231,6 @@ namespace CutterManagement.UI.Desktop
 
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-
-                // update log with latest piece count
-                //ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
             };
 
             // Subscribe to the DataChanged event
@@ -283,7 +278,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="machineSendingCutterId">The machine currently with cutter</param>
         /// <param name="machineReceivingCutterId">The id of machine receiving cutter</param>
         /// <param name="userId">Id to user carrying out this process</param>
-        public async Task RelocateCutter(int machineSendingCutterId, int machineReceivingCutterId, int userId, string comment)
+        public async Task RelocateCutterAsync(int machineSendingCutterId, int machineReceivingCutterId, int userId, string comment)
         {
             // Data that will be changing
             MachineDataModel? data = null;
@@ -298,9 +293,6 @@ namespace CutterManagement.UI.Desktop
             // Get user db table
             using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
 
-            // Get production part log table
-            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
-
             // Get machine that will be receiving cutter
             MachineDataModel? receivingMachine = await receivingMachineTable.GetEntityByIdAsync(machineReceivingCutterId);
             MachineDataModel? sendingMachine = await sendingMachineTable.GetEntityByIdAsync(machineSendingCutterId, cutter => cutter.Cutter);
@@ -312,10 +304,10 @@ namespace CutterManagement.UI.Desktop
             EventHandler<object>? handler = null;
 
             // Set up the event handler
-            handler += (s, e) =>
+            handler += (sender, e) =>
             {
                 // Unhook the event handler to prevent memory leaks
-                if(s == sendingMachineTable)
+                if(sender == sendingMachineTable)
                 {
                     sendingMachineTable.DataChanged -= handler;
                 }
@@ -329,9 +321,6 @@ namespace CutterManagement.UI.Desktop
 
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-
-                // log cutter relocation
-                //ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
             };
 
             // Subscribe to the DataChanged event
@@ -387,22 +376,19 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Capture and records CMM data of a specific cutter
         /// </summary>
-        public async Task CaptureAndRecordCMMData(int userId, int machineId, string comment, CMMDataModel incomingCMMData)
+        public async Task CaptureAndRecordCMMDataAsync(int userId, int machineId, string comment, CMMDataModel incomingCMMData)
         {
             // The data that changed
             MachineDataModel? data = null;
 
             // Get machine table
-            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
 
             // Get user table
             using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
 
             // Get cutter table
             using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
-
-            // Get production part log table
-            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Attempt to get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId, cutter => cutter.Cutter);
@@ -414,7 +400,7 @@ namespace CutterManagement.UI.Desktop
             EventHandler<object>? handler = null;
 
             // Set up the event handler
-            handler += (s, e) =>
+            handler += async (s, e) =>
             {
                 // Unhook the event handler to prevent memory leaks
                 machineTable.DataChanged -= handler;
@@ -423,8 +409,14 @@ namespace CutterManagement.UI.Desktop
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
 
-                // Log cmm data
-                //ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
+                // log that cutter was relocated
+                if (user is not null && data is not null)
+                {
+                    await LogProductionProgressAsync(data.Id, user);
+                }
+
+                // Dispose tables to free resources
+                machineTable.Dispose();
             };
 
             // Subscribe to the DataChanged event
@@ -456,7 +448,7 @@ namespace CutterManagement.UI.Desktop
 
                 // Set other machine information
                 machine.Cutter.Count = int.Parse(incomingCMMData.Count);
-                machine.StatusMessage = string.IsNullOrEmpty(comment) ? "Passed CMM check" : comment;
+                machine.StatusMessage = string.IsNullOrEmpty(comment) ? "Passed CMM check" : $"Passed CMM check. {comment}";
                 machine.Status = MachineStatus.IsRunning;
                 machine.FrequencyCheckResult = FrequencyCheckResult.Passed;
                 machine.DateTimeLastModified = DateTime.Now;
@@ -481,21 +473,19 @@ namespace CutterManagement.UI.Desktop
         /// <param name="userId">The user removing the cutter</param>
         /// <param name="keepCutter">True if cutter is to stay in department</param>
         /// <param name="newData">Data changing on the machine that is having it's cutter removed</param>
-        public async Task RemoveCutter(int machineId, int userId, bool keepCutter, MachineDataModel newData)
+        public async Task RemoveCutterAsync(int machineId, int userId, bool keepCutter, MachineDataModel newData)
         {
             // New data from database
             MachineDataModel? data = null;
 
             // Get machine table
-            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
             // Get user table
             using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
             // Get cutter table
             using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
             // Get cmm data table
             using var cmmTable = _dataAccessServiceFactory.GetDbTable<CMMDataModel>();
-            // Get production part log table
-            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
 
             // Get machine
             MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId, x => x.Cutter);
@@ -507,7 +497,7 @@ namespace CutterManagement.UI.Desktop
             EventHandler<object>? handler = null;
 
             // Set up the event handler
-            handler += (s, e) =>
+            handler += async (s, e) =>
             {
                 // Unhook the event handler to prevent memory leaks
                 machineTable.DataChanged -= handler;
@@ -516,8 +506,13 @@ namespace CutterManagement.UI.Desktop
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected machine data cannot be null"));
 
-                // log that cutter was removed
-                ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
+                if (user is not null && data is not null)
+                {
+                    await LogProductionProgressAsync(data.Id, user);
+                }
+
+                // Dispose tables to free resources
+                machineTable.Dispose();
             };
 
             // Subscribe to the DataChanged event
@@ -541,7 +536,7 @@ namespace CutterManagement.UI.Desktop
                 // Set new information
                 machine.FrequencyCheckResult = FrequencyCheckResult.Setup;
                 machine.Status = MachineStatus.Warning;
-                machine.StatusMessage = newData.StatusMessage ?? $"Cutter was removed. {DateTime.Now.ToString("g")}";
+                machine.StatusMessage = string.IsNullOrEmpty(newData.StatusMessage) ? $"Cutter was removed. {DateTime.Now.ToString("g")}" : $"Cutter was removed. {newData.StatusMessage}";
                 machine.DateTimeLastModified = DateTime.Now;
                 machine.PartNumber = newData.PartNumber;
                 machine.PartToothSize = "0";
@@ -573,5 +568,53 @@ namespace CutterManagement.UI.Desktop
                 await machineTable.SaveEntityAsync(machine);
             }
         }
+
+        /// <summary>
+        /// Logs the production progress of a machine, including cutter and part details, to the production log table.
+        /// </summary>
+        /// <remarks>
+        /// This method records key production details, such as machine number, cutter
+        /// information, part number, and user details,  into the production log table. If the cutter information is
+        /// missing (<see cref="MachineDataModel.Cutter"/> is <see langword="null"/>),  the method does not perform any
+        /// logging.
+        /// </remarks>
+        /// <param name="user">The user associated with the operation. Can be <see langword="null"/> if no user is specified.</param>
+        /// <param name="data">The machine data containing details about the machine, cutter, and production status.  
+        /// <see cref="MachineDataModel.Cutter"/> property must not be <see langword="null"/>; otherwise, the method will
+        /// return without logging.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        public async Task LogProductionProgressAsync(int machineId, UserDataModel? user)
+        {
+            // Get machine table
+            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+
+            // Get production log table
+            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
+
+            // Get machine by id
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId, c => c.Cutter);
+
+            // Make sure we have machine
+            if (machine is null || machine.Cutter is null) return;
+
+            // Log production data progress    
+            await productionLogTable.CreateNewEntityAsync(new ProductionPartsLogDataModel
+            {
+                MachineNumber = machine.MachineNumber,
+                CutterNumber = machine.Cutter.CutterNumber,
+                PartNumber = machine.PartNumber,
+                Comment = machine.StatusMessage,
+                Model = machine.Cutter.Model,
+                FrequencyCheckResult = machine.FrequencyCheckResult.ToString(),
+                PieceCount = machine.Cutter.Count.ToString(),
+                UserFullName = $"{user?.FirstName} {user?.LastName}" ?? "n/a",
+                ToothCount = "n/a (coming soon)",
+                CurrentShift = "n/a (coming soon)",
+                ToothSize = string.IsNullOrEmpty(machine.PartToothSize) ? "n/a" : machine.PartToothSize,
+                CMMData = machine.Cutter.CMMData.LastOrDefault() ?? null,
+                CutterChangeInfo = machine.Cutter.CutterChangeInfo.ToString(),
+            });
+        }
+
     }
 }

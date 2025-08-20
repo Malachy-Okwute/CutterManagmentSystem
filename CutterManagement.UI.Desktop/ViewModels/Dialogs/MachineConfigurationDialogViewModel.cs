@@ -190,7 +190,7 @@ namespace CutterManagement.UI.Desktop
             try
             {
                 // Try configuring machine with new data, get the result of the process
-                (ValidationResult, MachineDataModel?) result =  await _machineService.Configure(newData);
+                (ValidationResult, MachineDataModel?) result =  await _machineService.ConfigureAsync(newData);
 
                 // Set message
                 string message = string.IsNullOrEmpty(result.Item1.ErrorMessage) ? "Configuration successful" : result.Item1.ErrorMessage;

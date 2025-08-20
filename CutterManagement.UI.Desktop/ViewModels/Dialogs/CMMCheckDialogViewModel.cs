@@ -319,7 +319,7 @@ namespace CutterManagement.UI.Desktop
             };
 
             // Capture and record CMM Data
-            await  _machineService.CaptureAndRecordCMMData(_user.Id, Id, Comment, cmmData);
+            await  _machineService.CaptureAndRecordCMMDataAsync(_user.Id, Id, Comment, cmmData);
 
             // Mark message as a success
             IsSuccess = true;

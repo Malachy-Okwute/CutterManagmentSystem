@@ -169,7 +169,7 @@ namespace CutterManagement.UI.Desktop
             }
 
             // Relocate cutter
-            await _machineService.RelocateCutter(Id, SelectedMachine.Id, _user.Id, Comment);
+            await _machineService.RelocateCutterAsync(Id, SelectedMachine.Id, _user.Id, Comment);
 
             // Set flag
             IsSuccess = true;

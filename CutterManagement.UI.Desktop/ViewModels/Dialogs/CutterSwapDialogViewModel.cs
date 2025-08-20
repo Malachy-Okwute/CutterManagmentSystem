@@ -206,63 +206,64 @@ namespace CutterManagement.UI.Desktop
         {
             // ToDo: Refactor code below
 
-            // Get machine table
-            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            // Get machine tables
+            using var firstMachineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            using var secondMachineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
 
             // Get user table
             using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
-
-            // Get production part log table
-            IDataAccessService<ProductionPartsLogDataModel> productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
+            // Get cutter table
+            using var cutterTable = _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
 
             // Get user
             UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
 
             // Get first machine
-            MachineDataModel? firstMachine = await machineTable.GetEntityByIdAsync(initialMachineId, cutter => cutter.Cutter);
+            MachineDataModel? firstMachine = await firstMachineTable.GetEntityByIdAsync(initialMachineId, cutter => cutter.Cutter);
             // Get second machine
-            MachineDataModel? secondMachine = await machineTable.GetEntityByIdAsync(secondMachineId, cutter => cutter.Cutter);
+            MachineDataModel? secondMachine = await secondMachineTable.GetEntityByIdAsync(secondMachineId, cutter => cutter.Cutter);
 
             // New data from database
             MachineDataModel? data = null;
 
             // Dummy
-            MachineDataModel dummyMachine = new MachineDataModel();
+            MachineDataModel? dummyMachine = new MachineDataModel();
 
             // Create event handler
             EventHandler<object>? handler = null;
 
             // Listen for changes 
-            handler += (s, e) =>
+            handler += (sender, e) =>
             {
-                //machineTable.DataChanged -= handler;
+                // Unhook the event handler to prevent memory leaks
+                if (sender == firstMachineTable)
+                {
+                    firstMachineTable.DataChanged -= handler;
+                }
+                else
+                {
+                    secondMachineTable.DataChanged -= handler;
+                }
 
                 // Set new data
                 data = e as MachineDataModel;
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected Machine data cannot be null"));
-
-                if (data.MachineNumber.Equals(firstMachine?.MachineNumber))
-                {
-                    // Unsubscribe from event
-                    machineTable.DataChanged -= handler;
-                }
-
-                // Log cmm data
-                //ProductionPartsLogHelper.LogProductionProgress(user, data, productionLogTable);
             };
 
-            // Subscribe to data changed event
-            machineTable.DataChanged += handler;
+            // Subscribe to data changed event for both machines
+            firstMachineTable.DataChanged += handler;
+            secondMachineTable.DataChanged += handler;
 
             // If both machines are available
-            if (firstMachine is not null && secondMachine is not null)
+            if (firstMachine is not null && secondMachine is not null && user is not null)
             {
                 // Create a dummy machine to hold first machine's data
                 dummyMachine.Status = firstMachine.Status;
                 dummyMachine.StatusMessage = firstMachine.StatusMessage;
                 dummyMachine.PartNumber = firstMachine.PartNumber;
                 dummyMachine.CutterDataModelId = firstMachine.CutterDataModelId;
+                dummyMachine.Cutter = firstMachine.Cutter;
                 dummyMachine.FrequencyCheckResult = firstMachine.FrequencyCheckResult;
                 dummyMachine.DateTimeLastModified = DateTime.Now;
 
@@ -271,36 +272,59 @@ namespace CutterManagement.UI.Desktop
                 firstMachine.StatusMessage = $"Swapped cutter with {secondMachine.MachineNumber}";
                 firstMachine.PartNumber = secondMachine.PartNumber;
                 firstMachine.CutterDataModelId = secondMachine.CutterDataModelId;
-                firstMachine.Cutter.MachineDataModelId = firstMachine.Id;
+                firstMachine.Cutter = secondMachine.Cutter;
                 firstMachine.FrequencyCheckResult = secondMachine.FrequencyCheckResult;
                 firstMachine.DateTimeLastModified = DateTime.Now;
 
                 // Set the user conducting this operation
                 firstMachine.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
+                    UserDataModel = user,
                     MachineDataModel = firstMachine
                 });
 
+                await _machineService.RemoveCutterAsync(secondMachine.Id, user.Id, true, new MachineDataModel
+                {
+                    FrequencyCheckResult = FrequencyCheckResult.Setup,
+                    Status = MachineStatus.Warning,
+                    StatusMessage = Comment ?? string.Empty,
+                    DateTimeLastModified = DateTime.Now,
+                    Cutter = new CutterDataModel
+                    {
+                        CutterChangeInfo = CutterRemovalReason.ChangOver,
+                        LastUsedDate = DateTime.Now,
+                        Condition = secondMachine.Cutter.Count > 0 ? CutterCondition.Used : CutterCondition.New,
+                        Count = secondMachine.Cutter.Count,
+                        MachineDataModelId = null,
+                    },
+                    CutterDataModelId = null,
+                    PartNumber = null!,
+                    PartToothSize = "0",
+                });
+
+                await firstMachineTable.SaveEntityAsync(firstMachine);
+
                 // Pass dummy machine's data to second machine
+                secondMachine.Cutter = dummyMachine.Cutter;
+                secondMachine.CutterDataModelId = dummyMachine.CutterDataModelId;
+                secondMachine.PartNumber = dummyMachine.PartNumber;
+                secondMachine.FrequencyCheckResult = dummyMachine.FrequencyCheckResult;
                 secondMachine.Status = dummyMachine.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.Warning : dummyMachine.Status;
                 secondMachine.StatusMessage = $"Swapped cutter with {firstMachine.MachineNumber}";
-                secondMachine.PartNumber = dummyMachine.PartNumber;
-                secondMachine.CutterDataModelId = dummyMachine.CutterDataModelId;
-                secondMachine.Cutter.MachineDataModelId = secondMachine.Id;
-                secondMachine.FrequencyCheckResult = dummyMachine.FrequencyCheckResult;
                 secondMachine.DateTimeLastModified = DateTime.Now;
 
                 // Set the user conducting this operation
                 secondMachine.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
+                    UserDataModel = user,
                     MachineDataModel = secondMachine
                 });
 
                 // Save new info to database
-                await machineTable.SaveEntityAsync(secondMachine);
-                await machineTable.SaveEntityAsync(firstMachine);
+                await secondMachineTable.SaveEntityAsync(secondMachine);
+
+                // Reset dummy machine
+                dummyMachine = null;
             }
 
             // Set flag

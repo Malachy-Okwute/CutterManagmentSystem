@@ -265,8 +265,6 @@ namespace CutterManagement.UI.Desktop
 
             // Get machine table
             using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();   
-            // Get production part log table
-            using var productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
 
             // Create event handler
             EventHandler<object>? handler = null;
@@ -280,9 +278,6 @@ namespace CutterManagement.UI.Desktop
                 data = e as MachineDataModel;
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected machine cannot be null"));
-
-                // Log initial part setup
-                //ProductionPartsLogHelper.LogProductionProgress(null, data, productionLogTable);
             };
 
             // Subscribe to data changed event

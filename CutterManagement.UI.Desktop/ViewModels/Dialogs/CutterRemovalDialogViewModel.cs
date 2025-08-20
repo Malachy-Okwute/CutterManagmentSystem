@@ -245,7 +245,7 @@ namespace CutterManagement.UI.Desktop
 
             // ToDo: Re-implement this
             // Remove cutter
-            await _machineService.RemoveCutter(Id, _user.Id, KeepCutter, new MachineDataModel
+            await _machineService.RemoveCutterAsync(Id, _user.Id, KeepCutter, new MachineDataModel
             {
                 FrequencyCheckResult = FrequencyCheckResult.Setup,
                 Status = MachineStatus.Warning,

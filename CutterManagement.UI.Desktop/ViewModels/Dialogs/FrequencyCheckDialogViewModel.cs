@@ -158,12 +158,17 @@ namespace CutterManagement.UI.Desktop
             MachineDataModel? data = null;
 
             // Get machine table
-            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
             // Get user table
             using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
-            // Get part log table
-            using var productionLogTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
 
+            // Get machine
+            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id, cutter => cutter.Cutter);
+
+            // Get user
+            UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
+
+            // Create event handler
             EventHandler<object>? handler = null;
 
             // Listen for changes 
@@ -176,18 +181,15 @@ namespace CutterManagement.UI.Desktop
                 // Send out message
                 Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
 
-                // Log cmm data
-                //ProductionPartsLogHelper.LogProductionProgress(_user, data, productionLogTable);
+                // Log data
+                _machineService.LogProductionProgressAsync(data.Id, user);
+
+                // Dispose machine table
+                machineTable.Dispose();
             };
 
             // Subscribe to data changed event
             machineTable.DataChanged += handler;
-
-            // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id, cutter => cutter.Cutter);
-
-            // Get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
 
             // If machine is not null...
             if(machine is not null)
