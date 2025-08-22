@@ -60,7 +60,15 @@
                        TextAlignment="Center"
                        Text="{Binding CutterNumber}"
                        FontFamily="{StaticResource RobotoFlexRegular}"
-                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                       Foreground="{DynamicResource ForegroundColorBrush3}">
+                <TextBlock.InputBindings>
+                    <MouseBinding Command="{Binding ShowCutterHistoryCommand}">
+                        <MouseBinding.Gesture>
+                            <MouseGesture Modifiers="Ctrl" MouseAction="LeftClick" />
+                        </MouseBinding.Gesture>
+                    </MouseBinding>
+                </TextBlock.InputBindings>
+            </TextBlock>
         </Border>
 
         <!--  part number currently being run by this machine  -->
@@ -128,6 +136,15 @@
                Placement="MousePoint" StaysOpen="True"
                PopupAnimation="Fade" AllowsTransparency="True">
             <local:MachineItemPopupControl />
+        </Popup>
+
+        <Popup HorizontalAlignment="Left"
+               IsOpen="{Binding IsCutterHistoryShowing}"
+               PlacementTarget="{Binding ElementName=CutterNumber}"
+               Placement="Bottom" StaysOpen="True"
+               HorizontalOffset="500" VerticalOffset="-20"
+               PopupAnimation="Slide" AllowsTransparency="True">
+            <local:CutterHistoryPopupControl />
         </Popup>
 
         <Grid x:Name="CountAdjustmentButtons" Grid.ColumnSpan="8"

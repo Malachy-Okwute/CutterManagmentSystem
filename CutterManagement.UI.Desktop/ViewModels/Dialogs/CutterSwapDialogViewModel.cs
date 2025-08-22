@@ -1,7 +1,5 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
-using CutterManagement.DataAccess;
-using System.IO;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop

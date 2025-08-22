@@ -93,6 +93,11 @@ namespace CutterManagement.UI.Desktop
         public bool IsPopupOpen { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the cutter history is currently visible.
+        /// </summary>
+        public bool IsCutterHistoryShowing { get; set; }
+
+        /// <summary>
         /// True if piece count can be edited
         /// Otherwise false
         /// <para>
@@ -180,8 +185,15 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public ICommand OpenCutterRelocationDialogCommand { get; set; }
 
-
+        /// <summary>
+        /// Command to open cutter swap dialog
+        /// </summary>
         public ICommand OpenCutterSwapDialogCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets the command that displays the cutter history when executed.
+        /// </summary>
+        public ICommand ShowCutterHistoryCommand { get; set; }
 
         /// <summary>
         /// Command to change the current part number
@@ -216,6 +228,7 @@ namespace CutterManagement.UI.Desktop
                 Count = _currentCount.ToString();
                 CanEditPieceCount = !CanEditPieceCount;
             });
+            ShowCutterHistoryCommand = new RelayCommand(async () => await ShowCutterHistory());
         }
 
         #endregion
@@ -545,6 +558,14 @@ namespace CutterManagement.UI.Desktop
                 // Show dialog
                 DialogService.InvokeDialog(cutterSwapViewModel);
             }
+        }
+
+        private async Task ShowCutterHistory()
+        {
+            // Broadcast that this item was selected
+            ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            IsCutterHistoryShowing = true;
         }
 
         #endregion
