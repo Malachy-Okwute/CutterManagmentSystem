@@ -37,6 +37,7 @@ namespace CutterManagement.UI.Desktop
             services.AddTransient<SettingsPageViewModel>();
             services.AddTransient<ShiftProfileViewModel>();
             services.AddTransient<ApplicationWindowViewModel>();
+            services.AddTransient<CutterHistoryPopupViewModel>();
 
             // Dialog view model
             services.AddTransient<CMMCheckDialogViewModel>();

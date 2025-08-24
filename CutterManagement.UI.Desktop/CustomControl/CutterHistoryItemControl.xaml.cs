@@ -16,13 +16,11 @@ using System.Windows.Shapes;
 namespace CutterManagement.UI.Desktop
 {
     /// <summary>
-    /// Interaction logic for CutterHistoryPopupControl.xaml
+    /// Interaction logic for CutterHistoryItemControl.xaml
     /// </summary>
-    public partial class CutterHistoryPopupControl : UserControl
+    public partial class CutterHistoryItemControl : UserControl
     {
-
-        
-        public CutterHistoryPopupControl()
+        public CutterHistoryItemControl()
         {
             InitializeComponent();
         }

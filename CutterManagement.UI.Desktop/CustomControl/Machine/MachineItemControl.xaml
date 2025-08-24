@@ -142,9 +142,9 @@
                IsOpen="{Binding IsCutterHistoryShowing}"
                PlacementTarget="{Binding ElementName=CutterNumber}"
                Placement="Bottom" StaysOpen="True"
-               HorizontalOffset="500" VerticalOffset="-20"
+               HorizontalOffset="550" VerticalOffset="-20"
                PopupAnimation="Slide" AllowsTransparency="True">
-            <local:CutterHistoryPopupControl />
+            <local:CutterHistoryPopupControl DataContext="{Binding CutterHistory}" />
         </Popup>
 
         <Grid x:Name="CountAdjustmentButtons" Grid.ColumnSpan="8"

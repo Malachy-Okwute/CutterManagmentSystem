@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:CutterManagement.UI.Desktop"
              mc:Ignorable="d">
 
-    <Border Width="650" Height="240"
+    <Border Width="650" Height="350"
             Padding="8">
         <Border Background="{DynamicResource BackgroundColorBrush1}"
                 BorderBrush="{x:Null}"
@@ -24,7 +24,7 @@
                 <Grid Grid.Row="0">
 
                     <Label Margin="2" HorizontalAlignment="Left"
-                           VerticalAlignment="Top" Content="P10003-10000"
+                           VerticalAlignment="Top" Content="P10003-10000    Cutter Log"
                            Foreground="{DynamicResource ForegroundColorBrush3}"
                            FontSize="{StaticResource XLarge}"
                            FontFamily="{StaticResource RobotoFlexRegular}" />
@@ -38,80 +38,38 @@
                     <Grid>
 
                         <Label Margin="0,10" HorizontalAlignment="Center"
-                               VerticalAlignment="Top" Content="Captured cutter history will appear here"
+                               VerticalAlignment="Top" d:Visibility="Collapsed"
+                               Content="Captured cutter history will appear here"
                                Foreground="{DynamicResource ForegroundColorBrush3}"
                                FontSize="{StaticResource Small}"
                                FontFamily="{StaticResource RobotoFlexRegular}"
-                               Visibility="Collapsed" />
+                               Visibility="{Binding IsHistoryEmpty}" />
 
                         <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-                            <ItemsControl x:Name="Items">
+
+                            <ItemsControl x:Name="Items" ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Height="35" Margin="14,0"
-                                              VerticalAlignment="Center">
-
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="3*" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="2*" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="2*" />
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="3*" />
-                                                <ColumnDefinition Width="4*" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <TextBlock Grid.Column="0" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="P10001-10000"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                                            <TextBlock Grid.Column="1" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="502"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                                            <TextBlock Grid.Column="2" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="10001000"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                                            <TextBlock Grid.Column="3" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="50"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                                            <TextBlock Grid.Column="4" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="n/a"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                                            <TextBlock Grid.Column="5" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="Passed"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                                            <TextBlock Grid.Column="6" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="1st"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                                            <TextBlock Grid.Column="7" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="Malachy Okwute"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-
-                                            <TextBlock Grid.Column="8" HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" Text="8-21-2025 ~ 12:16 PM"
-                                                       FontFamily="{StaticResource RobotoFlexRegular}"
-                                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
-                                        </Grid>
+                                        <local:CutterHistoryItemControl />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+
                         </ScrollViewer>
+
+                        <Grid VerticalAlignment="Top" Visibility="Collapsed" Background="{DynamicResource BackgroundColorBrush1}">
+
+                            <Border Grid.ColumnSpan="9" HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center" BorderThickness="0,1"
+                                    BorderBrush="{DynamicResource BorderColorBrush5}" />
+
+                            <TextBlock Grid.ColumnSpan="9" Padding="20,8"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Background="{DynamicResource BackgroundColorBrush1}"
+                                       Text="8-21-2025 ~ 12:16 PM"
+                                       FontFamily="{StaticResource RobotoFlexRegular}"
+                                       Foreground="{DynamicResource ForegroundColorBrush3}" />
+                        </Grid>
 
                     </Grid>
                 </Border>

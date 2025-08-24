@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Diagnostics.Metrics;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -127,6 +128,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public bool IsAdminLoggedIn => AuthenticationService.IsAdminUserAuthorized;
 
+        public CutterHistoryPopupViewModel CutterHistory {  get; set; }
+
         #endregion
 
         #region Public Events
@@ -249,7 +252,7 @@ namespace CutterManagement.UI.Desktop
             if (IsConfigured is false)
             {
                 // Show feed back message
-                await DialogService.InvokeFeedbackDialog(statusSettingDialog, "SelectedMachine need to be configured for production");
+                await DialogService.InvokeFeedbackDialog(statusSettingDialog, $"{MachineNumber} need to be configured for production");
 
                 // Do nothing else
                 return;
@@ -564,6 +567,10 @@ namespace CutterManagement.UI.Desktop
         {
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
+
+            CutterHistory = new CutterHistoryPopupViewModel(_machineService);
+
+            await CutterHistory.LoadCutterHistory();
 
             IsCutterHistoryShowing = true;
         }

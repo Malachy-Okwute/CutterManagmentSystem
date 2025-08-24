@@ -60,7 +60,6 @@ namespace CutterManagement.UI.Desktop
         {
             // Initialize
             _machineService = machineService;
-            
             _ringItems = new ObservableCollection<MachineItemViewModel>();
             _pinItems = new ObservableCollection<MachineItemViewModel>();
 

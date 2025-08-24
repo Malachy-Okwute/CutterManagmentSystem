@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Accessibility;
+using CutterManagement.Core;
+using Microsoft.IdentityModel.Tokens;
+using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -11,49 +11,85 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class CutterHistoryPopupViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Cutter number
-        /// </summary>
-        public string CutterNumber { get; set; }
+        private readonly IMachineService _machineService;
 
-        /// <summary>
-        /// Machine number
-        /// </summary>
-        public string MachineNumber { get; set; }
+        public ObservableCollection<CutterHistoryPopupItemViewModel> Items { get; set; }
 
-        /// <summary>
-        /// Part number
-        /// </summary>
-        public string PartNumber { get; set; }
+        public bool IsHistoryEmpty { get; set; }
 
-        /// <summary>
-        /// Produced quantity
-        /// </summary>
-        public string Count { get; set; }
+        public CutterHistoryPopupViewModel(IMachineService machineService)
+        {
+            _machineService = machineService;
 
-        /// <summary>
-        /// Size of part tooth
-        /// </summary>
-        public string SizeOfPartTooth { get; set; }
+            Initialize();
+        }
 
-        /// <summary>
-        /// The result of the check
-        /// </summary>
-        public string CheckResult { get; set; }
+        protected override void Initialize()
+        {
+            Items = new ObservableCollection<CutterHistoryPopupItemViewModel>();
+        }
 
-        /// <summary>
-        /// Current shift
-        /// </summary>
-        public string Shift { get; set; }
+        public async Task<bool> LoadCutterHistory()
+        {
+            Items.Clear();
 
-        /// <summary>
-        /// User that is logging this check
-        /// </summary>
-        public string UserName { get; set; }
+            using var logTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
 
-        /// <summary>
-        /// Date and time of the check
-        /// </summary>
-        public DateTime DateAndTimeOfCheck { get; set; }
+            var counter = 0;
+
+            foreach (var cutterLog in await logTable.GetAllEntitiesAsync())
+            {
+                if (Items.IsNullOrEmpty())
+                {
+                    Items.Add(new CutterHistoryPopupItemViewModel
+                    {
+                        DateAndTimeOfCheck = cutterLog.DateTimeOfCheck.ToString("M-dd-yyyy"),
+                        UseAlternateBackground = false,
+                        IsHeader = true 
+                    });
+                }
+                else if (GetFullDate(DateTime.Parse(Items.Last().DateAndTimeOfCheck)).Equals(GetFullDate(cutterLog.DateTimeOfCheck)) is false)
+                {
+                    Items.Add(new CutterHistoryPopupItemViewModel
+                    {
+                        DateAndTimeOfCheck = cutterLog.DateTimeOfCheck.ToString("M-dd-yyyy"),
+                        UseAlternateBackground = false,
+                        IsHeader = true
+                    });
+
+                    counter = 0;
+                }
+
+                Items.Add(new CutterHistoryPopupItemViewModel
+                {
+                    CutterNumber = cutterLog.CutterNumber,
+                    MachineNumber = cutterLog.MachineNumber,
+                    PartNumber = cutterLog.PartNumber,
+                    Count = cutterLog.PieceCount,
+                    CheckResult = cutterLog.FrequencyCheckResult,
+                    //SizeOfPartTooth = cutterLog.ToothSize,
+                    SizeOfPartTooth = "10",
+                    //Shift = cutterLog.CurrentShift,
+                    Shift = "1st",
+                    UserName = cutterLog.UserFullName ?? "Unknown user",
+                    DateAndTimeOfCheck = cutterLog.DateTimeOfCheck.ToString("g"),
+                    UseAlternateBackground = counter % 2 == 0,
+                    IsHeader = false
+                });
+                
+                counter++;
+            }
+
+            IsHistoryEmpty = Items.IsNullOrEmpty();
+
+            OnPropertyChanged(nameof(IsHistoryEmpty));
+
+            return true;
+        }
+
+        private string GetFullDate(DateTime date)
+        {
+            return date.GetDateTimeFormats().First();
+        }
     }
 }
