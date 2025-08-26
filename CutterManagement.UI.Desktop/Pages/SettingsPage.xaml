@@ -3,8 +3,8 @@
       mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsPage">
 
-    <Grid Background="WhiteSmoke">
-        <TextBlock Text="{Binding Test}"
+    <Grid Background="{DynamicResource BackgroundColorBrush3}">
+        <TextBlock Text="{Binding Message}" Foreground="{DynamicResource ForegroundColorBrush3}" 
                    FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
 </Page>

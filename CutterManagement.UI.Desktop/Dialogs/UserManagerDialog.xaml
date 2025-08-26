@@ -47,7 +47,8 @@
                            FontFamily="{StaticResource RobotoFlexRegular}"
                            Visibility="{Binding IsDeactivatedUserCollectionEmpty, Converter={local:BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                    <ScrollViewer local:ScrollViewerAttachedProperties.SetScrollSpeed="20" VerticalScrollBarVisibility="Hidden"
+                                  HorizontalScrollBarVisibility="Disabled">
                         <ItemsControl x:Name="Items" ItemsSource="{Binding DeactivatedUser, UpdateSourceTrigger=PropertyChanged}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>

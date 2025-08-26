@@ -11,12 +11,25 @@ namespace CutterManagement.UI.Desktop
     /// </summary>
     public class CutterHistoryPopupViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Represents the service used to interact with and manage machine-related operations.
+        /// </summary>
         private readonly IMachineService _machineService;
 
+        /// <summary>
+        /// The collection of items displayed in the cutter history popup.
+        /// </summary>
         public ObservableCollection<CutterHistoryPopupItemViewModel> Items { get; set; }
 
+        /// <summary>
+        /// True if history is empty. Otherwise false
+        /// </summary>
         public bool IsHistoryEmpty { get; set; }
 
+        /// <summary>
+        ///  Default constructor
+        /// </summary>
+        /// <param name="machineService">Machine service</param>
         public CutterHistoryPopupViewModel(IMachineService machineService)
         {
             _machineService = machineService;
@@ -24,21 +37,37 @@ namespace CutterManagement.UI.Desktop
             Initialize();
         }
 
+        /// <summary>
+        /// Initialize this class
+        /// </summary>
         protected override void Initialize()
         {
             Items = new ObservableCollection<CutterHistoryPopupItemViewModel>();
         }
 
-        public async Task<bool> LoadCutterHistory()
+        /// <summary>
+        /// Loads history of cutter number specified
+        /// </summary>
+        /// <param name="cutterNumber">The cutter number to look up and load the history of</param>
+        public async Task LoadCutterHistory(string cutterNumber)
         {
+            // Clear any pre-existing items
             Items.Clear();
 
+            // Get log db
             using var logTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
 
             var counter = 0;
 
             foreach (var cutterLog in await logTable.GetAllEntitiesAsync())
             {
+                // Filter cutter number
+                if(cutterLog.CutterNumber.Equals(cutterNumber) is false)
+                {
+                    continue;
+                }
+
+                // Add header
                 if (Items.IsNullOrEmpty())
                 {
                     Items.Add(new CutterHistoryPopupItemViewModel
@@ -60,6 +89,7 @@ namespace CutterManagement.UI.Desktop
                     counter = 0;
                 }
 
+                // Add data to items collection
                 Items.Add(new CutterHistoryPopupItemViewModel
                 {
                     CutterNumber = cutterLog.CutterNumber,
@@ -68,9 +98,9 @@ namespace CutterManagement.UI.Desktop
                     Count = cutterLog.PieceCount,
                     CheckResult = cutterLog.FrequencyCheckResult,
                     //SizeOfPartTooth = cutterLog.ToothSize,
-                    SizeOfPartTooth = "10",
+                    SizeOfPartTooth = "10", // ToDo: Wire up actual data
                     //Shift = cutterLog.CurrentShift,
-                    Shift = "1st",
+                    Shift = "1st", // ToDo: Wire up actual data
                     UserName = cutterLog.UserFullName ?? "Unknown user",
                     DateAndTimeOfCheck = cutterLog.DateTimeOfCheck.ToString("g"),
                     UseAlternateBackground = counter % 2 == 0,
@@ -82,9 +112,8 @@ namespace CutterManagement.UI.Desktop
 
             IsHistoryEmpty = Items.IsNullOrEmpty();
 
+            // Update UI
             OnPropertyChanged(nameof(IsHistoryEmpty));
-
-            return true;
         }
 
         private string GetFullDate(DateTime date)

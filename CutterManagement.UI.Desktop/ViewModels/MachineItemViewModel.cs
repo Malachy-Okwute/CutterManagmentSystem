@@ -563,16 +563,27 @@ namespace CutterManagement.UI.Desktop
             }
         }
 
+        /// <summary>
+        /// Shows a popup that contains cutter history
+        /// </summary>
         private async Task ShowCutterHistory()
         {
             // Broadcast that this item was selected
             ItemSelected?.Invoke(this, EventArgs.Empty);
 
+            // Create a cutter history
             CutterHistory = new CutterHistoryPopupViewModel(_machineService);
 
-            await CutterHistory.LoadCutterHistory();
+            // Make sure cutter number is not null
+            if(CutterNumber is not null)
+            {
+                // Load all existing cutter history associated with the specified cutter number
+                await CutterHistory.LoadCutterHistory(CutterNumber.Split('-')[0]);
+                // Show cutter history popup
+                IsCutterHistoryShowing = true;
+            }
 
-            IsCutterHistoryShowing = true;
+            // ToDo: Notify user if there is an issue with current cutter number
         }
 
         #endregion

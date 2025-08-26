@@ -8,6 +8,8 @@ namespace CutterManagement.UI.Desktop
 {
     public class InfoPageViewModel : ViewModelBase
     {
-        public string Test { get; set; } = "Coming soon";
+        public string Message { get; set; } = $"This Page is currently under development. " +
+                                              $"{Environment.NewLine}We are working hard to bring you this feature soon. " +
+                                              $"{Environment.NewLine}Please check back later";
     }
 }

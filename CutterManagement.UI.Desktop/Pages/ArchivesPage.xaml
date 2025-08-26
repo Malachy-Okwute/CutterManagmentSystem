@@ -55,7 +55,8 @@
 
                 <!--  items  -->
                 <ScrollViewer Grid.Row="1" Padding="7,0"
-                              VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                              local:ScrollViewerAttachedProperties.SetScrollSpeed="20" VerticalScrollBarVisibility="Hidden"
+                              HorizontalScrollBarVisibility="Disabled">
 
                     <Grid x:Name="ItemsContainer" Margin="0,4">
 
