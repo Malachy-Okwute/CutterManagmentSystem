@@ -1,12 +1,14 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using System.IO;
+using System.Reflection.Metadata.Ecma335;
 using System.Windows;
 
 namespace CutterManagement.UI.Desktop
@@ -78,7 +80,7 @@ namespace CutterManagement.UI.Desktop
                         Log.Logger.Information("Application is starting...");
 
                         // Finalizing...
-                        //await Task.Delay(TimeSpan.FromSeconds(6));
+                        //await Task.Delay(TimeSpan.FromSeconds(4));
                     }
                     // If there is an error...
                     catch (Exception ex)
@@ -98,6 +100,16 @@ namespace CutterManagement.UI.Desktop
 
             // Get database 
             ApplicationDbContext db = ApplicationHost.Services.GetRequiredService<ApplicationDbContext>();
+
+
+            // TODO: Check if we have database connection string - if not - request that dev team should provide a database connection.
+            //IConfiguration config = db.GetService<IConfiguration>();
+
+            //if(VerifyConnectionString(config) is false)
+            //{
+            //    // Get connection string from user
+                
+            //}
 
             // Update database migration or generate a database if not created.
             await db.UpdateDatabaseMigrateAsync();
@@ -121,8 +133,6 @@ namespace CutterManagement.UI.Desktop
             // TODO: Check if there is an app update available - if new update is available
             //      - notify user to update the application
             //      - if app is not updated... automatically update app at the end of shift.
-
-            // TODO: Check if we have database connection string - if not - request that dev team should provide a database connection.
 
             // Lunch main application window
             await LunchApplicationWindowAsync();
@@ -246,6 +256,15 @@ namespace CutterManagement.UI.Desktop
                 .MinimumLevel.Override("System", LogEventLevel.Fatal)
                 .CreateLogger();
         }
+
+        //private bool VerifyConnectionString(IConfiguration configuration) => 
+        //    string.IsNullOrEmpty(configuration.GetConnectionString("LocalDbConnection")) is false;
+
+        //private Task GetDbConnectionDetails()
+        //{
+        //    return Task.FromResult(0);
+        //}
+        
 
         /// <summary>
         /// Set up application dependency injection service
