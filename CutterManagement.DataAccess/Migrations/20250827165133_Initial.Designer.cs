@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CutterManagement.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250815212043_ChangedUserAndInfoUpdateRelationship")]
-    partial class ChangedUserAndInfoUpdateRelationship
+    [Migration("20250827165133_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -220,40 +220,6 @@ namespace CutterManagement.DataAccess.Migrations
                     b.HasIndex("UserDataModelId");
 
                     b.ToTable("InfoUpdates");
-                });
-
-            modelBuilder.Entity("CutterManagement.Core.InfoUpdateUserRelations", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("InfoUpdateDataModelId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastEntryDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("UserDataArchiveId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserDataModelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InfoUpdateDataModelId");
-
-                    b.HasIndex("UserDataArchiveId");
-
-                    b.HasIndex("UserDataModelId");
-
-                    b.ToTable("InfoUpdateUserRelations");
                 });
 
             modelBuilder.Entity("CutterManagement.Core.MachineDataModel", b =>
@@ -691,25 +657,6 @@ namespace CutterManagement.DataAccess.Migrations
                     b.Navigation("UserDataModel");
                 });
 
-            modelBuilder.Entity("CutterManagement.Core.InfoUpdateUserRelations", b =>
-                {
-                    b.HasOne("CutterManagement.Core.InfoUpdateDataModel", "InfoUpdateDataModel")
-                        .WithMany()
-                        .HasForeignKey("InfoUpdateDataModelId");
-
-                    b.HasOne("CutterManagement.Core.UserDataArchive", null)
-                        .WithMany("InfoUpdateUserRelations")
-                        .HasForeignKey("UserDataArchiveId");
-
-                    b.HasOne("CutterManagement.Core.UserDataModel", "UserDataModel")
-                        .WithMany()
-                        .HasForeignKey("UserDataModelId");
-
-                    b.Navigation("InfoUpdateDataModel");
-
-                    b.Navigation("UserDataModel");
-                });
-
             modelBuilder.Entity("CutterManagement.Core.MachineUserInteractions", b =>
                 {
                     b.HasOne("CutterManagement.Core.MachineDataModel", "MachineDataModel")
@@ -762,8 +709,6 @@ namespace CutterManagement.DataAccess.Migrations
 
             modelBuilder.Entity("CutterManagement.Core.UserDataArchive", b =>
                 {
-                    b.Navigation("InfoUpdateUserRelations");
-
                     b.Navigation("MachineUserInteractions");
                 });
 

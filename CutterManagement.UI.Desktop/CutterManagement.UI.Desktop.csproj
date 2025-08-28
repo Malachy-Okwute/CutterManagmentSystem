@@ -9,6 +9,10 @@
     <ApplicationIcon>.Resources\Images\cms-icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile> 
+    <PublishTrimmed>false</PublishTrimmed> <!-- Avoid trimming for EF Core/WPF -->
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,0 +1,29 @@
+name: "Cutter Management System"
+
+on:
+    push:
+        tag:
+            - "Cutter-Management-System/v*"
+
+jobs:
+    deploy:
+        runs-on: windows-latest
+
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        - name: Set up dotnet
+          uses: actions/setup-dotnet@v3
+          with:
+                dotnet-version: '8.0.x'
+        
+        - name: Restore dependencies
+          run: dotnet restore CutterManagementSystem.sln
+
+        - name: Build solution
+          run: dotnet build CutterManagementSystem.sln --c Release --no-restore
+
+        - name: Publish application
+        - run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj --c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build -o ./publish
+      
