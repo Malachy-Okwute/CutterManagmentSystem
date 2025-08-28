@@ -1,14 +1,12 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using System.IO;
-using System.Reflection.Metadata.Ecma335;
 using System.Windows;
 
 namespace CutterManagement.UI.Desktop
@@ -262,7 +260,7 @@ namespace CutterManagement.UI.Desktop
 
         //private Task GetDbConnectionDetails()
         //{
-        //    return Task.FromResult(0);
+        //    return Task.FromResult(0); //
         //}
         
 
