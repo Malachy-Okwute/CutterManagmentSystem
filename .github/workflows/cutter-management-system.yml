@@ -25,4 +25,4 @@ jobs:
               run: dotnet build CutterManagementSystem.sln --c Release --no-restore
 
             - name: Publish application
-            - run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj --c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build -o ./publish
+              run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj --c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build -o ./publish
