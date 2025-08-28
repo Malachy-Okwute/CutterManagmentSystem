@@ -221,7 +221,7 @@ namespace CutterManagement.UI.Desktop
         /// Provides environment variable indicating if we are running in 
         /// development or production environment
         /// </summary>
-        /// <returns>Environment variable as a <see cref="string"/></returns>
+        /// <returns><see cref="string"/> as environment variable</returns>
         private string GetEnvironmentVariable()
         {
             #region Environment variable
@@ -260,7 +260,7 @@ namespace CutterManagement.UI.Desktop
 
         //private Task GetDbConnectionDetails()
         //{
-        //    return Task.FromResult(0); //
+        //    return Task.FromResult(0); 
         //}
         
 
