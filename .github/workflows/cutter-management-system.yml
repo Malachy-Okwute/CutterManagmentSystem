@@ -26,4 +26,3 @@ jobs:
 
             - name: Publish application
             - run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj --c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build -o ./publish
-      
