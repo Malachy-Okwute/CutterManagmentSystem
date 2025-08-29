@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using System.IO;
+using System.Linq.Expressions;
+using System.Text.Json;
 using System.Windows;
 
 namespace CutterManagement.UI.Desktop
@@ -83,6 +85,9 @@ namespace CutterManagement.UI.Desktop
                     // If there is an error...
                     catch (Exception ex)
                     {
+                        // Log error
+                        Log.Logger.Information($"Error occurred. {Environment.NewLine} {ex.GetBaseException().Message}");
+
                         // Log the error 
                         Log.Logger.Warning(ex.Message);
                     }
@@ -106,8 +111,11 @@ namespace CutterManagement.UI.Desktop
             //if(VerifyConnectionString(config) is false)
             //{
             //    // Get connection string from user
-                
+
             //}
+
+            // Log 
+            Log.Logger.Information($"Attempting to apply database migration...");
 
             // Update database migration or generate a database if not created.
             await db.UpdateDatabaseMigrateAsync();
@@ -263,19 +271,50 @@ namespace CutterManagement.UI.Desktop
         //    return Task.FromResult(0); 
         //}
         
-
         /// <summary>
         /// Set up application dependency injection service
         /// </summary>
         private static IHostBuilder CreateHostBuilder(string[]? args = null)
         {
+            var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"CutterManagementSystem");
+
+            // Define appsettings 
+            var appSettings = new 
+            {
+                Serilog = new
+                {
+                    MinimumLevel = new
+                    {
+                        Default = "Information",
+                        Override = new
+                        {
+                            Microsoft = "Information",
+                            System = "Warning",
+                        }
+                    }
+                },
+                ConnectionStrings = new { LocalDbConnection = "Server=(localdb)\\MSSQLLocalDB;Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
+            };
+
+            // Serialize appsettings
+            var json = JsonSerializer.Serialize(appSettings, new JsonSerializerOptions { WriteIndented = true });
+
+            // Create a folder
+            Directory.CreateDirectory(configDir);
+
+            var configPath = Path.Combine(configDir, "appsettings.json");
+
+            // Create json file
+            File.WriteAllText(configPath, json);
+
             // Setup services 
             return Host.CreateDefaultBuilder(args)
                  .ConfigureAppConfiguration(configurationBuilder =>
                  {
-                     configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
-                                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                         .AddJsonFile($"appsettings.{_environment}.json", optional: true);
+                     configurationBuilder.SetBasePath(configDir)
+                                         .AddJsonFile(configPath, optional: false, reloadOnChange: true);
+                                         //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                                         //.AddJsonFile($"appsettings.{_environment}.json", optional: true);
 
                      SetupSerilogLogger(configurationBuilder);
                  })
@@ -298,8 +337,8 @@ namespace CutterManagement.UI.Desktop
                          option.UseSqlServer(hostContext.Configuration.GetConnectionString("LocalDbConnection")!
                                                                     // https://learn.microsoft.com/en-us/answers/questions/1113995/changing-location-of-database-mdf-file-from-defaul
                                                                     // Create the *.mfd file in the bin folder instead of the user folder
-                                                                    .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));                        
-                     }, ServiceLifetime.Scoped);
+                                                                    .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));
+                 }, ServiceLifetime.Scoped);
 
                      services.AddViewModels();
                      services.AddServices();

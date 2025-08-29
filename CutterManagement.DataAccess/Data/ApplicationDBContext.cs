@@ -249,6 +249,9 @@ namespace CutterManagement.DataAccess
             }
             catch (Exception ex)
             {
+                // Log an error 
+                //Log.Logger.Information($"Error occurred. {Environment.NewLine} {ex.GetBaseException().Message}");
+
                 // Log ex.Message as error or warning
                 Debugger.Break();
                 Console.WriteLine(ex.Message);
