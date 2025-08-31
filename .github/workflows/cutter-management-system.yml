@@ -6,7 +6,7 @@ on:
           - "v*"
 
 permissions:
-    Contents: write
+    contents: write
 
 jobs:
     deploy:
