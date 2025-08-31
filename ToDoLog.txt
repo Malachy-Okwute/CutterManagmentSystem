@@ -1,9 +1,12 @@
-ToDos: 
+==============================================================================================================================================
+
+ToDo Log: 
 
 - Implement procedure for requesting and getting roll masters
 - In the settings have an option of how long a data has to be in the database before getting archived. e.g. archive data after 3, 4, 6 months
 - Disable size field for pinions in the settings
-- Log the inital setup of part number on a machine
-- Get ToothCount and CurrentShift for production part logging
+- Log the inital setup of part number on a machine in the [ProductionPartsLog] table
+- Get ToothCount and CurrentShift for production part data for [ProductionPartsLog] table
 - Notify each shift of any news and updates broadcasted 
-
+- Recalculate the number of users on a shift whenever a user is added or removed from a shift (Deactivated / Activated)
+- Check if cutter is already in-use on another machine right after cutter number is valid. And notify the user if it is currently in-use.

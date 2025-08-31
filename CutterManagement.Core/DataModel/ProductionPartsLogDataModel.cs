@@ -26,9 +26,9 @@
         public string PartNumber { get; set; }
 
         /// <summary>
-        /// The model of the part
+        /// The summary of the part
         /// </summary>
-        public string Model { get; set; }
+        public string SummaryNumber { get; set; }
 
         /// <summary>
         /// The tooth count of the part

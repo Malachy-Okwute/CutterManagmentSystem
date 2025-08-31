@@ -32,7 +32,7 @@ namespace CutterManagement.UI.Desktop
 
                 if(cutter is not null)
                 {
-                    item.CutterNumber = $"{cutter.CutterNumber}-{cutter.Model}";
+                    item.CutterNumber = $"{cutter.CutterNumber}-{cutter.SummaryNumber}";
                     item.PartNumber = machineData.PartNumber;
                     item.Count = cutter.Count.ToString();
                     item.PartPreviousToothSize = machineData.PartToothSize;

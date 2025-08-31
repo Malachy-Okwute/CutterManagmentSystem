@@ -22,10 +22,10 @@
                 return ErrorReport(result, "A valid part number is required");
 
             else if (string.IsNullOrEmpty(part.Model))
-                return ErrorReport(result, "Model number is required");
+                return ErrorReport(result, "SummaryNumber number is required");
 
             else if (string.IsNullOrEmpty(part.SummaryNumber))
-                return ErrorReport(result, "Summary number is required");
+                return ErrorReport(result, "SummaryNumber number is required");
 
             else if (string.IsNullOrEmpty(part.PartToothCount))
                 return ErrorReport(result, "Tooth count is required");

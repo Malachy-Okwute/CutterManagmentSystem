@@ -156,6 +156,8 @@ namespace CutterManagement.UI.Desktop
             // Log information
             Log.Logger.Information("Application is shutting down...");
 
+            var shift = ApplicationHost.Services.GetRequiredService<ShiftProfileViewModel>();
+
             // Stop application host
             await ApplicationHost.StopAsync();
 

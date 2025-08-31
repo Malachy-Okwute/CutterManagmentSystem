@@ -83,42 +83,6 @@ namespace CutterManagement.UI.Desktop
         }
 
         /// <summary>
-        /// Gets the current shift
-        /// </summary>
-        //private void GetCurrentShift()
-        //{
-        //    // Get current time of the day
-        //    TimeSpan now = DateTime.Now.TimeOfDay;
-
-        //    // Define start and end of shifts
-        //    TimeSpan shift1Start = new TimeSpan(7, 0, 0);   // 7:00 AM
-        //    TimeSpan shift1End = new TimeSpan(15, 0, 0);    // 3:00 PM
-        //    TimeSpan shift2Start = new TimeSpan(15, 0, 0);  // 3:00 PM
-        //    TimeSpan shift2End = new TimeSpan(23, 0, 0);    // 11:00 PM
-        //    //TimeSpan shift3Start = new TimeSpan(23, 0, 0);  // 11:00 PM
-        //    //TimeSpan shift3End = new TimeSpan(7, 0, 0);     // 7:00 AM (next day)
-
-        //    // 1st shift
-        //    if (now >= shift1Start && now < shift1End)
-        //    {
-        //        CurrentShift = "1st Shift";
-        //    }
-        //    // 2nd shift
-        //    else if (now >= shift2Start && now < shift2End)
-        //    {
-        //        CurrentShift = "2nd Shift";
-        //    }
-        //    else // Overnight shift (11 PM - 7 AM)
-        //    {
-        //        // Handles time between 11 PM and midnight, and midnight to 7 AM
-        //        CurrentShift = "3rd Shift";
-        //    }
-
-        //    // Update property
-        //    OnPropertyChanged(nameof(CurrentShift));
-        //}
-
-        /// <summary>
         /// Gathers details associated with current shift
         /// </summary>
         private void InitializeShiftProfileDetails()
@@ -136,11 +100,12 @@ namespace CutterManagement.UI.Desktop
                 Time = DateTime.Now.ToString("t");
 
                 string previousShift = CurrentShift;
+                string previousNumberOfUsers = NumberOfUsers;
 
                 CurrentShift = ShiftHelper.GetCurrentShift();
 
                 // If shift changed...
-                if (previousShift.Equals(CurrentShift, StringComparison.OrdinalIgnoreCase) is false || string.IsNullOrEmpty(NumberOfUsers) )
+                if (previousShift.Equals(CurrentShift, StringComparison.OrdinalIgnoreCase) is false || string.IsNullOrEmpty(NumberOfUsers))
                 {
                     // Get number of user in the current shift
                     _ = GetNumberOfUsersInCurrentShift(); 

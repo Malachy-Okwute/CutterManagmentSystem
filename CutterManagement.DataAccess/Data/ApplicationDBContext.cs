@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 
 namespace CutterManagement.DataAccess
 {
@@ -129,13 +130,13 @@ namespace CutterManagement.DataAccess
             #region Cutter Data Model Configuration
 
             modelBuilder.Entity<CutterDataModel>().HasKey(x => x.Id);
-            modelBuilder.Entity<CutterDataModel>().Property(x => x.Model).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CutterDataModel>().Property(x => x.SummaryNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Kind).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Owner).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterChangeInfo).HasConversion<string>().IsRequired().HasMaxLength(100);
             modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).IsRequired().HasMaxLength(100);
-            //modelBuilder.Entity<CutterDataModel>().Property(x => x.Condition).HasConversion<string>().IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<CutterDataModel>().Property(x => x.CutterChangeComment).IsRequired(false).HasMaxLength(100);
 
             #endregion
 
@@ -179,7 +180,7 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.MachineNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.PartNumber).IsRequired().HasMaxLength(100);
-            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.Model).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.SummaryNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.ToothCount).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.PieceCount).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataModel>().Property(x => x.ToothSize).IsRequired().HasMaxLength(100);
@@ -200,7 +201,7 @@ namespace CutterManagement.DataAccess
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.MachineNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.CutterNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.PartNumber).IsRequired().HasMaxLength(100);
-            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.Model).IsRequired().HasMaxLength(100);
+            modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.SummaryNumber).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.ToothCount).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.PieceCount).IsRequired().HasMaxLength(100);
             modelBuilder.Entity<ProductionPartsLogDataArchive>().Property(x => x.ToothSize).IsRequired().HasMaxLength(100);

@@ -604,7 +604,7 @@ namespace CutterManagement.UI.Desktop
                 CutterNumber = machine.Cutter.CutterNumber,
                 PartNumber = machine.PartNumber,
                 Comment = machine.StatusMessage,
-                Model = machine.Cutter.Model,
+                SummaryNumber = machine.Cutter.SummaryNumber,
                 FrequencyCheckResult = machine.FrequencyCheckResult.ToString(),
                 PieceCount = machine.Cutter.Count.ToString(),
                 UserFullName = $"{user?.FirstName} {user?.LastName}" ?? "n/a",

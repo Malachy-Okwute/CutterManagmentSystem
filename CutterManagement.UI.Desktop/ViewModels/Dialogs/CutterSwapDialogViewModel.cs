@@ -170,9 +170,9 @@ namespace CutterManagement.UI.Desktop
             {
                 // Set Properties
                 FirstMachine = new CutterSwapHelper(firstMachine.MachineNumber, 
-                    $"{firstMachine.Cutter.CutterNumber}-{firstMachine.Cutter.Model}", firstMachine.PartNumber, firstMachine.Cutter.Count.ToString());
+                    $"{firstMachine.Cutter.CutterNumber}-{firstMachine.Cutter.SummaryNumber}", firstMachine.PartNumber, firstMachine.Cutter.Count.ToString());
                 SecondMachine = new CutterSwapHelper(secondMachine.MachineNumber,
-                    $"{secondMachine.Cutter.CutterNumber}-{secondMachine.Cutter.Model}", secondMachine.PartNumber, secondMachine.Cutter.Count.ToString());
+                    $"{secondMachine.Cutter.CutterNumber}-{secondMachine.Cutter.SummaryNumber}", secondMachine.PartNumber, secondMachine.Cutter.Count.ToString());
 
                 // Get users
                 foreach (UserDataModel userData in await userTable.GetAllEntitiesAsync())

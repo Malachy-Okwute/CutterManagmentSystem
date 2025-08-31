@@ -398,7 +398,7 @@ namespace CutterManagement.UI.Desktop
                 }
 
                 // Get all part numbers that uses the current cutter number
-                _parts.Where(part => (part.Model == cutter.Model) && (part.Kind == cutter.Kind))
+                _parts.Where(part => (part.SummaryNumber == cutter.SummaryNumber) && (part.Kind == cutter.Kind))
                       .ToList().ForEach(part =>
                       {
                           if (_partNumberCollection.ContainsKey(part.Id) is false)

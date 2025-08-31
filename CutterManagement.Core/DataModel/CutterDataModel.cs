@@ -16,9 +16,10 @@
         public int Count { get; set; } 
 
         /// <summary>
-        /// The model this cutter is made for
+        /// The summary this cutter is made for
         /// </summary>
-        public string Model { get; set; }
+        public string SummaryNumber { get; set; }
+
 
         /// <summary>
         /// Extra information relating to the reason cutter is pulled
