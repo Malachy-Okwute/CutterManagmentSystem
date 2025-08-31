@@ -18,20 +18,20 @@ jobs:
               with:
                     dotnet-version: '8.0.x'
         
-            - name: Restore dependencies
+            - name: Restoring dependencies
               run: dotnet restore CutterManagementSystem.sln
 
-            - name: Build solution
-              run: dotnet build CutterManagementSystem.sln --c Release --no-restore
+            - name: Building solution
+              run: dotnet build CutterManagementSystem.sln -c Release --no-restore
 
-            - name: Publish application
+            - name: Publishing application
               # run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj --c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build -o ./publish
               run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --no-build -o ./publish
 
-            - name: Zip published folder
+            - name: Zipping the published folder
               run: zip -r CutterManagementSystem.zip .bin/Release/net8.0-windows/win-x64/publish
 
-            - name: Upload release asset
+            - name: Uploading the zipped folder as a release
               uses: softprops/action-gh-release@v1
               with:
                 files: CutterManagementSystem.zip
