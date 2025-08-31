@@ -5,6 +5,9 @@ on:
         tags:
           - "v*"
 
+permissions:
+    Contents: write
+
 jobs:
     deploy:
         runs-on: windows-latest
