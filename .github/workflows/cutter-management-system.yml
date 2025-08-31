@@ -31,7 +31,11 @@ jobs:
 
             - name: Zipping the published folder (using powershell)
               shell: pwsh
-              run: Compress-Archive -path "CutterManagement.UI.Desktop/bin/Release/net8.0-windows/win-x64/publish" -DestinationPath "CutterManagementSystem.zip"
+              # run: Compress-Archive -path "CutterManagement.UI.Desktop/bin/Release/net8.0-windows/win-x64/publish" -DestinationPath "CutterManagementSystem.zip"
+              run: | 
+                if (Test-Path "publish") 
+                { Compress-Archive -Path "publish" -DestinationPath "CutterManagementSystem.zip" } 
+                else { Write-Error "Publish folder not found. Did dotnet publish fail?" }
 
             - name: Uploading the zipped folder as a release
               uses: softprops/action-gh-release@v1
