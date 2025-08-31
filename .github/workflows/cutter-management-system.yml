@@ -29,8 +29,9 @@ jobs:
               # run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj --c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build -o ./publish
               run: dotnet publish CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --no-build -o ./publish
 
-            - name: Zipping the published folder
-              run: zip -r CutterManagementSystem.zip .bin/Release/net8.0-windows/win-x64/publish
+            - name: Zipping the published folder (using powershell)
+              shell: pwsh
+              run: Compress-Archive -path ".bin/Release/net8.0-windows/win-x64/publish -DestinationPath CutterManagementSystem.zip"
 
             - name: Uploading the zipped folder as a release
               uses: softprops/action-gh-release@v1
