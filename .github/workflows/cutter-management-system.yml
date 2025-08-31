@@ -19,7 +19,8 @@ jobs:
                     dotnet-version: '8.0.x'
         
             - name: Restoring dependencies
-              run: dotnet restore CutterManagementSystem.sln
+              # run: dotnet restore CutterManagementSystem.sln
+              run: dotnet restore CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -r win-x64
 
             - name: Building solution
               run: dotnet build CutterManagementSystem.sln -c Release --no-restore
