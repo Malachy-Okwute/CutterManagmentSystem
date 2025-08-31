@@ -31,7 +31,7 @@ jobs:
 
             - name: Zipping the published folder (using powershell)
               shell: pwsh
-              run: Compress-Archive -path ".bin/Release/net8.0-windows/win-x64/publish -DestinationPath .bin/Release/net8.0-windows/win-x64/publish/CutterManagementSystem.zip"
+              run: Compress-Archive -path ".bin/Release/net8.0-windows/win-x64/publish" -DestinationPath "CutterManagementSystem.zip"
 
             - name: Uploading the zipped folder as a release
               uses: softprops/action-gh-release@v1
