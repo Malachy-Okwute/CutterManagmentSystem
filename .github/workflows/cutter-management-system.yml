@@ -3,7 +3,8 @@ name: "Cutter Management System"
 on:
     push:
         tags:
-            - "Cutter-Management-System/v*"
+            - "v*.*.*"
+            - "v*.*.*-*"
 
 jobs:
     deploy:
