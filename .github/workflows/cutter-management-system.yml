@@ -46,7 +46,7 @@ jobs:
                 $exe = Get-ChildItem -Path publish -Filter *.exe | Select-Object -First 1
                 if ($exe)
                   {
-                    $zipName = "CutterManagementSystem-$env:RELEASE_VERSION.zip"
+                    $zipName = "CutterManagementSystem-{{ github.RELEASE_VERSION }}.zip"
                     Compress-Archive -Path "publish" -DestinationPath $zipName 
                   } 
                 else
@@ -57,4 +57,4 @@ jobs:
             - name: Uploading the zipped folder as a release
               uses: softprops/action-gh-release@v1
               with:
-                files: CutterManagementSystem-{{env.RELEASE_VERSION}}.zip
+                files: CutterManagementSystem-{{ github.RELEASE_VERSION }}.zip
