@@ -33,7 +33,7 @@ jobs:
 
             - name: Publishing application
               # run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj --c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build -o ./publish
-              run: dotnet publish CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --no-build -o ./publish
+              run: dotnet publish CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true --no-build -o ./CutterManagementSystem-${{ env.RELEASE_VERSION }}
 
             - name: Zipping the published folder (using powershell)
               shell: pwsh
@@ -43,18 +43,20 @@ jobs:
               #   { Compress-Archive -Path "publish" -DestinationPath "CutterManagementSystem.zip" } 
               #   else { Write-Error "Publish folder not found. Did dotnet publish fail?" }
               run: |
-                $exe = Get-ChildItem -Path publish -Filter *.exe | Select-Object -First 1
+                $exe = Get-ChildItem -Path "publish" -Filter *.exe | Select-Object -First 1
                 if ($exe)
                   {
-                    $zipName = "CutterManagementSystem-{{ github.RELEASE_VERSION }}.zip"
+                    $zipName = "CutterManagementSystem-$env:RELEASE_VERSION.zip"
                     Compress-Archive -Path "publish" -DestinationPath $zipName 
                   } 
                 else
-                 {
+                  {
                     Write-Error "No .exe found in publish folder."
                   }
 
             - name: Uploading the zipped folder as a release
               uses: softprops/action-gh-release@v1
               with:
-                files: CutterManagementSystem-{{ github.RELEASE_VERSION }}.zip
+                files: CutterManagementSystem-${{ env.RELEASE_VERSION }}.zip
+                name: "Cutter-Management-System ${{ env.RELEASE_VERSION }}"
+                tag_name: ${{ github.ref_name }}
