@@ -43,15 +43,15 @@ jobs:
               #   { Compress-Archive -Path "publish" -DestinationPath "CutterManagementSystem.zip" } 
               #   else { Write-Error "Publish folder not found. Did dotnet publish fail?" }
               run: |
-                $exe = Get-ChildItem -Path "publish" -Filter *.exe | Select-Object -First 1
+                $exe = Get-ChildItem -Path "CutterManagementSystem-${{ env.RELEASE_VERSION }}" -Filter *.exe | Select-Object -First 1
                 if ($exe)
                   {
                     $zipName = "CutterManagementSystem-$env:RELEASE_VERSION.zip"
-                    Compress-Archive -Path "publish" -DestinationPath $zipName 
+                    Compress-Archive -Path "CutterManagementSystem-${{ env.RELEASE_VERSION }}" -DestinationPath $zipName 
                   } 
                 else
                   {
-                    Write-Error "No .exe found in publish folder."
+                    Write-Error "No .exe found in CutterManagementSystem-${{ env.RELEASE_VERSION }} folder."
                   }
 
             - name: Uploading the zipped folder as a release
