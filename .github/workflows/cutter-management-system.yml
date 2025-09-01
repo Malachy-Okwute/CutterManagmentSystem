@@ -47,7 +47,7 @@ jobs:
                 if ($exe)
                   {
                     $zipName = "CutterManagementSystem-$env:RELEASE_VERSION.zip"
-                    Compress-Archive -Path $exe.FullName -DestinationPath $zipName 
+                    Compress-Archive -Path "publish" -DestinationPath $zipName 
                   } 
                 else
                  {
