@@ -46,7 +46,8 @@ jobs:
                 $exe = Get-ChildItem -Path publish -Filter *.exe | Select-Object -First 1
                 if ($exe)
                   {
-                    Compress-Archive -Path $exe.FullName -DestinationPath CutterManagementSystem-$env:RELEASE_VERSION.zip 
+                    $zipName = "CutterManagementSystem-$env:RELEASE_VERSION.zip"
+                    Compress-Archive -Path $exe.FullName -DestinationPath $zipName 
                   } 
                 else
                  {
