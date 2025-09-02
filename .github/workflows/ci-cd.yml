@@ -60,7 +60,7 @@ jobs:
 
       # Archive the package
       - name: Create archive
-        run: Compress-Archive -Path CutterManagementSystem-${{ env.RELEASE_VERSION }} -DestinationPath CutterManagementSystem-$env:RELEASE_VERSION.zip
+        run: Compress-Archive -Path CutterManagement.UI.Desktop -DestinationPath CutterManagement.UI.Desktop\CutterManagementSystem-$env:RELEASE_VERSION.zip
 
       # Create the release:  https://github.com/actions/create-release
       - name: Create release
