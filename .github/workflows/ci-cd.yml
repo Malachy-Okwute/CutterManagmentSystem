@@ -28,7 +28,9 @@ jobs:
         run: dotnet restore CutterManagementSystem.sln -r win-x64
 
       - name: 🧱 Build MSIX Package
-        run: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe" ./CutterManagementSystem/CutterManagementSystem.Package.wapproj /p:Configuration=Release /p:Platform=x64 /p:GenerateAppxPackageOnBuild=true'
+        run: $projectPath = "./CutterManagementSystem/CutterManagementSystem.Package.wapproj"
+            & "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe" $projectPath /p:Configuration=Release /p:Platform=x64 /p:GenerateAppxPackageOnBuild=true
+
 
       - name: 🔐 Sign MSIX with Trusted Signing
         uses: azure/trusted-signing-action@v0
