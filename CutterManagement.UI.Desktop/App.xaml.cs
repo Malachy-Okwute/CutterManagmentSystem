@@ -211,7 +211,7 @@ namespace CutterManagement.UI.Desktop
             MainWindow = ApplicationHost.Services.GetRequiredService<MainWindow>();
 
             // Make sure we have window
-            ArgumentNullException.ThrowIfNull(nameof(MainWindow));
+            //ArgumentNullException.ThrowIfNull(nameof(MainWindow));
 
             // Fade window out of view, then close it
             await Animations.FadeElementOutOfView(_splashWindow);
