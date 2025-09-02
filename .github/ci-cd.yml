@@ -1,4 +1,4 @@
-name: "Cutter Management System"
+name: "Continuous Integration Continuous Delivery"
 
 on:
     push:
