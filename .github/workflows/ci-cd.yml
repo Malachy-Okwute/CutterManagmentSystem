@@ -27,13 +27,13 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
 
       - name: Update manifest version
-        run: |
-          $manifest.Package.Identity.Version = "${{ env.RELEASE_VERSION }}"
-          $manifest.Package.Identity.Name = "CutterManagementSystem"
-          $manifest.Package.Identity.Publisher = "CN=Malachy Okwute"
-          $manifest.Package.Properties.DisplayName = "CutterManagementSystem"
-          $manifest.Package.Applications.Application.VisualElements.DisplayName = "CutterManagementSystem"
-          $manifest.save("./CutterManagementSystem-${{ env.RELEASE_VERSION }}")
+        # run: |
+        #   $manifest.Package.Identity.Version = "${{ env.RELEASE_VERSION }}"
+        #   $manifest.Package.Identity.Name = "CutterManagementSystem"
+        #   $manifest.Package.Identity.Publisher = "CN=Malachy Okwute"
+        #   $manifest.Package.Properties.DisplayName = "CutterManagementSystem"
+        #   $manifest.Package.Applications.Application.VisualElements.DisplayName = "CutterManagementSystem"
+        #   $manifest.save("./CutterManagementSystem-${{ env.RELEASE_VERSION }}")
 
       # Decode the Base64 encoded Pfx
       - name: Decode the Pfx
