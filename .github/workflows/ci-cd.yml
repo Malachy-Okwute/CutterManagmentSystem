@@ -28,7 +28,7 @@ jobs:
         run: dotnet restore CutterManagementSystem.sln -r win-x64
 
       - name: Building solution
-        run: dotnet build CutterManagementSystem.sln -c Release -r win-x64 --no-restore
+        run: dotnet build CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -c Release -r win-x64 --no-restore
 
       - name: Publishing application
         run: dotnet publish CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true --no-build -o ./CutterManagementSystem-${{ env.RELEASE_VERSION }}
