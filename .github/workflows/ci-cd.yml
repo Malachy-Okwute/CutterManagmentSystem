@@ -12,7 +12,7 @@ env:
   RELEASE_VERSION: ${{ github.ref_name }}
 
 jobs:
-  build-and-create-a-release-file:
+  build-deploy-CutterManagementSystem-x64:
     runs-on: windows-latest
 
     steps:
@@ -22,37 +22,20 @@ jobs:
       - name: Dotnet setup
         uses: actions/setup-dotnet@v3
         with:
-              dotnet-version: '9.*'
+              dotnet-version: '8.0.*'
   
       - name: Restoring dependencies
-        # run: dotnet restore CutterManagementSystem.sln
-        run: dotnet restore CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -r win-x64
+        run: dotnet restore CutterManagementSystem.sln -r win-x64
 
       - name: Building solution
         run: dotnet build CutterManagementSystem.sln -c Release --no-restore
 
       - name: Publishing application
-        # run: dotnet publish CutterManagementSystem/CutterManagementSystem.csproj --c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build -o ./publish
-        run: dotnet publish CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --no-build -o ./CutterManagementSystem-${{ env.RELEASE_VERSION }}
+        run: dotnet publish CutterManagement.UI.Desktop/CutterManagement.UI.Desktop.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true --no-build -o ./CutterManagementSystem-${{ env.RELEASE_VERSION }}
 
       - name: Zipping the published folder (using powershell)
         shell: pwsh
-        # run: Compress-Archive -path "CutterManagement.UI.Desktop/bin/Release/net8.0-windows/win-x64/publish" -DestinationPath "CutterManagementSystem.zip"
-        # run: | 
-        #   if (Test-Path "publish") 
-        #   { Compress-Archive -Path "publish" -DestinationPath "CutterManagementSystem.zip" } 
-        #   else { Write-Error "Publish folder not found. Did dotnet publish fail?" }
-        run: |
-          $exe = Get-ChildItem -Path "CutterManagementSystem-${{ env.RELEASE_VERSION }}" -Filter *.exe | Select-Object -First 1
-          if ($exe)
-            {
-              $zipName = "CutterManagementSystem-$env:RELEASE_VERSION.zip"
-              Compress-Archive -Path "CutterManagementSystem-${{ env.RELEASE_VERSION }}" -DestinationPath $zipName 
-            } 
-          else
-            {
-              Write-Error "No .exe found in CutterManagementSystem-${{ env.RELEASE_VERSION }} folder."
-            }
+        run: Compress-Archive -path "CutterManagementSystem-${{ env.RELEASE_VERSION }}" -DestinationPath "CutterManagementSystem-${{ env.RELEASE_VERSION }}.zip"
 
       - name: Uploading the zipped folder as a release
         uses: softprops/action-gh-release@v1
