@@ -8,12 +8,12 @@
 
   <Identity
     Name="61631126-d377-42f8-a462-2c85c7686ac7"
-    Publisher="CN=mal"
+    Publisher="CN=MalachyOkwute"
     Version="1.0.0.0" />
 
   <Properties>
     <DisplayName>CutterManagementSystem.Package</DisplayName>
-    <PublisherDisplayName>mal</PublisherDisplayName>
+    <PublisherDisplayName>MalachyOkwute</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
