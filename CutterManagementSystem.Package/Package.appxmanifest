@@ -31,8 +31,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="CutterManagementSystem.Package"
-        Description="CutterManagementSystem.Package"
+        DisplayName="Cutter Management System"
+        Description="The Cutter Management System is a desktop application built with WPF and .NET, designed to streamline the management of industrial machines and their associated cutting tools. It also facilitates logging the condition of output parts—representing the physical results of machine operations—to support traceability and quality assurance across production workflows."
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">
