@@ -79,4 +79,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CutterManagement.UI.Desktop\CutterManagement.UI.Desktop.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
 </Project>
