@@ -49,8 +49,7 @@ jobs:
         # working-directory: ./CutterManagement.UI.Desktop 
 
       - name: List AppPackages folder
-        run: dir CutterManagementSystem
-
+        run: dir CutterManagementSystem /s
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
