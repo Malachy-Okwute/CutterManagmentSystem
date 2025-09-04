@@ -42,7 +42,7 @@ jobs:
         run: certutil -user -p ${{ secrets.CERT_PASSWORD }} -silent -importpfx cert.pfx NoRoot
 
       - name: Publish
-        run: dotnet publish -c release -f:net8.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint=${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}
+        run: dotnet publish -c release /p:Platform=x64 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint=${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}
         working-directory: ./CutterManagement.UI.Desktop
 
       - name: Upload artifact
