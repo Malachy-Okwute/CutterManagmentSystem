@@ -48,8 +48,8 @@ jobs:
         run: msbuild ./CutterManagement.Package/CutterManagement.Package.wapproj /p:Configuration=release /p:Platform=x64 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint=${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}
         # working-directory: ./CutterManagement.UI.Desktop 
 
-      - name: List AppPackages folder
-        run: dir CutterManagementSystem /s
+      - name: 🔍 Find MSIX
+        run: Get-ChildItem -Recurse -Filter *.msix
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
