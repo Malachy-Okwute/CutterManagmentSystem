@@ -49,4 +49,4 @@ jobs:
         with:
           name: Build
           path: ./CutterManagementSystem/CutterManagementSystem.Package/**/*.msix
-          path: ./CutterManagementSystem/CutterManagementSystem.Package/**/*.cert
+          # path: ./CutterManagementSystem/CutterManagementSystem.Package/**/*.cert
