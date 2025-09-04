@@ -52,5 +52,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Build
-          path: ./CutterManagementSystem/CutterManagementSystem.Package/AppPackages/**/*.msix
+          path: ./CutterManagementSystem.Package/AppPackages/**/*.msix
           # path: ./CutterManagementSystem/CutterManagementSystem.Package/**/*.cert
