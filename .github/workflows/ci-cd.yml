@@ -25,7 +25,7 @@ jobs:
               dotnet-version: '8.0.x'
   
       - name: Restoring dependencies
-        run: dotnet restore ./CutterManagement.UI.Desktop
+        run: dotnet restore CutterManagementSystem.sln -r win-x64 
 
       - name: Build 
         # run: dotnet build /p:Configuration=Release /p:Platform=x64 /p:GenerateAppxPackageOnBuild=true
