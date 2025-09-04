@@ -45,8 +45,8 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Generate msix
-        run: msbuild ./CutterManagementSystem/CutterManagement.Package/CutterManagement.Package.wapproj /p:Configuration=release /p:Platform=x64 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint=${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}
-        # working-directory: ./CutterManagement.UI.Desktop
+        run: msbuild ./CutterManagement.Package/CutterManagement.Package.wapproj /p:Configuration=release /p:Platform=x64 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint=${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}
+        # working-directory: ./CutterManagement.UI.Desktop 
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
