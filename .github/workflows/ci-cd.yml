@@ -49,7 +49,7 @@ jobs:
         # working-directory: ./CutterManagement.UI.Desktop 
 
       - name: List AppPackages folder
-        run: dir CutterManagementSystem\CutterManagement.Package /s
+        run: dir CutterManagementSystem
 
 
       - name: Upload artifact
