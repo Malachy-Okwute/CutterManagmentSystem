@@ -48,6 +48,10 @@ jobs:
         run: msbuild ./CutterManagement.Package/CutterManagement.Package.wapproj /p:Configuration=release /p:Platform=x64 /p:GenerateAppxPackageOnBuild=true /p:AppxPackageSigningEnabled=true /p:PackageCertificateThumbprint=${{ secrets.SIGNING_CERTIFICATE_THUMBPRINT }}
         # working-directory: ./CutterManagement.UI.Desktop 
 
+      - name: List AppPackages folder
+        run: dir CutterManagementSystem\CutterManagement.Package\AppPackages /s
+
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -55,4 +59,4 @@ jobs:
           # path: ./CutterManagementSystem/CutterManagementSystem.Package/**/*.cert
           # path: ./CutterManagementSystem.Package/AppPackages/CutterManagement.Package_1.0.0.0_x64_Test/CutterManagement.Package_1.0.0.0_x64.msix
           # path: CutterManagmentSystem\CutterManagmentSystem\CutterManagement.Package\AppPackages\CutterManagement.Package_1.0.0.0_x64_Test\CutterManagement.Package_1.0.0.0_x64.msix
-          path: CutterManagementSystem\CutterManagement.Package\AppPackages\CutterManagement.Package_1.0.0.0_x64_Test\CutterManagement.Package_1.0.0.0_x64.msix
+          path: CutterManagementSystem/CutterManagement.Package/AppPackages/**/CutterManagement.Package_*.msix
