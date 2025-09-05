@@ -75,7 +75,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v1.0.1-beta
+          tag_name: v1.0.2-beta
           files: CutterManagmentSystem.zip
 
       # - name: Create GitHub Release
