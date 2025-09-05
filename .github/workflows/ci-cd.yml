@@ -67,13 +67,22 @@ jobs:
           cp /a/CutterManagmentSystem/CutterManagmentSystem/CutterManagement.Package/AppPackages/**/*.msix release_bundle/
           cp /a/CutterManagmentSystem/CutterManagmentSystem/CutterManagement.Package/AppPackages/**/*.cer release_bundle/
 
+      - name: Zip release folder
+        run: zip -r CutterManagmentSystem.zip release_bundle
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v1.0.1-beta
-          path: release_bundle
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: CutterManagmentSystem.zip
+
+      # - name: Create GitHub Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: v1.0.1-beta
+      #     files: release_bundle
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Create release
       #   uses: softprops/action-gh-release@v1
