@@ -61,10 +61,24 @@ jobs:
       #       \a\CutterManagmentSystem\CutterManagmentSystem\CutterManagement.Package\AppPackages\**\*.msix
       #       \a\CutterManagmentSystem\CutterManagmentSystem\CutterManagement.Package\AppPackages\**\*.cer
 
-      - name: Create release
+      - name: Prepare release folder
+        run: |
+          mkdir release_bundle
+          cp /a/CutterManagmentSystem/CutterManagmentSystem/CutterManagement.Package/AppPackages/**/*.msix release_bundle/
+          cp /a/CutterManagmentSystem/CutterManagmentSystem/CutterManagement.Package/AppPackages/**/*.cer release_bundle/
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v1.0.0-beta
-          files: | 
-            /a/CutterManagmentSystem/CutterManagmentSystem/CutterManagement.Package/AppPackages/CutterManagement.Package_1.0.0.0_x64_Test/CutterManagement.Package_1.0.0.0_x64.msix
-            /a/CutterManagmentSystem/CutterManagmentSystem/CutterManagement.Package/AppPackages/CutterManagement.Package_1.0.0.0_x64_Test/CutterManagement.Package_1.0.0.0_x64.cer
+          tag_name: v1.0.1-beta
+          files: release_bundle/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Create release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: v1.0.0-beta
+      #     files: | 
+      #       /a/CutterManagmentSystem/CutterManagmentSystem/CutterManagement.Package/AppPackages/CutterManagement.Package_1.0.0.0_x64_Test/CutterManagement.Package_1.0.0.0_x64.msix
+      #       /a/CutterManagmentSystem/CutterManagmentSystem/CutterManagement.Package/AppPackages/CutterManagement.Package_1.0.0.0_x64_Test/CutterManagement.Package_1.0.0.0_x64.cer
