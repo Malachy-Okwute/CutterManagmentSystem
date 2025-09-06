@@ -10,3 +10,11 @@ ToDo Log:
 - Notify each shift of any news and updates broadcasted 
 - Recalculate the number of users on a shift whenever a user is added or removed from a shift (Deactivated / Activated)
 - Check if cutter is already in-use on another machine right after cutter number is valid. And notify the user if it is currently in-use.
+
+
+
+
+Workflow ToDos:
+
+- Auto update
+- Auto versioning
