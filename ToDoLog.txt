@@ -2,6 +2,7 @@
 
 ToDo Log: 
 
+- Implement a server service to manage database side of things
 - Implement procedure for requesting and getting roll masters
 - In the settings have an option of how long a data has to be in the database before getting archived. e.g. archive data after 3, 4, 6 months
 - Disable size field for pinions in the settings

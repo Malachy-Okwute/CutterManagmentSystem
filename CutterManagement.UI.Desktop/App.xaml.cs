@@ -1,11 +1,14 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
+using Microsoft.Data.Sql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq.Expressions;
 using System.Text.Json;
@@ -76,6 +79,34 @@ namespace CutterManagement.UI.Desktop
                         // Set up dependency injection service
                         ApplicationHost = CreateHostBuilder().Build();
 
+                        // Make sure we have a database
+                        if(ApplicationHost.Services.GetRequiredService<ApplicationDbContext>().Database.CanConnect() is false)
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                // Message
+                                string message = $"Goto: \"Users > Public > Public Documents > CutterManagementSystem > DatabaseServerName.txt\" " +
+                                $"and provide a valid sql server name for the application.{Environment.NewLine} {Environment.NewLine}" +
+                                $"NOTE: Save the server name provided to the prior to running the application.";
+
+                                // Dialog box configuration
+                                var result = MessageBox.Show(message,"Database error",MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
+
+                                // Shut down application
+                                if (result == MessageBoxResult.OK)
+                                {
+                                    // Mark task as completed
+                                    taskCompletionSource.TrySetResult(true);
+
+                                    // try closing the splash window on ui thread
+                                    _splashWindow.Close();
+
+                                    // Close application 
+                                    Application.Current.Shutdown();
+                                }
+                            });
+                        }    
+
                         // Log application start up as information 
                         Log.Logger.Information("Application is starting...");
 
@@ -103,16 +134,6 @@ namespace CutterManagement.UI.Desktop
 
             // Get database 
             ApplicationDbContext db = ApplicationHost.Services.GetRequiredService<ApplicationDbContext>();
-
-
-            // TODO: Check if we have database connection string - if not - request that dev team should provide a database connection.
-            //IConfiguration config = db.GetService<IConfiguration>();
-
-            //if(VerifyConnectionString(config) is false)
-            //{
-            //    // Get connection string from user
-
-            //}
 
             // Log 
             Log.Logger.Information($"Attempting to apply database migration...");
@@ -264,21 +285,33 @@ namespace CutterManagement.UI.Desktop
                 .MinimumLevel.Override("System", LogEventLevel.Fatal)
                 .CreateLogger();
         }
-
-        //private bool VerifyConnectionString(IConfiguration configuration) => 
-        //    string.IsNullOrEmpty(configuration.GetConnectionString("LocalDbConnection")) is false;
-
-        //private Task GetDbConnectionDetails()
-        //{
-        //    return Task.FromResult(0); 
-        //}
         
         /// <summary>
         /// Set up application dependency injection service
         /// </summary>
         private static IHostBuilder CreateHostBuilder(string[]? args = null)
         {
-            var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"CutterManagementSystem");
+            string? serverName = string.Empty;
+            var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CutterManagementSystem");
+            var localDbDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "CutterManagementSystem");
+
+            if (File.Exists(Path.Combine(localDbDir, "DatabaseServerName.txt")) is false)
+            {
+                // Create local db folder
+                Directory.CreateDirectory(localDbDir);
+
+                var dbServerNamePath = Path.Combine(localDbDir, "DatabaseServerName.txt");
+
+                File.WriteAllText(dbServerNamePath, "ReplaceThisWithYourServerName");
+            }
+
+            // Read the file
+            var fileContent = File.ReadAllText(Path.Combine(localDbDir, "DatabaseServerName.txt"));
+
+            if (string.IsNullOrEmpty(fileContent) is false)
+            {
+                serverName = fileContent.Trim().Replace("\\\\", "\\") + ";" ;
+            }
 
             // Define appsettings 
             var appSettings = new 
@@ -295,7 +328,8 @@ namespace CutterManagement.UI.Desktop
                         }
                     }
                 },
-                ConnectionStrings = new { LocalDbConnection = "Server=(localdb)\\MSSQLLocalDB;Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
+                //ConnectionStrings = new { LocalDbConnection = "Server=(localdb)\\MSSQLLocalDB;Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
+                ConnectionStrings = new { LocalDbConnection = $"Server={serverName}Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
             };
 
             // Serialize appsettings
