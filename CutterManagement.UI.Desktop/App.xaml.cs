@@ -291,6 +291,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private static IHostBuilder CreateHostBuilder(string[]? args = null)
         {
+            // TEMPORARY FIX FOR DATABASE UNTIL A SERVER IS IMPLEMENTED TO HANDLE DATABASE SIDE OF THINGS
+            // REMOVE ONCE SERVER IS UP AND RUNNING
             string? serverName = string.Empty;
             var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CutterManagementSystem");
             var localDbDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "CutterManagementSystem");
