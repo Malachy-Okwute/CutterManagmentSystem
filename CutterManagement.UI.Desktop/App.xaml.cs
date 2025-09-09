@@ -11,6 +11,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq.Expressions;
+using System.Text;
 using System.Text.Json;
 using System.Windows;
 
@@ -86,8 +87,8 @@ namespace CutterManagement.UI.Desktop
                             {
                                 // Message
                                 string message = $"Goto: \"Users > Public > Public Documents > CutterManagementSystem > DatabaseServerName.txt\" " +
-                                $"and provide a valid sql server name for the application.{Environment.NewLine} {Environment.NewLine}" +
-                                $"NOTE: Save the server name provided to the prior to running the application.";
+                                $"and provide a valid sql server details in this format server-name;user-id;password; for the application.{Environment.NewLine} {Environment.NewLine}" +
+                                $"NOTE: Save the details provided to the prior to running the application.";
 
                                 // Dialog box configuration
                                 var result = MessageBox.Show(message,"Database error",MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
@@ -293,7 +294,7 @@ namespace CutterManagement.UI.Desktop
         {
             // TEMPORARY FIX FOR DATABASE UNTIL A SERVER IS IMPLEMENTED TO HANDLE DATABASE SIDE OF THINGS
             // REMOVE ONCE SERVER IS UP AND RUNNING
-            string? serverName = string.Empty;
+            string[]? serverDetails = Array.Empty<string>();
             var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CutterManagementSystem");
             var localDbDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "CutterManagementSystem");
 
@@ -304,7 +305,7 @@ namespace CutterManagement.UI.Desktop
 
                 var dbServerNamePath = Path.Combine(localDbDir, "DatabaseServerName.txt");
 
-                File.WriteAllText(dbServerNamePath, "ReplaceThisWithYourServerName");
+                File.WriteAllText(dbServerNamePath, "ReplaceThisWithYourServerName;ReplaceThisWithYourServerUserId;ReplaceThisWithYourServerPassword;");
             }
 
             // Read the file
@@ -312,7 +313,7 @@ namespace CutterManagement.UI.Desktop
 
             if (string.IsNullOrEmpty(fileContent) is false)
             {
-                serverName = fileContent.Trim().Replace("\\\\", "\\") + ";" ;
+                serverDetails = fileContent.Trim().Replace("\\\\", "\\").Split(";");
             }
 
             // Define appsettings 
@@ -330,8 +331,10 @@ namespace CutterManagement.UI.Desktop
                         }
                     }
                 },
+
+                //ConnectionStrings = new { LocalDbConnection = "Server=ServerName;Database=DatabaseName;User Id=dev;Password=devenv;TrustServerCertificate=True;" }
                 //ConnectionStrings = new { LocalDbConnection = "Server=(localdb)\\MSSQLLocalDB;Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
-                ConnectionStrings = new { LocalDbConnection = $"Server={serverName}Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
+                ConnectionStrings = new { LocalDbConnection = $"Server={serverDetails[0]};User Id={serverDetails[1]};Password={serverDetails[2]};Database=CutterManagementSystemDatabase;Trusted_Connection=True;TrustServerCertificate=True;" }
             };
 
             // Serialize appsettings
