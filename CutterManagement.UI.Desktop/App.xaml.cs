@@ -5,12 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Client;
 using Serilog;
 using Serilog.Events;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
@@ -80,33 +82,50 @@ namespace CutterManagement.UI.Desktop
                         // Set up dependency injection service
                         ApplicationHost = CreateHostBuilder().Build();
 
-                        // Make sure we have a database
-                        if(ApplicationHost.Services.GetRequiredService<ApplicationDbContext>().Database.CanConnect() is false)
-                        {
-                            Dispatcher.Invoke(() =>
-                            {
-                                // Message
-                                string message = $"Goto: \"Users > Public > Public Documents > CutterManagementSystem > DatabaseServerName.txt\" " +
-                                $"and provide a valid sql server details in this format server-name;user-id;password; for the application.{Environment.NewLine} {Environment.NewLine}" +
-                                $"NOTE: Save the details provided to the prior to running the application.";
+                        //using (HttpClient client = new HttpClient())
+                        //{
+                        //    HttpResponseMessage response = await client.GetAsync($"https://localhost:7057/userdatamodel");
+                        //    response.EnsureSuccessStatusCode(); // Throws an exception if not successful
 
-                                // Dialog box configuration
-                                var result = MessageBox.Show(message,"Database error",MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
+                        //    string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                                // Shut down application
-                                if (result == MessageBoxResult.OK)
-                                {
-                                    // Mark task as completed
-                                    taskCompletionSource.TrySetResult(true);
+                        //    var test = JsonSerializer.Deserialize<List<UserDataModel>>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                                    // try closing the splash window on ui thread
-                                    _splashWindow.Close();
+                        //}                        
 
-                                    // Close application 
-                                    Application.Current.Shutdown();
-                                }
-                            });
-                        }    
+                        #region Old Code
+                        
+                        //var appDbContext = ApplicationHost.Services.GetRequiredService<ApplicationDbContext>();
+
+                        //// Make sure we have a database
+                        //if ((await appDbContext.Database.CanConnectAsync()) is false)
+                        //{
+                        //    Dispatcher.Invoke(() =>
+                        //    {
+                        //        // Message
+                        //        string message = $"Goto: \"Users > Public > Public Documents > CutterManagementSystem > DatabaseServerName.txt\" " +
+                        //        $"and provide a valid sql server details in this format server-name;user-id;password; for the application.{Environment.NewLine} {Environment.NewLine}" +
+                        //        $"NOTE: Save the details provided to the prior to running the application.";
+
+                        //        // Dialog box configuration
+                        //        var result = MessageBox.Show(message, "Database error", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
+
+                        //        // Shut down application
+                        //        if (result == MessageBoxResult.OK)
+                        //        {
+                        //            // Mark task as completed
+                        //            taskCompletionSource.TrySetResult(true);
+
+                        //            // try closing the splash window on ui thread
+                        //            _splashWindow.Close();
+
+                        //            // Close application 
+                        //            Application.Current.Shutdown();
+                        //        }
+                        //    });
+                        //}
+
+                        #endregion
 
                         // Log application start up as information 
                         Log.Logger.Information("Application is starting...");
@@ -133,34 +152,30 @@ namespace CutterManagement.UI.Desktop
                 await taskCompletionSource.Task;
             });
 
-            // Get database 
-            ApplicationDbContext db = ApplicationHost.Services.GetRequiredService<ApplicationDbContext>();
+            //// Get database 
+            //ApplicationDbContext db = ApplicationHost.Services.GetRequiredService<ApplicationDbContext>();
 
-            // Log 
-            Log.Logger.Information($"Attempting to apply database migration...");
+            //// Log 
+            //Log.Logger.Information($"Attempting to apply database migration...");
 
-            // Update database migration or generate a database if not created.
-            await db.UpdateDatabaseMigrateAsync();
+            //// Update database migration or generate a database if not created.
+            //await db.UpdateDatabaseMigrateAsync();
 
             // If admin doesn't exist...
-            if (await db.Users.AnyAsync(user => user.LastName == "admin") is false)
-            {
-                // add admin user
-                await db.Users.AddAsync(new UserDataModel
-                {
-                    FirstName = "resource",
-                    LastName = "admin",
-                    DateCreated = DateTime.Now,
-                    Shift = UserShift.First
-                });
+            //if (await db.Users.AnyAsync(user => user.LastName == "admin") is false)
+            //{
+            //    // add admin user
+            //    await db.Users.AddAsync(new UserDataModel
+            //    {
+            //        FirstName = "resource",
+            //        LastName = "admin",
+            //        DateCreated = DateTime.Now,
+            //        Shift = UserShift.First
+            //    });
 
-                // Save changes
-                await db.SaveChangesAsync();
-            }
-
-            // TODO: Check if there is an app update available - if new update is available
-            //      - notify user to update the application
-            //      - if app is not updated... automatically update app at the end of shift.
+            //    // Save changes
+            //    await db.SaveChangesAsync();
+            //}
 
             // Lunch main application window
             await LunchApplicationWindowAsync();
@@ -292,70 +307,74 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private static IHostBuilder CreateHostBuilder(string[]? args = null)
         {
-            // TEMPORARY FIX FOR DATABASE UNTIL A SERVER IS IMPLEMENTED TO HANDLE DATABASE SIDE OF THINGS
-            // REMOVE ONCE SERVER IS UP AND RUNNING
-            string[]? serverDetails = Array.Empty<string>();
-            var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CutterManagementSystem");
-            var localDbDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "CutterManagementSystem");
+            #region Old Code
 
-            if (File.Exists(Path.Combine(localDbDir, "DatabaseServerName.txt")) is false)
-            {
-                // Create local db folder
-                Directory.CreateDirectory(localDbDir);
+            //// TEMPORARY FIX FOR DATABASE UNTIL A SERVER IS IMPLEMENTED TO HANDLE DATABASE SIDE OF THINGS
+            //// REMOVE ONCE SERVER IS UP AND RUNNING
+            //string[]? serverDetails = Array.Empty<string>();
+            //var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CutterManagementSystem");
+            //var localDbDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "CutterManagementSystem");
 
-                var dbServerNamePath = Path.Combine(localDbDir, "DatabaseServerName.txt");
+            //if (File.Exists(Path.Combine(localDbDir, "DatabaseServerName.txt")) is false)
+            //{
+            //    // Create local db folder
+            //    Directory.CreateDirectory(localDbDir);
 
-                File.WriteAllText(dbServerNamePath, "ReplaceThisWithYourServerName;ReplaceThisWithYourServerUserId;ReplaceThisWithYourServerPassword;");
-            }
+            //    var dbServerNamePath = Path.Combine(localDbDir, "DatabaseServerName.txt");
 
-            // Read the file
-            var fileContent = File.ReadAllText(Path.Combine(localDbDir, "DatabaseServerName.txt"));
+            //    File.WriteAllText(dbServerNamePath, "ReplaceThisWithYourServerName;ReplaceThisWithYourServerUserId;ReplaceThisWithYourServerPassword;");
+            //}
 
-            if (string.IsNullOrEmpty(fileContent) is false)
-            {
-                serverDetails = fileContent.Trim().Replace("\\\\", "\\").Split(";");
-            }
+            //// Read the file
+            //var fileContent = File.ReadAllText(Path.Combine(localDbDir, "DatabaseServerName.txt"));
 
-            // Define appsettings 
-            var appSettings = new 
-            {
-                Serilog = new
-                {
-                    MinimumLevel = new
-                    {
-                        Default = "Information",
-                        Override = new
-                        {
-                            Microsoft = "Information",
-                            System = "Warning",
-                        }
-                    }
-                },
+            //if (string.IsNullOrEmpty(fileContent) is false)
+            //{
+            //    serverDetails = fileContent.Trim().Replace("\\\\", "\\").Split(";");
+            //}
 
-                //ConnectionStrings = new { LocalDbConnection = "Server=ServerName;Database=DatabaseName;User Id=dev;Password=devenv;TrustServerCertificate=True;" }
-                //ConnectionStrings = new { LocalDbConnection = "Server=(localdb)\\MSSQLLocalDB;Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
-                ConnectionStrings = new { LocalDbConnection = $"Server={serverDetails[0]};User Id={serverDetails[1]};Password={serverDetails[2]};Database=CutterManagementSystemDatabase;Trusted_Connection=True;TrustServerCertificate=True;" }
-            };
+            //// Define appsettings 
+            //var appSettings = new
+            //{
+            //    Serilog = new
+            //    {
+            //        MinimumLevel = new
+            //        {
+            //            Default = "Information",
+            //            Override = new
+            //            {
+            //                Microsoft = "Information",
+            //                System = "Warning",
+            //            }
+            //        }
+            //    },
 
-            // Serialize appsettings
-            var json = JsonSerializer.Serialize(appSettings, new JsonSerializerOptions { WriteIndented = true });
+            //    //ConnectionStrings = new { LocalDbConnection = "Server=ServerName;Database=DatabaseName;User Id=dev;Password=devenv;TrustServerCertificate=True;" }
+            //    //ConnectionStrings = new { LocalDbConnection = "Server=MAL-DEV-ENVIRONMENT;Database=CutterManagementSystemDatabase;User Id=dev;Password=devenv;TrustServerCertificate=True;" }
+            //    //ConnectionStrings = new { LocalDbConnection = "Server=(localdb)\\MSSQLLocalDB;Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
+            //    ConnectionStrings = new { LocalDbConnection = $"Server={serverDetails[0]};User Id={serverDetails[1]};Password={serverDetails[2]};Database=CutterManagementSystemDatabase;Trusted_Connection=True;TrustServerCertificate=True;" }
+            //};
 
-            // Create a folder
-            Directory.CreateDirectory(configDir);
+            //// Serialize appsettings
+            //var json = JsonSerializer.Serialize(appSettings, new JsonSerializerOptions { WriteIndented = true });
 
-            var configPath = Path.Combine(configDir, "appsettings.json");
+            //// Create a folder
+            //Directory.CreateDirectory(configDir);
 
-            // Create json file
-            File.WriteAllText(configPath, json);
+            //var configPath = Path.Combine(configDir, "appsettings.json");
+
+            //// Create json file
+            //File.WriteAllText(configPath, json); 
+
+            #endregion
 
             // Setup services 
             return Host.CreateDefaultBuilder(args)
                  .ConfigureAppConfiguration(configurationBuilder =>
                  {
-                     configurationBuilder.SetBasePath(configDir)
-                                         .AddJsonFile(configPath, optional: false, reloadOnChange: true);
-                                         //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                         //.AddJsonFile($"appsettings.{_environment}.json", optional: true);
+                     configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
+                                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                                         .AddJsonFile($"appsettings.{_environment}.json", optional: true);
 
                      SetupSerilogLogger(configurationBuilder);
                  })
@@ -379,7 +398,7 @@ namespace CutterManagement.UI.Desktop
                                                                     // https://learn.microsoft.com/en-us/answers/questions/1113995/changing-location-of-database-mdf-file-from-defaul
                                                                     // Create the *.mfd file in the bin folder instead of the user folder
                                                                     .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));
-                 }, ServiceLifetime.Scoped);
+                     }, ServiceLifetime.Scoped);
 
                      services.AddViewModels();
                      services.AddServices();
