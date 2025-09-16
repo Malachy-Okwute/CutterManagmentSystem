@@ -5,12 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Client;
 using Serilog;
 using Serilog.Events;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
@@ -104,10 +106,7 @@ namespace CutterManagement.UI.Desktop
                 // Send task information
                 await taskCompletionSource.Task;
             });
-
-            // Log 
-            Log.Logger.Information($"Attempting to apply database migration...");
-
+            
             // Lunch main application window
             await LunchApplicationWindowAsync();
 

@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -87,6 +88,7 @@ namespace CutterManagement.UI.Desktop
                 }
             });
 
+            services.AddHttpClient();
             services.AddTransient<IMachineService, MachineService>();
             services.AddTransient<IDialogViewModelFactory, DialogViewModelFactory>();
             services.AddScoped<IDataAccessServiceFactory, DataAccessServiceFactory>();
