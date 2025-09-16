@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CutterManagement.UI.Desktop
@@ -8,6 +9,9 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Resolves <see cref="MachineDataModel"/> to <see cref="MachineItemViewModel"/>
         /// </summary>
+        /// <remarks>
+        /// TODO: Use DTO
+        /// </remarks>
         /// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
         /// <returns><see cref="MachineItemViewModel"/></returns>
         public static async Task<MachineItemViewModel> ResolveToMachineItemViewModel(MachineDataModel machineData, IMachineService machineService, EventHandler eventHandler)
@@ -27,8 +31,10 @@ namespace CutterManagement.UI.Desktop
 
             if(machineData.CutterDataModelId is not null)
             {
-                using var cutterTable = machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
-                CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(machineData.CutterDataModelId);
+                HttpClient client = machineService.HttpClientFactory.CreateClient();
+                client.BaseAddress = new Uri("https://localhost:7057");
+
+                var cutter = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machineData.CutterDataModelId}");
 
                 if(cutter is not null)
                 {

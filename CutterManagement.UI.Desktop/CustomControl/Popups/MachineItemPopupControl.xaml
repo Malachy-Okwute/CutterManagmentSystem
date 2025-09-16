@@ -47,7 +47,8 @@
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         IsEnabled="{Binding IsConfigured}"
                         Focusable="False" />
-                <Button Content="Configure" Focusable="False"
+                <Button d:IsEnabled="{Binding IsAdminLoggedIn}"
+                        Content="Configure" Focusable="False"
                         Style="{StaticResource MachineOptionsPopupStyle}"
                         IsEnabled="{Binding IsAdminLoggedIn}"
                         Command="{Binding OpenMachineConfigurationDialogCommand}" />

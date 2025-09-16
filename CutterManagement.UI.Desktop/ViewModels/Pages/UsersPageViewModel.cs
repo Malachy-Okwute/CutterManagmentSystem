@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -12,9 +13,9 @@ namespace CutterManagement.UI.Desktop
         #region Private Fields
 
         /// <summary>
-        /// Access to database
+        /// Http client factory
         /// </summary>
-        private IDataAccessServiceFactory _dataServiceFactory;
+        private IHttpClientFactory _httpFactory;
 
         /// <summary>
         /// A collection of users
@@ -110,10 +111,9 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="dataServiceFactory">Access to database</param>
-        public UsersPageViewModel(IDataAccessServiceFactory dataServiceFactory)
+        public UsersPageViewModel(IHttpClientFactory httpFactory)
         {
-            _dataServiceFactory = dataServiceFactory;
+            _httpFactory = httpFactory;
             _users = new ObservableCollection<UserItemViewModel>();
            
             _ = LoadUsers();
@@ -147,7 +147,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private void OpenCreateUserDialog()
         {
-            CreateUserDialogViewModel createUser = new CreateUserDialogViewModel(_dataServiceFactory);
+            CreateUserDialogViewModel createUser = new CreateUserDialogViewModel(_httpFactory);
             DialogService.InvokeDialog(createUser);
         }
 
@@ -156,17 +156,18 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task ChangeUserShift()
         {
-            using var usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            UserDataModel? user = await usersTable.GetEntityByIdAsync(_users.First(x => x.IsEditMode == true).Id);
+            var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{_users.First(x => x.IsEditMode == true).Id}");
 
             if (user is not null && user.Shift.Equals(SelectedUserShift) is false)
             {
                 user.Shift = _selectedUserShift;
 
-                await usersTable.SaveEntityAsync(user);
+                var postResponse = await ServerRequest.PostData(client, $"UserDataModel", user);
 
-                UpdateUsersCollection(user);
+                await UpdateUsersCollection(user);
             }
         }
 
@@ -176,15 +177,16 @@ namespace CutterManagement.UI.Desktop
         /// <param name="userId">Unique id of the user to deactivate</param>
         private async Task DeactivateUser(int userId)
         {
-            using var usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            UserDataModel? user = await usersTable.GetEntityByIdAsync(userId);
+            var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{userId}");
 
             if (user is null) return;
             {
                 user.IsActive = false;
 
-                await usersTable.SaveEntityAsync(user);
+                var postResponse = await ServerRequest.PostData(client, $"UserDataModel", user);
 
                 await ReloadUserCollection();
             }
@@ -192,7 +194,7 @@ namespace CutterManagement.UI.Desktop
 
         private async Task OpenUserManagerDialog()
         {
-            UserManagerDialogViewModel userManager = new UserManagerDialogViewModel(_dataServiceFactory);
+            UserManagerDialogViewModel userManager = new UserManagerDialogViewModel(_httpFactory);
 
             await userManager.GetDeactivatedUsers();
 
@@ -215,8 +217,10 @@ namespace CutterManagement.UI.Desktop
             // Clear users
             _users.Clear();
 
-            // Get users table
-            using var userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057/");
+
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 
             _userShiftCollection = new Dictionary<UserShift, string>();
 
@@ -227,16 +231,16 @@ namespace CutterManagement.UI.Desktop
                 _userShiftCollection.Add(shift, EnumHelpers.GetDescription(shift));
             }
 
-            foreach (UserDataModel user in await userTable.GetAllEntitiesAsync())
+            userCollection?.ForEach((user) =>
             {
                 // If user is admin user 
-                if ((user.FirstName is "resource" && user.LastName is "admin") || user.IsActive is false || user.IsArchived)
+                if ((user.FirstName is "resource" && user.LastName is "admin") || user.IsActive is false || user.IsArchived) 
                     // Do not add it
-                    continue;
+                    return;
 
                 // Add users
                 AddUserToUserCollection(user);
-            }
+            });
 
             IsLoading = false;
 
@@ -305,19 +309,21 @@ namespace CutterManagement.UI.Desktop
         /// Update users list with the latest information from database
         /// </summary>
         /// <param name="data">The data to update users list with</param>
-        public void UpdateUsersCollection(UserDataModel data)
+        public async Task<bool> UpdateUsersCollection(UserDataModel data)
         {
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057/");
+
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
+
             // Check if user exist in local users list
             UserItemViewModel? existingLocalData = _users.FirstOrDefault(x => x.Id == data.Id);
 
-            // Get users db table
-            var usersTable = _dataServiceFactory.GetDbTable<UserDataModel>();
-
             // Jump onto UI thread
-            DispatcherService.Invoke(async () =>
+            DispatcherService.Invoke(() =>
             {
                 // Check if the user is on database
-                UserDataModel? existingDbData = await usersTable.GetEntityByIdAsync(data.Id);
+                UserDataModel? existingDbData = userCollection?.FirstOrDefault(item => item.Id == data.Id);
 
                 // If user exists locally
                 if (existingLocalData is not null)
@@ -341,12 +347,11 @@ namespace CutterManagement.UI.Desktop
                     // Remove user from local collection
                     _users.RemoveAt(data.Id);
                 }
-
-                // Close and dispose db connection
-                usersTable.Dispose();
             });
 
             OnPropertyChanged(nameof(IsUserCollectionEmpty));
+
+            return await Task.FromResult(true); // Return true for now
         }
 
         #endregion
@@ -361,7 +366,7 @@ namespace CutterManagement.UI.Desktop
         {
             if (message.GetType() == typeof(UserDataModel))
             {
-                UpdateUsersCollection((UserDataModel)message);
+                _ = UpdateUsersCollection((UserDataModel)message);
             }
         }
 

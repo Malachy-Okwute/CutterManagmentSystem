@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System.Net.Http;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -17,9 +18,9 @@ namespace CutterManagement.UI.Desktop
         private PartKind _kind;
 
         /// <summary>
-        /// Access to database
+        /// Http client factory
         /// </summary>
-        private IDataAccessServiceFactory _dataServiceFactory;
+        private IHttpClientFactory _httpFactory;
 
         #endregion
 
@@ -89,9 +90,9 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public CreatePartDialogViewModel(IDataAccessServiceFactory dataServiceFactory)
+        public CreatePartDialogViewModel(IHttpClientFactory httpFactory)
         {
-            _dataServiceFactory = dataServiceFactory;
+            _httpFactory = httpFactory;
             Initialize();
 
             CreatePartCommand = new RelayCommand(async () => await CreatePart());
@@ -122,8 +123,10 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task"/></returns>
         private async Task CreatePart()
         {
-            // Get parts table
-            using var partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
+
+            var partsCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
 
             // Create new part
             PartDataModel newPart = new PartDataModel
@@ -141,11 +144,23 @@ namespace CutterManagement.UI.Desktop
             // Set success flag
             IsSuccess = result.IsValid;
 
+            if(partsCollection is null)
+            {
+                // Set message
+                string errorMessage = "Unexpected server error";
+                // Set success flag
+                IsSuccess = false;
+                // Briefly show message
+                await DialogService.InvokeFeedbackDialog(this, errorMessage);
+                // Do nothing else
+                return;
+            }
+
             // If validation passes
             if (result.IsValid)
             {
                 // Make sure part doesn't already exist
-                if ((await partsTable.GetAllEntitiesAsync()).Any(part => part.PartNumber.Equals(newPart.PartNumber)))
+                if (partsCollection.Any(part => part.PartNumber.Equals(newPart.PartNumber)))
                 {
                     // Set message
                     string errorMessage = "Part number already exists";
@@ -157,24 +172,7 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
-                // Create event handler
-                EventHandler<object>? handler = null;
-
-                // Define event
-                handler += (s, e) =>
-                {
-                    // Unhook event
-                    partsTable.DataChanged -= handler;
-
-                    // Update parts list with latest data from database
-                    Messenger.MessageSender.SendMessage((PartDataModel)e);
-                };
-
-                // Listen for when parts is created
-                partsTable.DataChanged += handler;
-
-                // commit the newly created part to the parts table
-                await partsTable.CreateNewEntityAsync(newPart);
+                var postResponse = await ServerRequest.PostData(client, $"PartDataModel", newPart);
             }
 
             // Set message
@@ -193,6 +191,9 @@ namespace CutterManagement.UI.Desktop
             // If successful...
             if (IsSuccess)
             {
+                // Update parts list with latest data from database
+                Messenger.MessageSender.SendMessage(newPart);
+
                 // Send dialog window close request
                 DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
             }

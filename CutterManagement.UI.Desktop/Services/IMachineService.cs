@@ -1,4 +1,5 @@
 ﻿using CutterManagement.Core;
+using System.Net.Http;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -8,9 +9,9 @@ namespace CutterManagement.UI.Desktop
     public interface IMachineService 
     {
         /// <summary>
-        /// Access to database
+        /// Http client
         /// </summary>
-        IDataAccessServiceFactory DataBaseAccess { get; }
+        IHttpClientFactory HttpClientFactory { get; }
 
         /// <summary>
         /// Gets a view model for a dialog window

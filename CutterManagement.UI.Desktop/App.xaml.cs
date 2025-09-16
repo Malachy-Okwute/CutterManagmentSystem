@@ -72,6 +72,9 @@ namespace CutterManagement.UI.Desktop
                 // make sure we are not on UI Thread 
                 if (Thread.CurrentThread != Dispatcher.Thread)
                 {
+                    // Log application start up as information 
+                    Log.Logger.Information("Application is starting...");
+
                     try
                     {
                         // Get environment variable
@@ -79,37 +82,6 @@ namespace CutterManagement.UI.Desktop
 
                         // Set up dependency injection service
                         ApplicationHost = CreateHostBuilder().Build();
-
-                        // Make sure we have a database
-                        if(ApplicationHost.Services.GetRequiredService<ApplicationDbContext>().Database.CanConnect() is false)
-                        {
-                            Dispatcher.Invoke(() =>
-                            {
-                                // Message
-                                string message = $"Goto: \"Users > Public > Public Documents > CutterManagementSystem > DatabaseServerName.txt\" " +
-                                $"and provide a valid sql server details in this format server-name;user-id;password; for the application.{Environment.NewLine} {Environment.NewLine}" +
-                                $"NOTE: Save the details provided to the prior to running the application.";
-
-                                // Dialog box configuration
-                                var result = MessageBox.Show(message,"Database error",MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
-
-                                // Shut down application
-                                if (result == MessageBoxResult.OK)
-                                {
-                                    // Mark task as completed
-                                    taskCompletionSource.TrySetResult(true);
-
-                                    // try closing the splash window on ui thread
-                                    _splashWindow.Close();
-
-                                    // Close application 
-                                    Application.Current.Shutdown();
-                                }
-                            });
-                        }    
-
-                        // Log application start up as information 
-                        Log.Logger.Information("Application is starting...");
 
                         // Finalizing...
                         //await Task.Delay(TimeSpan.FromSeconds(4));
@@ -133,34 +105,8 @@ namespace CutterManagement.UI.Desktop
                 await taskCompletionSource.Task;
             });
 
-            // Get database 
-            ApplicationDbContext db = ApplicationHost.Services.GetRequiredService<ApplicationDbContext>();
-
             // Log 
             Log.Logger.Information($"Attempting to apply database migration...");
-
-            // Update database migration or generate a database if not created.
-            await db.UpdateDatabaseMigrateAsync();
-
-            // If admin doesn't exist...
-            if (await db.Users.AnyAsync(user => user.LastName == "admin") is false)
-            {
-                // add admin user
-                await db.Users.AddAsync(new UserDataModel
-                {
-                    FirstName = "resource",
-                    LastName = "admin",
-                    DateCreated = DateTime.Now,
-                    Shift = UserShift.First
-                });
-
-                // Save changes
-                await db.SaveChangesAsync();
-            }
-
-            // TODO: Check if there is an app update available - if new update is available
-            //      - notify user to update the application
-            //      - if app is not updated... automatically update app at the end of shift.
 
             // Lunch main application window
             await LunchApplicationWindowAsync();
@@ -177,8 +123,6 @@ namespace CutterManagement.UI.Desktop
         {
             // Log information
             Log.Logger.Information("Application is shutting down...");
-
-            var shift = ApplicationHost.Services.GetRequiredService<ShiftProfileViewModel>();
 
             // Stop application host
             await ApplicationHost.StopAsync();
@@ -286,101 +230,35 @@ namespace CutterManagement.UI.Desktop
                 .MinimumLevel.Override("System", LogEventLevel.Fatal)
                 .CreateLogger();
         }
-        
+
         /// <summary>
         /// Set up application dependency injection service
         /// </summary>
+        /// <remarks>
+        /// To apply ef core migration, the project configuring services (e.g. Dependency Injection) Have to do the following for migration to work
+        ///     - Define a static CreateHostBuilder(string[]? args) method and use it to setup services
+        ///        (Ef core looks for a method with such signature during migration to locate Dbcontext type and db provider e.g. SqlServer).
+        ///     - AddDbContext to services and set it up.
+        ///     - Install ef core design and ef core tools nuget packages.
+        ///     - Use the project to run migrations by setting it as a startup project.
+        ///
+        /// **** Use -verbose to see what's actually going on during migration. ****
+        /// </remarks>
         private static IHostBuilder CreateHostBuilder(string[]? args = null)
         {
-            // TEMPORARY FIX FOR DATABASE UNTIL A SERVER IS IMPLEMENTED TO HANDLE DATABASE SIDE OF THINGS
-            // REMOVE ONCE SERVER IS UP AND RUNNING
-            string[]? serverDetails = Array.Empty<string>();
-            var configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CutterManagementSystem");
-            var localDbDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "CutterManagementSystem");
-
-            if (File.Exists(Path.Combine(localDbDir, "DatabaseServerName.txt")) is false)
-            {
-                // Create local db folder
-                Directory.CreateDirectory(localDbDir);
-
-                var dbServerNamePath = Path.Combine(localDbDir, "DatabaseServerName.txt");
-
-                File.WriteAllText(dbServerNamePath, "ReplaceThisWithYourServerName;ReplaceThisWithYourServerUserId;ReplaceThisWithYourServerPassword;");
-            }
-
-            // Read the file
-            var fileContent = File.ReadAllText(Path.Combine(localDbDir, "DatabaseServerName.txt"));
-
-            if (string.IsNullOrEmpty(fileContent) is false)
-            {
-                serverDetails = fileContent.Trim().Replace("\\\\", "\\").Split(";");
-            }
-
-            // Define appsettings 
-            var appSettings = new 
-            {
-                Serilog = new
-                {
-                    MinimumLevel = new
-                    {
-                        Default = "Information",
-                        Override = new
-                        {
-                            Microsoft = "Information",
-                            System = "Warning",
-                        }
-                    }
-                },
-
-                //ConnectionStrings = new { LocalDbConnection = "Server=ServerName;Database=DatabaseName;User Id=dev;Password=devenv;TrustServerCertificate=True;" }
-                //ConnectionStrings = new { LocalDbConnection = "Server=(localdb)\\MSSQLLocalDB;Database=CutterManagementSystemDatabase;Trusted_Connection=True;" }
-                ConnectionStrings = new { LocalDbConnection = $"Server={serverDetails[0]};User Id={serverDetails[1]};Password={serverDetails[2]};Database=CutterManagementSystemDatabase;Trusted_Connection=True;TrustServerCertificate=True;" }
-            };
-
-            // Serialize appsettings
-            var json = JsonSerializer.Serialize(appSettings, new JsonSerializerOptions { WriteIndented = true });
-
-            // Create a folder
-            Directory.CreateDirectory(configDir);
-
-            var configPath = Path.Combine(configDir, "appsettings.json");
-
-            // Create json file
-            File.WriteAllText(configPath, json);
-
             // Setup services 
             return Host.CreateDefaultBuilder(args)
                  .ConfigureAppConfiguration(configurationBuilder =>
                  {
-                     configurationBuilder.SetBasePath(configDir)
-                                         .AddJsonFile(configPath, optional: false, reloadOnChange: true);
-                                         //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                         //.AddJsonFile($"appsettings.{_environment}.json", optional: true);
+                     configurationBuilder.SetBasePath(Directory.GetCurrentDirectory())
+                                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                                         .AddJsonFile($"appsettings.{_environment}.json", optional: true);
 
                      SetupSerilogLogger(configurationBuilder);
                  })
                  .ConfigureServices((hostContext, services) =>
                  {
-                     // To apply ef core migration, the project configuring services (e.g. Dependency Injection)
-                     // Have to do the following for migration to work
-                     //
-                     // - Define a static CreateHostBuilder(string[]? args) method and use it to setup services
-                     //         (Ef core looks for a method with such signature during migration to locate Dbcontext type and db provider e.g. SqlServer).
-                     // - AddDbContext to services and set it up.
-                     // - Install ef core design and ef core tools nuget packages.
-                     // - Use the project to run migrations by setting it as a startup project.
-                     //
-                     // **** Use -verbose to see what's actually going on during migration. ****
-
-                     services.AddDbContext<ApplicationDbContext>(option =>
-                     {
-                         // TODO: Consider internet connection when using remote database
-                         option.UseSqlServer(hostContext.Configuration.GetConnectionString("LocalDbConnection")!
-                                                                    // https://learn.microsoft.com/en-us/answers/questions/1113995/changing-location-of-database-mdf-file-from-defaul
-                                                                    // Create the *.mfd file in the bin folder instead of the user folder
-                                                                    .Replace("[DataDirectory]", Directory.GetCurrentDirectory()));
-                 }, ServiceLifetime.Scoped);
-
+                     services.AddHttpClient();
                      services.AddViewModels();
                      services.AddServices();
                      services.AddViews();
