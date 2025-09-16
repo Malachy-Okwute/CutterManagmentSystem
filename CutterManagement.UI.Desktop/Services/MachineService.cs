@@ -1,4 +1,10 @@
 ﻿using CutterManagement.Core;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Windows.Documents;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -8,9 +14,9 @@ namespace CutterManagement.UI.Desktop
     public class MachineService : IMachineService
     {
         /// <summary>
-        /// Data access factory
+        /// Http client
         /// </summary>
-        private IDataAccessServiceFactory _dataAccessServiceFactory;
+        public IHttpClientFactory HttpClientFactory { get; }
 
         /// <summary>
         /// View model factory
@@ -18,17 +24,11 @@ namespace CutterManagement.UI.Desktop
         private IDialogViewModelFactory _dialogViewModelFactory;
 
         /// <summary>
-        /// Access to database
-        /// </summary>
-        public IDataAccessServiceFactory DataBaseAccess => _dataAccessServiceFactory;
-
-        /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="dataAccessService">Data access factory</param>
-        public MachineService(IDataAccessServiceFactory dataAccessService, IDialogViewModelFactory? dialogViewModelFactory)
+        public MachineService(IHttpClientFactory httpClientFactory, IDialogViewModelFactory? dialogViewModelFactory)
         {
-            _dataAccessServiceFactory = dataAccessService;
+            HttpClientFactory = httpClientFactory;
 
             if (dialogViewModelFactory is not null)
             {
@@ -57,63 +57,41 @@ namespace CutterManagement.UI.Desktop
         /// </exception>
         public async Task<(ValidationResult, MachineDataModel?)> ConfigureAsync(MachineDataModel newData)
         {
-            // Data that will be changing
-            MachineDataModel? data = null;
-
-            // Get machine table
-            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
-
-            // Use an event handler to listen for data changes
-            EventHandler<object>? handler = null;
-
-            // Set up the event handler
-            handler = (s, e) => 
-            {
-                // Unhook the event handler to prevent memory leaks
-                machineTable.DataChanged -= handler;
-                // Cast the event data to MachineDataModel
-                data = e as MachineDataModel; 
-            };
-
-            // Subscribe to the DataChanged event
-            machineTable.DataChanged += handler;
-
-            // Get the specific item from db
-            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
+            HttpClient client = HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri($"https://localhost:7057");
 
             // Validate incoming data
-            ValidationResult result = DataValidationService.Validate(newData);
+            ValidationResult validationResult = DataValidationService.Validate(newData);
 
-            // Make sure new machine number is not already being used
-            foreach (var item in await machineTable.GetAllEntitiesAsync())
+            if (validationResult.IsValid is false)
             {
-                if (item.MachineNumber.Equals(newData.MachineNumber))
+                return (validationResult, newData);
+            }
+
+            var serverResponse = await ServerRequest.ModifyAndSaveChanges<MachineDataModel>(client, $"MachineDataModel/{newData.Id}", async machineItem =>
+            {
+                // Make sure we have the item and incoming data is valid
+                if (machineItem is not null)
                 {
-                    result.ErrorMessage = "Machine number already exist";
-                    result.IsValid = false;
+                    // Wire new data 
+                    machineItem.MachineNumber = newData.MachineNumber;
+                    machineItem.MachineSetId = newData.MachineSetId;
+                    machineItem.Status = newData.Status;
+                    machineItem.StatusMessage = newData.StatusMessage ?? string.Empty;
+                    machineItem.DateTimeLastModified = DateTime.Now;
+                    machineItem.IsConfigured = newData.IsConfigured;
+
+                    // Update server with new data
+                    var putResponse = await ServerRequest.PutData(client, $"MachineDataModel", machineItem);
+
+                    // TODO: Wait and process response from server 
+
+                    newData = machineItem;
                 }
-            }
-
-            // Make sure we have the item and incoming data is valid
-            if (machineData is not null && result.IsValid)
-            {
-                // Wire new data 
-                machineData.MachineNumber = newData.MachineNumber;
-                machineData.MachineSetId = newData.MachineSetId;
-                machineData.Status = newData.Status;
-                machineData.StatusMessage = newData.StatusMessage ?? string.Empty;
-                machineData.DateTimeLastModified = DateTime.Now;
-                machineData.IsConfigured = newData.IsConfigured;
-
-                // Save new data
-                await machineTable.SaveEntityAsync(machineData);
-
-                // Return result
-                return (result, data);
-            }
+            });
 
             // Return result
-            return (result, data);
+            return (validationResult, newData);
         }
 
         /// <summary>
@@ -128,58 +106,40 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task{T}"/></returns>
         public async Task<ValidationResult> SetStatusAsync(MachineDataModel newData, int userId, Action<MachineDataModel> callback)
         {
-            // Data that will be changing
-            MachineDataModel? data = null;
+            HttpClient client = HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri($"https://localhost:7057");
 
-            // Get machines table
-            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
-
-            /// Get users table
-            using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
-
-            // Get machine
-            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(newData.Id);
-
-            // Get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
-
-            // Use an event handler to listen for data changes
-            EventHandler<object>? handler = null;
-
-            // Set up the event handler
-            handler += (s, e) =>
-            {
-                // Unhook the event handler to prevent memory leaks
-                machineTable.DataChanged -= handler;
-                // Cast the event data to MachineDataModel
-                data = e as MachineDataModel;
-                // Send out message
-                callback?.Invoke(data ?? throw new ArgumentNullException("Cannot find machine item that changed"));
-            };
-
-            // Subscribe to the DataChanged event
-            machineTable.DataChanged += handler;
+            var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{newData.Id}");
+            var userItem = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{userId}"); 
 
             // Validate incoming data
             ValidationResult result = DataValidationService.Validate(newData);
 
             // Make sure we have the item and incoming data is valid
-            if (machineData is not null && result.IsValid)
+            if (machineItem is not null && userItem is not null && result.IsValid)
             {
                 // Wire new machine data 
-                machineData.Status = newData.Status;
-                machineData.DateTimeLastModified = DateTime.Now;
-                machineData.StatusMessage = newData.StatusMessage ?? $"Machine status updated. {DateTime.Now.ToString("g")}";
+                machineItem.Status = newData.Status;
+                machineItem.DateTimeLastModified = DateTime.Now;
+                machineItem.StatusMessage = newData.StatusMessage ?? $"Machine status updated. {DateTime.Now.ToString("g")}";
 
                 // Set the user performing this operation including the machine involved
-                machineData.MachineUserInteractions.Add(new MachineUserInteractions
+                machineItem.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
-                    MachineDataModel = machineData
+                    UserDataModelId = userItem.Id,
+                    MachineDataModelId = machineItem.Id
                 });
 
-                // Update db with the new data
-                await machineTable.SaveEntityAsync(machineData);
+                // Update server with new data
+                var putResponse = await ServerRequest.PutData(client, $"MachineDataModel", machineItem);
+
+                if (putResponse.IsSuccessStatusCode is false)
+                {
+                    return new ValidationResult { ErrorMessage = "Unexpected server error" };
+                }
+
+                // Send out message
+                callback?.Invoke(machineItem);
             }
 
             // Return result
@@ -210,45 +170,21 @@ namespace CutterManagement.UI.Desktop
         /// <param name="verifyUserIntention">Confirms user intention when new piece count is over a certain limit</param>
         public async Task AdjustPieceCountAsync(int Id, int count, Func<Task<bool?>> verifyUserIntention)
         {
-            // Data that will be changing
-            MachineDataModel? data = null;
+            HttpClient client = HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            // Get machines table
-            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
-            // Get cutter table
-            using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
-
-            // Use an event handler to listen for data changes
-            EventHandler<object>? handler = null;
-
-            // Set up the event handler
-            handler += (s, e) =>
-            {
-                // Unhook the event handler to prevent memory leaks
-                machineTable.DataChanged -= handler;
-                // Cast the event data to MachineDataModel
-                data = e as MachineDataModel;
-
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-            };
-
-            // Subscribe to the DataChanged event
-            machineTable.DataChanged += handler;
-
-            // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id, cutter => cutter.Cutter);
+            var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{Id}");
+            var cutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machineItem?.CutterDataModelId}"); // Find a different way to do this
 
             // Make sure machine is not null
-            if (machine is not null)
+            if (machineItem is not null && cutterItem is not null)
             {
+
                 // Result of user intention prompt
                 bool? result = null;
 
-                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.Cutter.Id) ?? throw new NullReferenceException("Cutter not found");
-
                 // If the difference between current and new value is more than 100...
-                if (GetValueDifference(count, cutter.Count) > 100)
+                if (GetValueDifference(count, cutterItem.Count) > 100)
                 {
                     // Prompt user
                     result = await verifyUserIntention.Invoke();
@@ -258,17 +194,21 @@ namespace CutterManagement.UI.Desktop
                 }
 
                 // Set new value
-                cutter.Count = count;
+                cutterItem.Count = count;
 
                 // Set message
-                machine.StatusMessage = $"Piece count adjusted. {DateTime.Now.ToString("g")}";
+                machineItem.StatusMessage = $"Piece count adjusted. {DateTime.Now.ToString("g")}";
 
                 // Set date
-                machine.DateTimeLastModified = DateTime.Now;
+                machineItem.DateTimeLastModified = DateTime.Now;
 
-                // Update db with the new data
-                await cutterTable.SaveEntityAsync(cutter);
-                await machineTable.SaveEntityAsync(machine);
+                var putResponse = await ServerRequest.PutData(client, "CutterDataModel", machineItem);;
+
+                if(putResponse.IsSuccessStatusCode)
+                {
+                    // Send out message
+                    Messenger.MessageSender.SendMessage(machineItem);
+                }
             }
         }
 
@@ -280,96 +220,60 @@ namespace CutterManagement.UI.Desktop
         /// <param name="userId">Id to user carrying out this process</param>
         public async Task RelocateCutterAsync(int machineSendingCutterId, int machineReceivingCutterId, int userId, string comment)
         {
-            // Data that will be changing
-            MachineDataModel? data = null;
+            HttpClient client = HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            // Get machine db tables
-            using var sendingMachineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
-            using var receivingMachineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
-
-            // Get cutter db table
-            using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
-
-            // Get user db table
-            using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
-
-            // Get machine that will be receiving cutter
-            MachineDataModel? receivingMachine = await receivingMachineTable.GetEntityByIdAsync(machineReceivingCutterId);
-            MachineDataModel? sendingMachine = await sendingMachineTable.GetEntityByIdAsync(machineSendingCutterId, cutter => cutter.Cutter);
-
-            // Get user carrying out this operation
-            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
-
-            // Use an event handler to listen for data changes
-            EventHandler<object>? handler = null;
-
-            // Set up the event handler
-            handler += (sender, e) =>
-            {
-                // Unhook the event handler to prevent memory leaks
-                if(sender == sendingMachineTable)
-                {
-                    sendingMachineTable.DataChanged -= handler;
-                }
-                else
-                {
-                    receivingMachineTable.DataChanged -= handler;
-                }
-
-                // Cast the event data to MachineDataModel
-                data = e as MachineDataModel;
-
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-            };
-
-            // Subscribe to the DataChanged event
-            sendingMachineTable.DataChanged += handler;
-            receivingMachineTable.DataChanged += handler;
+            var sendingMachineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineSendingCutterId}");
+            var sendingMachineCutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{sendingMachineItem?.CutterDataModelId}");
+            var receivingMachineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineReceivingCutterId}");
+            var receivingMachineCutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{receivingMachineItem?.CutterDataModelId}");
+            var userItem = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{userId}");
 
             // Make sure both machines are not null
-            if (sendingMachine is not null && receivingMachine is not null)
+            if (sendingMachineItem is not null && receivingMachineItem is not null && 
+                receivingMachineCutterItem is not null && sendingMachineCutterItem is not null && userItem is not null)
             {
-                // Get cutter
-                CutterDataModel? cutter = await cutterTable.GetEntityByIdAsync(sendingMachine.Cutter.Id);
-
                 // Transfer data
-                receivingMachine.Status = sendingMachine.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.Warning : sendingMachine.Status;
-                receivingMachine.PartNumber = sendingMachine.PartNumber;
-                receivingMachine.CutterDataModelId = sendingMachine.CutterDataModelId;
-                receivingMachine.Cutter = cutter ?? throw new ArgumentNullException("Cutter cannot be null");
-                receivingMachine.FrequencyCheckResult = sendingMachine.FrequencyCheckResult;
-                receivingMachine.StatusMessage = sendingMachine.StatusMessage ?? $"Received cutter relocated from {sendingMachine.MachineNumber} machine. {DateTime.Now.ToString("g")}";
-                receivingMachine.DateTimeLastModified = DateTime.Now;
+                receivingMachineItem.Status = sendingMachineItem.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.Warning : sendingMachineItem.Status;
+                receivingMachineItem.PartNumber = sendingMachineItem.PartNumber;
+                receivingMachineItem.CutterDataModelId = sendingMachineItem.CutterDataModelId;
+                receivingMachineCutterItem = sendingMachineCutterItem;
+                receivingMachineItem.FrequencyCheckResult = sendingMachineItem.FrequencyCheckResult;
+                receivingMachineItem.StatusMessage = sendingMachineItem.StatusMessage ?? $"Received cutterItem relocated from {sendingMachineItem.MachineNumber} machineItem. {DateTime.Now.ToString("g")}";
+                receivingMachineItem.DateTimeLastModified = DateTime.Now;
 
                 // Set the user performing this operation including the machine involved
-                receivingMachine.MachineUserInteractions.Add(new MachineUserInteractions
+                receivingMachineItem.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
-                    MachineDataModel = receivingMachine
+                    UserDataModelId = userItem.Id,
+                    MachineDataModelId = receivingMachineItem.Id
                 });
 
                 // Clear data
-                sendingMachine.PartNumber = null!;
-                sendingMachine.CutterDataModelId = null;
-                sendingMachine.Cutter.MachineDataModelId = null;
-                sendingMachine.StatusMessage = $"Sent cutter to {receivingMachine.MachineNumber} machine. {DateTime.Now.ToString("g")}";
-                sendingMachine.FrequencyCheckResult = FrequencyCheckResult.Setup;
-                sendingMachine.Status = sendingMachine.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.IsDownForMaintenance : MachineStatus.Warning;
-                sendingMachine.DateTimeLastModified = DateTime.Now;
+                sendingMachineCutterItem.MachineDataModelId = null;
+                sendingMachineItem.PartNumber = null!;
+                sendingMachineItem.CutterDataModelId = null;
+                sendingMachineItem.StatusMessage = $"Sent cutterItem to {receivingMachineItem.MachineNumber} machineItem. {DateTime.Now.ToString("g")}";
+                sendingMachineItem.FrequencyCheckResult = FrequencyCheckResult.Setup;
+                sendingMachineItem.Status = sendingMachineItem.Status == MachineStatus.IsDownForMaintenance ? MachineStatus.IsDownForMaintenance : MachineStatus.Warning;
+                sendingMachineItem.DateTimeLastModified = DateTime.Now;
 
                 // Set the user performing this operation including the machine involved
-                sendingMachine.MachineUserInteractions.Add(new MachineUserInteractions
+                sendingMachineItem.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
-                    MachineDataModel = sendingMachine
+                    UserDataModelId = userItem.Id,
+                    MachineDataModelId = sendingMachineItem.Id
                 });
 
-                // Update db with the new data
-                await cutterTable.SaveEntityAsync(cutter);
-                await userTable.SaveEntityAsync(user);
-                await sendingMachineTable.SaveEntityAsync(sendingMachine);
-                await receivingMachineTable.SaveEntityAsync(receivingMachine);
+                var putResponseUser = await ServerRequest.PutData(client, "UserDataModel", userItem);
+                var putResponseFromSendingMachine = await ServerRequest.PutData(client, "MachineDataModel", sendingMachineItem);
+                var putResponseFromReceivingMachine = await ServerRequest.PutData(client, "MachineDataModel", receivingMachineItem);
+                var putResponseFromSendingMachineCutter = await ServerRequest.PutData(client, "CutterDataModel", sendingMachineCutterItem);
+                var putResponseFromReceivingMachineCutter = await ServerRequest.PutData(client, "CutterDataModel", receivingMachineCutterItem);
+
+                // Send out message
+                Messenger.MessageSender.SendMessage(sendingMachineItem);
+                Messenger.MessageSender.SendMessage(receivingMachineItem);
             }
         }
 
@@ -378,56 +282,16 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public async Task CaptureAndRecordCMMDataAsync(int userId, int machineId, string comment, CMMDataModel incomingCMMData)
         {
-            // The data that changed
-            MachineDataModel? data = null;
+            HttpClient client = HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            // Get machine table
-            var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
-
-            // Get user table
-            using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
-
-            // Get cutter table
-            using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
-
-            // Attempt to get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId, cutter => cutter.Cutter);
-
-            // Attempt to get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
-
-            // Use an event handler to listen for data changes
-            EventHandler<object>? handler = null;
-
-            // Set up the event handler
-            handler += async (s, e) =>
-            {
-                // Unhook the event handler to prevent memory leaks
-                machineTable.DataChanged -= handler;
-                // Cast the event data to MachineDataModel
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-
-                // log that cutter was relocated
-                if (user is not null && data is not null)
-                {
-                    await LogProductionProgressAsync(data.Id, user);
-                }
-
-                // Dispose tables to free resources
-                machineTable.Dispose();
-            };
-
-            // Subscribe to the DataChanged event
-            machineTable.DataChanged += handler;
+            var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineId}");
+            var cutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machineItem?.CutterDataModelId}");
+            var userItem = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{userId}");
 
             // Make sure we have machine
-            if (machine is not null)
+            if (machineItem is not null && cutterItem is not null)
             {
-                // Attempt to get current cutter
-                CutterDataModel cutter = await cutterTable.GetEntityByIdAsync(machine.Cutter.Id) ?? throw new NullReferenceException("Cutter not found");
-
                 CMMDataModel cmmData = new CMMDataModel
                 {
                     // Set cmm data
@@ -440,29 +304,34 @@ namespace CutterManagement.UI.Desktop
                     Fr = incomingCMMData.Fr,
                     Size = incomingCMMData.Size,
                     Count = incomingCMMData.Count,
-                    CutterDataModel = cutter,
+                    CutterDataModelId = cutterItem.Id,
                 };
 
                 // Set cmm data
-                machine.Cutter.CMMData.Add(cmmData);
+                cutterItem.CMMData.Add(cmmData);
 
                 // Set other machine information
-                machine.Cutter.Count = int.Parse(incomingCMMData.Count);
-                machine.StatusMessage = string.IsNullOrEmpty(comment) ? "Passed CMM check" : $"Passed CMM check. {comment}";
-                machine.Status = MachineStatus.IsRunning;
-                machine.FrequencyCheckResult = FrequencyCheckResult.Passed;
-                machine.DateTimeLastModified = DateTime.Now;
+                cutterItem.Count = int.Parse(incomingCMMData.Count);
+                machineItem.StatusMessage = string.IsNullOrEmpty(comment) ? "Passed CMM check" : $"Passed CMM check. {comment}";
+                machineItem.Status = MachineStatus.IsRunning;
+                machineItem.FrequencyCheckResult = FrequencyCheckResult.Passed;
+                machineItem.DateTimeLastModified = DateTime.Now;
 
                 // Set the user performing this operation
-                machine.MachineUserInteractions.Add(new MachineUserInteractions
+                machineItem.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
-                    MachineDataModel = machine
+                    UserDataModelId = userItem?.Id,
+                    MachineDataModelId = machineItem.Id
                 });
 
-                // Update information in database
-                await cutterTable.SaveEntityAsync(cutter);
-                await machineTable.SaveEntityAsync(machine);
+                var putMachineResponse = await ServerRequest.PutData(client, "MachineDataModel", machineItem);
+                var putCutterResponse = await ServerRequest.PutData(client, "CutterDataModel", cutterItem);
+
+                if(putMachineResponse.IsSuccessStatusCode )
+                {
+                    // Send out message
+                    Messenger.MessageSender.SendMessage(machineItem);
+                }
             }
         }
 
@@ -475,79 +344,40 @@ namespace CutterManagement.UI.Desktop
         /// <param name="newData">Data changing on the machine that is having it's cutter removed</param>
         public async Task RemoveCutterAsync(int machineId, int userId, bool keepCutter, MachineDataModel newData)
         {
-            // New data from database
-            MachineDataModel? data = null;
+            HttpClient client = HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            // Get machine table
-            var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
-            // Get user table
-            using var userTable = _dataAccessServiceFactory.GetDbTable<UserDataModel>();
-            // Get cutter table
-            using var cutterTable = _dataAccessServiceFactory.GetDbTable<CutterDataModel>();
-            // Get cmm data table
-            using var cmmTable = _dataAccessServiceFactory.GetDbTable<CMMDataModel>();
-
-            // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId, x => x.Cutter);
-
-            // Get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(userId);
-
-            // Use an event handler to listen for data changes
-            EventHandler<object>? handler = null;
-
-            // Set up the event handler
-            handler += async (s, e) =>
-            {
-                // Unhook the event handler to prevent memory leaks
-                machineTable.DataChanged -= handler;
-                // Set new data
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected machine data cannot be null"));
-
-                if (user is not null && data is not null)
-                {
-                    await LogProductionProgressAsync(data.Id, user);
-                }
-
-                // Dispose tables to free resources
-                machineTable.Dispose();
-            };
-
-            // Subscribe to the DataChanged event
-            machineTable.DataChanged += handler;
+            var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineId}");
+            var cutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machineItem?.CutterDataModelId}");
+            var userItem = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{userId}");
 
             // If machine is not null...
-            if (machine is not null)
+            if (machineItem is not null && cutterItem is not null)
             {
-                // Get current cutter with the associated CMM data
-                CutterDataModel? cutter = await cutterTable.GetEntityWithCollectionsByIdAsync(machine.Cutter.Id, cmm => cmm.CMMData);
-
                 // Set cutter information
-                cutter.CutterChangeInfo = newData.Cutter.CutterChangeInfo;
-                cutter.LastUsedDate = DateTime.Now;
-                cutter.Count = newData.Cutter.Count;
-                cutter.CMMData.ToList().AddRange(cutter.CMMData);
-                cutter.Condition = newData.Cutter.Condition;
-                cutter.MachineDataModel = null!;
-                cutter.MachineDataModelId = null;
-                
+                cutterItem.CutterChangeInfo = newData.Cutter.CutterChangeInfo;
+                cutterItem.LastUsedDate = DateTime.Now;
+                cutterItem.Count = newData.Cutter.Count;
+                cutterItem.CMMData.ToList().AddRange(cutterItem.CMMData);
+                cutterItem.Condition = newData.Cutter.Condition;
+                cutterItem.MachineDataModel = null!;
+                cutterItem.MachineDataModelId = null;
+
                 // Set new information
-                machine.FrequencyCheckResult = FrequencyCheckResult.Setup;
-                machine.Status = MachineStatus.Warning;
-                machine.StatusMessage = string.IsNullOrEmpty(newData.StatusMessage) ? $"Cutter was removed. {DateTime.Now.ToString("g")}" : $"Cutter was removed. {newData.StatusMessage}";
-                machine.DateTimeLastModified = DateTime.Now;
-                machine.PartNumber = newData.PartNumber;
-                machine.PartToothSize = "0";
-                machine.Cutter = null!;
-                machine.CutterDataModelId = null;
+                machineItem.FrequencyCheckResult = FrequencyCheckResult.Setup;
+                machineItem.Status = MachineStatus.Warning;
+                machineItem.StatusMessage = string.IsNullOrEmpty(newData.StatusMessage) ? $"Cutter was removed. {DateTime.Now.ToString("g")}" : $"Cutter was removed. {newData.StatusMessage}";
+                machineItem.DateTimeLastModified = DateTime.Now;
+                machineItem.PartNumber = newData.PartNumber;
+                machineItem.PartToothSize = "0";
+                machineItem.Cutter = null!;
+                machineItem.CutterDataModelId = null;
 
                 // Set the user performing this operation
-                machine.MachineUserInteractions.Add(new MachineUserInteractions
+                machineItem.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
-                    MachineDataModel = machine
+                    UserDataModelId = userItem?.Id,
+                    MachineDataModelId = machineItem.Id
                 });
 
                 // If cutter needs rebuilding...
@@ -556,18 +386,24 @@ namespace CutterManagement.UI.Desktop
                     // NOTE: Never delete entry from database, move data that is not needed to history table or archive
                     // ToDo: Record this event in a history table
 
-                    await cutterTable.SaveEntityAsync(cutter);
+                    var putCutterResponse = await ServerRequest.PutData(client, "CutterDataModel", cutterItem);
                 }
                 else
                 {
                     // Update cutter information 
-                    await cutterTable.SaveEntityAsync(cutter);
+                    var putCutterResponse = await ServerRequest.PutData(client, "CutterDataModel", cutterItem);
                 }
 
                 // Update database
-                await machineTable.SaveEntityAsync(machine);
+                var putMachineResponse = await ServerRequest.PutData(client, "MachineDataModel", machineItem);
+
+                if (putMachineResponse.IsSuccessStatusCode)
+                {
+                    // Send out message
+                    Messenger.MessageSender.SendMessage(machineItem);
+                }
             }
-        }
+        }   
 
         /// <summary>
         /// Logs the production progress of a machine, including cutter and part details, to the production log table.
@@ -585,20 +421,17 @@ namespace CutterManagement.UI.Desktop
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task LogProductionProgressAsync(int machineId, UserDataModel? user)
         {
-            // Get machine table
-            using var machineTable = _dataAccessServiceFactory.GetDbTable<MachineDataModel>();
+            HttpClient client = HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            // Get production log table
-            using var productionLogTable = _dataAccessServiceFactory.GetDbTable<ProductionPartsLogDataModel>();
-
-            // Get machine by id
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(machineId, c => c.Cutter);
+            var machine = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineId}");
+            var cutter = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machine?.CutterDataModelId}");
 
             // Make sure we have machine
             if (machine is null || machine.Cutter is null) return;
 
             // Log production data progress    
-            await productionLogTable.CreateNewEntityAsync(new ProductionPartsLogDataModel
+            var log = new ProductionPartsLogDataModel
             {
                 MachineNumber = machine.MachineNumber,
                 CutterNumber = machine.Cutter.CutterNumber,
@@ -613,7 +446,9 @@ namespace CutterManagement.UI.Desktop
                 ToothSize = string.IsNullOrEmpty(machine.PartToothSize) ? "n/a" : machine.PartToothSize,
                 CMMData = machine.Cutter.CMMData.LastOrDefault() ?? null,
                 CutterChangeInfo = machine.Cutter.CutterChangeInfo.ToString(),
-            });
+            };
+
+            var postResponse = ServerRequest.PostData(client, "ProductionPartsLogDataModel", log);
         }
 
     }

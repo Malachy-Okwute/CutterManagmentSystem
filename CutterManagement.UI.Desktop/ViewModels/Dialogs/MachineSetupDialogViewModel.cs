@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System.Net.Http;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -227,6 +228,12 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task SetupMachine()
         {
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
+
+            var cutterCollection = await ServerRequest.GetDataCollection<CutterDataModel>(client, $"CutterDataModel");
+            var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{_machineItemViewModel.Id}");
+
             // Get the desired cutter 
             CutterDataModel desiredCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == _cutterNumber);
 
@@ -257,58 +264,35 @@ namespace CutterManagement.UI.Desktop
             // Mark message as a success
             IsSuccess = true;
 
-            // Data that will be changing
-            MachineDataModel? data = null;
-
-            // Get the desired cutter 
-            //CutterDataModel desiredCutter = _cutters.Single(cutterNumber => cutterNumber.CutterNumber == _cutterNumber);
-
-            // Get machine table
-            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();   
-
-            // Create event handler
-            EventHandler<object>? handler = null;
-
-            // Listen for when machine table data actually changed
-            handler += (s, e) =>
-            {
-                // Unsubscribe from the event
-                machineTable.DataChanged -= handler;
-                // Cast data to MachineDataModel
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected machine cannot be null"));
-            };
-
-            // Subscribe to data changed event
-            machineTable.DataChanged += handler;
-
-            // Find the actual machine
-            MachineDataModel? machineData = await machineTable.GetEntityByIdAsync(_machineItemViewModel.Id);
-
-            if (machineData is not null)
+            if (machineItem is not null)
             {
                 // Update machine information
-                machineData.Cutter = desiredCutter;
-                machineData.CutterDataModelId = desiredCutter.Id;
-                machineData.PartNumber = PartNumberCollection[SelectedPart];
-                machineData.FrequencyCheckResult = FrequencyCheckResult.Setup;
-                machineData.Status = MachineStatus.Warning;
-                machineData.StatusMessage = "Waiting for CMM check result";
-                machineData.DateTimeLastModified = DateTime.Now;
+                machineItem.Cutter = desiredCutter;
+                machineItem.CutterDataModelId = desiredCutter.Id;
+                machineItem.PartNumber = PartNumberCollection[SelectedPart];
+                machineItem.FrequencyCheckResult = FrequencyCheckResult.Setup;
+                machineItem.Status = MachineStatus.Warning;
+                machineItem.StatusMessage = "Waiting for CMM check result";
+                machineItem.DateTimeLastModified = DateTime.Now;
 
                 // Update machine information
-                await machineTable.SaveEntityAsync(machineData);
+                var putResponse = await ServerRequest.PutData(client, "MachineDataModel", machineItem);
+
+                if (putResponse.IsSuccessStatusCode)
+                {
+                    // Send out message
+                    Messenger.MessageSender.SendMessage(machineItem);
+                }
 
                 //if(Title.Equals("Setup", StringComparison.OrdinalIgnoreCase) is false)
-                if(machineData.FrequencyCheckResult == FrequencyCheckResult.Setup)
+                if (machineItem.FrequencyCheckResult == FrequencyCheckResult.Setup)
                 {
                     // Close dialog
                     await DialogService.InvokeAlertDialog(this, "Machine setup is successful").ContinueWith(_ =>
                     {
                         DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
                     });
-                } 
+                }
                 else
                 {
                     // Close dialog
@@ -326,11 +310,13 @@ namespace CutterManagement.UI.Desktop
             // Clear the current collection
             _cutters.Clear();
 
-            // Get all cutters from the database
-            using var cutterTable = _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            // Add all cutters to the collection
-            (await cutterTable.GetAllEntitiesAsync()).ToList().ForEach(_cutters.Add);
+            var cutterCollection = await ServerRequest.GetDataCollection<CutterDataModel>(client, $"CutterDataModel");
+
+            //Add all cutters to the collection
+           cutterCollection?.ForEach(_cutters.Add);
         }
 
         /// <summary>
@@ -342,10 +328,12 @@ namespace CutterManagement.UI.Desktop
             // Clear the current collection
             _parts.Clear();
 
-            // Get all parts from the database
-            using var partTable = _machineService.DataBaseAccess.GetDbTable<PartDataModel>();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            (await partTable.GetAllEntitiesAsync()).ToList().ForEach((part) =>
+            var partCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
+
+            partCollection?.ToList().ForEach((part) =>
             {
                 if (part.PartNumber.Equals(_machineItemViewModel.PartNumber) is false) _parts.Add(part);
             });
@@ -356,7 +344,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private void GetCorrespondingPartNumbers()
         {
-            // Get parts
+            //Get parts
             Task.Run(GetParts).ContinueWith(async _ =>
             {
                 // Get cutter
@@ -372,17 +360,19 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
-                // Get machine table
-                using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+                HttpClient client = _machineService.HttpClientFactory.CreateClient();
+                client.BaseAddress = new Uri("https://localhost:7057");
 
-                // Make sure cutter is not already being used by another machine
-                foreach (var item in await machineTable.GetAllEntitiesAsync())
+                //var cutterCollection = await ServerRequest.GetDataCollection<CutterDataModel>(client, $"CutterDataModel");
+                var machineCollection = await ServerRequest.GetDataCollection<MachineDataModel>(client, $"MachineDataModel");
+
+                machineCollection?.ForEach(item =>
                 {
                     // Filter a specific kind of cutter
-                    if (!(item.Owner.Equals(cutter.Owner))) continue;
+                    if (!(item.Owner.Equals(cutter.Owner))) return;
 
                     // If cutter number is found
-                    if(cutter.CutterNumber.Equals(item.Cutter?.CutterNumber) && MachineNumber.Equals(item?.MachineNumber) is false)
+                    if (cutter.CutterNumber.Equals(item.Cutter?.CutterNumber) && MachineNumber.Equals(item?.MachineNumber) is false)
                     {
                         // Run on UI thread
                         DispatcherService.Invoke(async () =>
@@ -395,7 +385,7 @@ namespace CutterManagement.UI.Desktop
                         // Do nothing else
                         return;
                     }
-                }
+                });
 
                 // Get all part numbers that uses the current cutter number
                 _parts.Where(part => (part.SummaryNumber == cutter.SummaryNumber) && (part.Kind == cutter.Kind))

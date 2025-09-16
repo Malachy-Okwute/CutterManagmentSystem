@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System.Net.Http;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -12,9 +13,9 @@ namespace CutterManagement.UI.Desktop
         #region Private Fields
 
         /// <summary>
-        /// Access to database
+        /// Http client factory
         /// </summary>
-        private IDataAccessServiceFactory _dataServiceFactory;
+        private IHttpClientFactory _httpFactory;
 
         /// <summary>
         /// Shift assigned to current new user
@@ -80,9 +81,9 @@ namespace CutterManagement.UI.Desktop
         /// Constructor
         /// </summary>
         /// <param name="dataServiceFactory">Access to database</param>
-        public CreateUserDialogViewModel(IDataAccessServiceFactory dataServiceFactory)
+        public CreateUserDialogViewModel(IHttpClientFactory httpFactory)
         {
-            _dataServiceFactory = dataServiceFactory;
+            _httpFactory = httpFactory;
             UserShiftCollection = new Dictionary<UserShift, string>();
             _newUserShift = UserShift.None;
 
@@ -133,43 +134,38 @@ namespace CutterManagement.UI.Desktop
             // If validation passes
             if (result.IsValid)
             {
-                // Get users table
-                using var userTable = _dataServiceFactory.GetDbTable<UserDataModel>();
+                HttpClient client = _httpFactory.CreateClient();
+                client.BaseAddress = new Uri("https://localhost:7057");
 
-                // Create event handle
-                EventHandler<object>? handler = null;
+                var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 
-                // Define event
-                handler += (s, e) =>
+                if (userCollection is not null)
                 {
-                    // Unhook event
-                    userTable.DataChanged -= handler;
+                    // See if user name exist
+                    bool isConflicting = userCollection.Any(x => 
+                    { 
+                        return (string.Equals(x.FirstName, newUser.FirstName, StringComparison.OrdinalIgnoreCase) && 
+                                string.Equals(x.LastName, newUser.LastName, StringComparison.OrdinalIgnoreCase)); 
+                    });
 
-                    // Update user list with latest data from database
-                    Messenger.MessageSender.SendMessage((UserDataModel)e);
-                };
-
-                // Listen for when user is created
-                userTable.DataChanged += handler;
-
-                // See if user name exist
-                bool isConflicting = (await userTable.GetAllEntitiesAsync()).Any(x => 
-                { 
-                    return (string.Equals(x.FirstName, newUser.FirstName, StringComparison.OrdinalIgnoreCase) && 
-                            string.Equals(x.LastName, newUser.LastName, StringComparison.OrdinalIgnoreCase)); 
-                });
-
-                // If user exist
-                if(isConflicting)
-                {
-                    // Alert user
-                    await DialogService.InvokeFeedbackDialog(this, $"Username is already taken.");
-                    // Do nothing else
-                    return;
+                    // If user exist
+                    if(isConflicting)
+                    {
+                        // Alert user
+                        await DialogService.InvokeFeedbackDialog(this, $"Username is already taken.");
+                        // Do nothing else
+                        return;
+                    }
                 }
 
                 // commit the newly created user to the users table
-                await userTable.CreateNewEntityAsync(newUser);
+                var postResponse = await ServerRequest.PostData(client, $"UserDataModel", newUser);
+
+                if (postResponse.IsSuccessStatusCode)
+                {
+                    // Update user list with latest data from database
+                    Messenger.MessageSender.SendMessage(newUser);
+                }
             }
 
             // Set message

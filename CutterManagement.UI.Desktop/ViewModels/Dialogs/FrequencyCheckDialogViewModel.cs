@@ -1,7 +1,9 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
 using Microsoft.IdentityModel.Tokens;
+using System.Net.Http;
 using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -154,48 +156,17 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task"/></returns>
         private async Task UpdateMachine()
         {
-            // New data from database
-            MachineDataModel? data = null;
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            // Get machine table
-            var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
-            // Get user table
-            using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
-
-            // Get machine
-            MachineDataModel? machine = await machineTable.GetEntityByIdAsync(Id, cutter => cutter.Cutter);
-
-            // Get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
-
-            // Create event handler
-            EventHandler<object>? handler = null;
-
-            // Listen for changes 
-            handler += (s, e) =>
-            {
-                // Unsubscribe from event to prevent memory leak
-                machineTable.DataChanged -= handler;
-                // Set new data
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("SelectedMachine data cannot be null"));
-
-                // Log data
-                _machineService.LogProductionProgressAsync(data.Id, user);
-
-                // Dispose machine table
-                machineTable.Dispose();
-            };
-
-            // Subscribe to data changed event
-            machineTable.DataChanged += handler;
-
+            var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{Id}");
+            var userItem = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{_user.Id}");
+            
             // If machine is not null...
-            if(machine is not null)
+            if (machineItem is not null)
             {
                 // Make sure piece count is entered
-                if(PartCount.IsNullOrEmpty())
+                if (PartCount.IsNullOrEmpty())
                 {
                     await DialogService.InvokeFeedbackDialog(this, "Enter part piece-count");
 
@@ -203,7 +174,7 @@ namespace CutterManagement.UI.Desktop
                 }
 
                 // Make sure new piece count is greater than current count
-                if(int.Parse(PartCount) <= machine.Cutter.Count)
+                if (int.Parse(PartCount) <= machineItem.Cutter.Count)
                 {
                     await DialogService.InvokeFeedbackDialog(this, "Piece-count must be greater than previous-count");
 
@@ -228,15 +199,15 @@ namespace CutterManagement.UI.Desktop
                 }
 
                 // If count is greater than previous count by more than 100
-                if ((int.Parse(PartCount) - machine.Cutter.Count) > 100)
+                if ((int.Parse(PartCount) - machineItem.Cutter.Count) > 100)
                 {
-                    string errorMessage = $"Current count is {machine.Cutter.Count}. Do you mean to enter {PartCount} ?";
+                    string errorMessage = $"Current count is {machineItem.Cutter.Count}. Do you mean to enter {PartCount} ?";
 
                     // Verify piece count is reasonable
                     bool? response = await DialogService.InvokeFeedbackDialog(this, errorMessage, FeedbackDialogKind.Prompt);
 
                     // If user did not mean to enter the current part number
-                    if(response is false)
+                    if (response is false)
                     {
                         // Cancel this process
                         return;
@@ -244,22 +215,28 @@ namespace CutterManagement.UI.Desktop
                 }
 
                 // Set new information
-                machine.Cutter.Count = int.Parse(PartCount);
-                machine.PartToothSize = PartToothSize ?? machine.PartToothSize;
-                machine.FrequencyCheckResult = PassedCheck ? _passedCheck : _failedCheck;
-                machine.Status = (machine.FrequencyCheckResult == _failedCheck) ? MachineStatus.Warning : MachineStatus.IsRunning;
-                machine.StatusMessage = (machine.FrequencyCheckResult == _failedCheck) ? (Comment!) : (Comment ?? "In good condition");
-                machine.DateTimeLastModified = DateTime.Now;
+                machineItem.Cutter.Count = int.Parse(PartCount);
+                machineItem.PartToothSize = PartToothSize ?? machineItem.PartToothSize;
+                machineItem.FrequencyCheckResult = PassedCheck ? _passedCheck : _failedCheck;
+                machineItem.Status = (machineItem.FrequencyCheckResult == _failedCheck) ? MachineStatus.Warning : MachineStatus.IsRunning;
+                machineItem.StatusMessage = (machineItem.FrequencyCheckResult == _failedCheck) ? (Comment!) : (Comment ?? "In good condition");
+                machineItem.DateTimeLastModified = DateTime.Now;
 
                 // Set the user performing this operation
-                machine.MachineUserInteractions.Add(new MachineUserInteractions
+                machineItem.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user ?? throw new NullReferenceException($"User with the name {user?.FirstName.PadRight(6)} {user?.LastName} not found"),
-                    MachineDataModel = machine
+                    UserDataModelId = userItem?.Id,
+                    MachineDataModelId = machineItem.Id
                 });
 
                 // Update machine on database
-                await machineTable.SaveEntityAsync(machine);
+                var putResponse = await ServerRequest.PutData<MachineDataModel>(client, "MachineDataModel", machineItem);
+
+                if(putResponse.IsSuccessStatusCode)
+                {
+                    // Send out message
+                    Messenger.MessageSender.SendMessage(machineItem);
+                }
 
                 // Close dialog
                 DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess));
@@ -272,20 +249,22 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task"/></returns>
         private async Task GetUsers()
         {
-            // Get user db table
-            using var users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
+
+            userCollection?.ForEach(user =>
             {
                 // ToDo: Consider users that might be staying late or coming in early
 
                 // If user is not admin, is active, not archived and is in current shift
-                if (userData.LastName is "admin" || userData.IsActive is false || userData.IsArchived ||
-                    EnumHelpers.GetDescription(userData.Shift) != ShiftHelper.GetCurrentShift())
-                    continue;
+                if (user.LastName is "admin" || user.IsActive is false || user.IsArchived ||
+                    EnumHelpers.GetDescription(user.Shift) != ShiftHelper.GetCurrentShift())
+                    return;
 
-                UsersCollection.Add(userData, userData.FirstName.PadRight(10) + userData.LastName);
-            }
+                UsersCollection.Add(user, user.FirstName.PadRight(10) + user.LastName);
+            });
 
             // Set current user
             _user = UsersCollection.FirstOrDefault().Key;

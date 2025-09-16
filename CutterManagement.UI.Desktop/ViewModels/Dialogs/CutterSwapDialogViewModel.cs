@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System.Net.Http;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -119,22 +120,23 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public async Task<bool> InitializeCutterSwapping()
         {
-            // Get machine table
-            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("http://localhost:7057");
 
-            // Get users
-            using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            var machineCollection = await ServerRequest.GetDataCollection<MachineDataModel>(client, "MachineDataModel");
+
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, "UserDataModel");
 
             // Get first machine
-            var firstMachine = await machineTable.GetEntityByIdAsync(_machineItem.Id, x => x.Cutter);
+            var firstMachine = machineCollection?.Single(m => m.Id == _machineItem.Id);
 
             // Filter and find second machine id
-             _secondMachine = (await machineTable.GetAllEntitiesAsync()).FirstOrDefault(x => x.MachineSetId == firstMachine?.MachineSetId && 
-                                      x.MachineNumber != firstMachine.MachineNumber &&
-                                      x.Owner == firstMachine.Owner)?.Id;
+            _secondMachine = machineCollection?.FirstOrDefault(x => x.MachineSetId == firstMachine?.MachineSetId &&
+                                     x.MachineNumber != firstMachine.MachineNumber &&
+                                     x.Owner == firstMachine.Owner)?.Id;
 
             // Get second machine
-            var secondMachine = await machineTable.GetEntityByIdAsync(_secondMachine, x => x.Cutter);
+            var secondMachine = machineCollection?.Single(m => m.Id == _secondMachine);
 
             // Make sure we have cutter to swap
             if (firstMachine?.Cutter is null) return false;
@@ -166,23 +168,22 @@ namespace CutterManagement.UI.Desktop
             }
 
             // If both machines are available
-            if(firstMachine is not null && secondMachine is not null)
+            if (firstMachine is not null && secondMachine is not null)
             {
                 // Set Properties
-                FirstMachine = new CutterSwapHelper(firstMachine.MachineNumber, 
+                FirstMachine = new CutterSwapHelper(firstMachine.MachineNumber,
                     $"{firstMachine.Cutter.CutterNumber}-{firstMachine.Cutter.SummaryNumber}", firstMachine.PartNumber, firstMachine.Cutter.Count.ToString());
                 SecondMachine = new CutterSwapHelper(secondMachine.MachineNumber,
                     $"{secondMachine.Cutter.CutterNumber}-{secondMachine.Cutter.SummaryNumber}", secondMachine.PartNumber, secondMachine.Cutter.Count.ToString());
 
-                // Get users
-                foreach (UserDataModel userData in await userTable.GetAllEntitiesAsync())
+                userCollection?.ForEach(user =>
                 {
                     // Do not load admin user
-                    if (userData.LastName is "admin")
-                        continue;
+                    if (user.LastName is "admin")
+                        return;
 
-                    UserCollection.Add(userData, userData.FirstName.PadRight(10) + userData.LastName);
-                }
+                    UserCollection.Add(user, user.FirstName.PadRight(10) + user.LastName);
+                });
 
                 // Set current user 
                 _user = UserCollection.FirstOrDefault().Key;
@@ -204,54 +205,15 @@ namespace CutterManagement.UI.Desktop
         {
             // ToDo: Refactor code below
 
-            // Get machine tables
-            using var firstMachineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
-            using var secondMachineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            // Get user table
-            using var userTable = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
-            // Get cutter table
-            using var cutterTable = _machineService.DataBaseAccess.GetDbTable<CutterDataModel>();
-
-            // Get user
-            UserDataModel? user = await userTable.GetEntityByIdAsync(_user.Id);
-
-            // Get first machine
-            MachineDataModel? firstMachine = await firstMachineTable.GetEntityByIdAsync(initialMachineId, cutter => cutter.Cutter);
-            // Get second machine
-            MachineDataModel? secondMachine = await secondMachineTable.GetEntityByIdAsync(secondMachineId, cutter => cutter.Cutter);
-
-            // New data from database
-            MachineDataModel? data = null;
+            var firstMachine = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{initialMachineId}");
+            var secondMachine = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{secondMachineId}");
+            var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{_user.Id}");
 
             // Dummy
             MachineDataModel? dummyMachine = new MachineDataModel();
-
-            // Create event handler
-            EventHandler<object>? handler = null;
-
-            // Listen for changes 
-            handler += (sender, e) =>
-            {
-                // Unhook the event handler to prevent memory leaks
-                if (sender == firstMachineTable)
-                {
-                    firstMachineTable.DataChanged -= handler;
-                }
-                else
-                {
-                    secondMachineTable.DataChanged -= handler;
-                }
-
-                // Set new data
-                data = e as MachineDataModel;
-                // Send out message
-                Messenger.MessageSender.SendMessage(data ?? throw new ArgumentNullException("Selected Machine data cannot be null"));
-            };
-
-            // Subscribe to data changed event for both machines
-            firstMachineTable.DataChanged += handler;
-            secondMachineTable.DataChanged += handler;
 
             // If both machines are available
             if (firstMachine is not null && secondMachine is not null && user is not null)
@@ -277,8 +239,8 @@ namespace CutterManagement.UI.Desktop
                 // Set the user conducting this operation
                 firstMachine.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user,
-                    MachineDataModel = firstMachine
+                    UserDataModelId = user.Id,
+                    MachineDataModelId = firstMachine.Id
                 });
 
                 await _machineService.RemoveCutterAsync(secondMachine.Id, user.Id, true, new MachineDataModel
@@ -300,7 +262,12 @@ namespace CutterManagement.UI.Desktop
                     PartToothSize = "0",
                 });
 
-                await firstMachineTable.SaveEntityAsync(firstMachine);
+                var firstMachinePostResponse = await ServerRequest.PutData(client,"MachineDataModel", firstMachine);
+
+                if(firstMachinePostResponse.IsSuccessStatusCode)
+                {
+                    Messenger.MessageSender.SendMessage(firstMachine);
+                }
 
                 // Pass dummy machine's data to second machine
                 secondMachine.Cutter = dummyMachine.Cutter;
@@ -314,27 +281,32 @@ namespace CutterManagement.UI.Desktop
                 // Set the user conducting this operation
                 secondMachine.MachineUserInteractions.Add(new MachineUserInteractions
                 {
-                    UserDataModel = user,
-                    MachineDataModel = secondMachine
+                    UserDataModelId = user.Id,
+                    MachineDataModelId = secondMachine.Id
                 });
 
-                // Save new info to database
-                await secondMachineTable.SaveEntityAsync(secondMachine);
+                var secondMachinePostResponse = await ServerRequest.PutData(client, "MachineDataModel", secondMachine);
+
+                if (secondMachinePostResponse.IsSuccessStatusCode)
+                {
+                    // Send out message
+                    Messenger.MessageSender.SendMessage(secondMachine);
+                }
 
                 // Reset dummy machine
                 dummyMachine = null;
             }
 
-            // Set flag
+            //Set flag
             IsSuccess = true;
 
-            // Notify user of the outcome
+            //Notify user of the outcome
             await DialogService.InvokeAlertDialog(this, "Cutters swapped successfully").ContinueWith(x =>
             {
-                DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));                
+                DispatcherService.Invoke(() => DialogWindowCloseRequest?.Invoke(this, new DialogWindowCloseRequestedEventArgs(IsSuccess)));
             });
         }
-
-        #endregion
     }
+
+    #endregion
 }

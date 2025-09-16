@@ -1,5 +1,7 @@
 ﻿using CutterManagement.Core;
 using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Reflection.PortableExecutable;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -17,9 +19,9 @@ namespace CutterManagement.UI.Desktop
         private ObservableCollection<PartItemViewModel> _partCollection;
 
         /// <summary>
-        /// Access to database
+        /// Http client factory
         /// </summary>
-        private IDataAccessServiceFactory _dataServiceFactory;
+        private IHttpClientFactory _httpFactory;
 
         #endregion
 
@@ -66,9 +68,9 @@ namespace CutterManagement.UI.Desktop
         /// Constructor
         /// </summary>
         /// <param name="dataServiceFactory">Access to database</param>
-        public ArchivesPageViewModel(IDataAccessServiceFactory dataServiceFactory)
+        public ArchivesPageViewModel(IHttpClientFactory httpFactory)
         {
-            _dataServiceFactory = dataServiceFactory;
+            _httpFactory = httpFactory;
             _partCollection = new ObservableCollection<PartItemViewModel>();
 
             _ = LoadParts();
@@ -90,7 +92,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private void OpenCreatePartDialog()
         {
-            CreatePartDialogViewModel createPartVM = new CreatePartDialogViewModel(_dataServiceFactory);
+            CreatePartDialogViewModel createPartVM = new CreatePartDialogViewModel(_httpFactory);
             DialogService.InvokeDialog(createPartVM);
         }
 
@@ -104,21 +106,23 @@ namespace CutterManagement.UI.Desktop
             // Clear part collection
             _partCollection.Clear();
 
-            // Get parts table
-            using var partsTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
+
+            var partsCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
 
             // Check if there is any part in the database
-            if ((await partsTable.GetAllEntitiesAsync()).Any() is false)
+            if (partsCollection?.Any() is false)
             {
                 // Update UI
                 OnPropertyChanged(nameof(IsPartCollectionEmpty));
                 return;
             }
 
-            foreach (PartDataModel part in await partsTable.GetAllEntitiesAsync())
+            if (partsCollection is not null)
             {
                 // Add users
-                AddPartToPartCollection(part);
+                partsCollection.ForEach(part => AddPartToPartCollection(part));
             }
 
             IsLoading = false;
@@ -181,13 +185,14 @@ namespace CutterManagement.UI.Desktop
         {
             PartItemViewModel? part = _partCollection.ToList().FirstOrDefault(x => x.IsEditMode == true);
 
-            using var partTable = _dataServiceFactory.GetDbTable<PartDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            var partToDelete = await partTable.GetEntityByIdAsync(part?.Id);
+            var partToDelete = await ServerRequest.GetData<PartDataModel>(client, $"PartDataModel/{part?.Id}");
 
             if(partToDelete is not null)
             {
-                await partTable.DeleteEntityAsync(partToDelete);
+                var deleteResponse = await ServerRequest.DeleteData<PartDataModel>(client, $"PartDataModel/{partToDelete.Id}");
 
                 await ReloadParts();
             }

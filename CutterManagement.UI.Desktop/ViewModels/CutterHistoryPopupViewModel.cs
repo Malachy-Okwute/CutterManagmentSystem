@@ -55,11 +55,11 @@ namespace CutterManagement.UI.Desktop
             Items.Clear();
 
             // Get log db
-            using var logTable = _machineService.DataBaseAccess.GetDbTable<ProductionPartsLogDataModel>();
+            var logTable = await ServerRequest.GetDataCollection<ProductionPartsLogDataModel>(new System.Net.Http.HttpClient(), "https://localhost:7261/ProductionPartsLogDataModel");
 
             var counter = 0;
 
-            foreach (var cutterLog in await logTable.GetAllEntitiesAsync())
+            foreach (var cutterLog in logTable ?? throw new Exception())
             {
                 // Filter cutter number
                 if(cutterLog.CutterNumber.Equals(cutterNumber) is false)

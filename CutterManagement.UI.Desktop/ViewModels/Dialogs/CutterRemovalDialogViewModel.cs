@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
 using Microsoft.IdentityModel.Tokens;
+using System.Net.Http;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -166,17 +167,19 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public async Task GetUsers()
         {
-            // Get user db table
-            using var users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057/");
 
-            foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
+
+            userCollection?.ForEach(userData =>
             {
                 // Do not load admin user
                 if (userData.LastName is "admin")
-                    continue;
+                    return;
 
                 UsersCollection.Add(userData, userData.FirstName.PadRight(10) + userData.LastName);
-            }
+            });
 
             // Set current user
             _user = UsersCollection.FirstOrDefault().Key;

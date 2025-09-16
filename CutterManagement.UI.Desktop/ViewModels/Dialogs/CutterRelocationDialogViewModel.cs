@@ -1,7 +1,10 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
+using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media.Converters;
 
 namespace CutterManagement.UI.Desktop
 {
@@ -194,15 +197,17 @@ namespace CutterManagement.UI.Desktop
             // Add default machine
             MachineCollection.Add(new MachineDataModel(), "Select machine");
 
-            // Get machine db table
-            using var machineTable = _machineService.DataBaseAccess.GetDbTable<MachineDataModel>();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            foreach (MachineDataModel machine in await machineTable.GetAllEntitiesAsync())
+            var machineCollection = await ServerRequest.GetDataCollection<MachineDataModel>(client, "MachineDataModel");
+
+            machineCollection?.ForEach(machine =>
             {
                 // Add machines that are in the same department and also doesn't currently have cutter
                 if (machine.Owner == Owner && machine.CutterDataModelId is null)
                     MachineCollection.Add(machine, machine.MachineNumber);
-            }
+            });
 
             // Set current user
             _selectedMachine = MachineCollection.FirstOrDefault().Key;
@@ -223,17 +228,19 @@ namespace CutterManagement.UI.Desktop
             // Make sure we have no user from previous caller
             UserCollection.Clear();
 
-            // Get user db table
-            using var users = _machineService.DataBaseAccess.GetDbTable<UserDataModel>();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            foreach (UserDataModel userData in await users.GetAllEntitiesAsync())
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, "UserDataModel");
+
+            userCollection?.ForEach(user =>
             {
                 // Do not load admin user
-                if (userData.LastName is "admin")
-                    continue;
+                if (user.LastName is "admin")
+                    return;
 
-                UserCollection.Add(userData, userData.FirstName.PadRight(10) + userData.LastName);
-            }
+                UserCollection.Add(user, user.FirstName.PadRight(10) + user.LastName);
+            });
 
             // Set current user
             _user = UserCollection.FirstOrDefault().Key;

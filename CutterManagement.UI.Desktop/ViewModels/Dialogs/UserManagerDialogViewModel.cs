@@ -1,6 +1,7 @@
 ﻿using CutterManagement.Core;
 using CutterManagement.Core.Services;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Windows.Input;
 
 namespace CutterManagement.UI.Desktop
@@ -18,9 +19,9 @@ namespace CutterManagement.UI.Desktop
         private ObservableCollection<DeactivatedUserViewModel> _deactivatedUser;
 
         /// <summary>
-        /// Data factory
+        /// Http client factory
         /// </summary>
-        private readonly IDataAccessServiceFactory _dataFactory;
+        private IHttpClientFactory _httpFactory;
 
         #endregion
 
@@ -80,9 +81,9 @@ namespace CutterManagement.UI.Desktop
         /// <summary>
         /// Default constructor
         /// </summary>
-        public UserManagerDialogViewModel(IDataAccessServiceFactory dataFactory)
+        public UserManagerDialogViewModel(IHttpClientFactory httpFactory)
         {
-            _dataFactory = dataFactory;
+            _httpFactory = httpFactory;
             _deactivatedUser = new ObservableCollection<DeactivatedUserViewModel>();
 
             ActivateUserCommand = new RelayCommand(async () => await ActivateUser());
@@ -99,21 +100,24 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task DeleteUser()
         {
-            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
+            HttpClient client =_httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
+
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 
             // Archive only users that are selected
             foreach (var user in _deactivatedUser)
             {
                 if (user.IsSelected)
                 {
-                    UserDataModel? actualUser = await userTable.GetEntityByIdAsync(user.Id);
+                    UserDataModel? actualUser = userCollection?.Single(u => u.Id == user.Id);
 
                     if (actualUser is not null)
                     {
                         actualUser.IsArchived = true;
                         actualUser.FirstName = $"{actualUser.FirstName}_Archived";
                         actualUser.LastName = $"{actualUser.LastName}_Archived";
-                        await userTable.SaveEntityAsync(actualUser);
+                        var postResponse = await ServerRequest.PostData(client, $"UserDataModel", actualUser);
                     }
                 }
             }
@@ -131,20 +135,22 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task ActivateUser()
         {
-            // Get user table
-            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
+
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 
             // Activate only users that are selected
             foreach (var user in _deactivatedUser)
             {
                 if (user.IsSelected)
                 {
-                    UserDataModel? actualUser = await userTable.GetEntityByIdAsync(user.Id);
+                    UserDataModel? actualUser = userCollection?.Single(u => u.Id == user.Id);
 
                     if (actualUser is not null)
                     {
                         actualUser.IsActive = true;
-                        await userTable.SaveEntityAsync(actualUser);
+                        var postResponse = await ServerRequest.PostData(client, $"UserDataModel", actualUser);
                     }
                 }
             }
@@ -161,9 +167,12 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public async Task GetDeactivatedUsers()
         {
-            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            (await userTable.GetAllEntitiesAsync()).ToList().ForEach(user =>
+            var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
+
+            userCollection?.ToList().ForEach(user =>
             {
                 if(user.IsActive is false && user.IsArchived is false)
                 {

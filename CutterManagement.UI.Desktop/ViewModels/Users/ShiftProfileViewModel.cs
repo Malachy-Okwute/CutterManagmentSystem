@@ -1,5 +1,6 @@
 ﻿using CutterManagement.Core;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -12,9 +13,9 @@ namespace CutterManagement.UI.Desktop
     public class ShiftProfileViewModel : ViewModelBase
     {
         /// <summary>
-        /// Access to db data
+        /// Http client factory
         /// </summary>
-        private IDataAccessServiceFactory _dataFactory;
+        private IHttpClientFactory _httpFactory;
 
         /// <summary>
         /// Timer 
@@ -60,9 +61,9 @@ namespace CutterManagement.UI.Desktop
         /// Default constructor
         /// </summary>
         /// <param name="dataFactory">db data access</param>
-        public ShiftProfileViewModel(IDataAccessServiceFactory dataFactory)
+        public ShiftProfileViewModel(IHttpClientFactory httpFactory)
         {
-            _dataFactory = dataFactory;
+            _httpFactory = httpFactory;
 
             // Get current shift
             CurrentShift = ShiftHelper.GetCurrentShift();
@@ -130,10 +131,17 @@ namespace CutterManagement.UI.Desktop
 
                 try
                 {
-                    using var usersTable = _dataFactory.GetDbTable<UserDataModel>();
-                    NumberOfUsers = (await usersTable.GetAllEntitiesAsync())
-                        .Count(user => EnumHelpers.GetDescription(user.Shift) == CurrentShift && user.IsArchived is false && user.FirstName != "resource")
-                        .ToString();
+                    HttpClient client = _httpFactory.CreateClient();
+                    client.BaseAddress = new Uri("https://localhost:7057");
+
+                    var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, "UserDataModel");
+
+                    if(userCollection is not null)
+                    {
+                        NumberOfUsers = userCollection
+                            .Count(user => EnumHelpers.GetDescription(user.Shift) == CurrentShift && user.IsArchived is false && user.FirstName != "resource")
+                            .ToString();
+                    }
                 }
                 finally
                 {

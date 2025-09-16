@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -14,9 +15,9 @@ namespace CutterManagement.UI.Desktop
     public class UpdatesPageViewModel : ViewModelBase, ISubscribeToMessages
     {
         /// <summary>
-        /// Access to database
+        /// Http client factory
         /// </summary>
-        private readonly IDataAccessServiceFactory _dataFactory;
+        private readonly IHttpClientFactory _httpFactory;
 
         /// <summary>
         /// View model for <see cref="NewInfoUpdateDialog"/>
@@ -67,9 +68,9 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         /// <param name="dataFactory">Access to database</param>
         /// <param name="NewInfoUpdateDialog">New info dialog view model</param>
-        public UpdatesPageViewModel(IDataAccessServiceFactory dataFactory, NewInfoUpdateDialogViewModel NewInfoUpdateDialog)
+        public UpdatesPageViewModel(IHttpClientFactory httpFactory, NewInfoUpdateDialogViewModel NewInfoUpdateDialog)
         {
-            _dataFactory = dataFactory;
+            _httpFactory = httpFactory;
             _newInfoUpdateDialog = NewInfoUpdateDialog;
             _infoUpdates = new ObservableCollection<InfoUpdatesItemViewModel>();
 
@@ -90,11 +91,11 @@ namespace CutterManagement.UI.Desktop
         /// <param name="itemId">The id of information to edit</param>
         private async Task EditInfoUpdate(int itemId)
         {
-            using var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
-            using var infoRelationsTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
-            using var partsTable = _dataFactory.GetDbTable<PartDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057/");
 
-            InfoUpdateDataModel? info = await infoRelationsTable.GetEntityByIdAsync(itemId, i => i.UserDataModel);
+            var info = await ServerRequest.GetData<InfoUpdateDataModel>(client, $"InfoUpdateDataModel/{itemId}");
+            var partCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
 
             if(info is not null && info.UserDataModel is not null)
             {
@@ -107,7 +108,7 @@ namespace CutterManagement.UI.Desktop
                 if (info.HasAttachedMoves)
                 {
                     _newInfoUpdateDialog.Kind = info.Kind;
-                    _newInfoUpdateDialog.SelectedPartNumber = (await partsTable.GetAllEntitiesAsync()).FirstOrDefault(part => part.PartNumber == info.PartNumberWithMove);
+                    _newInfoUpdateDialog.SelectedPartNumber = partCollection?.FirstOrDefault(part => part.PartNumber == info.PartNumberWithMove);
                     _newInfoUpdateDialog.PressureAngleCoast = info.PressureAngleCoast;
                     _newInfoUpdateDialog.PressureAngleDrive = info.PressureAngleDrive;
                     _newInfoUpdateDialog.SpiralAngleCoast = info.SpiralAngleCoast;
@@ -124,27 +125,22 @@ namespace CutterManagement.UI.Desktop
         /// <param name="itemId">The id of information to edit</param>
         private async Task DeleteInfoUpdate(int itemId)
         {
-            using var infoTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            InfoUpdateDataModel? info = await infoTable.GetEntityByIdAsync(itemId);
-
-            infoTable.DataChanged += (s, e) =>
-            {
-                InfoUpdatesItemViewModel? itemToRemove = _infoUpdates.FirstOrDefault(i => i.Id == itemId);
-
-                if (itemToRemove is not null)
-                {
-                    _infoUpdates.Remove(itemToRemove);
-                }
-
-                OnPropertyChanged(nameof(InfoUpdates));
-            };
+            var info = await ServerRequest.GetData<InfoUpdateDataModel>(client, $"InfoUpdateDataModel/{itemId}");
 
             if (info is not null)
             {
-                await infoTable.DeleteEntityAsync(info);
-
-                OnPropertyChanged(nameof(IsInfoUpdateEmpty));
+                var deleteResponse = await ServerRequest.DeleteData<InfoUpdateDataModel>(client, $"InfoUpdateDataModel/{info.Id}");
+                InfoUpdatesItemViewModel? itemToRemove = _infoUpdates.FirstOrDefault(i => i.Id == itemId);
+                
+                if (deleteResponse.IsSuccessStatusCode && itemToRemove is not null)
+                {
+                    _infoUpdates.Remove(itemToRemove);
+                    OnPropertyChanged(nameof(InfoUpdates));
+                    OnPropertyChanged(nameof(IsInfoUpdateEmpty));
+                }
             }
         }
 
@@ -167,17 +163,26 @@ namespace CutterManagement.UI.Desktop
                 {
                     IsBusy = true;
 
+                    HttpClient client = _httpFactory.CreateClient();
+                    client.BaseAddress = new Uri("https://localhost:7057");
+
                     // Make sure we have empty collection to start with
                     _infoUpdates.Clear();
 
-                    // Get info update table
-                    using var infoUpdateTable = _dataFactory.GetDbTable<InfoUpdateDataModel>();
+                    var infoCollection = await ServerRequest.GetDataCollection<InfoUpdateDataModel>(client, $"InfoUpdateDataModel");
 
-                    foreach (var info in (await infoUpdateTable.GetAllEntitiesAsync())) await AddInfoUpdate(info);
-                    
+                    if (infoCollection is not null)
+                    {
+                        infoCollection.ForEach(async info => await AddInfoUpdate(info));
+                    }
+
                     // Sort in a descending order
                     CollectionViewSource.GetDefaultView(InfoUpdates).SortDescriptions.Add(new SortDescription(nameof(InfoUpdatesItemViewModel.PublishDate), ListSortDirection.Descending));
-
+                }
+                catch (HttpRequestException ex)
+                {
+                    var test = ex.HttpRequestError;
+                    var msg = ex.Message;
                 }
                 finally
                 {
@@ -192,9 +197,10 @@ namespace CutterManagement.UI.Desktop
         /// <param name="infoUpdate">The item to add to the list</param>
         private async Task AddInfoUpdate(InfoUpdateDataModel infoUpdate)
         {
-            using var userTable = _dataFactory.GetDbTable<UserDataModel>();
+            HttpClient client = _httpFactory.CreateClient();
+            client.BaseAddress = new Uri("https://localhost:7057");
 
-            UserDataModel? user = await userTable.GetEntityByIdAsync(infoUpdate.UserDataModelId);
+            var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{infoUpdate.UserDataModelId}");
 
             // If item already exist...
             if (_infoUpdates.ToList().Exists(i => i.Id == infoUpdate.Id))
