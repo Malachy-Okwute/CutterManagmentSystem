@@ -257,7 +257,12 @@ namespace CutterManagement.UI.Desktop
                  })
                  .ConfigureServices((hostContext, services) =>
                  {
-                     services.AddHttpClient();
+                     services.AddHttpClient("CutterManagementApi", client =>
+                     {
+                         client.BaseAddress = new Uri(hostContext.Configuration["ApiBaseUrl:Url"]!);
+
+                     });
+
                      services.AddViewModels();
                      services.AddServices();
                      services.AddViews();

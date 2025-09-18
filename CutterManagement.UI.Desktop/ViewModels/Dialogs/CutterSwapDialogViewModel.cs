@@ -120,7 +120,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public async Task<bool> InitializeCutterSwapping()
         {
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
             client.BaseAddress = new Uri("http://localhost:7057");
 
             var machineCollection = await ServerRequest.GetDataCollection<MachineDataModel>(client, "MachineDataModel");
@@ -205,8 +205,8 @@ namespace CutterManagement.UI.Desktop
         {
             // ToDo: Refactor code below
 
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var firstMachine = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{initialMachineId}");
             var secondMachine = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{secondMachineId}");

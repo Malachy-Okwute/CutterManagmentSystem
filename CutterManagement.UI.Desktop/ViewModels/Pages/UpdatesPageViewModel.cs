@@ -126,7 +126,7 @@ namespace CutterManagement.UI.Desktop
         private async Task DeleteInfoUpdate(int itemId)
         {
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var info = await ServerRequest.GetData<InfoUpdateDataModel>(client, $"InfoUpdateDataModel/{itemId}");
 
@@ -164,7 +164,7 @@ namespace CutterManagement.UI.Desktop
                     IsBusy = true;
 
                     HttpClient client = _httpFactory.CreateClient();
-                    client.BaseAddress = new Uri("https://localhost:7057");
+                    
 
                     // Make sure we have empty collection to start with
                     _infoUpdates.Clear();
@@ -198,7 +198,7 @@ namespace CutterManagement.UI.Desktop
         private async Task AddInfoUpdate(InfoUpdateDataModel infoUpdate)
         {
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{infoUpdate.UserDataModelId}");
 

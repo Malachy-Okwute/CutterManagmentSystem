@@ -132,7 +132,7 @@ namespace CutterManagement.UI.Desktop
                 try
                 {
                     HttpClient client = _httpFactory.CreateClient();
-                    client.BaseAddress = new Uri("https://localhost:7057");
+                    
 
                     var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, "UserDataModel");
 

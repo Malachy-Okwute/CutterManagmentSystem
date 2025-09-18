@@ -101,7 +101,7 @@ namespace CutterManagement.UI.Desktop
         private async Task DeleteUser()
         {
             HttpClient client =_httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 
@@ -136,7 +136,7 @@ namespace CutterManagement.UI.Desktop
         private async Task ActivateUser()
         {
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 
@@ -168,7 +168,7 @@ namespace CutterManagement.UI.Desktop
         public async Task GetDeactivatedUsers()
         {
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 

@@ -84,8 +84,7 @@ namespace CutterManagement.UI.Desktop
         {
             try
             {
-                HttpClient client = _machineService.HttpClientFactory.CreateClient();
-                client.BaseAddress = new Uri("https://localhost:7057");
+                HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
 
                 var machines = await ServerRequest.GetDataCollection<MachineDataModel>(client, "MachineDataModel");
                 var users = await ServerRequest.GetDataCollection<UserDataModel>(client, "UserDataModel");

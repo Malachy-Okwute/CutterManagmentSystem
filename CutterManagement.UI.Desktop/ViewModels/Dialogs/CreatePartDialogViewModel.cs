@@ -124,7 +124,7 @@ namespace CutterManagement.UI.Desktop
         private async Task CreatePart()
         {
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var partsCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
 

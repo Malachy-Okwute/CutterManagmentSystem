@@ -107,7 +107,7 @@ namespace CutterManagement.UI.Desktop
             _partCollection.Clear();
 
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var partsCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
 
@@ -186,7 +186,7 @@ namespace CutterManagement.UI.Desktop
             PartItemViewModel? part = _partCollection.ToList().FirstOrDefault(x => x.IsEditMode == true);
 
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var partToDelete = await ServerRequest.GetData<PartDataModel>(client, $"PartDataModel/{part?.Id}");
 

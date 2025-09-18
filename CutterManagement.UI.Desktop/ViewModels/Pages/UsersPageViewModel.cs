@@ -157,7 +157,7 @@ namespace CutterManagement.UI.Desktop
         private async Task ChangeUserShift()
         {
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{_users.First(x => x.IsEditMode == true).Id}");
 
@@ -178,7 +178,7 @@ namespace CutterManagement.UI.Desktop
         private async Task DeactivateUser(int userId)
         {
             HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            
 
             var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{userId}");
 
