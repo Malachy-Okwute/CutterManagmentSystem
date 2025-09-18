@@ -450,6 +450,5 @@ namespace CutterManagement.UI.Desktop
 
             var postResponse = ServerRequest.PostData(client, "ProductionPartsLogDataModel", log);
         }
-
     }
 }

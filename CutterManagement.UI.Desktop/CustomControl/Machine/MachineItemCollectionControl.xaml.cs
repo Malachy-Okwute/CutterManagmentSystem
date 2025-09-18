@@ -52,7 +52,26 @@ namespace CutterManagement.UI.Desktop
                     GearsItemLabel.DateAndTimeStampLabel.Width = machineItemControl.DateAndTimeOfLastCheck.ActualWidth;
 
                     #endregion
+                }
 
+                if (Items.Items.Count == 0)
+                {
+                    // [Pinions]
+                    PinsItemLabel.MachineIDLabel.Width = 120;
+                    PinsItemLabel.MachineStatusLabel.Width = 60;
+                    PinsItemLabel.CutterNumberLabel.Width = 80;
+                    PinsItemLabel.PartNumberLabel.Width = 80;
+                    PinsItemLabel.CountLabel.Width = 60;
+                    PinsItemLabel.ResultLabel.Width = 90;
+                    PinsItemLabel.DateAndTimeStampLabel.Width = 160;
+                    // [Gears]
+                    GearsItemLabel.MachineIDLabel.Width = 120;
+                    GearsItemLabel.MachineStatusLabel.Width = 60;
+                    GearsItemLabel.CutterNumberLabel.Width = 80;
+                    GearsItemLabel.PartNumberLabel.Width = 80;
+                    GearsItemLabel.CountLabel.Width = 60;
+                    GearsItemLabel.ResultLabel.Width = 90;
+                    GearsItemLabel.DateAndTimeStampLabel.Width = 160;
                 }
             };
         }

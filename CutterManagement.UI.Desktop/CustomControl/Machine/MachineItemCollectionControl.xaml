@@ -26,8 +26,9 @@
         </Grid>
 
         <!--  items  -->
-        <ScrollViewer Grid.Row="1" local:ScrollViewerAttachedProperties.SetScrollSpeed="20"
-                      VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+        <ScrollViewer Grid.Row="1" local:ScrollViewerAttachedProperties.SetScrollSpeed="20" ScrollViewer.CanContentScroll="True"
+                      VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
+                      VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling">
 
             <Grid x:Name="ItemsContainer" Grid.Row="1"
                   Margin="0,4,0,0">

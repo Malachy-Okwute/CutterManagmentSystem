@@ -85,14 +85,16 @@ namespace CutterManagement.UI.Desktop
             DeleteInfoUpdateCommand = new RelayCommand(async (itemId) => await DeleteInfoUpdate(Convert.ToInt32(itemId)));
         }
 
+
+
         /// <summary>
         /// Edits information update
         /// </summary>
         /// <param name="itemId">The id of information to edit</param>
         private async Task EditInfoUpdate(int itemId)
         {
-            HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057/");
+            HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
+            
 
             var info = await ServerRequest.GetData<InfoUpdateDataModel>(client, $"InfoUpdateDataModel/{itemId}");
             var partCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
@@ -125,7 +127,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="itemId">The id of information to edit</param>
         private async Task DeleteInfoUpdate(int itemId)
         {
-            HttpClient client = _httpFactory.CreateClient();
+            HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
             
 
             var info = await ServerRequest.GetData<InfoUpdateDataModel>(client, $"InfoUpdateDataModel/{itemId}");
@@ -163,8 +165,7 @@ namespace CutterManagement.UI.Desktop
                 {
                     IsBusy = true;
 
-                    HttpClient client = _httpFactory.CreateClient();
-                    
+                    HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
 
                     // Make sure we have empty collection to start with
                     _infoUpdates.Clear();
@@ -197,7 +198,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="infoUpdate">The item to add to the list</param>
         private async Task AddInfoUpdate(InfoUpdateDataModel infoUpdate)
         {
-            HttpClient client = _httpFactory.CreateClient();
+            HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
             
 
             var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{infoUpdate.UserDataModelId}");

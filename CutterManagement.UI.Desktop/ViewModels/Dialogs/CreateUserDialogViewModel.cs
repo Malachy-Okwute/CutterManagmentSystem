@@ -134,7 +134,7 @@ namespace CutterManagement.UI.Desktop
             // If validation passes
             if (result.IsValid)
             {
-                HttpClient client = _httpFactory.CreateClient();
+                HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
                 
 
                 var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");

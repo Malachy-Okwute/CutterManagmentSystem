@@ -1,20 +1,10 @@
-﻿using CutterManagement.Core;
-using CutterManagement.DataAccess;
-using Microsoft.Data.Sql;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Identity.Client;
 using Serilog;
 using Serilog.Events;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Windows;
 
 namespace CutterManagement.UI.Desktop
@@ -86,7 +76,7 @@ namespace CutterManagement.UI.Desktop
                         ApplicationHost = CreateHostBuilder().Build();
 
                         // Finalizing...
-                        //await Task.Delay(TimeSpan.FromSeconds(4));
+                        await Task.Delay(TimeSpan.FromSeconds(4));
                     }
                     // If there is an error...
                     catch (Exception ex)

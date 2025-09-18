@@ -25,7 +25,7 @@ namespace CutterManagement.UI.Desktop
 
             // Singletons 
             // NOTE: Supports EF core migration
-            services.AddSingleton(provider => 
+            services.AddSingleton(provider =>
             new NavigationBarViewModel(provider.GetRequiredService<PageFactory>(), provider.GetRequiredService<ShiftProfileViewModel>()));
             services.AddSingleton(provider => new HomePageViewModel(provider.GetRequiredService<MachineItemCollectionViewModel>()));
             services.AddSingleton(provider => new MachineItemCollectionViewModel(provider.GetRequiredService<IMachineService>()));

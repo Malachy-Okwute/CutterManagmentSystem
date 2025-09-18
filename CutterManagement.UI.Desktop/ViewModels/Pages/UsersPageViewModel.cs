@@ -156,7 +156,7 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task ChangeUserShift()
         {
-            HttpClient client = _httpFactory.CreateClient();
+            HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
             
 
             var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{_users.First(x => x.IsEditMode == true).Id}");
@@ -177,7 +177,7 @@ namespace CutterManagement.UI.Desktop
         /// <param name="userId">Unique id of the user to deactivate</param>
         private async Task DeactivateUser(int userId)
         {
-            HttpClient client = _httpFactory.CreateClient();
+            HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
             
 
             var user = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{userId}");
@@ -217,8 +217,7 @@ namespace CutterManagement.UI.Desktop
             // Clear users
             _users.Clear();
 
-            HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057/");
+            HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
 
             var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 
@@ -311,8 +310,8 @@ namespace CutterManagement.UI.Desktop
         /// <param name="data">The data to update users list with</param>
         public async Task<bool> UpdateUsersCollection(UserDataModel data)
         {
-            HttpClient client = _httpFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057/");
+            HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
+            
 
             var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 

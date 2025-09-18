@@ -123,7 +123,7 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task"/></returns>
         private async Task CreatePart()
         {
-            HttpClient client = _httpFactory.CreateClient();
+            HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
             
 
             var partsCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
