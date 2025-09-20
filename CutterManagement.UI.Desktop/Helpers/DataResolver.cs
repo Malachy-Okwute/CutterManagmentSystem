@@ -10,7 +10,6 @@ namespace CutterManagement.UI.Desktop
         /// Resolves <see cref="MachineDataModel"/> to <see cref="MachineItemViewModel"/>
         /// </summary>
         /// <remarks>
-        /// TODO: Use DTO
         /// </remarks>
         /// <param name="machineData">The data to pass to <see cref="MachineItemViewModel"/></param>
         /// <returns><see cref="MachineItemViewModel"/></returns>
@@ -31,8 +30,7 @@ namespace CutterManagement.UI.Desktop
 
             if(machineData.CutterDataModelId is not null)
             {
-                HttpClient client = machineService.HttpClientFactory.CreateClient();
-                client.BaseAddress = new Uri("https://localhost:7057");
+                HttpClient client = machineService.HttpClientFactory.CreateClient("CutterManagementApi");
 
                 var cutter = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machineData.CutterDataModelId}");
 

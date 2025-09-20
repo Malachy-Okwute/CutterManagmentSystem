@@ -131,8 +131,8 @@ namespace CutterManagement.UI.Desktop
 
                 try
                 {
-                    HttpClient client = _httpFactory.CreateClient();
-                    client.BaseAddress = new Uri("https://localhost:7057");
+                    HttpClient client = _httpFactory.CreateClient("CutterManagementApi");
+                    
 
                     var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, "UserDataModel");
 

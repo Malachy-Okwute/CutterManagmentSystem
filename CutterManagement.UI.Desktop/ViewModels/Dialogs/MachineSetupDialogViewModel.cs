@@ -228,8 +228,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         private async Task SetupMachine()
         {
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var cutterCollection = await ServerRequest.GetDataCollection<CutterDataModel>(client, $"CutterDataModel");
             var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{_machineItemViewModel.Id}");
@@ -310,8 +310,8 @@ namespace CutterManagement.UI.Desktop
             // Clear the current collection
             _cutters.Clear();
 
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var cutterCollection = await ServerRequest.GetDataCollection<CutterDataModel>(client, $"CutterDataModel");
 
@@ -328,8 +328,8 @@ namespace CutterManagement.UI.Desktop
             // Clear the current collection
             _parts.Clear();
 
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var partCollection = await ServerRequest.GetDataCollection<PartDataModel>(client, $"PartDataModel");
 
@@ -360,8 +360,8 @@ namespace CutterManagement.UI.Desktop
                     return;
                 }
 
-                HttpClient client = _machineService.HttpClientFactory.CreateClient();
-                client.BaseAddress = new Uri("https://localhost:7057");
+                HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+                
 
                 //var cutterCollection = await ServerRequest.GetDataCollection<CutterDataModel>(client, $"CutterDataModel");
                 var machineCollection = await ServerRequest.GetDataCollection<MachineDataModel>(client, $"MachineDataModel");

@@ -1,20 +1,10 @@
-﻿using CutterManagement.Core;
-using CutterManagement.DataAccess;
-using Microsoft.Data.Sql;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Identity.Client;
 using Serilog;
 using Serilog.Events;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Windows;
 
 namespace CutterManagement.UI.Desktop
@@ -85,8 +75,28 @@ namespace CutterManagement.UI.Desktop
                         // Set up dependency injection service
                         ApplicationHost = CreateHostBuilder().Build();
 
+                        var httpFactory = ApplicationHost.Services.GetService<IHttpClientFactory>();
+
+                        if(httpFactory is not null)
+                        {
+                            try
+                            {
+                                HttpClient client = httpFactory.CreateClient("CutterManagementApi");
+                                var response = await client.GetAsync("CutterManagement.Web.Server");
+                            }
+                            catch (Exception ex)
+                            {
+                                // Log the error
+                                Log.Logger.Warning($"server is not reachable. {Environment.NewLine} {ex.GetBaseException().Message}");
+                            }
+                            finally
+                            { 
+                                // Set server UI status
+                            }
+                        }
+
                         // Finalizing...
-                        //await Task.Delay(TimeSpan.FromSeconds(4));
+                        await Task.Delay(TimeSpan.FromSeconds(4));
                     }
                     // If there is an error...
                     catch (Exception ex)
@@ -257,7 +267,12 @@ namespace CutterManagement.UI.Desktop
                  })
                  .ConfigureServices((hostContext, services) =>
                  {
-                     services.AddHttpClient();
+                     services.AddHttpClient("CutterManagementApi", client =>
+                     {
+                         client.BaseAddress = new Uri(hostContext.Configuration["ApiBaseUrl:Url"]!);
+
+                     });
+
                      services.AddViewModels();
                      services.AddServices();
                      services.AddViews();

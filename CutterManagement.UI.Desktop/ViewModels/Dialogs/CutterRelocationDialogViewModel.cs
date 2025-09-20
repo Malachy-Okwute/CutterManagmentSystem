@@ -197,8 +197,8 @@ namespace CutterManagement.UI.Desktop
             // Add default machine
             MachineCollection.Add(new MachineDataModel(), "Select machine");
 
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var machineCollection = await ServerRequest.GetDataCollection<MachineDataModel>(client, "MachineDataModel");
 
@@ -228,8 +228,8 @@ namespace CutterManagement.UI.Desktop
             // Make sure we have no user from previous caller
             UserCollection.Clear();
 
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, "UserDataModel");
 

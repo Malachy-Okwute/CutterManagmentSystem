@@ -167,8 +167,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public async Task GetUsers()
         {
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057/");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 

@@ -60,7 +60,6 @@ namespace CutterManagement.UI.Desktop
                     PartsItemLabel.TeethCountLabel.Width = 140;
                 }
             };
-
         }
     }
 }

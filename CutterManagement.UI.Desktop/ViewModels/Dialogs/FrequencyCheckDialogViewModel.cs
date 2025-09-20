@@ -156,8 +156,8 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task"/></returns>
         private async Task UpdateMachine()
         {
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{Id}");
             var userItem = await ServerRequest.GetData<UserDataModel>(client, $"UserDataModel/{_user.Id}");
@@ -249,8 +249,8 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task"/></returns>
         private async Task GetUsers()
         {
-            HttpClient client = _machineService.HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = _machineService.HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var userCollection = await ServerRequest.GetDataCollection<UserDataModel>(client, $"UserDataModel");
 

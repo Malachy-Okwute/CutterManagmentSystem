@@ -57,7 +57,7 @@ namespace CutterManagement.UI.Desktop
         /// </exception>
         public async Task<(ValidationResult, MachineDataModel?)> ConfigureAsync(MachineDataModel newData)
         {
-            HttpClient client = HttpClientFactory.CreateClient();
+            HttpClient client = HttpClientFactory.CreateClient("CutterManagementApi");
             client.BaseAddress = new Uri($"https://localhost:7057");
 
             // Validate incoming data
@@ -106,7 +106,7 @@ namespace CutterManagement.UI.Desktop
         /// <returns><see cref="Task{T}"/></returns>
         public async Task<ValidationResult> SetStatusAsync(MachineDataModel newData, int userId, Action<MachineDataModel> callback)
         {
-            HttpClient client = HttpClientFactory.CreateClient();
+            HttpClient client = HttpClientFactory.CreateClient("CutterManagementApi");
             client.BaseAddress = new Uri($"https://localhost:7057");
 
             var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{newData.Id}");
@@ -170,8 +170,8 @@ namespace CutterManagement.UI.Desktop
         /// <param name="verifyUserIntention">Confirms user intention when new piece count is over a certain limit</param>
         public async Task AdjustPieceCountAsync(int Id, int count, Func<Task<bool?>> verifyUserIntention)
         {
-            HttpClient client = HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{Id}");
             var cutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machineItem?.CutterDataModelId}"); // Find a different way to do this
@@ -220,8 +220,8 @@ namespace CutterManagement.UI.Desktop
         /// <param name="userId">Id to user carrying out this process</param>
         public async Task RelocateCutterAsync(int machineSendingCutterId, int machineReceivingCutterId, int userId, string comment)
         {
-            HttpClient client = HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var sendingMachineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineSendingCutterId}");
             var sendingMachineCutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{sendingMachineItem?.CutterDataModelId}");
@@ -282,8 +282,8 @@ namespace CutterManagement.UI.Desktop
         /// </summary>
         public async Task CaptureAndRecordCMMDataAsync(int userId, int machineId, string comment, CMMDataModel incomingCMMData)
         {
-            HttpClient client = HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineId}");
             var cutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machineItem?.CutterDataModelId}");
@@ -344,8 +344,8 @@ namespace CutterManagement.UI.Desktop
         /// <param name="newData">Data changing on the machine that is having it's cutter removed</param>
         public async Task RemoveCutterAsync(int machineId, int userId, bool keepCutter, MachineDataModel newData)
         {
-            HttpClient client = HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var machineItem = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineId}");
             var cutterItem = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machineItem?.CutterDataModelId}");
@@ -421,8 +421,8 @@ namespace CutterManagement.UI.Desktop
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task LogProductionProgressAsync(int machineId, UserDataModel? user)
         {
-            HttpClient client = HttpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("https://localhost:7057");
+            HttpClient client = HttpClientFactory.CreateClient("CutterManagementApi");
+            
 
             var machine = await ServerRequest.GetData<MachineDataModel>(client, $"MachineDataModel/{machineId}");
             var cutter = await ServerRequest.GetData<CutterDataModel>(client, $"CutterDataModel/{machine?.CutterDataModelId}");
@@ -450,6 +450,5 @@ namespace CutterManagement.UI.Desktop
 
             var postResponse = ServerRequest.PostData(client, "ProductionPartsLogDataModel", log);
         }
-
     }
 }
