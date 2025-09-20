@@ -75,6 +75,26 @@ namespace CutterManagement.UI.Desktop
                         // Set up dependency injection service
                         ApplicationHost = CreateHostBuilder().Build();
 
+                        var httpFactory = ApplicationHost.Services.GetService<IHttpClientFactory>();
+
+                        if(httpFactory is not null)
+                        {
+                            try
+                            {
+                                HttpClient client = httpFactory.CreateClient("CutterManagementApi");
+                                var response = await client.GetAsync("CutterManagement.Web.Server");
+                            }
+                            catch (Exception ex)
+                            {
+                                // Log the error
+                                Log.Logger.Warning($"server is not reachable. {Environment.NewLine} {ex.GetBaseException().Message}");
+                            }
+                            finally
+                            { 
+                                // Set server UI status
+                            }
+                        }
+
                         // Finalizing...
                         await Task.Delay(TimeSpan.FromSeconds(4));
                     }
